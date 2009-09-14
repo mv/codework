@@ -1,0 +1,13 @@
+
+@media screen {
+  h1,h2,h3,h4,h5,h6 { font-family: Tahoma, Helvetica, Arial, sans-serif; }
+
+  body { padding: 0 4em 0 4em; background-color: #fff; color: #000; }
+  a:link    { color: #00f }
+  a:visited { color: #a0a }
+  a:active  { color: #f00 }
+  .noscreen { display: none }
+}
+.hide { display: none }
+@media print  { .noprint { display: none } }
+

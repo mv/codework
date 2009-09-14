@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/adpsys/!svn/ver/1/trunk/code/bot/sh/_chico
+END
+ftp.sh
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/adpsys/!svn/ver/1/trunk/code/bot/sh/_chico/ftp.sh
+END
+ping_mun.sh
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/adpsys/!svn/ver/1/trunk/code/bot/sh/_chico/ping_mun.sh
+END
+ping_chico.sh
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/adpsys/!svn/ver/1/trunk/code/bot/sh/_chico/ping_chico.sh
+END

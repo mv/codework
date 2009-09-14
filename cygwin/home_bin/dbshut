@@ -1,0 +1,12 @@
+
+
+export ORACLE_SID=orcl
+
+sqlplus internal/oracle <<SQL
+
+shutdown immediate
+
+SQL
+
+net stop OracleServiceOrcl
+

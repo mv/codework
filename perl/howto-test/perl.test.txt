@@ -1,0 +1,86 @@
+
+Test::Simple
+
+    use Test::Simple plan => 5;     # 5 tests to run
+    use Test::Simple 'no_plan';     # developing: run all tests available
+
+    ok( expression [, 'name' ] );
+
+Test::More
+
+    use Test::More skip_all => $reason; # developing: run all tests available
+    use Test::More plan     => 5;       # 5 tests to run
+    use Test::More 'no_plan';           # developing: run all tests available
+
+    Output:
+        greeter....NOK 3/4#   Failed test 'age() should return age for object'
+        #   in greeter.t at line 13.
+        #          got: '21'
+        #     expected: '22'
+        # Looks like you failed 1 test of 4.
+
+    use_ok( 'SomeModule' );         # inside BEGIN {}
+    require_ok( 'SomeModule');      #   "   "   "
+
+    ok( expression,   'name' );
+    is( $this, $that, 'name' );
+    isnt
+
+    like( $this, qr/that/, 'name');
+    unlike
+
+    cmp_ok( $this, '==', $that, 'name');
+
+    SKIP: {
+        eval 'use WWW::Babelfish';
+        skip( 'because WWW::Babelfish required for as_dutch()', 1 ) if $@;
+
+        is( $phrase->as_dutch, 'Goede ochtend!', "successfully translated to Dutch" );
+    }
+
+    SKIP_ALL: {
+        if ( [ localtime ]->[6] != 2 )  { plan( skip_all => 'only run these tests on Tuesday'   ); }
+        else                            { plan( tests    => 1                                   ); }
+    }
+
+
+Test::Differences
+    eq_or_diff( $list1, $list2, 'a tale of two references' );
+
+Test::LongString
+    is_string( $string1, $string2, 'are they the same?' );
+
+Test::Deep
+
+Test::Warn
+    warning_is()
+    warning_are()
+    warning_like()
+
+Test::NoWarnings
+
+Test::Exception
+    throws_ok()
+    lives_ok()
+
+Devel::Cover
+    $ cover -delete
+    $ HARNESS_PERL_SWITCHES=-MDevel::Cover make test
+    $ cover
+
+Test::Distribution
+Module::Starter
+
+Test::Kwalitee
+Test::DatabaseRow
+    row_ok
+    not_row_ok
+
+Test::Class
+
+our
+
+use base 'Exporter';
+use vars $VERSION
+our $VERSION
+

@@ -1,0 +1,13 @@
+
+ssh-host-config -y
+net start sshd
+
+cygrunsrv -I cron -d "CYGWIN cron" -p /usr/sbin/cron -a -D -e "CYGWIN=tty ntsec"
+net start cron
+
+
+net stop inetd
+cygrunsrv -R inetd
+cygrunsrv -I inetd -d "CYGWIN inetd" -p /usr/sbin/inetd -a -D -e CYGWIN="tty ntsec"
+net start inetd
+

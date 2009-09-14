@@ -1,0 +1,11 @@
+
+net start OracleServiceOrcl
+
+export ORACLE_SID=orcl
+
+sqlplus internal/oracle <<SQL
+
+startup pfile=C:\oracle\app\oracle\admin\orcl\pfile\initorcl.ora
+
+SQL
+

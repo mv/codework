@@ -1,0 +1,17 @@
+#!/usr/local/bin/ez-ipupdate -c
+#
+# $Id: rc.ddns.easydns.org 6 2006-09-10 15:35:16Z marcus $
+#
+
+service-type=easydns
+user=user:pass
+host=mvway.com
+interface=eth1
+
+cache-file=/tmp/easydns.ez-ipupdate.tmp
+pid-file=/tmp/easydns.ez-ipupdate.pid
+
+# you can use "killall -QUIT ez-ipupdate" under linux.
+
+daemon
+

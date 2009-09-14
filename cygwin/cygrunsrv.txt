@@ -1,0 +1,18 @@
+#
+# $Id: cygrunsrv.txt 6 2006-09-10 15:35:16Z marcus $
+#
+#
+
+# openssh
+ssh-host-config -y
+net start sshd
+
+
+#         install  description      path              args...
+cygrunsrv -I cron -d "CYGWIN cron" -p /usr/sbin/cron -a   -D -e CYGWIN="tty ntsec"
+cygrunsrv -S cron
+
+# inetd: ftp, telnet.....
+cygrunsrv -I inetd -d "CYGWIN inetd" -p /usr/sbin/inetd -a -d -e CYGWIN="ntsec tty"
+cygrunsrv -S inetd
+

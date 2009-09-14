@@ -1,0 +1,2157 @@
+<html>
+<head><title>Higher-Order Perl: Errata</title>
+<base href="http://hop.perl.plover.com/errata/errata-p.html">
+<buse href="http://perl.plover.com/hop/errata/TMP.html">
+<link rel="SHORTCUT ICON" href="/favicon.ico" />
+<link rel="alternate" TITLE="Errata RSS"
+        HREF="http://hop.perl.plover.com/errata/errata.rss"
+        TYPE="application/rss+xml">
+ <link rel='stylesheet' type='text/css' href='common.css' />
+
+</head>
+
+<body bgcolor="#ffffff">
+<a href="../"><img src="covers/perl-lr.jpg" align=right border=0></a>
+
+<h1><cite>Higher-Order Perl</cite> Errata</h1>
+
+<h2>For 1st printing <font size='-1'>(<a href="errata-p-2.html">2nd printing</a>, <a href="huh.html">what?</a>)</font></h2>
+
+<p>Last update: 
+<b>28 August 2006</b> <a href="errata.rss"><img
+src="xml.gif" border=0></a></p>
+
+<!-- page last rebuilt on Mon Aug 28 02:04:46 2006  -->
+
+
+
+<h1>Listing by page number</h1>
+
+<p><a href="errata-c-1.html">Listing by contributor</a> | <a href="errata-d-1.html">Listing by date reported</a> | <a href="errata-s-1.html">Listing by severity</a></p>
+
+<a name='pxviii'><h1>xviii</h1></a><p>(trivial error) <P>"Sean Burke recorded my Ivory Tower talk and cut CDs and sent them
+to me and who supplied RTF-related consulting..."
+should read
+"Sean Burke recorded my Ivory Tower talk, cut CDs and sent them
+to me, and also supplied RTF-related consulting...". </P>
+
+</p><a href="errata-c-1.html#RJBS">(RJBS)</a></p>
+
+<p>(<font color="orange">substantive error</font>) <P>The name of Luc St-Louis is misspelled as "St. Louis".  Sorry, Luc!</P>
+
+</p></p>
+
+
+
+<a name='p21'><h1>21</h1></a><p>(<font color="orange">substantive error</font>) <P>The line </P>
+
+<pre>
+        warn &quot;Couldn't open directory $code: $!; skipping.\n&quot;;
+</pre>
+<P>should read</P>
+
+<pre>
+        warn &quot;Couldn't open directory $top: $!; skipping.\n&quot;;
+</pre>
+<P>(The same error also appears on page 24 in the first printing.)</P>
+
+</p><a href="errata-c-1.html#JPL">(JPL)</a></p>
+
+
+
+<a name='p24'><h1>24</h1></a><p>(<font color="orange">substantive error</font>) <P>The line </P>
+
+<pre>
+        warn &quot;Couldn't open directory $code: $!; skipping.\n&quot;;
+</pre>
+<P>should read</P>
+
+<pre>
+        warn &quot;Couldn't open directory $top: $!; skipping.\n&quot;;
+</pre>
+<P>(The same error also appears on page 21.)</P>
+
+</p><a href="errata-c-1.html#LSL">(LSL)</a></p>
+
+<p>(trivial error) <P>In the middle display, there is a space missing between <tt>push</tt> and
+<tt>@results</tt>, and there is a space missing before the colon in the
+final <tt>return</tt> statement.  </P>
+
+</p><a href="errata-c-1.html#JK">(JK)</a></p>
+
+
+
+<a name='p28'><h1>28</h1></a><p>(trivial error) <P>In the second display, the closing <tt>]</tt> is indented too far.</P>
+
+</p><a href="errata-c-1.html#JK">(JK)</a></p>
+
+
+
+<a name='p32'><h1>32</h1></a><p>(minor error) <P>The second boldface line in <tt>promote_if()</tt> is missing a parenthesis; it
+says</P>
+
+<pre>
+        if ($is_interesting-&gt;($element-&gt;{_tag}) {
+</pre>
+<P>but it should be</P>
+
+<pre>
+        if ($is_interesting-&gt;($element-&gt;{_tag})) {
+</pre>
+</p><a href="errata-c-1.html#JCZ">(JCZ)</a></p>
+
+
+
+<a name='p32-33'><h1>32-33</h1></a><p>(trivial error) <P>The last code display on page 32, and the first on page 33, use tags
+<tt>'maybe'</tt>, which is inconsistent with the all-capitals tags used on
+page 30-32.  Although I think that the code will still run as given,
+there was no reason to change the tags; it was just an oversight.</P>
+
+<P>A similar inconsistency appears on pages 326-328.</P>
+
+</p></p>
+
+
+
+<a name='p33'><h1>33</h1></a><p>(<font color="orange">substantive error</font>) <P>The call to <tt>promote_if()</tt> at the top of the page has:</P>
+
+<pre>
+        promote_if(
+        sub { $_[0] eq 'h1' },
+        $_[0])
+</pre>
+<P>but it should be:</P>
+
+<pre>
+        promote_if(
+        sub { $_[0] eq 'h1' },
+<font color=purple><b>        @_)</b></font>
+</pre>
+<P>This erroneous code also appears at the top of page 327.</P>
+
+</p><a href="errata-c-1.html#JCZ">(JCZ)</a></p>
+
+
+
+<a name='p34'><h1>34</h1></a><p>(minor error) <P>The definition of the Fibonacci function here is not the one that is
+usually used by mathematicians.  Mathematicians always put <tt>fib(0)</tt> =
+0 and <tt>fib(1)</tt> = 1, so <tt>fib(2)</tt> = 1 also.  But the definition I give
+on page 34 has <tt>fib(0)</tt> = 1 instead, so that <tt>fib(2)</tt> = 2.</P>
+
+<P>This may have been deliberate, and in any case the error is small,
+because <tt>page_34_fib($n)</tt> = <tt>standard_fib($n+1)</tt> for all <var>n</var>.  But
+it at least shows poor judgement, because the definition I did use was
+inconsistent with the table on page 33, which has <tt>fib(1)</tt> =
+<tt>fib(2)</tt> = 1 as is standard.</P>
+
+<P>If one uses the standard definition, the Fibonacci function enjoys a
+number of mathematical properties that make its analysis more
+tractable.  (For example, <tt>fib($a*$n)</tt> is always an exact multiple of
+<tt>fib($n)</tt>.)  </P>
+
+<P>It would have been better to use the usual definition, as I did on
+page 243:</P>
+
+<pre>
+        sub fib {
+          my $n = shift;
+          if ($n &lt; 2) { return $n }
+          fib($n-2) + fib($n-1);
+        }
+</pre>
+<P>The nonstandard definition also appears on pages 66 and 69 and in the
+illustration on page 76.</P>
+
+</p><a href="errata-c-1.html#JCZ">(JCZ)</a></p>
+
+
+
+<a name='p38-39'><h1>38-39</h1></a><p>(<font color="orange">substantive error</font>) <P>The <tt>partition()</tt> function should have a declaration <tt>my $share_2;</tt>
+somewhere near the top.</P>
+
+</p><a href="errata-c-1.html#SB">(SB)</a></p>
+
+
+
+<a name='p44'><h1>44</h1></a><p>(trivial error) <P>The message 
+<tt>&quot;Couldn't chdir to '$dir: $!; aborting&quot;</tt>
+should read
+<tt>&quot;Couldn't chdir to '$dir': $!; aborting&quot;</tt>.</P>
+
+</p><a href="errata-c-1.html#HDP">(HDP)</a></p>
+
+<p>(trivial error) <P>The <tt>}</tt> at the end of <tt>change_dir()</tt> is indented
+too far.</P>
+
+</p><a href="errata-c-1.html#RJBS">(RJBS)</a></p>
+
+
+
+<a name='p45'><h1>45</h1></a><p>(trivial error) <P>There is a space missing before the <tt>=&gt;</tt> in <tt>'DEFINE'=&gt;
+\&amp;define_config_directive,</tt>.</P>
+
+</p></p>
+
+
+
+<a name='p49'><h1>49</h1></a><p>(not an error) <P>Note that this version of <tt>read_config()</tt> doesn't support the
+<tt>INCLUDE</tt> directive as defined in the previous
+section, because order of the arguments in the
+<tt>$action</tt> call is inconsistent with the order of the parameters in
+the <tt>read_config()</tt> function.  A similar problem occurs with the
+version on page 50.  </P>
+
+<P>If you want to fix this, one way is to reorder the parameters; another
+is to have 
+<tt>INCLUDE</tt> call a helper function that calls <tt>read_config()</tt> in turn
+with the arguments in the correct order.</P>
+
+</p><a href="errata-c-1.html#TH">(TH)</a></p>
+
+<p>(minor error) <P>There is a <tt>}</tt> missing from the last line on the page.</P>
+
+</p><a href="errata-c-1.html#JPL">(JPL)</a></p>
+
+
+
+<a name='p56'><h1>56</h1></a><p>(trivial error) <P>Each of the six <tt>=&gt;</tt> items in the code display at the bottom of the
+page should be preceded by a space.</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p57'><h1>57</h1></a><p>(trivial error) <P>In the last display, the next-to-last <tt>}</tt> is indented too far.</P>
+
+</p><a href="errata-c-1.html#JK">(JK)</a></p>
+
+
+
+<a name='p59'><h1>59</h1></a><p>(minor error) <P>The <tt>_DEFAULT_</tt> callback function is missing its close brace.</P>
+
+</p><a href="errata-c-1.html#JCZ">(JCZ)</a></p>
+
+<p>(minor error) <P>In the code display in the middle of the page, the expression
+<tt>$table{_DEFAULT_}</tt> should be <tt>$table-&gt;{_DEFAULT_}</tt>.</P>
+
+</p><a href="errata-c-1.html#JCZ">(JCZ)</a></p>
+
+
+
+<a name='p64'><h1>64</h1></a><p>(trivial error) <P>In the final paragraph, the fonts in the phrase "with arguments
+<tt>128,0,64</tt>" are wrong.  It should appear as "with arguments (128, 0, 64)".</P>
+
+</p></p>
+
+
+
+<a name='p76'><h1>76</h1></a><p>(trivial error) <P>In the illustration, the code for the caching stub is missing a <tt>$</tt>
+sign.  The second line has <tt>func-&gt;(@_)</tt>, but it should have
+<tt>$func-&gt;(@_)</tt>. </P>
+
+</p><a href="errata-c-1.html#LE">(LE)</a></p>
+
+
+
+<a name='p79'><h1>79</h1></a><p>(trivial error) <P>In the middle of the page, there is a space missing between "in" and
+"Figure 3.6".</P>
+
+</p></p>
+
+
+
+<a name='p84'><h1>84</h1></a><p>(trivial error) <P>In "join <tt> $; , @_ </tt>", the word "join" should be in
+monospaced font.</P>
+
+</p></p>
+
+
+
+<a name='p88'><h1>88</h1></a><p>(<font color="darkred">major  error</font>) <P>At the bottom of the page, I assert that 
+"Using <tt>UNIVERSAL::isa</tt> avoids all these problems."
+In fact, it only solves the first problem, not the second,
+much-less-likely one.
+</P>
+
+</p><a href="errata-c-1.html#KW">(KW)</a></p>
+
+
+
+<a name='p94'><h1>94</h1></a><p>(<font color="orange">substantive error</font>) <P>The discussion of the <tt>find_share()</tt> function gets the two
+arguments in the wrong order.  For example, the mention of
+<tt>find_share([7,8,9,10], 41)</tt>
+should actually be
+<tt>find_share(41, [7,8,9,10])</tt>.
+Similarly, the key generation function
+<tt>sub {join &quot;-&quot;, @{$_[0]}, $_[1]}</tt> should be
+<tt>sub {join &quot;-&quot;, @{$_[1]}, $_[0]}</tt>. 
+</P>
+
+</p><a href="errata-c-1.html#RJBS">(RJBS)</a></p>
+
+
+
+<a name='p95'><h1>95</h1></a><p>(trivial error) <P>In the comment in the first code display, the word <tt>computatation</tt>
+should be <tt>computation</tt>.</P>
+
+</p><a href="errata-c-1.html#AK">(AK)</a></p>
+
+
+
+<a name='p98'><h1>98</h1></a><p>(minor error) <P>Near the top of the page, the expression <tt>$cache{$self}</tt> is missing
+its close brace.</P>
+
+</p><a href="errata-c-1.html#VL">(VL)</a></p>
+
+
+
+<a name='p99'><h1>99</h1></a><p>(trivial error) <P>The second code display on the page has an extra space after the open
+parenthesis in the <tt>memoize_method()</tt> call.</P>
+
+</p></p>
+
+<p>(minor error) <P>The third code display on the page has a period between the arguments
+to the <tt>memoize_method()</tt> call; it should be a comma.</P>
+
+</p><a href="errata-c-1.html#GC">(GC)</a></p>
+
+
+
+<a name='p104'><h1>104</h1></a><p>(<font color="orange">substantive error</font>) <P>I said that the sort will not call <tt>chronologically</tt> on the same pair
+of dates; this is only true if there are no duplicate items in the input list.</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p105'><h1>105</h1></a><p>(trivial error) <P>"a sequence of <tt>&lt;=&gt;</tt>'s and <tt>||</tt>s" should be
+"a sequence of <tt>&lt;=&gt;</tt>s and <tt>||</tt>s".</P>
+
+</p><a href="errata-c-1.html#VL">(VL)</a></p>
+
+
+
+<a name='p110'><h1>110</h1></a><p>(<font color="darkred">major  error</font>) <P>The code</P>
+
+<pre>
+      sub function {
+        if (++$calls &gt; 100) { memoize 'function' }
+        ...
+</pre>
+<P>should have been</P>
+
+<pre>
+      sub function {
+        if (++$calls == 100) { memoize 'function' }
+        ...
+</pre>
+<P>since we don't want to memoize the same function more than once.</P>
+
+</p><a href="errata-c-1.html#FF">(FF)</a></p>
+
+<p>(minor error) <P>In the fourth paragraph, the phrase "the cost-benefit ratio is nine
+times as large" should read "the cost-benefit ratio improves ninefold".</P>
+
+</p></p>
+
+
+
+<a name='p112'><h1>112</h1></a><p>(<font color="orange">substantive error</font>) <P>In the <tt>END</tt> block, the table header is written to
+<tt>STDERR</tt>, but the table itself is written to <tt>STDOUT</tt>.
+They should both be written to the same place, whatever that is.</P>
+
+</p></p>
+
+
+
+<a name='p115'><h1>115</h1></a><p>(<font color="orange">substantive error</font>) <P>"the next time <tt>next</tt> is called" should read 
+"the next time <tt>NEXTVAL</tt> is called".
+"The <tt>next</tt> operation is written in Perl" should read
+"The <tt>NEXTVAL</tt> operation is written in Perl".
+</P>
+
+</p></p>
+
+
+
+<a name='p120'><h1>120</h1></a><p>(trivial error) <P>The last sentence in the second paragraph should read
+"Then we would still be able <b>to</b> emulate the original <tt>dir_walk()</tt>...".</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p122'><h1>122</h1></a><p>(trivial error) <P>There is a space missing before the <tt>=&gt;</tt> in <tt>'all'=&gt; \@EXPORT_OK</tt>.</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p123'><h1>123</h1></a><p>(<font color="orange">substantive error</font>) <P>The lines:</P>
+
+<pre>
+        if (-d $file) {
+          opendir my $dh, $file or next;
+</pre>
+<P>don't work because the <tt>next</tt> is not inside a loop.    They should be
+replaced with:</P>
+
+<pre>
+        if (-d $file &amp;&amp; opendir my $dh, $file) {
+</pre>
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p126'><h1>126</h1></a><p>(trivial error) <P>"But they payoff" should read
+"But the payoff".</P>
+
+</p><a href="errata-c-1.html#JS">(JS)</a></p>
+
+<p>(trivial error) <P>The last line of code on the page should be indented one more
+space to the right.</P>
+
+</p><a href="errata-c-1.html#RJBS">(RJBS)</a></p>
+
+
+
+<a name='p128'><h1>128</h1></a><p>(minor error) <P>The loop at the top of the page:</P>
+
+<pre>
+        while ($file = NEXTVAL($octopus_file)) { ... } 
+</pre>
+<P>will terminate prematurely if the initial call to <tt>interesting_files()</tt>
+includes a request to examine a file named <tt>0</tt>.  To avoid this edge
+case, one should write:</P>
+
+<pre>
+        while (defined($file = NEXTVAL($octopus_file))) { ... } 
+</pre>
+<P>instead.  Similarly, the <tt>if</tt> test just below should be <tt>if
+(defined(NEXTVAL(...)))</tt> rather than just <tt>if
+(NEXTVAL(...))</tt>.
+</P>
+
+</p><a href="errata-c-1.html#JPL">(JPL)</a></p>
+
+<p>(minor error) <P>The variable <tt>$next_octopus</tt> in the second code display should have
+been <tt>$octopus_file</tt>, to be consistent with the first code display
+and with the example at the bottom of the previous page.</P>
+
+</p><a href="errata-c-1.html#JPL">(JPL)</a></p>
+
+
+
+<a name='p129'><h1>129</h1></a><p>(<font color="orange">substantive error</font>) <P>The next-to-last paragraph says that items are removed from <tt>@items</tt>
+and placed onto the end of <tt>@perms</tt>.  Actually the code has
+<tt>unshift</tt>, so they're placed at the
+beginning of <tt>@perms</tt>, not the end.</P>
+
+</p><a href="errata-c-1.html#VL">(VL)</a></p>
+
+
+
+<a name='p130'><h1>130</h1></a><p>(trivial error) <P>There is an extra blank line before the closing brace of the <tt>while</tt>
+loop in the middle of the page.</P>
+
+</p><a href="errata-c-1.html#JPL">(JPL)</a></p>
+
+
+
+<a name='p135'><h1>135</h1></a><p>(trivial error) <P>The parenthetical remark about
+Lincoln Stein's article is missing its close parenthesis.</P>
+
+</p><a href="errata-c-1.html#AL">(AL)</a></p>
+
+<p>(trivial error) <P>The spacing in the first paragraph of section 4.3.2 is generally too
+tight, and in particular the words "of" and "Virginia" in the first
+sentence are too close together.</P>
+
+</p><a href="errata-c-1.html#VL">(VL)</a></p>
+
+
+
+<a name='p136'><h1>136</h1></a><p>(minor error) <P>The <tt>make_genes()</tt> function does not correctly handle the special case
+where the input contains an empty wildcard, symbolized by <tt>()</tt>.  In
+such a case, there are no matching strings, and the iterator should
+immediately indicate exhaustion.  </P>
+
+</p><a href="errata-c-1.html#JPL">(JPL)</a></p>
+
+
+
+<a name='p139'><h1>139</h1></a><p>(not an error) <P>The code</P>
+
+<pre>
+     for my $abbrev (keys %n_expand) {
+       $pat =~ s/$abbrev/($n_expand{$abbrev})/g;
+     }
+</pre>
+<P>would have been simpler as</P>
+
+<pre>
+     while (my ($abbrev, $expand) = each %n_expand) {
+       $pat =~ s/$abbrev/($expand)/g;
+     }
+</pre>
+</p><a href="errata-c-1.html#GC">(GC)</a></p>
+
+<p>(trivial error) <P>The second sentence of section 4.3.3 says "Why would we want to
+this?", but it should be "Why would we want to <b>do</b> this?".</P>
+
+</p><a href="errata-c-1.html#JCZ">(JCZ)</a></p>
+
+
+
+<a name='p141'><h1>141</h1></a><p>(<font color="orange">substantive error</font>) <P>There should be a <tt>chomp</tt> just after the <tt>while (&lt;$fh&gt;)</tt> at the
+very bottom of the page.  Otherwise, <tt>equal</tt> queries on the rightmost
+field won't work properly.</P>
+
+<P>(Also, similar errors on pages 144, 147 (twice) and 151; thanks John
+P. Linderman.)
+</P>
+
+</p><a href="errata-c-1.html#DL">(DL)</a></p>
+
+
+
+<a name='p142'><h1>142</h1></a><p>(<font color="orange">substantive error</font>) <P>It would be better if the <tt>split $self-&gt;{FIELDSEP}</tt> were 
+<tt>split $self-&gt;{FIELDSEP}, $_, -1</tt>.  Otherwise, if the input data
+contained empty trailing fields, the would be omitted from the
+<tt>@fields</tt> array, and later could might produce an "uninitialized
+value" warning.  For the example database this can't happen, since the
+last field is numeric, and so won't be empty, but it could happen with
+other databases.</P>
+
+</p><a href="errata-c-1.html#DL">(DL)</a></p>
+
+
+
+<a name='p143'><h1>143</h1></a><p>(trivial error) <P>In the code display in the middle of the page, the line:</P>
+
+<pre>
+        my $q = $dbh-&gt;callbackquery(sub { my %F=@_; $F{STATE} eq 'NY'});
+</pre>
+<P>is missing a space:</P>
+
+<pre>
+        my $q = $dbh-&gt;callbackquery(sub { my %F=@_; $F{STATE} eq 'NY' });
+</pre>
+</p></p>
+
+
+
+<a name='p144'><h1>144</h1></a><p>(<font color="orange">substantive error</font>) <P>The code with the "punctuation that made my eyes glaze over" contains
+a minor error:</P>
+
+<pre>
+        @F{@{$self-&gt;{fields}}} = split $self-&gt;{FIELDSEP};
+</pre>
+<P><tt>fields</tt> should be in capitals here:</P>
+
+<pre>
+        @F{@{$self-&gt;{FIELDS}}} = split $self-&gt;{FIELDSEP};
+</pre>
+</p><a href="errata-c-1.html#RS">(RS)</a></p>
+
+
+
+<a name='p147'><h1>147</h1></a><p>(<font color="orange">substantive error</font>) <P>The last line of code on the page, </P>
+
+<pre>
+    return [$position, $_] if $is_interesting-&gt;(%F);
+</pre>
+<P>should probably be:</P>
+
+<pre>
+    return $_ if $is_interesting-&gt;(%F);
+</pre>
+<P>Moreover, it should not be in boldface.</P>
+
+</p></p>
+
+<p>(trivial error) <P>Of the ten boldface lines in <tt>callbackquery()</tt>, only the second, third
+and fourth (the ones with <tt>seek()</tt> and <tt>tell()</tt>) should be boldface.
+</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p148'><h1>148</h1></a><p>(trivial error) <P>In the first line of HTML log file data, there should not be a space
+between <tt>~</tt> and <tt>mjd</tt>.  </P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p151'><h1>151</h1></a><p>(trivial error) <P>There should be a paragraph break just before the sentence that begins
+"If <tt>$it</tt> were an iterator...".</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p152'><h1>152</h1></a><p>(minor error) <P>In the first code display, the line</P>
+
+<pre>
+        open my($fh), &quot;|-&quot;, &quot;tac&quot;, $file
+          or return;
+</pre>
+<P>should be</P>
+
+<pre>
+        open my($fh), &quot;-|&quot;, &quot;tac&quot;, $file
+          or return;
+</pre>
+</p><a href="errata-c-1.html#JCZ">(JCZ)</a></p>
+
+<p>(minor error) <P>At the bottom of the page, the line</P>
+
+<pre>
+    my $q = $db-&gt;callbackquery(sub {my %F=@_; $F{PAGE}=~ m{/book/$}});
+</pre>
+<P>should be</P>
+
+<pre>
+    my $q = $db-&gt;callbackquery(sub {my %F=@_; $F{page}=~ m{/book/$}});
+</pre>
+<P>because the keys in the <tt>%F</tt> hash must match the names passed in the
+call to <tt>new</tt> on the previous line.</P>
+
+</p><a href="errata-c-1.html#JCZ">(JCZ)</a></p>
+
+
+
+<a name='p152-153'><h1>152-153</h1></a><p>(<font color="orange">substantive error</font>) <P>The <tt>do</tt> block should be <tt>while (1)</tt>, or perhaps a <tt>do</tt>-<tt>while</tt> of
+some sort.</P>
+
+</p><a href="errata-c-1.html#JM">(JM)</a></p>
+
+
+
+<a name='p158-160'><h1>158-160</h1></a><p>(minor error) <P>Each of the three pages has a call to <tt>imap</tt> that divides numbers by
+37268.  Each division should be by 32768 instead.</P>
+
+</p><a href="errata-c-1.html#IS">(IS)</a></p>
+
+
+
+<a name='p161'><h1>161</h1></a><p>(trivial error) <P>The dashed line that leads into the "return" box on the right is
+missing its arrowhead.</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p163'><h1>163</h1></a><p>(trivial error) <P>In the last paragraph of section 4.4.4, the phrase
+"the next argument it tried" should read
+"the next argument is tried".</P>
+
+</p></p>
+
+
+
+<a name='p164'><h1>164</h1></a><p>(trivial error) <P>The sentence beginning "this won't work because..." is
+ungrammatical.  It has the structure "... the caller will not be able
+to distinguish between ... from one that ...".
+It should read either
+"... the caller will not be able to distinguish between ... and one
+that ..." or 
+"... the caller will not be able to distinguish ... from one that ..."
+as the reader prefers.</P>
+
+</p></p>
+
+
+
+<a name='p166'><h1>166</h1></a><p>(<font color="orange">substantive error</font>) <P>The first paragraph in section 4.5.2 refers to "listrefs".  There is
+no such thing.  It should have said "arrayrefs".</P>
+
+</p><a href="errata-c-1.html#JW">(JW)</a></p>
+
+
+
+<a name='p168'><h1>168</h1></a><p>(<font color="orange">substantive error</font>) <P>The text mentions "the test for <tt>ref($arg) eq 'ARRAY'</tt>",
+but the code on page 167 that is being described actually has just
+<tt>ref($arg)</tt>.  I made a late change to simplify the code, and
+forgot to change the following discussion to match.</P>
+
+</p></p>
+
+
+
+<a name='p176'><h1>176</h1></a><p>(minor error) <P>There is a close parenthesis missing at the end of the <tt>Iter::value()</tt>
+function. </P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p177'><h1>177</h1></a><p>(not an error) <P>The title of section 4.6.1 is "Using <tt>foreach</tt>..." but then
+the next paragraphs discuss <tt>for</tt>.  In Perl, <tt>for</tt> and
+<tt>foreach</tt> are identical, as I mention on page 451.  Because
+they're interchangeable, I tend to interchange them without meaning
+to, sometimes with confusing results.</P>
+
+</p></p>
+
+
+
+<a name='p180'><h1>180</h1></a><p>(trivial error) <P>There's a extra space in the <tt>my $stop_size</tt> line that misaligns the
+<tt>=</tt> sign.</P>
+
+</p><a href="errata-c-1.html#GC">(GC)</a></p>
+
+
+
+<a name='p180-181'><h1>180-181</h1></a><p>(trivial error) <P>Both versions of <tt>each_array()</tt> are missing a space before the <tt>:</tt>
+on the third line.</P>
+
+</p></p>
+
+<p>(not an error) <P>The version of <tt>each_array()</tt> on page 180 uses <tt>ref $arrays[0]</tt> to
+test the first argument; if it is a non-reference, it is taken to be
+the label of a stop-type function.  In the version on page 181, this
+test has changed to <tt>UNIVERSAL::isa($arrays[0], 'ARRAY')</tt>.  That's
+because the page 181 version is expecting that the first argument
+might be a code reference, so the simpler <tt>ref</tt> test will no
+longer work.</P>
+
+</p><a href="errata-c-1.html#GC">(GC)</a></p>
+
+<p>(trivial error) <P>On each page, there is an extra space in the line:</P>
+
+<pre>
+        return ()  if $cur_elt &gt;= $stop_size;
+</pre>
+</p><a href="errata-c-1.html#JPL">(JPL)</a></p>
+
+
+
+<a name='p185'><h1>185</h1></a><p>(<font color="orange">substantive error</font>) <P>In the middle of the page, the phrase "If you later ask the hash
+what's stored under that key" should be "If you later ask the scalar
+what it contains".</P>
+
+</p></p>
+
+
+
+<a name='p188'><h1>188</h1></a><p>(<font color="orange">substantive error</font>) <P>The code </P>
+
+<pre>
+        if ($content_type eq 'text/html') { 
+</pre>
+<P>assumes that the <tt>Content-Type</tt> field will always have a bare content
+type.  But actually, the HTTP/1.1 standard allows the field to contain
+zero or more "parameters", so that the <tt>$content_type</tt> variable might
+contain (for example)</P>
+
+<pre>
+        text/html; charset=ISO-8859-4
+</pre>
+<P>in which case the test above will fail even though it should have
+succeeded.  The test here should be replaced with</P>
+
+<pre>
+        if ($content_type =~ m{^text/html\b}) {
+</pre>
+<P>and similarly on pages 192, 193, and 196.</P>
+
+</p><a href="errata-c-1.html#AR">(AR)</a></p>
+
+
+
+<a name='p190'><h1>190</h1></a><p>(<font color="orange">substantive error</font>) <P>The sample callback arguments contain relative URLs.  This is the
+behavior if the <tt>$base</tt> argument to <tt>get_links()</tt> is undefined.
+However, <i>Grasshopper</i> doesn't use <tt>get_links()</tt> in that way; it
+always passes a URL in for <tt>$base</tt>.  The result is that the
+URLs passed to the callback are absolute URLs, interpreted
+relative to <tt>$base</tt>.</P>
+
+</p><a href="errata-c-1.html#GC">(GC)</a></p>
+
+<p>(trivial error) <P>There is a space missing before the <tt>=&gt;</tt> in <tt>'SRC'=&gt;</tt> and
+<tt>'LOWSRC'=&gt;</tt>.</P>
+
+</p></p>
+
+
+
+<a name='p191'><h1>191</h1></a><p>(minor error) <P><tt>print F, get($url)</tt> should be <tt>print F get($url)</tt>.</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p192'><h1>192</h1></a><p>(minor error) <P>In the last code display, <tt>print F, $content</tt> should be <tt>print F $content</tt>.</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p193'><h1>193</h1></a><p>(<font color="orange">substantive error</font>) <P><tt>$html</tt> is declared twice.  The inner declaration</P>
+
+<pre>
+        my $html = get($url);
+</pre>
+<P>should be</P>
+
+<pre>
+        $html = get($url);
+</pre>
+<P>(This error also appears on page 196 in the first printing.)</P>
+
+</p><a href="errata-c-1.html#JCZ">(JCZ)</a></p>
+
+
+
+<a name='p194'><h1>194</h1></a><p>(minor error) <P>In the second line of code on the page, <tt>s/^\Q$top/o</tt> should be
+<tt>/^\Q$top/o</tt>.</P>
+
+</p><a href="errata-c-1.html#JQ">(JQ)</a></p>
+
+
+
+<a name='p195'><h1>195</h1></a><p>(trivial error) <P>In the first code display, there should be a space between <tt>=~</tt> and <tt>/^q/i</tt>.</P>
+
+</p></p>
+
+
+
+<a name='p196'><h1>196</h1></a><p>(<font color="orange">substantive error</font>) <P><tt>$html</tt> is declared twice.  The inner declaration</P>
+
+<pre>
+        my $html = get($url);
+</pre>
+<P>should be</P>
+
+<pre>
+        $html = get($url);
+</pre>
+<P>(This error also appears on page 193 in the first and second printings.)</P>
+
+</p><a href="errata-c-1.html#AR">(AR)</a></p>
+
+
+
+<a name='p201'><h1>201</h1></a><p>(trivial error) <P>In the fourth line from the bottom of the page, <tt>WWW:SimpleRobot</tt>
+should be <tt>WWW::SimpleRobot</tt>.</P>
+
+</p><a href="errata-c-1.html#AL2">(AL2)</a></p>
+
+
+
+<a name='p215'><h1>215</h1></a><p>(minor error) <P>There is an extraneous space between the <tt>#</tt> and the <tt>!</tt> in the
+shebang line of the example.</P>
+
+</p><a href="errata-c-1.html#GC">(GC)</a></p>
+
+<p>(trivial error) <P>The last line of code on the page is missing a space between the <tt>)</tt>
+and the <tt>{</tt>.</P>
+
+</p></p>
+
+
+
+<a name='p216'><h1>216</h1></a><p>(trivial error) <P>There's an extra space after the <tt>%</tt> sign in <tt>n %  2 == 0</tt>.</P>
+
+</p><a href="errata-c-1.html#JPL">(JPL)</a></p>
+
+
+
+<a name='p217'><h1>217</h1></a><p>(trivial error) <P>The reference in the first paragraph to "Figure 5.7" should be to
+Figure 5.5 instead. </P>
+
+</p></p>
+
+<p>(trivial error) <P>The third sentence on the page is missing a word.  It should say
+"...when the call returns, it moves back up <b>to</b> the parent."</P>
+
+</p><a href="errata-c-1.html#JCZ">(JCZ)</a></p>
+
+
+
+<a name='p220'><h1>220</h1></a><p>(<font color="orange">substantive error</font>) <P>The tree in figure 5.6 is missing a node.  The leaf labeled (4,1,1,1)
+should have a second descendant, labeled (2,2,1,1,1), to the right of
+the one labeled (3,1,1,1,1).</P>
+
+</p><a href="errata-c-1.html#LSL">(LSL)</a></p>
+
+<p>(trivial error) <P>There's an extra space after <tt>my $max</tt>, causing the following <tt>=</tt>
+sign to be misaligned.</P>
+
+</p><a href="errata-c-1.html#GC">(GC)</a></p>
+
+
+
+<a name='p221'><h1>221</h1></a><p>(trivial error) <P>The code display named <tt>partition-iterator-2</tt> should be named
+<tt>partition-it-2</tt>. 
+</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p222-223'><h1>222-223</h1></a><p>(<font color="darkred">major  error</font>) <P>The output produced by the <tt>make_partition()</tt> functions is not as is
+shown on page 223; the iterators generated by the code traverse the
+search space in depth-first order, but the sample output on page 223
+is in breadth-first order.  To fix this, change </P>
+
+<pre>
+        my $item = pop @agenda;
+</pre>
+<P>to</P>
+
+<pre>
+        my $item = shift @agenda;
+</pre>
+<P>in each function.  The discussion in the first paragraph on page 223
+is confused.  It says:</P>
+
+<blockquote>
+<P>Because we return each partition immediately, after putting its
+children onto the agenda, old nodes are never preempted by new ones,
+regardless of whether we use <tt>pop</tt> or <tt>shift</tt>.</P>
+
+</blockquote>
+<P>This is completely wrong.  When <tt>pop</tt> is used, nodes are taken from
+the end of the agenda; the nodes so taken are the ones most recently
+added, so they certainly do pre-empt the nodes that were on the agenda
+before.
+</P>
+
+</p><a href="errata-c-1.html#DG">(DG)</a></p>
+
+
+
+<a name='p224'><h1>224</h1></a><p>(minor error) <P>In the (perhaps unlikely) event that Perl's built-in <tt>sort</tt> function
+tries to use the <tt>partitions()</tt> comparator to compare an element with
+itself, the comparator will return an undefined value, which is a
+fatal error.  For more robustness, add <tt>return 0;</tt> after the <tt>for</tt>
+loop.
+</P>
+
+</p><a href="errata-c-1.html#JPL">(JPL)</a></p>
+
+
+
+<a name='p228'><h1>228</h1></a><p>(trivial error) <P>The <tt>--</tt> in the code display in the middle of the page is in the
+wrong font.
+</P>
+
+</p><a href="errata-c-1.html#JPL">(JPL)</a></p>
+
+<p>(trivial error) <P>The close brace in the display in the middle of the page is indented
+one space too far.</P>
+
+</p><a href="errata-c-1.html#JPL">(JPL)</a></p>
+
+
+
+<a name='p231-232'><h1>231-232</h1></a><p>(trivial error) <P>The "A:", "B:" and "C:" labels on the displays should be in
+fixed-width font.</P>
+
+</p></p>
+
+
+
+<a name='p232'><h1>232</h1></a><p>(<font color="orange">substantive error</font>) <P>"pop 48, 80 from stack" should read "pop 48, 20 from stack".</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+<p>(<font color="orange">substantive error</font>) <P>In the middle of the last paragraph, the phrase "rebinding the
+variables to the appropriate variables" should be "rebinding the
+variables to the appropriate values".</P>
+
+</p></p>
+
+
+
+<a name='p234'><h1>234</h1></a><p>(trivial error) <P>In footnote 5, 
+"O'Reilly and associates" should read
+"O'Reilly and Associates".</P>
+
+</p><a href="errata-c-1.html#JS">(JS)</a></p>
+
+
+
+<a name='p235'><h1>235</h1></a><p>(not an error) <P>The first line in the <tt>powerset_recurse</tt> function reads</P>
+
+<pre>
+        my ( $set, $powerset, $keys, $values, $n, $i ) = @_;
+</pre>
+<P>but it should read</P>
+
+<pre>
+        my ( $set, $powerset, $keys, $values, $nmembers, $i ) = @_;
+</pre>
+<P>This wasn't originally my mistake; I took the code as it was written in
+<i>Mastering Algorithms with Perl</i>.</P>
+
+</p><a href="errata-c-1.html#LSL">(LSL)</a></p>
+
+
+
+<a name='p236'><h1>236</h1></a><p>(trivial error) <P>The last line of the code on the page, <tt>$i++;</tt>, is indented one space
+too far.</P>
+
+</p></p>
+
+
+
+<a name='p260'><h1>260</h1></a><p>(trivial error) <P>In the middle of the page,       </P>
+
+<pre>
+        node($m, upfrom_list($m+1) );
+</pre>
+<P>should be</P>
+
+<pre>
+        node($m, upfrom_list($m+1));
+</pre>
+</p></p>
+
+
+
+<a name='p261'><h1>261</h1></a><p>(<font color="orange">substantive error</font>) <P>The definition of <tt>show()</tt> is suboptimal, because the last element of
+its output will be followed by an extraneous instance of <tt>$&quot;</tt>.
+This isn't normally noticeable, because the default value of <tt>$&quot;</tt> is a space.</P>
+
+</p><a href="errata-c-1.html#MZ">(MZ)</a></p>
+
+
+
+<a name='p272'><h1>272</h1></a><p>(trivial error) <P>The typography in the expression 
+24 &middot; 320 &middot; 5 
+is all wrong; it should be 
+2<sup>4</sup> &middot; 3<sup>20</sup> &middot; 5.</P>
+
+</p><a href="errata-c-1.html#GB">(GB)</a></p>
+
+<p>(trivial error) <P>The spaces following the commas in "278, 942, 752, 080" should
+be omitted.</P>
+
+</p></p>
+
+
+
+<a name='p275'><h1>275</h1></a><p>(trivial error) <P>In the code display, the last line, which is output of the program,
+should be in boldface.</P>
+
+</p></p>
+
+
+
+<a name='p278-279'><h1>278-279</h1></a><p>(not an error) <P>The boxes labeled <tt>MERGE</tt> should probably say <tt>UNION</tt> instead, since
+what's being used here is actually the <tt>union()</tt> function of p.274, and
+the behavior is different from that of the <tt>merge()</tt> function of p.271
+that was mentioned in the analogous diagram on p.272.
+</P>
+
+</p><a href="errata-c-1.html#JPL">(JPL)</a></p>
+
+
+
+<a name='p281'><h1>281</h1></a><p>(<font color="orange">substantive error</font>) <P>The first line of the <tt>charclass()</tt> function reads
+<tt>my ($s, $class) = @_;</tt>, but it should be
+<tt>my $class = shift;</tt>.</P>
+
+</p><a href="errata-c-1.html#KH">(KH)</a></p>
+
+
+
+<a name='p285'><h1>285</h1></a><p>(<font color="orange">substantive error</font>) <P><tt>$regex3-&gt;show(30)</tt> should have been <tt>show($regex3, 30)</tt>.</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p288'><h1>288</h1></a><p>(minor error) <P>The call to <tt>match()</tt> in the last code display should be to <tt>matches()</tt>.</P>
+
+</p><a href="errata-c-1.html#JQ">(JQ)</a></p>
+
+<p>(trivial error) <P>In the last line of the page, "It presently generates..." should be
+"At present, it generates...".</P>
+
+</p></p>
+
+
+
+<a name='p291'><h1>291</h1></a><p>(minor error) <P>In the <tt>cutsort()</tt> function, I wish that instead of this:</P>
+
+<pre>
+        insert(@pending, head($s), $cmp);
+        $s = tail($s);
+</pre>
+<P>I had written this:</P>
+
+<pre>
+        insert(@pending, drop($s), $cmp);
+</pre>
+<P>A similar kind of change is possible in <tt>display_failures()</tt> on page
+433, although less obviously preferable.</P>
+
+</p></p>
+
+<p>(not an error) <P>It may appear that <tt>list_to_stream()</tt> is broken, because, for example:</P>
+
+<pre>
+        my $list = list_to_stream( 1 .. 10 );
+        1 while defined drop($list);
+</pre>
+<P>fails; under <tt>strict 'refs'</tt> it says <tt>Can't use string (&quot;10&quot;) as an
+ARRAY ref</tt>.  But no, the function is working as designed and as
+documented on pages 291--292.  The final argument of <tt>list_to_stream()</tt>
+is required to be the "final tail" of the stream that is constructed,
+and must be "another (possibly empty) stream or a promise"; in this
+example it is neither.  The correct call would be:</P>
+
+<pre>
+        my $list = list_to_stream( 1 .. 10, undef );
+</pre>
+<P>where the final <tt>undef</tt> argument is an empty stream, as in the
+example on page 292.
+</P>
+
+</p><a href="errata-c-1.html#O">(O)</a></p>
+
+
+
+<a name='p293'><h1>293</h1></a><p>(trivial error) <P>In the middle of the page, the sentence "Depending on the outcome of
+the comparison, it now know, a new element..." is garbled.  It should
+read "Depending on the outcome of
+the comparison, the function now knows a new element..."
+</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p294'><h1>294</h1></a><p>(trivial error) <P>The last paragraph says that "The next function takes a filename, an
+open filehandle, and...", but it should say 
+"The next function takes an
+open filehandle, a filename, and...".
+</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p295'><h1>295</h1></a><p>(not an error) <P>The line</P>
+
+<pre>
+        tail(iterate_function(sub { _next_record($fh, $filename, $devino) }));
+</pre>
+<P>is designed to work with the <tt>iterate_function()</tt> function that
+is defined on page 263; this version returns a stream.  There is
+another, different <tt>iterate_function()</tt> function on page 134,
+that returns a chapter-4-style iterator object; that won't work here.
+I should have given the two functions different names, but sometimes
+these things slip through the editing process.  </P>
+
+</p><a href="errata-c-1.html#HDP">(HDP)</a></p>
+
+<p>(<font color="orange">substantive error</font>) <P>In the function <tt>tai64n_to_unix_time()</tt>, the line</P>
+
+<pre>
+        return [undef, $rec] unless s/^\@([a-f0-9]{24})\s+//;
+</pre>
+<P>should read</P>
+
+<pre>
+        return [undef, $rec] unless $rec =~ s/^\@([a-f0-9]{24})\s+//;
+</pre>
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p296-297'><h1>296-297</h1></a><p>(trivial error) <P>In the <tt>digest_maillog()</tt> function, there should be a space
+between <tt>=~</tt> and the following <tt>/.../</tt> in each of the five
+constructions that reads <tt>$rec =~/.../</tt>.</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p303'><h1>303</h1></a><p>(not an error) <P>Using a fixed constant like <tt>1e-12</tt> in <tt>close_enough()</tt> is a bad idea;
+one should calculate error relative to the size of the arguments.  I
+didn't mean to suggest that one should use this exact code; it was
+intended only as an example.  A similar consideration holds for the
+value of <tt>$e</tt> on page 305.</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p304'><h1>304</h1></a><p>(trivial error) <P>At the end of the last paragraph, "synatax" should be "syntax".</P>
+
+</p><a href="errata-c-1.html#GC">(GC)</a></p>
+
+
+
+<a name='p305'><h1>305</h1></a><p>(not an error) <P>See page 303.</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p308-310'><h1>308-310</h1></a><p>(<font color="darkred">major  error</font>) <P>The discussion of the tortoise-and-hare algorithm suggests that
+it can detect repeating values in a sequence without the memory costs of
+maintaining a record of the already-seen values.  In most contexts,
+this is true.  However, in the context of infinite streams, the
+tortoise-and-hare algorithm loses this benefit.  After <var>n</var>
+iterations, the tortoise is at the <var>n</var>th stream element and the
+hare is at the 2<var>n</var>th.  Therefore, there are <var>n</var> stream
+elements held in memory that will not be garbage-collected until the
+tortoise passes them. </P>
+
+<P>Since the memory cost is proportional to <var>n</var> anyway, the
+simple, obvious method is probably better:</P>
+
+<pre>
+        sub cut_loops {
+          my ($stream, $seen) = @_;
+          $seen = {} unless defined $seen;
+          my $nextval = drop($stream);
+          return if $seen-&gt;{$nextval}++ ;
+          return node($nextval, promise { cut_loops($stream, $seen) });
+        }
+</pre>
+<P>The tortoise-and-hare algorithm <i>does</i> make sense in the
+context of the iterators of chapters 4 and 5.
+</P>
+
+</p></p>
+
+
+
+<a name='p310'><h1>310</h1></a><p>(minor error) <P>The name of the function should be <tt>cut_loops</tt>, not <tt>cut_loops2</tt>.
+Otherwise, the recursive call inside the function won't work properly.
+</P>
+
+</p><a href="errata-c-1.html#MB">(MB)</a></p>
+
+
+
+<a name='p311'><h1>311</h1></a><p>(trivial error) <P>In the very middle of the page, in the phrase "and the total is ...,
+or ... .", there is a superfluous close parenthesis just before the comma.</P>
+
+</p><a href="errata-c-1.html#GC">(GC)</a></p>
+
+
+
+<a name='p312'><h1>312</h1></a><p>(trivial error) <P>In the inline equation in the middle of the page, the variables <var>P</var>
+and <var>pmt</var> should be in italics.</P>
+
+</p></p>
+
+
+
+<a name='p316'><h1>316</h1></a><p>(<font color="darkred">major  error</font>) <P>The definition of <tt>add2()</tt> is wrong.  Empty streams in this context
+represent infinite sequences of zeroes.  So <tt>add2()</tt> should be:</P>
+
+<pre>
+        sub add2 {
+          my ($s, $t) = @_;
+          return $s unless $t;
+          return $t unless $s;
+          node (head($s) + head($t),
+             promise { add2(tail($s), tail($t)) } );
+        }
+</pre>
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p326'><h1>326</h1></a><p>(minor error) <P>In the <tt>return</tt> line of <tt>promote_if_h1tag()</tt>, the quotation mark
+should be a pair of apostrophes <tt>''</tt>.
+</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+<p>(trivial error) <P>There should be a blank line between the two function definitions in
+the first display.</P>
+
+</p></p>
+
+
+
+<a name='p326-328'><h1>326-328</h1></a><p>(trivial error) <P>The <tt>'keeper'</tt> and <tt>'maybe'</tt> tags are lowercase, which is
+inconsistent with the usage established on pages 30-32.  See the
+correction for pages 32-33 for more information.</P>
+
+</p></p>
+
+
+
+<a name='p328'><h1>328</h1></a><p>(<font color="darkred">major  error</font>) <P>The call to <tt>walk_html()</tt> at the top of the page is wrong.  It says</P>
+
+<pre>
+        walk_html($tree,
+               sub { ['maybe', $_[0]] },
+               promote_if('h1'),
+               });
+</pre>
+<P>in which the braces aren't even balanced.  It should have been:</P>
+
+<pre>
+        walk_html($tree,
+               sub { ['maybe', $_[0]] },
+<font color=purple><b>               promote_if(sub { $_[0] eq 'h1' }),</b></font>
+              );
+</pre>
+</p><a href="errata-c-1.html#PB">(PB)</a></p>
+
+
+
+<a name='p329'><h1>329</h1></a><p>(trivial error) <P>In the first code display, the longest line should end with <tt>)) });</tt>
+instead of with <tt>))});</tt> .</P>
+
+</p></p>
+
+
+
+<a name='p342'><h1>342</h1></a><p>(trivial error) <P>In the comment at the top of the page, "appropriate" is misspelled.</P>
+
+</p><a href="errata-c-1.html#DT">(DT)</a></p>
+
+
+
+<a name='p344'><h1>344</h1></a><p>(trivial error) <P>On the second line from the bottom of the page,
+in "<tt>List::Util::</tt>reduce", the word "reduce" should be in monospaced font.</P>
+
+</p><a href="errata-c-1.html#DT">(DT)</a></p>
+
+
+
+<a name='p349'><h1>349</h1></a><p>(<font color="orange">substantive error</font>) <P>In the <tt>_i_or()</tt> function, there should be a declaration</P>
+
+<pre>
+        my $rv;
+</pre>
+<P>just after <tt>return sub</tt>.</P>
+
+</p><a href="errata-c-1.html#GC">(GC)</a></p>
+
+
+
+<a name='p351'><h1>351</h1></a><p>(<font color="orange">substantive error</font>) <P><tt>$dbh-&gt;query($filename, $value)</tt> should be
+<tt>$dbh-&gt;query($fieldname, $value)</tt>.
+</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p354'><h1>354</h1></a><p>(<font color="orange">substantive error</font>) <P><tt>sub { $F{OWES} &gt; 100 }</tt>
+should be
+<tt>sub { my %F = @_; $F{OWES} &gt; 100 }</tt>
+as on page 143.  Also, the same error occurs on pages 357 and 448.</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p357'><h1>357</h1></a><p>(trivial error) <P>The <tt>use overload</tt> directive should have a space before each of the
+four instances of <tt>=&gt;</tt>.
+</P>
+
+</p></p>
+
+
+
+<a name='p362'><h1>362</h1></a><p>(<font color="orange">substantive error</font>) <P>In the brief code display in the middle of the page and in the
+following sentence, the pattern
+<tt>/-{3}\n|\+3\n/</tt> should read
+<tt>qr/-{3}\n|\+{3}\n/</tt>.</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p363'><h1>363</h1></a><p>(trivial error) <P>Near the bottom of the page, "does and with a newline" should be
+"does end with a newline".</P>
+
+</p><a href="errata-c-1.html#RS">(RS)</a></p>
+
+
+
+<a name='p364'><h1>364</h1></a><p>(trivial error) <P>The second paragraph should end "...with the features currently in Perl."</P>
+
+</p></p>
+
+
+
+<a name='p366'><h1>366</h1></a><p>(trivial error) <P>In the code display at the top of the page, there should be a space
+between the <tt>=~</tt> and the <tt>/\G.../</tt> in each of the eight <tt>=~/\G.../</tt>
+constructions.
+</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p369'><h1>369</h1></a><p>(<font color="orange">substantive error</font>) <P>The <tt>push @tokens, grep $_ ne &quot;&quot;, $sep, $tok, $i</tt> will produce a lot
+of "undefined value" warnings as written; it would probably be better
+as <tt>push @tokens, grep defined &amp;&amp; $_ ne &quot;&quot;, $sep, $tok, $i</tt>.  (Also
+similarly on page 371.)</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p370'><h1>370</h1></a><p>(trivial error) <P>In the paragraph numbered "3", the sentence "This occurs when <tt>$i</tt>
+the most recent input..." should read
+"This occurs when <tt>$i</tt>,
+the most recent input...".</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p373'><h1>373</h1></a><p>(<font color="darkred">major  error</font>) <P>Because the <tt>INTEGER</tt> lexer is called before the <tt>IDENTIFIER</tt> lexer,
+it will incorrectly tokenize a string such as <tt>a2 = p</tt>; the
+<tt>INTEGER</tt> lexer will extract the <tt>2</tt> out of the identifier <tt>a2</tt>,
+resulting in a syntax error later on.</P>
+
+<P>Probably the best way to fix this is to replace the <tt>INTEGER</tt> pattern
+<tt>qr/\d+/</tt> with <tt>qr/\b\d+\b/</tt>.</P>
+
+<P>The same error occurs in the lexers on pages 374, 392, and 424.  A
+related error occurs on page 436.</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p381'><h1>381</h1></a><p>(trivial error) <P>The final <tt>};</tt>  on the page should be moved one space to the right. </P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p386'><h1>386</h1></a><p>(trivial error) <P>The <tt>-&gt;</tt> in the <tt>doorbell</tt> grammar should have
+been a right arrow symbol (&rarr;).</P>
+
+</p></p>
+
+
+
+<a name='p388'><h1>388</h1></a><p>(minor error) <P>In the version of <tt>alternate()</tt> at the top of the page, the lines:</P>
+
+<pre>
+        if (($v, $newinput) = $p1-&gt;($input)} { return ($v, $newinput) }
+        if (($v, $newinput) = $p2-&gt;($input)} { return ($v, $newinput) }
+</pre>
+<P>should be:</P>
+
+<pre>
+        if (($v, $newinput) = $p1-&gt;($input)) { return ($v, $newinput) }
+        if (($v, $newinput) = $p2-&gt;($input)) { return ($v, $newinput) }
+</pre>
+</p></p>
+
+
+
+<a name='p390'><h1>390</h1></a><p>(<font color="darkred">major  error</font>) <P>The call to <tt>star($separator, $element)</tt> should be
+<tt>star(concat($separator, $element))</tt>.  (Or else we should modify
+<tt>star()</tt> to implicitly concatenate its arguments, if it has more than one.)</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+<p>(trivial error) <P>The first complete sentence on the page has a dangling pronoun.  It
+says "But it will be less efficient than the previous version, because
+it will call <tt>alternate()</tt> and <tt>concatenate()</tt> each time it is
+called...".   The word <i>it</i> here refers to the parser constructed by
+<tt>star()</tt>, not to <tt>star()</tt> itself, and so should read "But this will be
+less efficient than the previous version, because the constructed
+parser will call...".</P>
+
+</p></p>
+
+
+
+<a name='p429'><h1>429</h1></a><p>(trivial error) <P>In the code display at the bottom of the page, the apostrophes should
+be neutral single quotes.</P>
+
+</p></p>
+
+
+
+<a name='p436'><h1>436</h1></a><p>(minor error) <P><tt>my(..., $qatoms)</tt> should be <tt>my(..., $qatom)</tt>.</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+<p>(<font color="orange">substantive error</font>) <P>The lexer, as written, doesn't correctly handle regexes that contain
+backaslashed metacharacters.  This is because the <tt>PAREN</tt>, <tt>QUANT</tt>,
+and <tt>BAR</tt> lexers take precedence over the <tt>ATOM</tt> lexer, and get
+first crack at interpreting those characters, before the
+backslash-escape part of the <tt>ATOM</tt> lexer can see them.  The correct
+lexer handles the backslashes with higher precedence, passing control
+to the metacharacter lexers only for unbackslashed characters:</P>
+
+<pre>
+  my $lexer = iterator_to_stream(
+          make_lexer($input,
+                  ['ATOM',       qr/\\x[0-9a-fA-F]{0,2} # hex escape
+                                   |\\\d+               # octal escape
+                                   |\\.                 # other \
+                                   /x,              ],
+                  ['PAREN',      qr/[()]/,          ],
+                  ['QUANT',      qr/[*+?]/,         ],
+                  ['BAR',        qr/[|]/,           ],
+                  ['ATOM',       qr/./,             ]   # other char
+                 )
+   );
+</pre>
+<P>A related error occurs on page 373.</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p436-437'><h1>436-437</h1></a><p>(not an error) <P>Regarding the part of the lexer that handles hex escapes, which has</P>
+
+<pre>
+        \\x[0-9a-fA-F]{0,2}
+</pre>
+<P>Per Westerlund asks "I wonder if the intention was to allow hex
+escapes with 0, 1, or 2 following hex digits?  What does <tt>\x</tt> mean in
+this context?"</P>
+
+<P>That's a good question!  It is intentional; I carefully checked the
+behavior of the regex engine while I was writing this section.  In the
+construction <tt>\x0a</tt>, the leading zeroes are optional, and in fact
+they're so optional that you can write <tt>\x</tt> to mean <tt>\x00</tt>.  I
+probably wouldn't want to use this feature in a real program, but
+in this case we might as well do what the real regex engine does.</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p443'><h1>443</h1></a><p>(minor error) <P><tt>s/^ $BULLET//o</tt> should be <tt>s/^$BULLET//o</tt>.</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p449'><h1>449</h1></a><p>(trivial error) <P>Near the bottom of the page, the apostrophes in
+<tt>'O'Reilly'</tt> should be neutral single quotes.</P>
+
+</p></p>
+
+
+
+<a name='p455'><h1>455</h1></a><p>(minor error) <P>The code display in the middle of the page:</P>
+
+<pre>
+        my %string_version = ('&gt;'=&gt; 'gt', '&gt;=', =&gt; 'ge', '==' =&gt; 'eq',
+                           '&lt;'=&gt; 'lt', '&lt;=', =&gt; 'le', '!=' =&gt; 'ne');
+</pre>
+<P>should look like this:</P>
+
+<pre>
+        my %string_version = ('&gt;' =&gt; 'gt', '&gt;=' =&gt; 'ge', '==' =&gt; 'eq',
+                           '&lt;' =&gt; 'lt', '&lt;=' =&gt; 'le', '!=' =&gt; 'ne');
+</pre>
+</p></p>
+
+
+
+<a name='p456'><h1>456</h1></a><p>(trivial error) <P>The three <tt>-&gt;</tt> symbols in the contrived example should be
+right arrow symbols (&rarr;).</P>
+
+</p></p>
+
+
+
+<a name='p466'><h1>466</h1></a><p>(<font color="darkred">major  error</font>) <P>Using <tt>_</tt> as the name of a subroutine is a bad idea.  One reason is
+that the name <tt>_</tt> is special, and is always forced into package
+<tt>main::</tt>.   So for example:</P>
+
+<pre>
+        package Parser;
+
+        sub _ { die &quot;Ouch&quot; }
+
+        package Unrelated;
+
+        $dir_readable = -d $dir &amp;&amp; -r _ ;
+</pre>
+<P>does not do what you expect; you want <tt>_</tt> to be interpreted as the
+name of a filehandle, but  it is not.  You have defined a subroutine
+named <tt>main::_</tt> here, not <tt>Parser::_</tt>.  Then, in the unrelated
+package, you think that in <tt>-r _</tt> the <tt>_</tt> is the name of a
+filehandle.  Usually it is, and it usually names the special
+filehandle <tt>main::_</tt>.  But now the Perl parser interprets it as a
+call to the function <tt>main::_()</tt>, and the statement dies.</P>
+
+<P>Moreover, Wolfgang Laun points out that <tt>_</tt> cannot be exported in the
+normal way, because of its special interaction with namespaces.  For
+example, suppose you try to do:</P>
+
+<pre>
+        package F;
+        use base 'Exporter';
+        BEGIN { @EXPORT = '_' }
+
+        sub _ { 
+          print &quot;_(@_)\n&quot; 
+        }
+
+        package main;
+        F-&gt;import();
+
+        _(1..3);
+</pre>
+<P>Here we are trying to export <tt>_</tt> from package <tt>F::</tt> to package
+<tt>main::</tt>.  But there is no <tt>_</tt> in package <tt>F::</tt>; it is <i>already</i>
+in <tt>main::</tt>!  So you get</P>
+
+<pre>
+        Subroutine main::_ redefined at /usr/local/lib/perl5/5.8.0/Exporter.pm line 59. at ...
+        Undefined subroutine &amp;F::_ called at ...
+</pre>
+<P>If you change the code to</P>
+
+<pre>
+        package F;
+        use base 'Exporter';
+        BEGIN { @EXPORT = '_' }
+
+<font color=purple><b>        sub F::_ {</b></font>
+          print &quot;_(@_)\n&quot; 
+        }
+
+        package main;
+        F-&gt;import();
+
+        _(1..3);
+</pre>
+<P>then it works as it should, for some value of "should".  As far as I
+know HOP does not contain an instance of this error.</P>
+
+<P>Wolfgang Laun points out other syntactic problems that are not
+exercised in HOP but that support the general conclusion that my
+attempt to use the compact notation</P>
+
+<pre>
+        _&quot;...&quot;;
+</pre>
+<P>was a bad idea.  The following expressions are syntax errors:</P>
+
+<pre>
+        _'arg'
+        &amp;_'arg'
+        &amp;_ 'arg'
+</pre>
+<P>although</P>
+
+<pre>
+        _ 'arg'
+</pre>
+<P>is acceptable.  This is not actually a problem with <tt>_</tt>; it occurs
+because <tt>'</tt> is still available as an obsolete synonym for <tt>::</tt>.
+(This causes problems elsewhere; for example <tt>$x = &quot;Fred&quot;; print
+&quot;$x's wallet&quot;</tt> does not print <tt>&quot;Fred's wallet&quot;</tt>.)  On page 555 I used</P>
+
+<pre>
+        $base_name = _&quot;IDENTIFIER&quot;;
+</pre>
+<P>which does work, but if I had used single quotes, it would have
+failed.  Unlike the two problems described above, changing <tt>_</tt> to
+<tt>__</tt> will not fix this, because the problem is really with the <tt>'</tt>
+symbol.
+</P>
+
+</p><a href="errata-c-1.html#GY">(GY)</a></p>
+
+
+
+<a name='p467'><h1>467</h1></a><p>(trivial error) <P>Near the top of the page, <tt>use overload '&quot;&quot;'=&gt;</tt> is missing a space;
+it should be <tt>use overload '&quot;&quot;' =&gt;</tt>.
+</P>
+
+</p></p>
+
+
+
+<a name='p474'><h1>474</h1></a><p>(<font color="orange">substantive error</font>) <P>The <tt>-</tt> node at the lower-right in the diagram (connected to wires
+<tt>m</tt>, <tt>n</tt>, and <tt>p</tt>) should be a <tt>+</tt> node, since <var>k</var> = <var>c</var> +
+273.15.  The diagram on page 486 gets it right.</P>
+
+<P>Similarly, the reference to the node in the middle of the page
+("...causing the <tt>-</tt> node to set wire <var>p</var> to 310.15...") should
+describe it as a <tt>+</tt> node instead of as a <tt>-</tt> node.</P>
+
+</p><a href="errata-c-1.html#WM">(WM)</a></p>
+
+
+
+<a name='p477'><h1>477</h1></a><p>(<font color="orange">substantive error</font>) <P>The <tt>settor_is()</tt> function issues an inappropriate warning if it's
+called to check the settor of a node with no settor.  The code has</P>
+
+<pre>
+        sub settor_is { $_[0]{S} == $_[1] }
+</pre>
+<P>but it would be better as:</P>
+
+<pre>
+        sub settor_is {
+          my $settor = $_[0]{S};
+          defined($settor) &amp;&amp; $settor == $_[1];
+        }
+</pre>
+<P>The function works properly without this change, except for the warning.</P>
+
+</p><a href="errata-c-1.html#VZ">(VZ)</a></p>
+
+<p>(<font color="orange">substantive error</font>) <P>There are errors in the <tt>set()</tt> function on page 476 and the <tt>revoke()</tt>
+function on page 477.  The <tt>value()</tt> and <tt>has_value()</tt> methods each
+require an argument, to inform the methods of who is asking the
+question.  <tt>set()</tt> and <tt>revoke()</tt> don't supply this argument, which is
+mandatory.   </P>
+
+<P>In <tt>set()</tt> on page 476, the lines:</P>
+
+<pre>
+        unless ($value == $self-&gt;value) {
+          my $v = $self-&gt;value;
+</pre>
+<P>should be:</P>
+
+<pre>
+        unless ($value == $self-&gt;value($settor)) {
+          my $v = $self-&gt;value($settor);
+</pre>
+<P>and similarly, in <tt>revoke()</tt> on page 477, the line:</P>
+
+<pre>
+        return unless $self-&gt;has_value;
+</pre>
+<P>should be removed entirely; if the request to revoke the value was
+made by the only component that is allowed to revoke it, namely the
+one that set the value in the first place, then <tt>has_value()</tt> will
+return false.</P>
+
+<P>Without these changes, programs generate a lot of (inappropriate) "use
+of uninitialized value" warnings, and may produce incorrect results
+under some circumstances.</P>
+
+</p></p>
+
+
+
+<a name='p480-485'><h1>480-485</h1></a><p>(trivial error) <P>Most of the code on these pages should be tagged as "Code library",
+downloadable from
+<a href="http://hop.perl.plover.com/Examples/Local_Propagation.pm"><tt>http://hop.perl.plover.com/Examples/Local_Propagation.pm</tt></a>.  The
+example on page 485 should be tagged as downloadable from
+<a href="http://hop.perl.plover.com/Examples/local-propagation"><tt>http://hop.perl.plover.com/Examples/local-propagation</tt></a>.</P>
+
+</p></p>
+
+
+
+<a name='p485'><h1>485</h1></a><p>(<font color="orange">substantive error</font>) <P>The letter labels in the program code for the local propagation
+network are intended to match the ones in the diagram on page 483.
+But the labels <tt>$i</tt> and <tt>$j</tt> are switched, so the network that is
+constructed by the code is wired up wrong, and the network produces
+wrong answers.  Instead of:</P>
+
+<pre>
+        { my ($i, $j, $k, $l, $m) = Wire-&gt;make(5);
+          $F = new_io('Fahrenheit', $i);
+          $C = new_io('Celsius', $m);
+          new_constant(32, $j);
+          new_constant(5/9, $l);
+          new_adder($j,$k,$i);
+          new_multiplier($k,$l,$m);
+        }
+</pre>
+<P>one should have:</P>
+
+<pre>
+        { my ($i, $j, $k, $l, $m) = Wire-&gt;make(5);
+<font color=purple><b>          $F = new_io('Fahrenheit', $j);</b></font>
+          $C = new_io('Celsius', $m);
+<font color=purple><b>          new_constant(32, $i);</b></font>
+          ...
+</pre>
+<P>Alternatively, just change <tt>new_adder</tt> to <tt>new_subtractor</tt> on line 6.</P>
+
+</p><a href="errata-c-1.html#VZ">(VZ)</a></p>
+
+
+
+<a name='p492'><h1>492</h1></a><p>(<font color="orange">substantive error</font>) <P>The display in the top half of the page of "four mathematically
+equivalent forms" contains one form that isn't equivalent.  The four
+forms are </P>
+
+<pre>
+                  F + (hspc, 0) = plus;
+                  plus + (-hspc, 0) = F;
+                  plus - F = (-hspc, 0);
+                  plus - (hspc, 0) - F = 0;
+</pre>
+<P>but the third one should be</P>
+
+<pre>
+                  plus - F = (hspc, 0);
+</pre>
+<P>instead.</P>
+
+</p></p>
+
+
+
+<a name='p500'><h1>500</h1></a><p>(trivial error) <P>In the last paragraph on the page, there is an extra comma after the
+phrase "The values 14, 9, and 3.5".</P>
+
+</p></p>
+
+
+
+<a name='p502-512'><h1>502-512</h1></a><p>(<font color="darkred">major  error</font>) <P>The Gaussian elimination technique for solving linear equations is
+notoriously unreliable in conjunction with floating-point numbers, and
+has a number of dangerous behaviors.  I chose to use it anyway because
+it is a lot easier to understand than any other method I could have
+presented.</P>
+
+<P>In this application, however, I have encountered at least one serious
+problem with the algorithm as presented in the book.  Under some
+circumstances, the equation solver will fail to eliminate a variable
+from an equation when it should have.  For example, suppose one
+equation is</P>
+
+<pre>
+        x + 2y + 2z            = 9
+</pre>
+<P>and another is</P>
+
+<pre>
+         2y + 2z            = 0
+</pre>
+<P>and the program uses the second equation to eliminate <var>y</var> from the
+first equation; the result should be:</P>
+
+<pre>
+        x                      = 9
+</pre>
+<P>But now suppose that because of an earlier floating-point roundoff
+error, the second equation is instead:</P>
+
+<pre>
+         2y + 1.9999999999z = 0
+</pre>
+<P>Then after eliminating <var>y</var> from the first equation, one has</P>
+
+<pre>
+        x +       .0000000001z = 9
+</pre>
+<P>If no other equations involve <var>z</var>, the erroneous <var>z</var> term will never
+be eliminated from this last equation, and the program will
+incorrectly conclude that it cannot determine the value for <var>x</var>.</P>
+
+<P>For <tt>linogram</tt>, I think a suitable fix is to change the <tt>arithmetic()</tt>
+function on page 504:</P>
+
+<pre>
+        sub arithmetic {
+          my ($a, $ac, $b, $bc) = @_;
+          my %new;
+          for my $k (keys(%$a), keys %$b) {
+         my ($av) = $a-&gt;coefficient($k);
+         my ($bv) = $b-&gt;coefficient($k);
+         $new{$k} = $ac * $av + $bc * $bv;
+          }
+          $a-&gt;new(%new);
+        }
+</pre>
+<P>We will add a special case that watches out for floating-point dust:</P>
+
+<pre>
+<font color=purple><b>        my $EPSILON = 1e-6;</b></font>
+
+        sub arithmetic {
+          my ($a, $ac, $b, $bc) = @_;
+          my %new;
+          for my $k (keys(%$a), keys %$b) {
+         my ($av) = $a-&gt;coefficient($k);
+         my ($bv) = $b-&gt;coefficient($k);
+<font color=purple><b>         my $new = $ac * $av + $bc * $bv;</b></font>
+<font color=purple><b>         $new{$k} = abs($new) &lt; $EPSILON ? 0 : $new;</b></font>
+          }
+          $a-&gt;new(%new);
+        }
+</pre>
+<P>If a new coefficient is calculated to be too small, we assume it is
+due to round-off error, and truncate it to zero.  I think this is probably
+safe, because values in <tt>linogram</tt> nearly always represent distances
+in a diagram, and output devices don't have sufficient resolution to
+render meaningful differences on the order of <tt>$EPSILON</tt>.  This
+change may, of course, introduce new problems.  A safer alternative
+might be to use rational arithmetic throughout.</P>
+
+</p></p>
+
+
+
+<a name='p509'><h1>509</h1></a><p>(trivial error) <P>Near the bottom of the page, the phrase "one if its variables" should
+read "one of its variables".</P>
+
+</p></p>
+
+
+
+<a name='p517'><h1>517</h1></a><p>(trivial error) <P>In the <tt>reciprocal()</tt> function, the line</P>
+
+<pre>
+        my ($self, $coeff) = @_;
+</pre>
+<P>should be</P>
+
+<pre>
+        my $self = shift;
+</pre>
+</p><a href="errata-c-1.html#BT">(BT)</a></p>
+
+
+
+<a name='p519'><h1>519</h1></a><p>(<font color="orange">substantive error</font>) <P>In the middle of the page, I said "we must use
+<tt>$self-&gt;component($k)-&gt;scale($coeff)</tt> rather than
+<tt>$self-&gt;component($k) * $coeff</tt>".  The latter expression should have
+been <tt>$self-&gt;component($k)-&gt;value * $coeff</tt>.</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p525-526'><h1>525-526</h1></a><p>(trivial error) <P>The two displays on each page should be aligned.</P>
+
+</p></p>
+
+
+
+<a name='p530'><h1>530</h1></a><p>(minor error) <P>The final <tt>&quot;;</tt> is missing
+in <tt>die &quot;Unknown tuple component ... 'kind'&quot;;</tt>.</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p532'><h1>532</h1></a><p>(trivial error) <P>The two instances of <tt>$_[0]{O}{$basename}</tt> would be better written as
+<tt>$self-&gt;{O}{$basename}</tt>, both for consistency and to avoid confusion
+between the <tt>0</tt> and the <tt>O</tt>.</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p538'><h1>538</h1></a><p>(not an error) <P>In <tt>add_constraints()</tt>, it might look as though this:</P>
+
+<pre>
+        push @{$self-&gt;{C}},
+          $value-&gt;intrinsic-&gt;constraints,
+          $value-&gt;synthetic-&gt;constraints;
+</pre>
+<P>should be this:</P>
+
+<pre>
+        push @{$self-&gt;{C}},
+          $value-&gt;intrinsic_constraints,
+          $value-&gt;synthetic_constraints;
+</pre>
+<P>but it's not so.  The <tt>intrinsic_constraints()</tt> method is called on a
+<tt>Type</tt> object to calculate its basic set of intrinsic constraints
+from scratch, but the <tt>$value</tt> here is not a <tt>Type</tt> object but a
+<tt>Value::Feature</tt> object.  <tt>intrinsic()</tt> is an accessor that returns
+the intrinsic constraint object already calculated for this expression,
+and <tt>constraints()</tt> extracts the list of constraints from this object.
+Similarly for the synthetic constraints.</P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p544'><h1>544</h1></a><p>(trivial error) <P>The definition of <tt>$definition</tt> has</P>
+
+<pre>
+        $definition = labeledblock($defheader, $Declaration) ...
+</pre>
+<P>This will work, as long as <tt>$defheader</tt> is already properly defined,
+which it is.
+But for consistency, we should probably write this instead:</P>
+
+<pre>
+        $definition = labeledblock($Defheader, $Declaration) ...
+</pre>
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p545'><h1>545</h1></a><p>(trivial error) <P>In the second paragraph, "Two others are..." should be "The two others
+are...". </P>
+
+</p><a href="errata-c-1.html#PW">(PW)</a></p>
+
+
+
+<a name='p546-547'><h1>546-547</h1></a><p>(trivial error) <P>The phrases <tt>(expression representing constant 3)</tt> and
+<tt>(expression representing variable 'boxwid')</tt> should be in a slanted
+monospace font.</P>
+
+</p></p>
+
+
+
+<a name='p551'><h1>551</h1></a><p>(trivial error) <P><tt>NAME =&gt; 'TOP'</tt> should read <tt>NAME =&gt; 'top'</tt>.</P>
+
+</p></p>
+
+
+
+<a name='p552'><h1>552</h1></a><p>(<font color="orange">substantive error</font>) <P>The function <tt>add_subobj_declaration()</tt> should be named
+<tt>add_subfeature_declaration()</tt>, to match the entry in the dispatch
+table at the bottom of page 551.</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p554'><h1>554</h1></a><p>(<font color="orange">substantive error</font>) <P>The definition of <tt>%eval_op</tt> is missing.  It should have at least</P>
+
+<pre>
+        %eval_op = ('+' =&gt; 1, '-' =&gt; 1, '*' =&gt; 1, '/' =&gt; 1,
+                 'CON' =&gt; 1, 'VAR' =&gt; 1);
+</pre>
+<P>An earlier version of the program performed a constant-folding
+optimization, and used the following dispatch table:</P>
+
+<pre>
+        my %eval_op = ( '+' =&gt; sub { $_[0] + $_[1] },
+                     '-' =&gt; sub { $_[0] - $_[1] },
+                     '*' =&gt; sub { $_[0] * $_[1] },
+                     '/' =&gt; sub { $_[0] / $_[1] },
+                     'CON' =&gt; &quot;special case&quot;,
+                     'VAR' =&gt; &quot;special case&quot;,
+                   );
+</pre>
+<P>In the version of <i>Linogram</i> used in the book, it's probably best to
+eliminate this entirely, turning <tt>Expression::new</tt> into:</P>
+
+<pre>
+        sub new {
+          my ($base, $op, @args) = @_;
+          my $class = ref $base || $base;
+          bless [ $op, @args ] =&gt; $class;
+        }
+</pre>
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p555'><h1>555</h1></a><p>(<font color="orange">substantive error</font>) <P>In the definition of <tt>$name</tt>, the line <tt>&gt; sub { ... }</tt> should read
+<tt>&gt;&gt; sub { ... }</tt>.</P>
+
+</p><a href="errata-c-1.html#WL">(WL)</a></p>
+
+
+
+<a name='p557'><h1>557</h1></a><p>(trivial error) <P>The two lines that read</P>
+
+<pre>
+        age = 4;
+</pre>
+<P>should read</P>
+
+<pre>
+        constraints { age = 4; }
+</pre>
+<P>instead.</P>
+
+</p></p>
+
+
+
+<a name='p559'><h1>559</h1></a><p>(trivial error) <P>In the last paragraph, "named" should be "names".</P>
+
+</p></p>
+
+
+
+<a name='p573'><h1>573</h1></a><p>(trivial error) <P>The line under "Unix" that mentions "epoch time format" should be indented.</P>
+
+</p></p>
+
+
+
+
+   
+
+</dl>
+
+<br clear=all>
+
+<!-- THANKS section -->
+
+  <h2>Thanks</h2>
+
+  <table>
+    <tr>  <td><a name="AK">AK</a></td><td><a href="errata-c-1.html#AK">Andrés Kievsky</a></td>
+  <td><a name="IS">IS</a></td><td><a href="errata-c-1.html#IS">Imre Saling</a></td>
+  <td><a name="MZ">MZ</a></td><td><a href="errata-c-1.html#MZ">Mike Zraly</a></td>
+</tr><tr>  <td><a name="AL">AL</a></td><td><a href="errata-c-1.html#AL">Andy Lester</a></td>
+  <td><a name="JCZ">JCZ</a></td><td><a href="errata-c-1.html#JCZ">Jean-Christophe Zeus</a></td>
+  <td><a name="O">O</a></td><td><a href="errata-c-1.html#O"> Ovid</a></td>
+</tr><tr>  <td><a name="AL2">AL2</a></td><td><a href="errata-c-1.html#AL2">Arjen Laarhoven</a></td>
+  <td><a name="JK">JK</a></td><td><a href="errata-c-1.html#JK">Jim Kovacs</a></td>
+  <td><a name="PB">PB</a></td><td><a href="errata-c-1.html#PB">Pete Bevin</a></td>
+</tr><tr>  <td><a name="AR">AR</a></td><td><a href="errata-c-1.html#AR">Axel Rose</a></td>
+  <td><a name="JM">JM</a></td><td><a href="errata-c-1.html#JM">Jeff Mitchell</a></td>
+  <td><a name="PW">PW</a></td><td><a href="errata-c-1.html#PW">Per Westerlund</a></td>
+</tr><tr>  <td><a name="BT">BT</a></td><td><a href="errata-c-1.html#BT">Bennett Todd</a></td>
+  <td><a name="JPL">JPL</a></td><td><a href="errata-c-1.html#JPL">John P. Linderman</a></td>
+  <td><a name="RJBS">RJBS</a></td><td><a href="errata-c-1.html#RJBS">Ricardo Signes</a></td>
+</tr><tr>  <td><a name="DG">DG</a></td><td><a href="errata-c-1.html#DG">David Golden</a></td>
+  <td><a name="JQ">JQ</a></td><td><a href="errata-c-1.html#JQ">Jerome Quelin</a></td>
+  <td><a name="RS">RS</a></td><td><a href="errata-c-1.html#RS">Ron Savage</a></td>
+</tr><tr>  <td><a name="DL">DL</a></td><td><a href="errata-c-1.html#DL">Dami Laurent</a></td>
+  <td><a name="JS">JS</a></td><td><a href="errata-c-1.html#JS">Jesse Sheidlower</a></td>
+  <td><a name="SB">SB</a></td><td><a href="errata-c-1.html#SB">Sean Burke</a></td>
+</tr><tr>  <td><a name="DT">DT</a></td><td><a href="errata-c-1.html#DT">Dennis Taylor</a></td>
+  <td><a name="JW">JW</a></td><td><a href="errata-c-1.html#JW">Juerd Waalboer</a></td>
+  <td><a name="TH">TH</a></td><td><a href="errata-c-1.html#TH">Thomas Herchenroeder</a></td>
+</tr><tr>  <td><a name="FF">FF</a></td><td><a href="errata-c-1.html#FF">Felix Finch</a></td>
+  <td><a name="KH">KH</a></td><td><a href="errata-c-1.html#KH">Kurt Hutchinson</a></td>
+  <td><a name="VL">VL</a></td><td><a href="errata-c-1.html#VL">Vincent Lee</a></td>
+</tr><tr>  <td><a name="GB">GB</a></td><td><a href="errata-c-1.html#GB">Greg Bacon</a></td>
+  <td><a name="KW">KW</a></td><td><a href="errata-c-1.html#KW">Ken Williams</a></td>
+  <td><a name="VZ">VZ</a></td><td><a href="errata-c-1.html#VZ">Vyacheslav Zakovyrya</a></td>
+</tr><tr>  <td><a name="GC">GC</a></td><td><a href="errata-c-1.html#GC">Gustavo Chaves</a></td>
+  <td><a name="LE">LE</a></td><td><a href="errata-c-1.html#LE">Leif Eriksen</a></td>
+  <td><a name="WL">WL</a></td><td><a href="errata-c-1.html#WL">Wolfgang Laun</a></td>
+</tr><tr>  <td><a name="GY">GY</a></td><td><a href="errata-c-1.html#GY">Gaal Yahas</a></td>
+  <td><a name="LSL">LSL</a></td><td><a href="errata-c-1.html#LSL">Luc St-Louis</a></td>
+  <td><a name="WM">WM</a></td><td><a href="errata-c-1.html#WM">Walt Mankowski</a></td>
+</tr><tr>  <td><a name="HDP">HDP</a></td><td><a href="errata-c-1.html#HDP">Hans Dieter Pearcey</a></td>
+  <td><a name="MB">MB</a></td><td><a href="errata-c-1.html#MB">Martin Busik</a></td>
+  <td>&nbsp;</td><td>&nbsp;</td>
+</tr></table>
+
+
+
+<hr>
+<img src="../../pics/small-sigils.gif" align=right>
+<p>Return to: 
+<a href="http://www.plover.com/~mjd/">Universe of Discourse main page</a> |
+<a href="http://www.plover.com/~mjd/whatsnew.html">What's new page</a> |
+<a href="../../">Perl Paraphernalia</a> |
+<a href="../"><cite>Higher-Order Perl</cite></a>
+</p>
+
+<p><a href="mailto:mjd-perl-hop+@plover.com">mjd-perl-hop+@plover.com</a></p>
+
+</body>
+</html>

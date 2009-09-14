@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="b4e3fd23-bc25-484a-859f-7a096c420f00" name="HigherOrderPerl.kpf" kpf_version="4">
+<preference-set idref="b4e3fd23-bc25-484a-859f-7a096c420f00/print_readdir.pl">
+  <string id="lastInvocation">default</string>
+<preference-set id="Invocations">
+<preference-set id="default">
+  <string id="postparams"></string>
+  <string id="language">Perl</string>
+  <string id="warnings">enabled</string>
+  <boolean id="use-console">0</boolean>
+  <string id="getparams"></string>
+  <string relative="path" id="filename">print_readdir.pl</string>
+  <string id="mpostparams"></string>
+  <boolean id="show-dialog">1</boolean>
+  <string id="userCGIEnvironment"></string>
+  <string id="request-method">GET</string>
+  <string id="params"></string>
+  <string id="executable-params"></string>
+  <string id="posttype">application/x-www-form-urlencoded</string>
+  <string id="documentRoot"></string>
+  <string id="cookieparams"></string>
+  <string id="userEnvironment"></string>
+  <boolean id="sim-cgi">0</boolean>
+  <string id="cwd"></string>
+  <long id="debugger.io-port">9011</long>
+</preference-set>
+</preference-set>
+</preference-set>
+<preference-set idref="b4e3fd23-bc25-484a-859f-7a096c420f00">
+  <boolean id="import_live">1</boolean>
+</preference-set>
+<preference-set idref="b4e3fd23-bc25-484a-859f-7a096c420f00/bin.1.pl">
+  <string id="lastInvocation">default</string>
+<preference-set id="Invocations">
+<preference-set id="default">
+  <string id="postparams"></string>
+  <string id="language">Perl</string>
+  <string id="warnings">enabled</string>
+  <boolean id="use-console">0</boolean>
+  <string id="getparams"></string>
+  <string relative="path" id="filename">bin.1.pl</string>
+  <string id="mpostparams"></string>
+  <boolean id="show-dialog">1</boolean>
+  <string id="userCGIEnvironment"></string>
+  <string id="request-method">GET</string>
+  <string id="params">10 12 14 15 16</string>
+  <string id="executable-params"></string>
+  <string id="posttype">application/x-www-form-urlencoded</string>
+  <string id="documentRoot"></string>
+  <string id="cookieparams"></string>
+  <string id="userEnvironment"></string>
+  <boolean id="sim-cgi">0</boolean>
+  <string id="cwd"></string>
+  <long id="debugger.io-port">9011</long>
+</preference-set>
+</preference-set>
+</preference-set>
+<preference-set idref="b4e3fd23-bc25-484a-859f-7a096c420f00/fac.1.pl">
+  <string id="lastInvocation">default</string>
+<preference-set id="Invocations">
+<preference-set id="default">
+  <string id="postparams"></string>
+  <string id="language">Perl</string>
+  <string id="warnings">enabled</string>
+  <boolean id="use-console">0</boolean>
+  <string id="getparams"></string>
+  <string relative="path" id="filename">fac.1.pl</string>
+  <string id="mpostparams"></string>
+  <boolean id="show-dialog">1</boolean>
+  <string id="userCGIEnvironment"></string>
+  <string id="request-method">GET</string>
+  <string id="params">12</string>
+  <string id="executable-params"></string>
+  <string id="posttype">application/x-www-form-urlencoded</string>
+  <string id="documentRoot"></string>
+  <string id="cookieparams"></string>
+  <string id="userEnvironment"></string>
+  <boolean id="sim-cgi">0</boolean>
+  <string id="cwd"></string>
+  <long id="debugger.io-port">9011</long>
+</preference-set>
+</preference-set>
+</preference-set>
+</project>

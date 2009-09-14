@@ -1,0 +1,39 @@
+# Project: sock_server_myftp
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = ../l4c/l4c.o myftpd.o ../socket/my_socket.o ../error/my_error.o $(RES)
+LINKOBJ  = ../l4c/l4c.o myftpd.o ../socket/my_socket.o ../error/my_error.o $(RES)
+LIBS =  -L"C:/GNU/Dev-Cpp/lib" -L"C:/gnu/Dev-Cpp/lib" -L"C:/gnu/Dev-Cpp/libexec" -L"C:/gnu/Dev-Cpp/mingw32/lib" ../../../../../../../../gnu/Dev-Cpp/lib/libwsock32.a  
+INCS =  -I"C:/GNU/Dev-Cpp/include"  -I"C:/gnu/Dev-Cpp/include"  -I"C:/cygwin/home/marcus/work/code/src/c/error"  -I"C:/cygwin/home/marcus/work/code/src/c/socket" 
+CXXINCS =  -I"C:/GNU/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/GNU/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/GNU/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/GNU/Dev-Cpp/include/c++/3.4.2"  -I"C:/GNU/Dev-Cpp/include"  -I"C:/gnu/Dev-Cpp/include"  -I"C:/cygwin/home/marcus/work/code/src/c/error"  -I"C:/cygwin/home/marcus/work/code/src/c/socket" 
+BIN  = sock_server_myftp.exe
+CXXFLAGS = $(CXXINCS)  
+CFLAGS = $(INCS)  
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before sock_server_myftp.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o "sock_server_myftp.exe" $(LIBS)
+
+../l4c/l4c.o: ../l4c/l4c.c
+	$(CC) -c ../l4c/l4c.c -o ../l4c/l4c.o $(CFLAGS)
+
+myftpd.o: myftpd.c
+	$(CC) -c myftpd.c -o myftpd.o $(CFLAGS)
+
+../socket/my_socket.o: ../socket/my_socket.c
+	$(CC) -c ../socket/my_socket.c -o ../socket/my_socket.o $(CFLAGS)
+
+../error/my_error.o: ../error/my_error.c
+	$(CC) -c ../error/my_error.c -o ../error/my_error.o $(CFLAGS)

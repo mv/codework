@@ -1,0 +1,592 @@
+Loaded...
+gaps 902
+src  704
+
+   1. BS_AR_ATU_NOSSO_NUM_PKB.pls
+               1109: trunk/gaps/ar/ar208/p1
+                156: trunk/src/bs/ar
+
+   2. BS_AR_ATU_NOSSO_NUM_PKS.pls
+               1109: trunk/gaps/ar/ar208/p1
+                156: trunk/src/bs/ar
+
+   3. LinearBarCode.jar
+               2973: trunk/gaps/ar/ar407/p6
+               2113: trunk/src/ar/java
+
+   4. MDBARACOMPNFF.rdf
+               3133: trunk/gaps/ar/ar403_rel_acomp_imp_nff/p2
+               3132: trunk/src/ar/rdf
+
+   5. MDBARALTSNF.fmb
+               2535: trunk/gaps/ar/ar270_Alterar_Serie_Nota_Fiscal/p1
+               2524: trunk/src/ar/fmb
+
+   6. MDBARBILL.rdf
+               2850: trunk/gaps/ar/ar407/p5
+               2763: trunk/src/ar/rdf
+
+   7. MDBARCOMPBATCHSOURCEPRF.ldt
+               2923: trunk/gaps/ar/ar400_nf_complementar/p3
+               2773: trunk/src/ar/seed
+
+   8. MDBARGRMA.fmb
+               2230: trunk/gaps/ar/ar236_Ger_Lote_RMA/p1
+                  1: trunk/src/ar/fmb
+
+   9. MDBARINSTBANC.fmb
+               2775: trunk/gaps/ar/ar219/p1
+               2597: trunk/src/ar/fmb
+
+  10. MDBARMDINT.fmb
+               2961: trunk/gaps/ar/ar236_Ger_Lote_RMA/p1
+                  1: trunk/src/ar/fmb
+
+  11. MDBARSETUPNFCOMPL.fmb
+               2920: trunk/gaps/ar/ar400_nf_complementar/p3
+               2774: trunk/src/ar/fmb
+
+  12. MDBARTRXNEGOTIATE.fmb
+               2211: trunk/gaps/ar/ar215/p2
+               2145: trunk/src/ar/fmb
+
+  13. MDBCMBASE.fmb
+               2852: trunk/gaps/cm/cm203/p2
+               2797: trunk/src/cm/fmb
+
+  14. MDBINVHISTINTERNALREQ.fmb
+               2284: trunk/gaps/inv/inv220/p1
+               2278: trunk/src/inv/fmb
+
+  15. MDBINVREQUESTERAPROVER.fmb
+               2284: trunk/gaps/inv/inv220/p1
+               2278: trunk/src/inv/fmb
+
+  16. MDBOMGOODSLIST.rdf
+               2445: trunk/gaps/om/om403/p1
+               1213: trunk/src/om/rdf
+
+  17. MDBOMORGPAR.fmb
+               2376: trunk/gaps/om/om252_tp_ped_trf/p1
+               2373: trunk/src/om/fmb
+
+  18. MDBWIPMOOP.rdf
+               3147: trunk/gaps/wip/wip405_Relat_Apont/p2
+               3146: trunk/src/wip/rdf
+
+  19. MDBWIPSMP.rdf
+               2044: trunk/gaps/wip/wip401_Separacao_Mat_Prod/p7
+               2042: trunk/src/wip/rdf
+
+  20. MDB_AP_PAYGROUP_R_AI.trg
+               2690: trunk/gaps/ap/ap214/p3
+               1340: trunk/src/ar/sql
+
+  21. MDB_AR_ABT_DEV_TIT_PKB.pls
+               2627: trunk/gaps/ar/ar275_sem_app_ac_tit_liq/p1
+               1326: trunk/src/ar/pls
+
+  22. MDB_AR_ABT_DEV_TIT_PKS.pls
+               2625: trunk/gaps/ar/ar275_sem_app_ac_tit_liq/p1
+               1324: trunk/src/ar/pls
+
+  23. MDB_AR_ALTERA_CFOP_PKB.pls
+               2693: trunk/gaps/ar/ar205_altera_cfop/p2
+               2692: trunk/src/ar/pls
+
+  24. MDB_AR_ALTERA_CFOP_PKS.pls
+               2693: trunk/gaps/ar/ar205_altera_cfop/p2
+               2692: trunk/src/ar/pls
+
+  25. MDB_AR_ALTER_NUM_PKB.pls
+               2886: trunk/gaps/ar/ar208/p2
+               2752: trunk/src/ar/pls
+
+  26. MDB_AR_ALTER_NUM_PKS.pls
+               2894: trunk/gaps/ar/ar208/p2
+               1105: trunk/src/ar/pls
+
+  27. MDB_AR_AR219_00001.sql
+               2933: trunk/gaps/ar/ar219/p1
+               2783: trunk/src/ar/sql
+
+  28. MDB_AR_AR225_00001.sql
+                588: trunk/gaps/ar/ar225_dev_gera_abat_banco/p1
+                529: trunk/src/ar/sql
+
+  29. MDB_AR_AR233_00001.sql
+               1535: trunk/gaps/ar/ar233_dev_cli_nao_aplicar_AC/p1
+                527: trunk/src/ar/sql
+
+  30. MDB_AR_AR243_00001.sql
+                252: trunk/gaps/ar/ar243_cad_serie_NF_OI/p1
+                246: trunk/src/ar/sql
+
+  31. MDB_AR_AR243_MNU.ldt
+                252: trunk/gaps/ar/ar243_cad_serie_NF_OI/p1
+                250: trunk/src/ar/seed
+
+  32. MDB_AR_AR250_00001.sql
+               2198: trunk/gaps/ar/ar250_Restringir_Transacoes_filiais/p1
+               2190: trunk/src/ar/sql
+
+  33. MDB_AR_AR271_00001.sql
+               2702: trunk/gaps/ar/ar271_Atualiza_liq_peso_bruto_NF/p1
+               2635: trunk/src/ar/sql
+
+  34. MDB_AR_ATTACH_FP.ldt
+               1925: trunk/gaps/ar/ar615/p2
+                  1: trunk/src/ar/seed
+
+  35. MDB_AR_ATUALIZAR_OI_PKB.pls
+                 16: trunk/gaps/ar/ar244/p1
+                 14: trunk/src/ar/pls
+
+  36. MDB_AR_ATUALIZAR_OI_PKS.pls
+                 16: trunk/gaps/ar/ar244/p1
+                 14: trunk/src/ar/pls
+
+  37. MDB_AR_BANK_TRANSFER_FP.ldt
+               1716: trunk/gaps/ar/ar610/p4
+                  1: trunk/src/ar/seed
+
+  38. MDB_AR_BARCODE_GENERATOR.jsp
+               2973: trunk/gaps/ar/ar407/p6
+               2110: trunk/src/ar/java
+
+  39. MDB_AR_BATCH_ORG_ASS_ALL.grt
+                252: trunk/gaps/ar/ar243_cad_serie_NF_OI/p1
+                246: trunk/src/ar/sql
+
+  40. MDB_AR_BATCH_ORG_ASS_ALL.ind
+                252: trunk/gaps/ar/ar243_cad_serie_NF_OI/p1
+                246: trunk/src/ar/sql
+
+  41. MDB_AR_BATCH_ORG_ASS_ALL.syn
+                252: trunk/gaps/ar/ar243_cad_serie_NF_OI/p1
+                246: trunk/src/ar/sql
+
+  42. MDB_AR_BATCH_ORG_ASS_ALL.tab
+                252: trunk/gaps/ar/ar243_cad_serie_NF_OI/p1
+                246: trunk/src/ar/sql
+
+  43. MDB_AR_BATCH_ORG_ASS_V.vw
+                252: trunk/gaps/ar/ar243_cad_serie_NF_OI/p1
+                246: trunk/src/ar/sql
+
+  44. MDB_AR_BATCH_SOURCES_VST.ldt
+               2889: trunk/gaps/ar/ar407/p5
+               2846: trunk/src/ar/seed
+
+  45. MDB_AR_BILL_CONTROL_PS_CCR.ldt
+               2889: trunk/gaps/ar/ar407/p5
+               2844: trunk/src/ar/seed
+
+  46. MDB_AR_BILL_CONTROL_RQG.ldt
+               1563: trunk/gaps/ar/ar407/p4
+                  1: trunk/src/ar/seed
+
+  47. MDB_AR_BILL_UTIL_PKB.pls
+               2888: trunk/gaps/ar/ar407/p5
+               2805: trunk/src/ar/pls
+
+  48. MDB_AR_BILL_UTIL_PKS.pls
+               2888: trunk/gaps/ar/ar407/p5
+               2754: trunk/src/ar/pls
+
+  49. MDB_AR_CALC_WEIGHT_PKB.pls
+               2713: trunk/gaps/ar/ar271_Atualiza_liq_peso_bruto_NF/p1
+               2700: trunk/src/ar/pls
+
+  50. MDB_AR_CALC_WEIGHT_PKS.pls
+               2702: trunk/gaps/ar/ar271_Atualiza_liq_peso_bruto_NF/p1
+               2634: trunk/src/ar/pls
+
+  51. MDB_AR_CUSTOMERS_FP.ldt
+               2969: trunk/gaps/ar/ar600/p6
+                  1: trunk/src/ar/seed
+
+  52. MDB_AR_CUSTOMER_CNPJ_V.vw
+               2430: trunk/gaps/ar/ar403_rel_acomp_imp_nff/p1
+               2405: trunk/src/ar/sql
+
+  53. MDB_AR_CUSTOMIZACOES_RQG.ldt
+                 16: trunk/gaps/ar/ar244/p1
+                  1: trunk/src/ar/seed
+
+  54. MDB_AR_IFACE_LIN_ABT_R_BU.trg
+               2628: trunk/gaps/ar/ar275_sem_app_ac_tit_liq/p1
+               1324: trunk/src/ar/sql
+
+  55. MDB_AR_MAINT_TRANSACTIONS_V.vw
+               2778: trunk/gaps/ar/ar219/p1
+                621: trunk/src/ar/sql
+
+  56. MDB_AR_MDBARACOMPNFF_CCR.ldt
+               2410: trunk/gaps/ar/ar403_rel_acomp_imp_nff/p1
+               2408: trunk/src/ar/seed
+
+  57. MDB_AR_MDBARACOMPNFF_RQG.ldt
+               2416: trunk/gaps/ar/ar403_rel_acomp_imp_nff/p1
+               2414: trunk/src/ar/seed
+
+  58. MDB_AR_NF_COMPL.ind
+               2923: trunk/gaps/ar/ar400_nf_complementar/p3
+               2772: trunk/src/ar/sql
+
+  59. MDB_AR_RECEIPTS_FP.ldt
+               2218: trunk/gaps/ar/ar603_tela_recebimento/p2
+                  1: trunk/src/ar/seed
+
+  60. MDB_AR_TERMS_FP.ldt
+                325: trunk/gaps/ar/ar611/p2
+                  1: trunk/src/ar/seed
+
+  61. MDB_AR_TRANSAC_ACCOUNT_PKB.pls
+               1220: trunk/gaps/bil/bil216_alt_contab_ctas_receber/p5
+                435: trunk/src/bil/pls
+
+  62. MDB_AR_TRANSAC_ACCOUNT_PKS.pls
+               1220: trunk/gaps/bil/bil216_alt_contab_ctas_receber/p5
+                435: trunk/src/bil/pls
+
+  63. MDB_AR_TRX_MAINTS_ALL.grt
+               2927: trunk/gaps/ar/ar219/p1
+               1308: trunk/src/ar/sql
+
+  64. MDB_AR_TRX_MAINTS_ALL.syn
+               2927: trunk/gaps/ar/ar219/p1
+               1308: trunk/src/ar/sql
+
+  65. MDB_AR_TRX_MAINTS_ALL.tab
+               2927: trunk/gaps/ar/ar219/p1
+               1696: trunk/src/ar/sql
+
+  66. MDB_AR_TRX_MAINTS_ALL_S.seq
+               2927: trunk/gaps/ar/ar219/p1
+               1308: trunk/src/ar/sql
+
+  67. MDB_AR_TRX_NUMBER_VST.ldt
+                 16: trunk/gaps/ar/ar244/p1
+                 15: trunk/src/ar/seed
+
+  68. MDB_ATUALIZAR_OI_CCR.ldt
+                 16: trunk/gaps/ar/ar244/p1
+                 15: trunk/src/ar/seed
+
+  69. MDB_CM_ACC_RESOURCES_R_BI.trg
+               1829: trunk/gaps/cm/cm250/p2
+               1828: trunk/src/cm/sql
+
+  70. MDB_CM_BASE_DIVIDE_PKB.pls
+               2880: trunk/gaps/cm/cm203/p2
+               2537: trunk/src/cm/pls
+
+  71. MDB_CM_BASE_DIVIDE_PKS.pls
+               2880: trunk/gaps/cm/cm203/p2
+               2537: trunk/src/cm/pls
+
+  72. MDB_CM_BASE_PARAMETERS.ind
+               2181: trunk/gaps/cm/cm203/p2
+               2180: trunk/src/cm/sql
+
+  73. MDB_CM_BASE_PARAM_DEPTS.ind
+               2181: trunk/gaps/cm/cm203/p2
+               2180: trunk/src/cm/sql
+
+  74. MDB_CM_REP_ACCOUNTING_PKB.pls
+               1824: trunk/gaps/cm/cm205/p7
+                  1: trunk/src/cm/pls
+
+  75. MDB_CM_REP_ACC_CCR.ldt
+                 18: trunk/gaps/cm/cm205/p1
+                  1: trunk/src/cm/seed
+
+  76. MDB_CM_REP_ACC_RQG.ldt
+                 18: trunk/gaps/cm/cm205/p1
+                  1: trunk/src/cm/seed
+
+  77. MDB_FA_FA200_00001.sql
+               1824: trunk/gaps/fa/fa200_ctrl_prj_fa/p1
+               1360: trunk/src/fa/sql
+
+  78. MDB_FA_MASS_ADDITIONS_PKB.pls
+               1824: trunk/gaps/fa/fa200_ctrl_prj_fa/p1
+               1360: trunk/src/fa/pls
+
+  79. MDB_FA_MASS_ADDITIONS_PKS.pls
+               1824: trunk/gaps/fa/fa200_ctrl_prj_fa/p1
+               1360: trunk/src/fa/pls
+
+  80. MDB_FA_MASS_ADDITIONS_R_BI.trg
+               1824: trunk/gaps/fa/fa200_ctrl_prj_fa/p1
+               1360: trunk/src/fa/sql
+
+  81. MDB_INV220_MNU.ldt
+               2304: trunk/gaps/inv/inv220/p1
+               2300: trunk/src/inv/seed
+
+  82. MDB_INV_COSTS_CENTER.grt
+               2304: trunk/gaps/inv/inv220/p1
+               2281: trunk/src/inv/sql
+
+  83. MDB_INV_COSTS_CENTER.ind
+               2304: trunk/gaps/inv/inv220/p1
+               2281: trunk/src/inv/sql
+
+  84. MDB_INV_COSTS_CENTER.syn
+               2304: trunk/gaps/inv/inv220/p1
+               2281: trunk/src/inv/sql
+
+  85. MDB_INV_COSTS_CENTER.tab
+               2304: trunk/gaps/inv/inv220/p1
+               2281: trunk/src/inv/sql
+
+  86. MDB_INV_HIST_REQ_LINES_PKB.pls
+               2304: trunk/gaps/inv/inv220/p1
+               2288: trunk/src/inv/sql
+
+  87. MDB_INV_HIST_REQ_LINES_PKS.pls
+               2304: trunk/gaps/inv/inv220/p1
+               2288: trunk/src/inv/sql
+
+  88. MDB_INV_INV212_00001.sql
+               2078: trunk/gaps/inv/inv212/p2
+                226: trunk/src/inv/sql
+
+  89. MDB_INV_INV220_00001.sql
+               2305: trunk/gaps/inv/inv220/p1
+               2303: trunk/src/inv/sql
+
+  90. MDB_INV_INV221_00001.sql
+               2022: trunk/gaps/inv/inv221_transf_subinventario/p1
+               1890: trunk/src/inv/sql
+
+  91. MDB_INV_ORDER_REQUISITION.wft
+               2296: trunk/gaps/inv/inv220/p1
+               2295: trunk/src/inv/wft
+
+  92. MDB_INV_REQUESTER_APROVER.grt
+               2302: trunk/gaps/inv/inv220/p1
+               2281: trunk/src/inv/sql
+
+  93. MDB_INV_REQUESTER_APROVER.ind
+               2302: trunk/gaps/inv/inv220/p1
+               2281: trunk/src/inv/sql
+
+  94. MDB_INV_REQUESTER_APROVER.syn
+               2302: trunk/gaps/inv/inv220/p1
+               2281: trunk/src/inv/sql
+
+  95. MDB_INV_REQUESTER_APROVER.tab
+               2302: trunk/gaps/inv/inv220/p1
+               2281: trunk/src/inv/sql
+
+  96. MDB_INV_REQ_APROVER_S.seq
+               2310: trunk/gaps/inv/inv220/p1
+               2308: trunk/src/inv/sql
+
+  97. MDB_INV_REQ_APROVER_S.syn
+               2310: trunk/gaps/inv/inv220/p1
+               2308: trunk/src/inv/sql
+
+  98. MDB_INV_TRANSF_SUBINV_PKB.pls
+               2078: trunk/gaps/inv/inv212/p2
+                  1: trunk/src/inv/pls
+
+  99. MDB_INV_TRANSF_SUBINV_PKS.pls
+               2078: trunk/gaps/inv/inv212/p2
+                  1: trunk/src/inv/pls
+
+ 100. MDB_INV_TRANSF_SUBINV_R_BI.trg
+               2078: trunk/gaps/inv/inv212/p2
+                226: trunk/src/inv/sql
+
+ 101. MDB_JL_BR_OCCUR_ABT_R_BI.trg
+                588: trunk/gaps/ar/ar225_dev_gera_abat_banco/p1
+                439: trunk/src/jl/sql
+
+ 102. MDB_MTL_MAT_TRANSACTIONS_V.vw
+               2022: trunk/gaps/inv/inv221_transf_subinventario/p1
+               1473: trunk/src/inv/sql
+
+ 103. MDB_OM_BOOKED_ORDER_PKB.pls
+               2445: trunk/gaps/om/om251_Melhoria_OM203/p1
+               2350: trunk/src/om/pls
+
+ 104. MDB_OM_BOOKED_ORDER_PKS.pls
+                422: trunk/gaps/om/om203/p1
+                 88: trunk/src/om/pls
+
+ 105. MDB_OM_BOOKORD_CCR.ldt
+                422: trunk/gaps/om/om203/p1
+                402: trunk/src/om/seed
+
+ 106. MDB_OM_BOOKORD_RQG.ldt
+                422: trunk/gaps/om/om203/p1
+                402: trunk/src/om/seed
+
+ 107. MDB_OM_HEADER_IFACE_R_BI.trg
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2374: trunk/src/om/sql
+
+ 108. MDB_OM_LINE_IFACE_R_BI.trg
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2374: trunk/src/om/sql
+
+ 109. MDB_OM_OM250_00001.sql
+               2865: trunk/gaps/om/om250_nf_cli_rma_ac/p1
+               2863: trunk/src/om/sql
+
+ 110. MDB_OM_OM252_MNU.ldt
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2375: trunk/src/om/seed
+
+ 111. MDB_OM_OM252_PTB_MSG.ldt
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2375: trunk/src/om/seed
+
+ 112. MDB_OM_OM252_US_MSG.ldt
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2375: trunk/src/om/seed
+
+ 113. MDB_OM_ORDENS_ROTA_CCR.ldt
+               3112: trunk/gaps/om/om400/p1
+               3110: trunk/src/om/seed
+
+ 114. MDB_OM_ORDENS_ROTA_RQG.ldt
+               3112: trunk/gaps/om/om400/p1
+               3072: trunk/src/om/seed
+
+ 115. MDB_OM_ORD_ROT_CLI.rdf
+               3122: trunk/gaps/om/om400/p1
+               3120: trunk/src/om/rdf
+
+ 116. MDB_OM_ORG_PARAMETERS.grt
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 117. MDB_OM_ORG_PARAMETERS.syn
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 118. MDB_OM_ORG_PARAMETERS.tab
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 119. MDB_OM_ORG_PARAMETERS_S.grt
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2370: trunk/src/om/sql
+
+ 120. MDB_OM_ORG_PARAMETERS_S.seq
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2370: trunk/src/om/sql
+
+ 121. MDB_OM_ORG_PARAMETERS_S.syn
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 122. MDB_OM_ORG_PARAMETERS_U1.ind
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 123. MDB_OM_ORG_PARAMETERS_U2.ind
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 124. MDB_OM_ORG_PAR_LINES.grt
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 125. MDB_OM_ORG_PAR_LINES.syn
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 126. MDB_OM_ORG_PAR_LINES.tab
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 127. MDB_OM_ORG_PAR_LINES_N1.ind
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 128. MDB_OM_ORG_PAR_LINES_S.grt
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 129. MDB_OM_ORG_PAR_LINES_S.seq
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 130. MDB_OM_ORG_PAR_LINES_S.syn
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 131. MDB_OM_ORG_PAR_LINES_U1.ind
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 132. MDB_OM_ORG_PAR_LINES_U2.ind
+               2445: trunk/gaps/om/om252_tp_ped_trf/p1
+               2362: trunk/src/om/sql
+
+ 133. MDB_OM_SALES_ORDERS_FP.ldt
+               1119: trunk/gaps/om/om601/p2
+                157: trunk/src/om/seed
+
+ 134. MDB_REC_ACC_CORREC_RET_CCR.ldt
+                 20: trunk/gaps/ri/ri203/p4
+                  1: trunk/src/ri/seed
+
+ 135. MDB_REC_ACC_CORREC_RET_PKB.pls
+                 20: trunk/gaps/ri/ri203/p4
+                  1: trunk/src/ri/pls
+
+ 136. MDB_REC_ACC_CORREC_RET_PKS.pls
+                 20: trunk/gaps/ri/ri203/p4
+                  1: trunk/src/ri/pls
+
+ 137. MDB_REC_ACC_CORREC_RET_RQG.ldt
+                 20: trunk/gaps/ri/ri203/p4
+                  1: trunk/src/ri/seed
+
+ 138. MDB_REC_FIXED_ACCOUNT_PKB.pls
+               1343: trunk/gaps/ri/ri250/p1
+               1341: trunk/src/ri/pls
+
+ 139. MDB_REC_FIXED_ACCOUNT_PKS.pls
+               1343: trunk/gaps/ri/ri250/p1
+               1341: trunk/src/ri/pls
+
+ 140. MDB_REC_QTY_DIVERG_CCR.ldt
+                 22: trunk/gaps/ri/ri207/p2
+                  1: trunk/src/ri/seed
+
+ 141. MDB_REC_RCV_TRANSACT_DFF.ldt
+                 22: trunk/gaps/ri/ri207/p2
+                  1: trunk/src/ri/seed
+
+ 142. MDB_REC_RECEIPT_UTIL_PKB.pls
+                 22: trunk/gaps/ri/ri207/p2
+                  1: trunk/src/ri/pls
+
+ 143. MDB_REC_RECEIPT_UTIL_PKS.pls
+                 22: trunk/gaps/ri/ri207/p2
+                  1: trunk/src/ri/pls
+
+ 144. MDB_WIP_CONF_COMP.rdf
+               2467: trunk/gaps/wip/wip406_Relat_Conf_Cons_Est_Comp/p2
+               2466: trunk/src/wip/rdf
+
+ 145. MDB_WIP_SMP_CCR.ldt
+               1137: trunk/gaps/wip/wip401_Separacao_Mat_Prod/p6
+                128: trunk/src/wip/seed
+
+ 146. MDB_WIP_SMP_RQG.ldt
+               1824: trunk/gaps/wip/wip401_Separacao_Mat_Prod/p6
+                  1: trunk/src/wip/seed
+
+ 147. mdb_ar_pay_occurrence_r_au.trg
+               2927: trunk/gaps/ar/ar219/p1
+               2783: trunk/src/ar/sql
+

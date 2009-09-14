@@ -1,0 +1,50 @@
+# $Id: list_mun.txt 6 2006-09-10 15:35:16Z marcus $
+#
+# label1                label2  hostname    ip            tnsnames              service_name        schema           cd_mun  cd_uf  concentrador    estadual        root        oracle
+#
+# 18,23/41
+
+Adrianopolis            adrpr   HMADRPR1    10.41.101.1   adrianopolis          MUN.M41410020000000 M41410020000000  410020  41     C41000000000001 E41000000000000 vD7Kr5Il    XAMcGxcY  adrianopolis
+Agudos_do_sul           asupr   HMASUPR1    10.41.97.1    agudosdosul           MUN.M41410030000000 M41410030000000  410030  41     C41000000000001 E41000000000000 vFF-R-6q    XkoUXF#I  agudosdosul
+Almirante_Tamandare     atapr   HMATAPR1    10.41.105.1   almirantetamandare    MUN.M41410040000000 M41410040000000  410040  41     C41000000000001 E41000000000000 vKBOk5TR    XeJd7sgn  almirantetamandare
+Araucaria               aacpr   HMAACPR1    10.41.91.1    araucaria             MUN.M41410180000000 M41410180000000  410180  41     C41000000000001 E41000000000000 nzRWlttU    hpb3bQPl  araucaria
+Balsa_Nova              bnopr   HMBNOPR1    10.41.110.1   balsanova             MUN.M41410230000000 M41410230000000  410230  41     C41000000000001 E41000000000000 n!%gG4Ht    hi0Yqp#6  balsanova
+Bocaiuva_do_Sul         bsupr   HMBSUPR1    10.41.98.1    bocaiuvadosul         MUN.M41410310000000 M41410310000000  410310  41     C41000000000001 E41000000000000 omfLGM0h    mLCE7@qD  bocaiuvadosul
+Campina_Grande_do_Sul   cgspr   HMCGSPR1    10.41.116.1   campinagrandedosul    MUN.M41410400000000 M41410400000000  410400  41     C41000000000001 E41000000000000 qRmzI&D!    mCuZpJWa  campinagrandedosul
+Campo_Largo             clapr   HMCALPR1    10.41.107.1   campolargo            MUN.M41410420000000 M41410420000000  410420  41     C41000000000001 E41000000000000 q@vG%ULa    mwzRuRz%  campolargo
+Campo_Magro             cmapr   HMCMAPR1    10.41.108.1   campomagro            MUN.M41410425000000 M41410425000000  410425  41     C41000000000001 E41000000000000 qK-KEP@Z    mSsrYOs2  campomagro
+Campo_do_Tenente        ctepr   HMCTEPR1    10.41.95.1    campodotenente        MUN.M41410410000000 M41410410000000  410410  41     C41000000000001 E41000000000000 qjbHhi5m    mFrsJueO  campodotenente
+Cerroazul               cazpr   HMCAZPR1    10.41.115.1   cerroazul             MUN.M41410520000000 M41410520000000  410520  41     C41000000000001 E41000000000000 s1xx!MRB    QOZO&ihr  cerroazul
+Colombo                 colpr   HMCOLPR1    10.41.114.1   colombo               MUN.M41410580000000 M41410580000000  410580  41     C41000000000001 E41000000000000 qJ#tWjpp    S2yZo7qU  colombo
+Contenda                conpr   HMCONPR1    10.41.109.1   contenda              MUN.M41410620000000 M41410620000000  410620  41     C41000000000001 E41000000000000 qTFaCeEe    QH#5fOHJ  contenda
+Curitiba                crtpr   HMCRTPR1    10.41.240.1   curitiba              MUN.M41410690000000 M41410690000000  410690  41     C41000000000001 E41000000000000 1EM3PaHq    QbkPQsa9  curitiba
+Doutor_Ulysses          dulpr   HMDULPR1    10.41.100.1   doutorulysses         MUN.M41412863000000 M41412863000000  412863  41     C41000000000001 E41000000000000 ysItq9Ab    %5M8sJvi  doutorulysses
+Fazenda_Rio_Grande      frgpr   HMFRGPR1    10.41.111.1   fazendariogrande      MUN.M41410765000000 M41410765000000  410765  41     C41000000000001 E41000000000000 13aInf&-    Swnpv9Fd  fazendariogrande
+Itaperucu               ipepr   HMIPEPR1    10.41.113.1   itaperucu             MUN.M41411125000000 M41411125000000  411125  41     C41000000000001 E41000000000000 a8gt9EsU    Lxt3l8nN  itaperucu
+Lapa                    lappr   HMLAPPR1    10.41.90.1    lapa                  MUN.M41411320000000 M41411320000000  411320  41     C41000000000001 E41000000000000 lZhQoPBM    NYUgIhq9  lapa
+Mandirituba             mnipr   HMMNIPR1    10.41.93.1    mandirituba           MUN.M41411430000000 M41411430000000  411430  41     C41000000000001 E41000000000000 ZYieO@v@    NYQi3n8v  mandirituba
+Pato_Branco             pbrpr   HMPBRPR1    10.46.90.1    patobranco            MUN.M41411850000000 M41411850000000  411850  41     C41000000000001 E41000000000000 QuDCW-GB    I6@HniJL  patobranco
+Pien                    piepr   HMPIEPR1    10.41.104.1   pien                  MUN.M41411910000000 M41411910000000  411910  41     C41000000000001 E41000000000000 PQaOxqcp    I0nxLnYJ  pien
+Pinhais                 pinpr   HMPINPR1    10.41.94.1    pinhais               MUN.M41411915000000 M41411915000000  411915  41     C41000000000001 E41000000000000 P8dp%vuS    IaDG4s6w  pinhais
+Piraquara               pirpr   HMPIRPR1    10.41.106.1   piraquara             MUN.M41411950000000 M41411950000000  411950  41     C41000000000001 E41000000000000 SiH6FpAX    HiEhoAMC  piraquara
+Quatro_Barras           qbapr   HMQBAPR1    10.41.96.1    quatrobarras          MUN.M41412080000000 M41412080000000  412080  41     C41000000000001 E41000000000000 SB0Sfx0m    w4NqKchD  quatrobarras
+Quitandinha             quipr   HMQUIPR1    10.41.92.1    quitandinha           MUN.M41412120000000 M41412120000000  412120  41     C41000000000001 E41000000000000 SF64OqkO    xJ@oDkKl  quitandinha
+Rio_Branco_do_Sul       rbspr   HMRBSPR1    10.41.103.1   riobrancodosul        MUN.M41412220000000 M41412220000000  412220  41     C41000000000001 E41000000000000 IZp&kxDM    xYEQGT99  riobrancodosul
+Rio_Negro               rnepr   HMRNEPR1    10.47.90.1    rionegro              MUN.M41412230000000 M41412230000000  412230  41     C41000000000001 E41000000000000 IW0Paiv8    DddCYMp5  rionegro
+Sao_Jose_dos_Pinhais    sjppr   HMSJPPR1    10.41.112.1   saojosedospinhais     MUN.M41412550000000 M41412550000000  412550  41     C41000000000001 E41000000000000 LaaqTmo2    mwsavQ22  saojosedospinhais
+Tijucas_do_Sul          tsupr   HMTSUPR1    10.41.102.1   tijucasdosul          MUN.M41412760000000 M41412760000000  412760  41     C41000000000001 E41000000000000 Jh!@3TKy    YF0IAIJQ  tijucasdosul
+Tunas_do_Parana         tpapr   HMTPAPR1    10.41.99.1    tunasdoparana         MUN.M41412788000000 M41412788000000  412788  41     C41000000000001 E41000000000000 JG6!eDDS    YWEwTq!k  tunasdoparana
+
+Campo_Mourao            cmopr   HMCMOPR1    10.44.90.1    campomourao           MUN.M41410430000000 M41410430000000  410430  41     C41000000000002 E41000000000000 q9Jb65pv    mxW-ZkKH  campomourao
+
+Osasco                  osasp   HMOSASP1    10.11.221.1   osasco                MUN.M35353440000000 M35353440000000  353440  35     C35000000000002 E35000000000000 rHBcO3&D    6J8&-LJW  osasco
+Santo_Andre             sansp   HMSANSP1    10.11.222.1   santoandre            MUN.M35354780000000 M35354780000000  354780  35     C35000000000001 E35000000000000 6kfioLwY    3#RvJGtx  santoandre
+Sao_Jose_dos_Campos     sjcsp   HMSJCSP1    10.12.220.1   sjc                   MUN.M35354990000000 M35354990000000  354990  35     C35000000000001 E35000000000000 5lsSjfR5    3L!o0s-g  sjc
+
+Vitoria                 vites   HMVITES1    10.27.220.1   vitoria               MUN.M32320530000000 M32320530000000  320530  32     C32000000000001 E32000000000000 6O0ID3gy    EiGeh-Ji  vitoria
+Volta_Redonda           vrerj   HMVRERJ1    10.24.90.1    voltaredonda          MUN.M33330630000000 M33330630000000  330630  33     C33000000000001 E33000000000000 E956crNr    q4ljpU5r  voltaredonda
+Belo_Horizonte          bhzmg   HMBHZMG1    10.31.240.1   belohorizonte         MUN.M31310620000000 M31310620000000  310620  31     C31000000000001 E31000000000000 N8mi6Y4c    @rrIet3J  belohorizonte
+Florianopolis           flnsc   HMFLNSC1    10.48.230.1   floripa               MUN.M42420540000000 M42420540000000  420540  42     C42000000000001 E42000000000000 z3UcaBTA    26!UyyKw  floripa
+Castanhal               caspa   HMCASPA1    10.91.90.1    castanhal             MUN.M15150240000000 M15150240000000  150240  15     C15000000000001 E15000000000000 pPA4Mln2    O2Znfrup  castanhal
+Campo_Grande            cpgms   HMCPGMS1    10.67.230.1   campogrande           MUN.M50500270000000 M50500270000000  500270  50     C50000000000001 E50000000000000 YvE2&L5i    t!OPHvlG  campogrande
+

@@ -1,0 +1,34 @@
+ #!/bin/sh
+# $Id: pre-commit 2603 2006-10-31 21:07:53Z marcus.ferreira $
+
+
+# For more examples and pre-written hooks, see those in
+# the Subversion repository at
+# http://svn.collab.net/repos/svn/trunk/tools/hook-scripts/ and
+# http://svn.collab.net/repos/svn/trunk/contrib/hook-scripts/
+
+
+REPOS="$1"
+TXN="$2"
+
+SVNLOOK=/u01/subversion/local/bin/svnlook
+
+# Make sure that the log message contains some text.
+# echo $SVNLOOK log -t "$TXN" "$REPOS" >> ~/repos/db01/svnlook.log.1.txt
+       $SVNLOOK log -t "$TXN" "$REPOS" | grep "[a-zA-Z0-9]" > /dev/null 
+
+if [ "$?" != "0" ]
+then
+    echo >&2
+    echo "SVN: Commit -------------------------------------------------------" >&2
+    echo "SVN: Commit: uma mensagem de log deve ser informada." >&2
+    echo "SVN: Commit -------------------------------------------------------" >&2
+    echo >&2
+    exit 1
+fi
+
+# Filename validation
+# echo $SVNLOOK changed -t "$TXN" "$REPOS" >> $REPOS/svnlook.changed.cmd.log
+       $SVNLOOK changed -t "$TXN" "$REPOS" >> $REPOS/svnlook.changed.log
+       $SVNLOOK changed -t "$TXN" "$REPOS" | $REPOS/svn.validate.name.pl
+

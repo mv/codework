@@ -1,0 +1,6 @@
+rem $Id: config.sys,v 1.1 2002/05/20 14:32:42 marcus Exp $
+
+device = c:\windows\COMMAND\display.sys con=(ega,,1)
+
+country = 055,850,c:\windows\COMMAND\country.sys
+

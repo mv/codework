@@ -1,0 +1,32 @@
+
+-- http://sources.redhat.com/ml/cygwin/2001-07/msg01069.html --
+
+It's ok. I configured it to do so.
+
+Try the following:
+
+- Check the NT event log. It could give a hint what's going wrong.
+
+- Set the env var CYGWIN to a defined value containg `ntsec' in the
+  service setting:
+
+  cygrunsrv -E cron
+  cygrunsrv -R cron
+  cygrunsrv -I cron -d "CYGWIN cron" -p /usr/sbin/cron -a -D -e "CYGWIN=tty ntsec"
+  cygrunsrv -S cron
+
+- Check your /etc/passwd AND /etc/group files. Perhaps it's better
+  to regenerate them using mkpasswd and mkgroup again.
+
+- If you still have problems try the next developers snapshot of
+  Cygwin. I checked in a patch today which solves a problem when
+  switching user context.
+
+Corinna
+
+--
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
+
+

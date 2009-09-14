@@ -1,0 +1,52 @@
+8
+
+dir
+1
+http://alejandro.textdriven.com/svn/adpsys/trunk/code/bot/ping
+http://alejandro.textdriven.com/svn/adpsys
+
+
+
+2007-03-15T14:46:11.587438Z
+1
+marcus.ferreira
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+0f8a6209-b82b-0410-8ef6-82f4015c3c85
+
+myping.c
+file
+
+
+
+
+2007-03-15T14:46:11.587438Z
+98079bb5aee888265b4af373841e5231
+2007-03-15T14:46:11.587438Z
+1
+marcus.ferreira
+
+ping.pl
+file
+
+
+
+
+2007-03-15T14:46:11.587438Z
+b5daddcad24082835c18c3010ff4c15f
+2007-03-15T14:46:11.587438Z
+1
+marcus.ferreira
+
