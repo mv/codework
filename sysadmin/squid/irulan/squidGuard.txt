@@ -1,0 +1,15 @@
+
+
+BerkeleyDB.4.6
+
+./configure \
+    --with-db=/usr/local/BerkeleyDB \
+    --with-sg-config=/usr/local/etc/squidguard.conf    \
+    --with-sg-logdir=/var/squid/logs    \
+    --with-sg-dbhome=/var/squid/db      \
+    | tee configure.my.log
+
+make
+make test
+make install
+

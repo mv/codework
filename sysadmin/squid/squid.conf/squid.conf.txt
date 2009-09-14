@@ -1,0 +1,70 @@
+
+    cache_mem 256 MB
+    maximum_object_size_in_memory 512 KB
+
+
+    cache_replacement_policy LFUDA
+    maximum_object_size 2048 MB
+
+    # --enable-storeio for others than ufs
+    #           aufs
+    cache_dir   ufs     /cache    51200   16    256
+
+    # Max download size
+    reply_body_max_size     800 MB
+
+    # PUT/POST
+    request_body_max_size 2048 KB
+
+    #
+    acl weekend     time    SA
+    acl weekdays    time    MTWHF
+    acl lunch       time    MTWHF   11:30-13:30
+    acl work1       time    MTWHF   09:00-12:00
+    acl work2       time    MTWHF   13:00-18:30
+
+    acl sex1        urlpath_regex -i sex porn redtube
+    acl video1      urlpath_regex -i tube youtube video
+
+    acl dmz         src     172.16.10/24
+    acl webco       src     172.16.20/24
+    acl mih         src     172.16.30/24
+    acl visitante   src     172.16.40/24
+    acl infra       src     172.16.20.30-172.16.20.47/24
+    acl infra2      src     172.16.20.250-172.16.20-252/24
+
+    acl except01    srcdomain   nagiosexchange.com scottberkun.com
+
+
+
+
+
+# Break HTTP standard for flash videos. Keep them in cache even if asked not to.
+refresh_pattern -i \.flv$ 10080 90% 999999 ignore-no-cache override-expire ignore-private
+
+# Apparently youtube.com use 'Range' requests
+# - not seen, but presumably when a video is stopped for a long while then resumed, (or fast-forwarded).
+# - convert range requests into a full-file request, so squid can cache it
+# NP: BUT slows down their _first_ load time.
+quick_abort_min -1 KB
+
+# Also videos are LARGE; make sure you aren't killing them as 'too big to save'
+# - squid defaults to 4MB, which is too small for videos and even some sound files
+maximum_object_size 4 GB
+
+# Let the clients favorite video site through with full caching
+# - they can come from any of a number of youtube.com subdomains.
+# - this is NOT ideal, the 'merging' of identical content is really needed here
+acl youtube dstdomain .youtube.com
+cache allow youtube
+
+# Do all the above BEFORE blocking dynamic caching
+# - Not required. Just recommended from general squid.conf
+# kept to demonstrate that the above go before this.
+hierarchy_stoplist cgi-bin ?
+    # acl QUERY urlpath_regex cgi-bin \?
+    # cache deny QUERY
+refresh_pattern (/cgi-bin/|\?) 0  0% 0
+refresh_pattern .              0 20% 4320
+
+

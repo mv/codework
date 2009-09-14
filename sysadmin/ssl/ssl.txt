@@ -1,0 +1,55 @@
+
+
+    Certisign       128bit  Static      R$ 1.890,00, por ano.
+
+    RackSpace       128bit  Static      $199 1y / $259 2y
+
+        https://my.rackspace.com/portal/authsec/portal/default/Certificates/CertificatesPortletWindow?action=2&page_num=0&operation=add_info
+
+
+    Verisign        128bit  Static      $ 995 1y
+                                        $1790 2y
+                                        $2480 3y
+        https://www.verisign.com/ssl/buy-ssl-certificates/secure-site-services/index.html
+
+
+    GeoTrust        QuickSSL        256bit  Static      $249 1y / $199 renew
+                    Power Server    256bit  4 domains   $599 1y / $529 renew
+                    True BusinessID 256bit  Unlimited   $995 1y / $995 renew
+
+        http://www.geotrust.com/buy/certificate_compare.asp
+
+    DigiCert
+                Wildcard SSL        256bit  Unlimited   $144 1y / $128 2y / $115 y
+                SSL Plus            256bit  Static      $495 1y / $445 2y / $395 y
+
+        http://www.digicert.com/?source=google_[SSL-Certificate]
+
+
+    GoDaddy
+                Standard SSL        256bit  Single      $ 29.99 1y / $26.99 2y
+
+                                            5 domains   $ 69.99
+                                            10 domains  $129.94
+                                            15          $189.99
+                                            20          $249.84
+
+                                            Unlimited   $199.99 1y / $179.99 2y
+
+        https://www.godaddy.com/gdshop/ssl/ssl.asp?isc=sslxgo004b&app%5Fhdr=&ci=10126
+
+
+
+
+
+Static
+    [dev|www].webcointernet.com/fogbugz
+                               /svn
+                               /bubbles
+
+Dynamic
+    fogbugz.webcointernet.com/
+    svn.webcointernet.com/
+    bubbles.webcointernet.com/
+
+

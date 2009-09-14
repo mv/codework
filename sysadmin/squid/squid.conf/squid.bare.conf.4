@@ -1,0 +1,120 @@
+#
+# $Id$
+#
+
+### ACL's
+acl manager         proto   cache_object
+acl localhost       src     127.0.0.1/32
+acl to_localhost    dst     127.0.0.0/8
+
+acl localnet        src     10.0.0.0/8      # RFC1918 possible internal network
+acl localnet        src     172.16.0.0/12   # RFC1918 possible internal network
+acl localnet        src     192.168.0.0/16  # RFC1918 possible internal network
+
+acl SSL_ports       port    443
+
+acl Safe_ports      port    80         # http
+acl Safe_ports      port    21         # ftp
+acl Safe_ports      port    443        # https
+acl Safe_ports      port    70         # gopher
+acl Safe_ports      port    210        # wais
+acl Safe_ports      port    1025-65535 # unregistered ports
+acl Safe_ports      port    280        # http-mgmt
+acl Safe_ports      port    488        # gss-http
+acl Safe_ports      port    591        # filemaker
+acl Safe_ports      port    777        # multiling http
+
+acl CONNECT         method  CONNECT
+
+    acl MyNetwork       src     172.16.10.0/24
+    acl MyNetwork       src     172.16.20.0/24
+    acl MyNetwork       src     172.16.30.0/24
+    acl MyNetwork       src     172.16.40.0/24
+
+##### Network
+    acl dmz         src     172.16.10.0/24
+    acl webco       src     172.16.20.0/24
+    acl mih         src     172.16.30.0/24
+    acl visitante   src     172.16.40.0/24
+
+#   acl infra       src     172.16.20.30-172.16.20.47/24
+#   acl mih-adm     src     172.16.30.30-172.16.30.46/24
+#   acl infra2      src     172.16.20.250-172.16.20.252/24
+
+    acl weekend     time    SA
+    acl weekdays    time    MTWHF
+    acl lunch       time    MTWHF   11:30-13:30
+    acl work1       time    MTWHF   09:00-12:00
+    acl work2       time    MTWHF   13:30-18:30
+
+##### deny
+    acl sex1        urlpath_regex -i sex porn redtube
+    acl video1      urlpath_regex -i tube youtube video
+
+##### allow
+    acl except01    srcdomain   nagiosexchange.com scottberkun.com
+
+
+### Rules: default
+http_access allow   manager localhost
+http_access deny    manager
+http_access deny    !Safe_ports
+http_access deny    CONNECT !SSL_ports
+http_access allow   localnet
+
+##### Rules
+    http_access deny    weekdays video1
+
+#   http_access allow   MyNetwork
+    http_access allow   dmz
+    http_access allow   webco
+    http_access allow   mih
+    http_access allow   visitante
+#####
+
+http_access deny    all
+### End of http rules
+
+icp_access  allow   localnet
+icp_access  deny    all
+htcp_access allow   localnet
+htcp_access deny    all
+
+hierarchy_stoplist cgi-bin ?
+
+refresh_pattern ^ftp:           1440    20% 10080
+refresh_pattern ^gopher:        1440    0%  1440
+refresh_pattern (cgi-bin|\?)    0       0%  0
+refresh_pattern .               0       20% 4320
+
+### Setup
+icp_port    3130
+
+http_port   3128
+http_port   8080
+# http_port 172.16.10.253:3128
+# http_port 172.16.10.253:8080
+
+cache_effective_user    _squid
+cache_effective_group   _squid
+
+access_log              /var/squid/logs/access.log squid
+cache_log               /var/squid/logs/cache.log
+cache_store_log         /var/squid/logs/store.log
+cache_store_log         none
+pid_filename            /var/squid/logs/squid.pid
+coredump_dir            /home/cache
+
+cache_replacement_policy    heap LFUDA
+cache_mem                   256 MB
+cache_dir                   aufs /home/cache 33792 32 256
+maximum_object_size         4096 GB
+
+cache_mgr   infra@webcointernet.com
+
+
+# Max download size
+reply_body_max_size     800 MB
+
+# PUT/POST
+request_body_max_size 2048 KB

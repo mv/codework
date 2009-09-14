@@ -1,0 +1,88 @@
+acl manager proto cache_object
+acl localhost src 127.0.0.1/32
+acl to_localhost dst 127.0.0.0/8
+acl localnet src 10.0.0.0/8        # RFC1918 possible internal network
+acl localnet src 172.16.0.0/12        # RFC1918 possible internal network
+acl localnet src 192.168.0.0/16        # RFC1918 possible internal network
+acl SSL_ports port 443
+acl Safe_ports port 80                # http
+acl Safe_ports port 21                # ftp
+acl Safe_ports port 443                # https
+acl Safe_ports port 70                # gopher
+acl Safe_ports port 210                # wais
+acl Safe_ports port 1025-65535        # unregistered ports
+acl Safe_ports port 280                # http-mgmt
+acl Safe_ports port 488                # gss-http
+acl Safe_ports port 591                # filemaker
+acl Safe_ports port 777                # multiling http
+acl CONNECT method CONNECT
+
+http_access allow manager localhost
+http_access deny manager
+http_access deny !Safe_ports
+http_access deny CONNECT !SSL_ports
+http_access allow localnet
+http_access allow all
+
+icp_access allow localnet
+icp_access deny all
+
+htcp_access allow localnet
+htcp_access deny all
+
+http_port 3128 transparent
+icp_port 3130
+
+cache_effective_user     _squid
+cache_effective_group    _squid
+cache_mem                256 MB
+cache_dir                aufs /home/cache 33792 32 256 
+cache_replacement_policy heap LFUDA
+maximum_object_size      4 GB
+
+access_log      /var/squid/logs/access.log squid
+cache_log       /var/squid/logs/cache.log
+cache_store_log /var/squid/logs/store.log
+pid_filename    /var/squid/logs/squid.pid
+coredump_dir    /home/cache
+
+### YouTube
+# Break HTTP standard for flash videos. Keep them in cache even if asked not to.
+refresh_pattern -i \.flv$ 10080 90% 999999 ignore-no-cache override-expire ignore-private
+
+# Apparently youtube.com use 'Range' requests
+# - not seen, but presumably when a video is stopped for a long while then resumed, (or fast-forwarded).
+# - convert range requests into a full-file request, so squid can cache it
+# NP: BUT slows down their _first_ load time.
+quick_abort_min -1 KB
+
+# Also videos are LARGE; make sure you aren't killing them as 'too big to save'
+# - squid defaults to 4MB, which is too small for videos and even some sound files
+maximum_object_size 4 GB
+
+# Let the clients favorite video site through with full caching
+# - they can come from any of a number of youtube.com subdomains.
+# - this is NOT ideal, the 'merging' of identical content is really needed here
+acl youtube dstdomain .youtube.com
+cache allow youtube
+
+# Do all the above BEFORE blocking dynamic caching
+# - Not required. Just recommended from general squid.conf
+# kept to demonstrate that the above go before this.
+###
+
+hierarchy_stoplist cgi-bin ?
+### acl QUERY urlpath_regex cgi-bin \?
+### cache deny QUERY
+
+refresh_pattern ^ftp:                1440        20%        10080
+refresh_pattern ^gopher:        1440        0%        1440
+refresh_pattern (cgi-bin|\?)        0        0%        0
+refresh_pattern .                0        20%        4320
+
+# httpd_accel_host             virtual
+# httpd_accel_port             80
+# httpd_accel_uses_host_header on
+# httpd_accel_with_proxy       on
+# httpd_accel_single_host      off
+

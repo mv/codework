@@ -1,0 +1,39 @@
+
+
+
+<VirtualHost 123.456.789.123:443>
+    ... some config like DocumentRoot , etc..
+    SSLEngine  on
+    SSLCertificateFile      /etc/httpd/conf/ssl.crt/MYdomain.com.crt
+    SSLCertificateKeyFile   /etc/httpd/conf/ssl.key/MYdomain.com.key
+</VirtualHost>
+
+
+
+
+Generating RSA & CSR (Signing Request)
+
+
+cd /etc/httpd/conf/ssl.key
+
+    OPTION 1:
+    Generating a RSA private key without a passphrase.
+    # openssl genrsa        -out MYdomain.com.key 1024
+
+    OPTION 2:
+    Generating a RSA private key with a passphrase.
+    # openssl genrsa -des3  -out MYdomain.com.key 1024
+
+
+    Next generate the CSR using the RSA Private Key
+
+    # openssl req -new -key MYdomain.com.key -out MYdomain.com.csr
+    # mv MYdomain.com.csr ../ssl.csr
+
+
+    Now you should have:
+        /etc/httpd/conf/ssl.key/MYdomain.com.key
+        /etc/httpd/conf/ssl.csr/MYdomain.com.csr
+
+    Now you should submit your csr and they will mail you the certificate.
+

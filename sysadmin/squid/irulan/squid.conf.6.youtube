@@ -1,0 +1,69 @@
+http_port 3128 transparent
+icp_port  3130
+
+cache_effective_user     _squid
+cache_effective_group    _squid
+cache_mem                256 MB
+cache_dir                aufs /home/cache 33792 32 256 
+cache_replacement_policy heap LFUDA
+maximum_object_size      4 GB
+
+access_log      /var/squid/logs/access.log squid
+cache_log       /var/squid/logs/cache.log
+cache_store_log /var/squid/logs/store.log
+pid_filename    /var/squid/logs/squid.pid
+coredump_dir    /home/cache
+
+
+### Defaults
+acl manager     proto cache_object
+acl localhost   src  127.0.0.1/32
+acl to_localhost dst 127.0.0.0/8
+# acl localnet    src  10.0.0.0/8             # RFC1918 possible internal network
+# acl localnet    src  172.16.0.0/12          # RFC1918 possible internal network
+acl localnet    src  192.168.0.0/16         # RFC1918 possible internal network
+acl SSL_ports   port 443
+acl Safe_ports  port 80                  # http
+acl Safe_ports  port 21                  # ftp
+acl Safe_ports  port 443                 # https
+acl Safe_ports  port 70                  # gopher
+acl Safe_ports  port 210                 # wais
+acl Safe_ports  port 1025-65535          # unregistered ports
+acl Safe_ports  port 280                 # http-mgmt
+acl Safe_ports  port 488                 # gss-http
+acl Safe_ports  port 591                 # filemaker
+acl Safe_ports  port 777                 # multiling http
+acl CONNECT     method CONNECT
+
+
+### Custom goes here
+# http://forums.whirlpool.net.au/forum-replies-archive.cfm/742741.html
+acl youtube     dstdomain   .youtube.com .googlevideo.com .video.google.com .vide.google.com.au
+cache allow youtube
+
+acl youtubeip   dst         74.125.15.0/24
+cache allow youtubeip
+
+###
+
+http_access allow   manager localhost
+http_access deny    manager
+http_access deny    !Safe_ports
+http_access deny    CONNECT !SSL_ports
+http_access allow   localnet
+http_access allow   all
+
+icp_access  allow   localnet
+icp_access  deny    all
+
+htcp_access allow   localnet
+htcp_access deny    all
+
+
+
+hierarchy_stoplist cgi-bin ?
+
+refresh_pattern ^ftp:           1440    20%     10080
+refresh_pattern ^gopher:        1440    0%      1440
+refresh_pattern (cgi-bin|\?)    0       0%      0
+refresh_pattern .               0       20%     4320
