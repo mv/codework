@@ -1,0 +1,4 @@
+#!/usr/bin/perl -p     
+# lowercase - turn all lines into lowercase     
+use locale;     
+s/([^\W0-9_])/\l$1/g;	# change all letters to lowercase

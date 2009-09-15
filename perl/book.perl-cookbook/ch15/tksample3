@@ -1,0 +1,56 @@
+#!/usr/bin/perl -w
+# tksample3 - demonstrate dialog boxes
+
+use Tk;
+use Tk::DialogBox;
+
+$main = MainWindow->new();
+
+$dialog = $main->DialogBox( -title   => "Register",
+                            -buttons => [ "Register", "Cancel" ],
+                           );
+
+# the top part of the dialog box will let people enter their names,
+# with a Label as a prompt
+
+$dialog->add("Label", -text => "Name")->pack();
+$entry = $dialog->add("Entry", -width => 35)->pack();
+
+# we bring up the dialog box with a button
+$main->Button( -text    => "Click Here For Registration Form",
+               -command => \&register)    ->pack(-side => "left");
+$main->Button( -text    => "Quit",
+               -command => sub { exit } ) ->pack(-side => "left");
+
+MainLoop;
+
+#
+# register
+#
+# Called to pop up the registration dialog box
+#
+
+sub register {
+    my $button;
+    my $done = 0;
+
+    do {    
+        # show the dialog
+        $button = $dialog->Show;
+
+        # act based on what button they pushed
+        if ($button eq "Register") {
+                my $name = $entry->get;
+
+            if (defined($name) && length($name)) {
+                print "Welcome to the fold, $name\n";
+                $done = 1;
+            } else {
+                print "You didn't give me your name!\n";
+            }
+        } else {
+            print "Sorry you decided not to register.\n";
+            $done = 1;
+        }
+    } until $done;
+}

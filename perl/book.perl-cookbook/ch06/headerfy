@@ -1,0 +1,17 @@
+#!/usr/bin/perl
+# headerfy: change certain chapter headers to html
+$/ = '';
+while ( <> ) {              # fetch a paragraph
+    s{
+        \A                  # start of record
+        (                   # capture in $1
+            Chapter         # text string
+            \s+             # mandatory whitespace
+            \d+             # decimal number
+            \s*             # optional whitespace
+            :               # a real colon
+            . *             # anything not a newline till end of line
+        )
+    }{<H1>$1</H1>}gx;
+    print;
+}

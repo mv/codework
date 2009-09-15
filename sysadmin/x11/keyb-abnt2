@@ -1,0 +1,32 @@
+Section "InputDevice"
+    Identifier  "Keyboard0"
+    Driver      "keyboard"
+    Option      "XkbRules" "xfree86"
+    Option      "XkbModel" "abnt2"
+    Option      "XkbLayout" "br"
+EndSection
+
+# Specify which keyboard LEDs can be user-controlled (eg, with xset(1))
+#   Option  "Xleds"     "1 2 3"
+# To disable the XKEYBOARD extension, uncomment XkbDisable.
+#   Option  "XkbDisable"
+# To customise the XKB settings to suit your keyboard, modify the
+# lines below (which are the defaults).  For example, for a non-U.S.
+# keyboard, you will probably want to use:
+#   Option  "XkbModel"  "pc102"
+# If you have a US Microsoft Natural keyboard, you can use:
+#   Option  "XkbModel"  "microsoft"
+#
+# Then to change the language, change the Layout setting.
+# For example, a german layout can be obtained with:
+#   Option  "XkbLayout" "de"
+# or:
+#   Option  "XkbLayout" "de"
+#   Option  "XkbVariant"    "nodeadkeys"
+#
+# If you'd like to switch the positions of your capslock and
+# control keys, use:
+#   Option  "XkbOptions"    "ctrl:swapcaps"
+# Or if you just want both to be control, use:
+#   Option  "XkbOptions"    "ctrl:nocaps"
+#

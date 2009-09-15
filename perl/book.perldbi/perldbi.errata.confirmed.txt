@@ -1,0 +1,227 @@
+Programming the Perl DBI
+by Alligator Descartes and Tim Bunce
+
+This errata page lists errors outstanding in the most recent printing.
+
+If you have technical questions or error reports, you can send them to
+booktech@oreilly.com.  Please specify the printing date of your copy.
+
+This page was updated August 1, 2001.
+
+Here's a key to the markup:
+
+        [page-number]: serious technical mistake
+        {page-number}: minor technical mistake
+        <page-number>: important language/formatting problem
+        (page-number): language change or minor formatting problem
+        ?page-number?: reader question or request for clarification
+
+
+Confirmed errors:
+
+
+(v) 8th bullet;
+DBD::MySql should be DBD::mSQL.
+
+(xiii)  first link under "Resources";
+http://www.symbolstone.org/technology/perl/DBI  has been moved to dbi.perl.org
+
+"The DBI pages have permanently moved to: dbi.perl.org. Please update your bookmarks and links. This redirection page will not exist indefinitely."
+
+(xvi) last paragraph:
+"reviewers to gave us" should be "reviewers that gave us"
+
+
+{13} code:
+
+	### Remove the newline that acts as a record delimiter chop;
+
+should be
+
+	### Remove the newline that acts as a records delimiter chomp;
+
+
+{20} The line
+
+	substr( $_, 64+64, 16, pack( "A16", $siteMapRef ) );
+
+should read:
+	
+     	substr($_, 64+64, 16) = pack( "A16", $siteMapRef );
+
+(Remove second parenthesis).
+
+
+[36] code section "### Insert some data rows":
+
+	$database{'Callanish I'} =
+            "This site, commonly known as the "Stonehenge of the North" is in 
+	the form of a buckled celtic cross.";
+
+The inner quotes should be two separate opening single quote characters and 
+then two separate closing single quote characters. In the book that's been 
+rendered as double quotes. That's wrong.
+
+
+(70) 1st paragraph:
+On the third line, the word "and" appears twice. Remove one "and".
+
+
+<82> 2nd-to-last paragraph, last sentence;
+
+The text reads:
+
+    Because DBI dies if it can't load an initialize a driver, this method 
+    should be called inside an eval{} block if you need to catch that error.
+
+"eval{} block" is in constant width font. "eval {}" should remain in constant 
+width font, but block should be in normal body font.
+
+
+[84] table:
+order of arguments for an mSQL connect is written as :
+
+	dbi:mSQL:hostname:database:port_number,
+
+It should be
+
+	dbi:mSQL:database:hostname:port_number.
+
+
+[117] line 2:
+The Perl code line reads:
+   
+	$rows = $sth->dump_results( 80, '\n', ';', \*FILE );
+
+It should be changed to:
+   
+	$rows = $sth->dump_results( 80, "\n", ';', \*FILE );
+
+
+(119)  6th paragraph;
+
+"The second and subsequent itterations..."
+
+"itterations" should be "iterations"
+
+
+(123) last paragraph:
+
+	executing four different SQL statements within the 
+	database
+
+"four different SQL" should read "three different SQL".
+
+
+(131) 2nd paragraph, 6th line:
+
+	to select the name and type fields
+
+"type" should read "mapref".
+
+
+{131} second paragraph under "Batch Fetching":
+The last sentence of the paragraph ("They are invoked...statement handle") 
+should be removed.
+
+
+(133) 10th line:
+ 
+	for the rows name and location
+
+"rows" should read "columns".
+
+
+{165} 2nd-to-last SELECT statement:
+The "outer" CONCAT is missing a comma between its two arguments.
+
+
+(167) fourth non-indented paragraph:
+In the text "and search for SQLGetInfo returns", the entire word "returns"
+should be in constant width font.
+
+
+(170) footnote:
+Footnote should say: "They are available from..." because there are two 
+[portable Open Source driver managers].
+
+
+(179) Setting up a proxy server:
+
+	...since PPM currently does not currently support bundles...
+
+One of the "currently"s should be removed.
+
+
+(195) 7th line from the bottom:
+"bind_column" should read "bind_columns".
+
+
+(213) last paragraph of "table (NEW)":
+
+	Note that table_info might not return records for all 
+	tables.
+
+"table_info" should read "tables".
+
+
+(228) NUM_OF_PARAMS (integer, read-only):
+There is no "Substitution Variables" to refer to anywhere in this book.
+
+
+(230)  3rd paragraph; 
+
+The last sentence reads:
+
+It's use is not recommended.
+
+It should read:
+
+Its use is not recommended.
+
+
+(281) FLOAT(M,D):
+
+	Allowable values are -3.402823466e+38 to -1.175494351e-38, 
+	0 and -1.175494351e-38 to 3.40282346 6e+38.
+
+should read:
+
+	Allowable values are -3.402823466e+38 to -1.175494351e-38, 
+	0 and 1.175494351e-38 to 3.402823466e+38.
+
+
+(298) 4th paragraph from the bottom:
+
+	The NUMBER datatype stores positive and negative fixed 
+	and floating-point numbers with magnitudes between 1.0 
+	* 10-130 and 9.9...9 * 10125 (38 nines followed by 88 
+	zeroes), with 38 digits of precision.
+
+In "1.0 * 10-130", "-130" should be superscripted because it is the -130th 
+power of 10.
+
+In "9.9...9 * 10125",  "125" should be superscripted because it is the 125th 
+power of 10.
+
+
+{310} string matching operators table:
+The last example, for the glyph '!~*', reads:
+
+ 	'thomas' !~ '.*vadim.*'
+
+but should be:
+ 
+	'thomas' !~* '.*vadim.*'
+
+
+(316)  7th paragraph; The text reads: "SearchServer does not really supports 
+joins, however it does support a kind of view mechanism."
+
+"supports" should be replaced by "support"
+
+
+
+
+
+

@@ -1,0 +1,69 @@
+#!/usr/bin/perl -w
+# recno_demo - show how to use the raw API on recno bindings
+use strict;
+use vars qw(@lines $dbobj $file $i);
+use DB_File;
+
+$file = "/tmp/textfile";
+unlink $file;               # just in case
+
+$dbobj = tie(@lines, "DB_File", $file, O_RDWR|O_CREAT, 0666, $DB_RECNO)
+    or die "Cannot open file $file: $!\n";
+
+# first create a text file to play with
+$lines[0] = "zero";
+$lines[1] = "one";
+$lines[2] = "two";
+$lines[3] = "three";
+$lines[4] = "four";
+
+# Print the records in order.
+#
+# The length method is needed here because evaluating a tied
+# array in a scalar context does not return the number of
+# elements in the array.
+
+print "\nORIGINAL\n";
+foreach $i (0 .. $dbobj->length - 1) {
+    print "$i: $lines[$i]\n";
+}
+
+# use the push & pop methods
+$a = $dbobj->pop;
+$dbobj->push("last");
+print "\nThe last record was [$a]\n";
+
+# and the shift & unshift methods
+$a = $dbobj->shift;
+$dbobj->unshift("first");
+print "The first record was [$a]\n";
+
+# Use the API to add a new record after record 2.
+$i = 2;
+$dbobj->put($i, "Newbie", R_IAFTER);
+    
+# and a new record before record 1.
+$i = 1;
+$dbobj->put($i, "New One", R_IBEFORE);
+
+# delete record 3
+$dbobj->del(3);
+
+# now print the records in reverse order
+print "\nREVERSE\n";
+for ($i = $dbobj->length - 1; $i >= 0; -- $i) {
+    print "$i: $lines[$i]\n";
+}
+
+# same again, but use the API functions instead
+print "\nREVERSE again\n";
+my ($s, $k, $v)  = (0, 0, 0);
+for ($s = $dbobj->seq($k, $v, R_LAST);
+     $s == 0;
+     $s = $dbobj->seq($k, $v, R_PREV))
+{
+    print "$k: $v\n"
+}
+
+undef $dbobj;
+untie @lines;

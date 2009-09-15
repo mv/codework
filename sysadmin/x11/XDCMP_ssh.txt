@@ -1,0 +1,23 @@
+##
+## $Id: XDCMP_ssh.txt 6 2006-09-10 15:35:16Z marcus $
+##
+
+client
+------
+1)  prompt 1:
+
+  $  startx
+  $  xhost +
+
+  $  ssh -X -l oracle 10.5.1.128
+
+
+Server
+------
+#
+# 800x600   1024x768    1280x810
+#
+$ export DISPLAY="client_ip:0"
+$ Xnest :1 -query localhost -geometry 1024x768
+
+

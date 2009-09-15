@@ -1,0 +1,40 @@
+#!/usr/bin/perl -w
+# tksample4 - popup dialog boxes for warnings
+
+use Tk;
+use Tk::DialogBox;
+
+my $main;
+
+# set up a warning handler that displays the warning in a Tk dialog box
+
+BEGIN {
+    $SIG{_     _WARN_     _} = sub {
+        if (defined $main) {
+            my $dialog = $main->DialogBox( -title   => "Warning",
+                                           -buttons => [ "Acknowledge" ]);
+            $dialog->add("Label", -text => $_[0])->pack;
+            $dialog->Show;
+        } else {
+            print STDOUT join("\n", @_), "n";
+        }
+    };
+}
+
+# your program goes here
+
+$main = MainWindow->new();
+
+$main->Button( -text   => "Make A Warning",
+               -command => \&make_warning) ->pack(-side => "left");
+$main->Button( -text   => "Quit",
+               -command => sub { exit } )  ->pack(-side => "left");
+
+MainLoop;
+
+# dummy subroutine to generate a warning
+    
+sub make_warning {
+    my $a;
+    my $b = 2 * $a;
+}

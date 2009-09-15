@@ -1,0 +1,34 @@
+#!/usr/bin/perl -w
+# fifolog - read and record log msgs from fifo
+
+use IO::File;
+
+$SIG{ALRM} = sub { close(FIFO) };   # move on to the next queued process
+
+while (1) {
+    alarm(0);                       # turn off alarm for blocking open
+    open(FIFO, "< /tmp/log")        or die "Can't open /tmp/log : $!\n";
+    alarm(1);                       # you have 1 second to log
+
+    $service = <FIFO>;
+    next unless defined $service;   # interrupted or nothing logged
+    chomp $service;
+
+    $message = <FIFO>;
+    next unless defined $message;   # interrupted or nothing logged
+    chomp $message;
+
+    alarm(0);                       # turn off alarms for message processing
+
+    if ($service eq "http") {
+        # ignoring
+    } elsif ($service eq "login") {
+        # log to /var/log/login
+        if ( open(LOG, ">> /tmp/login") ) {
+            print LOG scalar(localtime), " $service $message\n";
+            close(LOG);
+        } else {
+            warn "Couldn't log $service $message to /var/log/login : $!\n";
+        }
+    }
+}

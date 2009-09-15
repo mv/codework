@@ -1,0 +1,62 @@
+#!/usr/bin/perl -w
+# expn -- convince smtp to divulge an alias expansion
+use strict;
+use IO::Socket;
+use Sys::Hostname;
+
+my $fetch_mx = 0;
+# try loading the module, but don't blow up if missing
+eval {    
+    require Net::DNS;
+    Net::DNS->import('mx');
+    $fetch_mx = 1;
+};
+
+my $selfname = hostname();
+die "usage: $0 address\@host ...\n" unless @ARGV;
+
+# Find out whether called as "vrfy" or "expn".
+my $VERB = ($0 =~ /ve?ri?fy$/i)  ? 'VRFY' : 'EXPN';
+my $multi = @ARGV > 1;
+my $remote;
+
+# Iterate over addresses give on command line.
+foreach my $combo (@ARGV) {
+    my ($name, $host) = split(/\@/, $combo);
+    my @hosts;
+    $host ||= 'localhost';
+    @hosts = map { $_->exchange } mx($host)     if $fetch_mx;
+    @hosts = ($host)   unless @hosts;
+
+    foreach my $host (@hosts) { 
+        print $VERB eq 'VRFY' ? "Verify" : "Expand", 
+            "ing $name at $host ($combo):";
+
+        $remote = IO::Socket::INET->new(
+    		       Proto    => "tcp",
+    		       PeerAddr => $host,
+    		       PeerPort => "smtp(25)",
+    		   ); 
+
+        unless ($remote) { 
+            warn "cannot connect to $host\n";
+            next;
+        }
+        print "\n";
+
+        $remote->autoflush(1);
+
+        # use CRLF network line terminators
+        print $remote "HELO $selfname\015\012";
+        print $remote "$VERB $name\015\012";
+        print $remote "quit\015\012";
+        while (<$remote>) {
+    	        /^220\b/ && next;
+    	        /^221\b/ && last;
+    	        s/250\b[\-\s]+//;
+    	        print;
+        } 
+        close($remote)			or die "can't close socket: $!";
+        print "\n"; #  if @ARGV;
+    }
+} 

@@ -1,0 +1,6 @@
+#!/usr/bin/perl -p
+# randcap: filter to randomly capitalize 20% of the letters
+# call to srand() is unnecessary in 5.004
+BEGIN { srand(time() ^ ($$ + ($$ << 15))) }
+sub randcase { rand(100) < 20 ? "\u$_[0]" : "\l$_[0]" }
+s/(\w)/randcase($1)/ge;

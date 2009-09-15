@@ -1,0 +1,7 @@
+#!/usr/bin/perl
+# rmtree2 - remove whole directory trees like rm -r
+use File::Path;
+die "usage: $0 dir ..\n" unless @ARGV;
+    foreach $dir (@ARGV) {
+    rmtree($dir);
+}

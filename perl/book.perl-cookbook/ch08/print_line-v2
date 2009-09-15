@@ -1,0 +1,23 @@
+#!/usr/bin/perl -w
+# print_line-v2 - index style
+# build_index and line_with_index from above
+@ARGV == 2 or
+    die "usage: print_line FILENAME LINE_NUMBER";
+
+($filename, $line_number) = @ARGV;
+open(ORIG, "< $filename") 
+        or die "Can't open $filename for reading: $!";
+
+# open the index and build it if necessary
+# there's a race condition here: two copies of this
+# program can notice there's no index for the file and
+# try to build one.  This would be easily solved with
+# locking
+$indexname = "$filename.index";
+sysopen(IDX, $indexname, O_CREAT|O_RDWR)
+         or die "Can't open $indexname for read/write: $!";
+build_index(*ORIG, *IDX) if -z $indexname;  # XXX: race unless lock
+
+$line = line_with_index(*ORIG, *IDX, $line_number);
+die "Didn't find line $line_number in $filename" unless defined $line;
+print $line;

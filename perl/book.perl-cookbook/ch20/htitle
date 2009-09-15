@@ -1,0 +1,16 @@
+#!/usr/bin/perl
+# htitle - get html title from URL
+
+die "usage: $0 url ...\n" unless @ARGV;
+require LWP;
+
+foreach $url (@ARGV) {
+    $ua = LWP::UserAgent->new();
+    $res = $ua->request(HTTP::Request->new(GET => $url));
+    print "$url: " if @ARGV > 1;
+    if ($res->is_success) {
+        print $res->title, "\n";
+    } else {
+        print $res->status_line, "\n";
+    }
+}

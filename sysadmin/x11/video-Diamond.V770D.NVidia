@@ -1,0 +1,24 @@
+
+Section "Device"
+    Identifier  "Card0"
+    Driver      "nv"
+    VendorName  "nVidia Corporation"
+    BoardName   "NV5 [RIVA TNT2/TNT2 Pro]"
+    BusID       "PCI:1:0:0"
+EndSection
+
+        ### Available Driver options are:-
+        ### Values: <i>: integer, <f>: float, <bool>: "True"/"False",
+        ### <string>: "String", <freq>: "<f> Hz/kHz/MHz"
+        ### [arg]: arg optional
+        #Option     "SWcursor"              # [<bool>]
+        #Option     "HWcursor"              # [<bool>]
+        #Option     "NoAccel"               # [<bool>]
+        #Option     "ShowCache"             # [<bool>]
+        #Option     "ShadowFB"              # [<bool>]
+        #Option     "UseFBDev"              # [<bool>]
+        #Option     "Rotate"                # [<str>]
+        #Option     "VideoKey"              # <i>
+        #Option     "FlatPanel"             # [<bool>]
+        #Option     "FPDither"              # [<bool>]
+        #Option     "CrtcNumber"            # <i>

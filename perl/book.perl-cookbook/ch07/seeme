@@ -1,0 +1,6 @@
+#!/usr/bin/perl -w
+# seeme - demo stdio output buffering
+$| = (@ARGV > 0);      # command buffered if arguments given
+print "Now you don't see it...";
+sleep 2;
+print "now you do\n";

@@ -1,0 +1,111 @@
+#!/usr/bin/perl -w
+# tkshufflepod - reorder =head1 sections in a pod file
+
+use Tk;
+use strict;
+
+# declare variables
+
+my $podfile;    		 # name of the file to open
+my $m;    			     # main window
+my $l;    			     # listbox
+my ($up, $down);   # positions to move
+my @sections;      # list of pod sections
+my $all_pod;       # text of pod file (used when reading)
+
+# read the pod file into memory, and split it into sections.
+
+$podfile = shift || "-";
+
+undef $/;
+open(F, "< $podfile")
+  or die "Can't open $podfile : $!\n";
+$all_pod = <F>;
+close(F);
+@sections = split(/(?==head1)/, $all_pod);
+
+# turn @sections into an array of anonymous arrays.  The first element
+# in each of these arrays is the original text of the message, while
+# the second element is the text following =head1 (the section title).
+
+foreach (@sections) {
+    /(.*)/;
+    $_ = [ $_, $1 ];
+}
+
+# fire up Tk and display the list of sections.
+
+$m = MainWindow->new();
+$l = $m->Listbox('-width' => 60)->pack('-expand' => 1, '-fill' => 'both');
+
+foreach my $section (@sections) {
+    $l->insert("end", $section->[1]);
+}
+
+# permit dragging by binding to the Listbox widget.
+$l->bind( '<Any-Button>'     => \&down );
+$l->bind( '<Any-ButtonRelease>' => \&up );
+
+# permit viewing by binding double-click
+$l->bind( '<Double-Button>'     => \&view );
+
+# 'q' quits and 's' saves
+$m->bind( '<q>'     	=> sub { exit } );
+$m->bind( '<s>'    		=> \&save );
+
+MainLoop;
+
+# down(widget): called when the user clicks on an item in the Listbox.
+
+sub down {
+    my $self = shift;
+    $down = $self->curselection;;
+}
+
+# up(widget): called when the user releases the mouse button in the
+# Listbox.
+
+sub up {
+    my $self = shift;
+    my $elt;
+
+    $up = $self->curselection;;
+
+    return if $down == $up;
+
+    # change selection list
+    $elt = $sections[$down];
+    splice(@sections, $down, 1);
+    splice(@sections, $up, 0, $elt);
+    $self->delete($down);
+    $self->insert($up, $sections[$up]->[1]);
+}
+
+# save(widget): called to save the list of sections.
+
+sub save {
+    my $self = shift;
+
+    open(F, "> $podfile")
+      or die "Can't open $podfile for writing: $!";
+    print F map { $_->[0] } @sections;
+    close F;
+
+    exit;
+}
+
+# view(widget): called to display the widget.  Uses the Pod widget.
+
+sub view {
+    my $self = shift;
+    my $temporary = "/tmp/$$-section.pod";
+    my $popup;
+
+    open(F, "> $temporary")
+      or warn ("Can't open $temporary : $!\n"), return;
+    print F $sections[$down]->[0];
+    close(F);
+    $popup = $m->Pod('-file' => $temporary);
+
+    $popup->bind('<Destroy>' => sub { unlink $temporary } );
+}

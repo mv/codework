@@ -1,0 +1,7 @@
+#!/usr/bin/perl -lw
+# fdirs - find all directories
+@ARGV = qw(.) unless @ARGV;
+use File::Find ();
+sub find(&@) { &File::Find::find }
+*name = *File::Find::name;
+find { print $name if -d } @ARGV;

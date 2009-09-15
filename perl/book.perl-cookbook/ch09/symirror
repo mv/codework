@@ -1,0 +1,38 @@
+#!/usr/bin/perl -w
+# symirror - build spectral forest of symlinks
+use strict;
+use File::Find;
+use Cwd;
+
+my ($srcdir, $dstdir);
+my $cwd = getcwd();
+die "usage: $0 realdir mirrordir" unless @ARGV == 2;
+
+for (($srcdir, $dstdir) = @ARGV) {
+    my $is_dir = -d;
+    next if $is_dir;                        # cool
+    if (defined ($is_dir)) {
+        die "$0: $_ is not a directory\n";
+    } else {                                # be forgiving
+        mkdir($dstdir, 07777) or die "can't mkdir $dstdir: $!";
+    }
+} continue {
+    s#^(?!/)#$cwd/#;                        # fix relative paths
+}
+                    
+chdir $srcdir;
+find(\&wanted, '.');
+
+sub wanted {
+    my($dev, $ino, $mode) = lstat($_);
+    my $name = $File::Find::name;
+    $mode &= 07777;                 # preserve directory permissions
+    $name =~ s!^\./!!;              # correct name
+    if (-d _) {                     # then make a real directory
+        mkdir("$dstdir/$name", $mode)
+            or die "can't mkdir $dstdir/$name: $!";
+    } else {                        # shadow everything else
+        symlink("$srcdir/$name", "$dstdir/$name")
+            or die "can't symlink $srcdir/$name to $dstdir/$name: $!";
+    }
+}

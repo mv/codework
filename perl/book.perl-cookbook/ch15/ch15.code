@@ -1,0 +1,445 @@
+use Getopt::Std;
+
+# -v ARG, -D ARG, -o ARG, sets $opt_v, $opt_D, $opt_o
+getopt("vDo");              
+# -v ARG, -D ARG, -o ARG, sets $args{v}, $args{D}, $args{o}
+getopt("vDo", \%args);
+
+getopts("vDo:");         # -v, -D, -o ARG, sets $opt_v, $opt_D, $opt_o
+getopts("vDo:", \%args); # -v, -D, -o ARG, sets $args{v}, $args{D}, $args{o}
+------------------------
+use Getopt::Long;
+
+GetOptions( "verbose"  => \$verbose,     # --verbose
+            "Debug"    => \$debug,       # --Debug
+            "output=s" => \$output );    # --output=string or --output=string
+------------------------
+% rm -r -f /tmp/testdir
+------------------------
+% rm -rf /tmp/testdir
+------------------------
+use Getopt::Std;
+getopts("o:");
+if ($opt_o) {
+    print "Writing output to $opt_o";
+}------------------------
+
+use Getopt::Std;
+
+%option = ();
+getopts("Do:", \%option);
+
+if ($option{D}) {
+    print "Debugging mode enabled.\n";
+}
+
+ # if not set, set output to "-".  opening "-" for writing
+ # means STDOUT
+ $option{o} = "-" unless defined $option{o};
+                             
+print "Writing output to file $option{o}\n" unless $option{o} eq "-";
+open(STDOUT, "> $option{o}")
+     or die "Can't open $option{o} for output: $!\n";
+}------------------------
+% gnutar --extract --file latest.tar
+}------------------------
+% gnutar --extract --file=latest.tar
+}
+-----------------------
+use Getopt::Long;
+
+GetOptions( "extract" => \$extract,
+            "file=s"  => \$file );
+
+if ($extract) {
+    print "I'm extracting.\n";
+}
+
+die "I wish I had a file" unless defined $file;
+print "Working on the file $file\n";
+-----------------------
+sub I_am_interactive {
+    return -t STDIN && -t STDOUT;
+}
+-----------------------
+use POSIX qw/getpgrp tcgetpgrp/;
+
+sub I_am_interactive {
+    local *TTY;  # local file handle
+    open(TTY, "/dev/tty") or die "can't open /dev/tty: $!";
+    my $tpgrp = tcgetpgrp(fileno(TTY));
+    my $pgrp  = getpgrp();
+    close TTY;
+    return ($tpgrp == $pgrp);
+}
+-----------------------
+while (1) {
+    if (I_am_interactive()) {
+        print "Prompt: ";
+    }
+    $line = <STDIN>;
+    last unless defined $line; 
+    # do something with the line
+}
+-----------------------
+sub prompt { print "Prompt: " if I_am_interactive() }
+for (prompt(); $line = <STDIN>; prompt()) {
+    # do something with the line
+} 
+-----------------------
+use Term::Cap;
+
+$OSPEED = 9600;
+eval {
+    require POSIX;
+    my $termios = POSIX::Termios->new();
+    $termios->getattr;
+    $OSPEED = $termios->getospeed;
+};
+
+$terminal = Term::Cap->Tgetent({OSPEED=>$OSPEED});
+$terminal->Tputs('cl', 1, STDOUT);
+-------------------------
+system("clear");
+-------------------------
+$clear = $terminal->Tputs('cl');
+$clear = `clear`;
+-------------------------
+print $clear;
+-------------------------
+use Term::ReadKey;
+
+($wchar, $hchar, $wpixels, $hpixels) = GetTerminalSize();
+-------------------------
+use Term::ReadKey;
+
+($width) = GetTerminalSize();
+die "You must have at least 10 characters" unless $width >= 10;
+
+$max = 0;
+foreach (@values) {
+    $max = $_ if $max < $_;
+}
+
+$ratio = ($width-10)/$max;          # chars per unit
+foreach (@values) {
+    printf("%8.1f %s\n", $_, "*" x ($ratio*$_));
+}
+-------------------------
+use Term::ANSIColor;
+
+print color("red"), "Danger, Will Robinson!\n", color("reset");
+print "This is just normal text.\n";
+print colored("<BLINK>Do you hurt yet?</BLINK>", "blink");
+-------------------------
+use Term::ANSIColor qw(:constants);
+
+print RED, "Danger, Will Robinson!\n", RESET;
+-------------------------
+# rhyme for the deadly coral snake
+print color("red on_black"),  "venom lack\n";
+print color("red on_yellow"), "kill that fellow\n";
+
+print color("green on_cyan blink"), "garish!\n";
+print color("reset");
+-------------------------
+print colored("venom lack\n", "red on_black");
+print colored("kill that fellow\n", "red", "on_yellow");
+
+print colored("garish!\n", "green", "on_cyan", "blink");
+-------------------------
+use Term::ANSIColor qw(:constants);
+
+print BLACK, ON_WHITE, "black on white\n";
+print WHITE, ON_BLACK, "white on black\n";
+print GREEN, ON_CYAN, BLINK, "garish!\n";
+print RESET;
+-------------------------
+END { print color("reset") }
+-------------------------
+$Term::ANSIColor::EACHLINE = $/;
+print colored(<<EOF, RED, ON_WHITE, BOLD, BLINK);
+This way
+each line
+has its own
+attribute set.
+EOF
+-------------------------
+use Term::ReadKey;
+
+ReadMode 'cbreak';
+$key = ReadKey(0);
+ReadMode 'normal';
+-------------------------
+print "\aWake up!\n";
+-------------------------
+use Term::Cap;
+
+$OSPEED = 9600;
+eval {
+    require POSIX;
+    my $termios = POSIX::Termios->new();
+    $termios->getattr;
+    $OSPEED = $termios->getospeed;
+};
+
+$terminal = Term::Cap->Tgetent({OSPEED=>$OSPEED});
+$vb = "";
+eval {
+    $terminal->Trequire("vb");
+    $vb = $terminal->Tputs('vb', 1);
+};
+
+print $vb;                                  # ring visual bell
+-------------------
+# HotKey.pm
+package HotKey;
+
+@ISA = qw(Exporter);
+@EXPORT = qw(cbreak cooked readkey);
+
+use strict;
+use POSIX qw(:termios_h);
+my ($term, $oterm, $echo, $noecho, $fd_stdin);
+
+$fd_stdin = fileno(STDIN);
+$term     = POSIX::Termios->new();
+$term->getattr($fd_stdin);
+$oterm     = $term->getlflag();
+
+$echo     = ECHO | ECHOK | ICANON;
+$noecho   = $oterm & ~$echo;
+
+sub cbreak {
+    $term->setlflag($noecho);  # ok, so i don't want echo either
+    $term->setcc(VTIME, 1);
+    $term->setattr($fd_stdin, TCSANOW);
+}
+
+sub cooked {
+    $term->setlflag($oterm);
+    $term->setcc(VTIME, 0);
+    $term->setattr($fd_stdin, TCSANOW);
+}
+
+sub readkey {
+    my $key = '';
+    cbreak();
+    sysread(STDIN, $key, 1);
+    cooked();
+    return $key;
+}
+
+END { cooked() }
+
+1;
+---------------------------
+use Term::ReadKey;
+
+ReadMode ('cbreak');
+
+if (defined ($char = ReadKey(-1)) ) {
+    # input was waiting and it was $char
+} else {
+    # no input was waiting
+}
+
+ReadMode ('normal');                  # restore normal tty settings
+
+---------------------------
+use Term::ReadKey;
+
+ReadMode 'noecho';
+$password = ReadLine 0;
+---------------------------
+use Term::ReadLine;
+
+$term = Term::ReadLine->new("APP DESCRIPTION");
+$OUT = $term->OUT || *STDOUT;
+
+$term->addhistory($fake_line);
+$line = $term->readline(PROMPT);
+
+print $OUT "Any program output\n";
+---------------------------
+$term->addhistory($seed_line);
+---------------------------
+$term->remove_history($line_number);
+---------------------------
+@history = $term->GetHistory;
+---------------------------
+% rep ps aux
+% rep netstat
+% rep -2.5 lpq
+---------------------------
+keypad(1);                  # enable keypad mode
+$key = getch();
+if ($key eq 'k'     ||      # vi mode
+    $key eq "\cP"   ||      # emacs mode
+    $key eq KEY_UP)         # arrow mode
+{
+    # do something
+} 
+----------------------------
+use Expect;
+
+$command = Expect->spawn("program to run")
+    or die "Couldn't start program: $!\n";
+
+# prevent the program's output from being shown on our STDOUT
+$command->log_stdout(0);
+
+# wait 10 seconds for "Password:" to appear
+unless ($command->expect(10, "Password")) {
+    # timed out
+}
+
+# wait 20 seconds for something that matches /[lL]ogin: ?/
+unless ($command->expect(20, -re => '[lL]ogin: ?')) {
+    # timed out
+}
+
+# wait forever for "invalid" to appear
+unless ($command->expect(undef, "invalid")) {
+    # error occurred; the program probably went away
+}
+
+# send "Hello, world" and a carriage return to the program
+print $command "Hello, world\r";
+
+# if the program will terminate by itself, finish up with
+$command->soft_close();
+    
+# if the program must be explicitly killed, finish up with
+$command->hard_close();
+----------------------------
+$which = $command->expect(30, "invalid", "succes", "error", "boom");
+if ($which) {
+    # found one of those strings
+}
+----------------------------
+use Tk;
+
+$main = MainWindow->new();
+
+# Create a horizontal space at the top of the window for the
+# menu to live in.
+$menubar = $main->Frame(-relief              => "raised",
+                        -borderwidth         => 2)
+                ->pack (-anchor              => "nw",
+                        -fill                => "x");
+
+# Create a button labeled "File" that brings up a menu
+$file_menu = $menubar->Menubutton(-text      => "File",
+                                  -underline => 1)
+                     ->pack      (-side      => "left" );
+# Create entries in the "File" menu
+$file_menu->command(-label   => "Print",
+                    -command => \&Print);
+This is considerably easier if you use the -menuitems shortcut: 
+$file_menu = $menubar->Menubutton(-text     	=> "File",
+                                 -underline 	=> 1,
+                                 -menuitems 	=> [
+              [ Button => "Print",-command  	=> \&Print ],
+               [ Button => "Save",-command  	=> \&Save  ] ])
+                           ->pack(-side     	=> "left");
+-------------------------
+    $file_menu->command(-label   => "Quit Immediately",
+                        -command => sub { exit } );
+-------------------------
+$file_menu->separator();
+-------------------------
+$options_menu->checkbutton(-label    => "Create Debugging File",
+                           -variable => \$debug,
+                           -onvalue  => 1,
+                           -offvalue => 0);
+-------------------------
+$debug_menu->radiobutton(-label    => "Level 1",
+                         -variable => \$log_level,
+                         -value    => 1);
+
+$debug_menu->radiobutton(-label    => "Level 2",
+                         -variable => \$log_level,
+                         -value    => 2);
+
+$debug_menu->radiobutton(-label    => "Level 3",
+                         -variable => \$log_level,
+                         -value    => 3);
+-------------------------
+# step 1: create the cascading menu entry
+$format_menu->cascade          (-label    => "Font");
+
+# step 2: get the new Menu we just made
+$font_menu = $format_menu->cget("-menu");
+
+# step 3: populate that Menu
+$font_menu->radiobutton        (-label    => "Courier",
+                                -variable => \$font_name,
+                                -value    => "courier");
+$font_menu->radiobutton        (-label    => "Times Roman",
+                                -variable => \$font_name,
+                                -value    => "times");
+------------------------------
+-------------------------$format_menu = $menubar->Menubutton(-text      => "Format",
+                                    -underline => 1
+                                    -tearoff   => 0)
+                       ->pack;
+
+$font_menu  = $format_menu->cascade(-label     => "Font",
+                                    -tearoff   => 0);
+----------------------------------
+my $f = $menubar->Menubutton(-text => "File", -underline => 0,
+                              -menuitems =>
+    [
+     [Button => 'Copy',        -command => \&edit_copy ],
+     [Button => 'Cut',         -command => \&edit_cut ],
+     [Button => 'Paste',       -command => \&edit_paste  ],
+     [Button => 'Delete',      -command => \&edit_delete ],
+     [Separator => ''],
+     [Cascade => 'Object ...', -tearoff => 0,
+                               -menuitems => [
+        [ Button => "Circle",  -command => \&edit_circle ],
+        [ Button => "Square",  -command => \&edit_square ],
+        [ Button => "Point",   -command => \&edit_point ] ] ],
+    ])->grid(-row => 0, -column => 0, -sticky => 'w');
+----------------------------------
+use Tk::DialogBox;
+
+$dialog = $main->DialogBox( -title   => "Register This Program",
+                            -buttons => [ "Register", "Cancel" ] );
+
+# add widgets to the dialog box with $dialog->Add()
+
+# later, when you need to display the dialog box
+$button = $dialog->Show();
+if ($button eq "Register") {
+    # ...
+} elsif ($button eq "Cancel") {
+    # ...
+} else {
+    # this shouldn't happen
+}
+-----------------------------
+use Tk;
+
+$main = MainWindow->new();
+
+$main->bind('<Configure>' => sub {
+    $xe = $main->XEvent;
+    $main->maxsize($xe->w, $xe->h);
+    $main->minsize($xe->w, $xe->h);
+});
+-----------------------------
+$widget->pack( -fill => "both", -expand => 1 );
+$widget->pack( -fill => "x",    -expand => 1 );
+-----------------------------
+$mainarea->pack( -fill => "both", -expand => 1);
+-----------------------------
+$menubar->pack( -fill => "x", -expand => 1 );
+-----------------------------
+$menubar->pack (-fill     => "x",
+                -expand   => 1,
+                -anchor   => "nw" );
+-----------------------------
+% tkshufflepod chap15.pod
+-----------------------------

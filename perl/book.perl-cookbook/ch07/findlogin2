@@ -1,0 +1,3 @@
+#!/usr/bin/perl -n     
+# findlogin2 - print all lines containing the string "login"     
+print if /login/;

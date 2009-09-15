@@ -1,0 +1,191 @@
+#!/usr/bin/perl -w
+# sigrand - supply random fortunes for .signature file
+
+use strict;
+
+# config section variables
+use vars qw( $NG_IS_DIR $MKNOD $FULLNAME $FIFO $ART $NEWS $SIGS $SEMA
+    	        $GLOBRAND $NAME );
+
+# globals
+use vars qw( $Home $Fortune_Path @Pwd );
+
+################################################################
+# begin configuration section 
+# should really read from ~/.sigrandrc
+
+gethome();
+
+# for rec/humor/funny instead of rec.humor.funny
+$NG_IS_DIR      = 1;    
+
+$MKNOD          = "/bin/mknod";
+$FULLNAME       = "$Home/.fullname";
+$FIFO           = "$Home/.signature";
+$ART            = "$Home/.article";
+$NEWS           = "$Home/News";
+$SIGS           = "$NEWS/SIGNATURES";
+$SEMA           = "$Home/.sigrandpid";
+$GLOBRAND       = 1/4;  # chance to use global sigs anyway
+
+# $NAME should be (1) left undef to have program guess
+# read address for signature maybe looking in ~/.fullname,
+# (2) set to an exact address, or (3) set to empty string
+# to be omitted entirely.
+
+$NAME           = '';           # means no name used
+## $NAME        = "me\@home.org\n";     
+
+# end configuration section -- HOME and FORTUNE get autoconf'd
+################################################################
+
+setup();                # pull in inits
+justme();               # make sure program not already running
+fork && exit;           # background ourself and go away
+
+open (SEMA, "> $SEMA")      	or die "can't write $SEMA: $!";
+print SEMA "$$\n";
+close(SEMA)                 	or die "can't close $SEMA: $!";
+
+# now loop forever, writing a signature into the 
+# fifo file.  if you don't have real fifos, change
+# sleep time at bottom of loop to like 10 to update
+# only every 10 seconds.
+for (;;) {
+    open (FIFO, "> $FIFO")		or die "can't write $FIFO: $!";
+    my $sig = pick_quote();
+    for ($sig) { 
+        s/^((:?[^\n]*\n){4}).*$/$1/s;   # trunc to 4 lines
+        s/^(.{1,80}).*? *$/$1/gm;       # trunc long lines
+    }
+    # print sig, with name if present, padded to four lines
+    if ($NAME) { 
+        print FIFO $NAME, "\n" x (3 - ($sig =~ tr/\n//)), $sig;
+    } else {
+        print FIFO $sig;
+    }
+    close FIFO;
+
+    # Without a microsleep, the reading process doesn't finish before
+    # the writer tries to open it again, which since the reader exists,
+    # succeeds.  They end up with multiple signatures.  Sleep a tiny bit
+    # between opens to give readers a chance to finish reading and close
+    # our pipe so we can block when opening it the next time.
+
+    select(undef, undef, undef, 0.2);   # sleep 1/5 second
+}
+die "XXX: NOT REACHED";         # you can't get here from anywhere
+
+################################################################
+
+# Ignore SIGPIPE in case someone opens us up and then closes the fifo
+# without reading it; look in a .fullname file for their login name.
+# Try to determine the fully qualified hostname.  Look our for silly
+# ampersands in passwd entries.  Make sure we have signatures or fortunes.
+# Build a fifo if we need to.
+
+sub setup {
+    $SIG{PIPE} = 'IGNORE';              
+
+    unless (defined $NAME) {            # if $NAME undef in config
+        if (-e $FULLNAME) {
+    	        $NAME = `cat $FULLNAME`;
+    	        die "$FULLNAME should contain only 1 line, aborting" 
+    	            if $NAME =~ tr/\n// > 1;
+        } else {
+    	        my($user, $host);
+    	        chop($host = `hostname`);
+    	        ($host) = gethostbyname($host) unless $host =~ /\./;
+    	        $user = $ENV{USER} || $ENV{LOGNAME} || $Pwd[0]
+    	            or die "intruder alert";
+    	        ($NAME = $Pwd[6]) =~ s/,.*//;
+    	        $NAME =~ s/&/\u\L$user/g; # can't believe some folks still do this
+    	        $NAME = "\t$NAME\t$user\@$host\n";
+        } 
+    }
+
+    check_fortunes() if !-e $SIGS;
+
+    unless (-p $FIFO) {         # -p checks whether it's a named pipe
+        if (!-e _) {
+    	         system("$MKNOD $FIFO p") && die "can't mknod $FIFO";
+    	         warn "created $FIFO as a named pipe\n";
+        } else {
+    	         die "$0: won't overwrite file .signature\n";
+        } 
+    } else {
+        warn "$0: using existing named pipe $FIFO\n";
+    } 
+
+    # get a good random number seed.  not needed if 5.004 or better.
+    srand(time() ^ ($$ + ($$ << 15)));
+}
+
+# choose a random signature
+sub pick_quote {
+    my $sigfile = signame();
+    if (!-e $sigfile) {
+        return fortune();
+    } 
+    open (SIGS, "< $sigfile" )		or die "can't open $sigfile";
+    local $/  = "%%\n";
+    local $_;
+    my $quip;
+    rand($.) < 1 && ($quip = $_) while <SIGS>;
+    close SIGS;
+    chomp $quip;
+    return $quip || "ENOSIG: This signature file is empty.\n";
+} 
+
+# See whether ~/.article contains a Newsgroups line.  if so, see the first
+# group posted to and find out whether it has a dedicated set of fortunes.
+# otherwise return the global one.  also, return the global one randomly
+# now and then to spice up the sigs.
+sub signame {
+     (rand(1.0) > ($GLOBRAND) && open ART) || return $SIGS;   
+     local $/  = '';
+     local $_  = <ART>;
+     my($ng)   = /Newsgroups:\s*([^,\s]*)/;
+     $ng =~ s!\.!/!g if $NG_IS_DIR;     # if rn -/,  or SAVEDIR=%p/%c
+     $ng = "$NEWS/$ng/SIGNATURES";
+     return -f $ng ? $ng : $SIGS;
+} 
+
+# Call the fortune program with -s for short flag until
+# we get a small enough fortune or ask too much.
+sub fortune {
+   local $_;
+   my $tries = 0;
+   do { 
+       $_ = `$Fortune_Path -s`; 
+   } until tr/\n// < 5 || $tries++ > 20;
+   s/^/ /mg;
+   $_ || " SIGRAND: deliver random signals to all processes.\n";
+} 
+
+# Make sure there's a fortune program.  Search 
+# for its full path and set global to that.
+sub check_fortunes {
+    return if $Fortune_Path;    # already set
+    for my $dir (split(/:/, $ENV{PATH}), '/usr/games') {
+        return if -x ($Fortune_Path = "$dir/fortune");
+    } 
+    die "Need either $SIGS or a fortune program, bailing out";
+} 
+
+# figure out our directory
+sub gethome {
+    @Pwd = getpwuid($<);
+    $Home = $ENV{HOME} || $ENV{LOGDIR} || $Pwd[7]
+    		   or die "no home directory for user $<";
+}
+
+# "There can be only one."  --the Highlander
+sub justme {
+    if (open SEMA) {
+        my $pid;
+        chop($pid = <SEMA>);
+        kill(0, $pid)		and die "$0 already running (pid $pid), bailing out";
+        close SEMA;
+    } 
+} 

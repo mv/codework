@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+# splitwulog - split wuftpd log by authenticated user
+use FileCache;
+$outdir = '/var/log/ftp/by-user';
+while (<>) {
+    unless (defined ($user = (split)[-4])) {
+       warn "Invalid line: $.\n";
+       next;
+    }
+    $path = "$outdir/$user";
+    cacheout $path;
+    print $path $_;
+}

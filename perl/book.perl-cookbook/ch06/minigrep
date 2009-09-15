@@ -1,0 +1,6 @@
+#!/usr/bin/perl
+# minigrep - trivial grep
+$pat = shift;
+while (<>) {
+    print if /$pat/o;
+}

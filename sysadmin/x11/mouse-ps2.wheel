@@ -1,0 +1,12 @@
+
+Section "InputDevice"
+# If the normal CorePointer mouse is not a USB mouse then
+# this input device can be used in AlwaysCore mode to let you
+# also use USB mice at the same time.
+    Identifier  "DevInputMice"
+    Driver      "mouse"
+    Option      "Protocol" "IMPS/2"
+    Option      "Device" "/dev/input/mice"
+    Option      "ZAxisMapping" "4 5"
+    Option      "Emulate3Buttons" "no"
+EndSection

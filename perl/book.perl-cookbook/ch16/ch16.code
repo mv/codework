@@ -1,0 +1,504 @@
+$output = `program args`;   # collect output into one multiline string
+@output = `program args`;   # collect output into array, one line per element
+-----------------------------
+open(README, "program args |") or die "Can't run program: $!\n";
+while(<README>) {
+    $output .= $_;
+}
+close(README);
+-----------------------------
+`fsck -y /dev/rsd1a`;       # BAD AND SCARY
+-----------------------------
+use POSIX qw(:sys_wait_h);
+
+pipe(README, WRITEME);
+if ($pid = fork) {
+    # parent
+    $SIG{CHLD} = sub { 1 while ( waitpid(-1, WNOHANG)) > 0 };
+    close(WRITEME);
+} else {
+    die "cannot fork: $!" unless defined $pid;
+    # child
+    open(STDOUT, ">&=WRITEME")      or die "Couldn't redirect STDOUT: $!";
+    close(README);
+    exec($program, $arg1, $arg2)    or die "Couldn't run $program : $!\n";
+}
+
+while (<README>) {
+    $string .= $_;
+    # or  push(@strings, $_);
+}
+close(README);
+-----------------------------
+$status = system("vi $myfile");
+-----------------------------
+$status = system("vi", $myfile);
+-----------------------------
+system("cmd1 args | cmd2 | cmd3 >outfile");
+system("cmd args <infile >outfile 2>errfile");
+-----------------------------
+$status = system($program, $arg1, $arg);
+die "$program exited funny: $?" unless $status == 0;
+-----------------------------
+if (($signo = system(@arglist)) &= 127) { 
+    die "program killed by signal $signo\n";
+}
+-----------------------------
+if ($pid = fork) {
+    # parent catches INT and berates user
+    local $SIG{INT} = sub { print "Tsk tsk, no process interruptus\n" };
+    waitpid($pid, 0);
+} else {
+    die "cannot fork: $!" unless defined $pid;
+    # child ignores INT and does its thing
+    $SIG{INT} = "IGNORE";
+    exec("summarize", "/etc/logfiles")             or die "Can't exec: $!\n";
+}
+
+($pid = fork) ? waitpid($pid, 0) : exec(@ARGV)     or die "Can't exec: $!\n";
+-----------------------------
+$shell = '/bin/tcsh';
+system $shell '-csh';           # pretend it's a login shell
+-----------------------------
+system {'/bin/tcsh'} '-csh';    # pretend it's a login shell
+-----------------------------
+# call expn as vrfy
+system {'/home/tchrist/scripts/expn'} 'vrfy', @ADDRESSES;
+-----------------------------
+@args = ( "echo surprise" );
+
+system @args;		# subject to shell escapes if @args == 1
+system { $args[0] } @args;  # safe even with one-arg list
+-----------------------------
+@args = ( "echo surprise" );
+-----------------------------
+exec("archive *.data")
+    or die "Couldn't replace myself with archive: $!\n";
+-----------------------------
+exec("archive", "accounting.data")
+    or die "Couldn't replace myself with archive: $!\n";
+-----------------------------
+exec("archive accounting.data")
+    or die "Couldn't replace myself with archive: $!\n";
+-----------------------------
+$pid = open(README, "program arguments |")  or die "Couldn't fork: $!\n";
+while (<README>) {
+    # ...
+}
+close(README)                               or die "Couldn't close: $!\n";
+-----------------------------
+$pid = open(WRITEME, "| program arguments") or die "Couldn't fork: $!\n";
+print WRITEME "data\n";
+close(WRITEME)                              or die "Couldn't close: $!\n";
+-----------------------------
+$pid = open(F, "sleep 100000|");    # child goes to sleep
+close(F);                           # and the parent goes to lala land
+-----------------------------
+$pid = open(WRITEME, "| program args");
+print WRITEME "hello\n";            # program will get hello\n on STDIN
+close(WRITEME);                     # program will get EOF on STDIN
+-----------------------------
+$pager = $ENV{PAGER} || '/usr/bin/less';  # XXX: might not exist
+open(STDOUT, "| $pager");
+-----------------------------
+head(100);
+while (<>) {
+    print;
+} 
+
+sub head {
+    my $lines = shift || 20;
+    return if $pid = open(STDOUT, "|-");
+    die "cannot fork: $!" unless defined $pid;
+    while (<STDIN>) {
+        print;
+        last unless --$lines ;
+    } 
+    exit;
+} 
+-----------------------------
+1: > Welcome to Linux, version 2.0.33 on a i686
+2: > 
+3: >     "The software required `Windows 95 or better', 
+4: >      so I installed Linux."  
+-----------------------------
+> 1: Welcome to Linux, Kernel version 2.0.33 on a i686
+> 2: 
+> 3:     "The software required `Windows 95 or better', 
+> 4:      so I installed Linux."  
+-----------------------------
+@ARGV = map { /\.(gz|Z)$/ ? "gzip -dc $_ |" : $_  } @ARGV;
+while (<>) {
+    # .......
+} 
+-----------------------------
+@ARGV = map { m#^\w+://# ? "GET $_ |" : $_ } @ARGV;
+while (<>) {
+    # .......
+} 
+-----------------------------
+$pwdinfo = `domainname` =~ /^(\(none\))?$/
+                ? '< /etc/passwd'
+                : 'ypcat  passwd |';
+
+open(PWD, $pwdinfo)                 or die "can't open $pwdinfo: $!";
+-----------------------------
+print "File, please? ";
+chomp($file = <>);
+open (FH, $file)                    or die "can't open $file: $!";
+-----------------------------
+$output = `cmd 2>&1`;                          # with backticks
+# or
+$pid = open(PH, "cmd 2>&1 |");                 # with an open pipe
+while (<PH>) { }                               # plus a read
+-----------------------------
+$output = `cmd 2>/dev/null`;                   # with backticks
+# or
+$pid = open(PH, "cmd 2>/dev/null |");          # with an open pipe
+while (<PH>) { }                               # plus a read
+-----------------------------
+$output = `cmd 2>&1 1>/dev/null`;              # with backticks
+# or
+$pid = open(PH, "cmd 2>&1 1>/dev/null |");     # with an open pipe
+while (<PH>) { }                               # plus a read
+-----------------------------
+$output = `cmd 3>&1 1>&2 2>&3 3>&-`;           # with backticks
+# or
+$pid = open(PH, "cmd 3>&1 1>&2 2>&3 3>&-|");   # with an open pipe
+while (<PH>) { }                               # plus a read
+-----------------------------
+$fd3 = $fd1;
+$fd1 = $fd2;
+$fd2 = $fd3;
+$fd3 = undef;
+-----------------------------
+system("prog args 1>tmpfile 2>&1");
+system("prog args 2>&1 1>tmpfile");
+-----------------------------
+# system ("prog args 1>tmpfile 2>&1");
+$fd1 = "tmpfile";        # change stdout destination first
+$fd2 = $fd1;             # now point stderr there, too
+-----------------------------
+                         # system("prog args 2>&1 1>tmpfile");
+$fd2 = $fd1;             # stderr same destination as stdout
+$fd1 = "tmpfile";        # but change stdout destination 
+-----------------------------
+use IPC::Open2;
+
+open2(*README, *WRITEME, $program);
+print WRITEME "here's your input\n";
+$output = <README>;
+close(WRITEME);
+close(README);
+-----------------------------
+use IPC::Open2;
+use IO::Handle;
+
+($reader, $writer) = (IO::Handle->new, IO::Handle->new);
+open2($reader, $writer, $program);
+-----------------------------
+eval {
+    open2($readme, $writeme, @program_and_arguments);
+};
+if ($@) { 
+    if ($@ =~ /^open2/) {
+        warn "open2 failed: $!\n$@\n";
+        return;
+    }
+    die;            # reraise unforeseen exception
+}
+-----------------------------
+@all = `($cmd | sed -e 's/^/stdout: /' ) 2>&1`;
+for (@all) { push @{ s/stdout: // ? \@outlines : \@errlines }, $_ }
+print "STDOUT:\n", @outlines, "\n";
+print "STDERR:\n", @errlines, "\n";
+-----------------------------
+open3(*WRITEHANDLE, *READHANDLE, *ERRHANDLE, "program to run");
+
+-----------------------------
+use IPC::Open3;
+$pid = open3(*HIS_IN, *HIS_OUT, *HIS_ERR, $cmd);
+close(HIS_IN);  # give end of file to kid, or feed him
+@outlines = <HIS_OUT>;              # read till EOF
+@errlines = <HIS_ERR>;              # XXX: block potential if massive
+print "STDOUT:\n", @outlines, "\n";
+print "STDERR:\n", @errlines, "\n";
+-----------------------------
+pipe(READER, WRITER);
+if (fork) {
+    # run parent code, either reading or writing, not both
+} else {
+    # run child code, either reading or writing, not both
+}
+--------------------------------
+if ($pid = open(CHILD, "|-")) {
+        # run parent code, writing to child
+} else {
+    die "cannot fork: $!" unless defined $pid;
+    # otherwise run child code here, reading from parent
+}
+--------------------------------
+if ($pid = open(CHILD, "-|")) {
+    # run parent code, reading from child
+} else {
+    die "cannot fork: $!" unless defined $pid;
+    # otherwise run child code here, writing to parent
+}
+--------------------------------
+socketpair(READER, WRITER, AF_UNIX, SOCK_STREAM, PF_UNSPEC);
+shutdown(READER, 1);        # no more writing for reader
+shutdown(WRITER, 0);        # no more reading for writer
+--------------------------------
+% mkfifo /path/to/named.pipe
+--------------------------------
+
+open(FIFO, "< /path/to/named.pipe")         or die $!;
+while (<FIFO>) {
+    print "Got: $_";
+}
+close(FIFO);
+--------------------------------
+open(FIFO, "> /path/to/named.pipe")         or die $1;
+print FIFO "Smoke this.\n";
+close(FIFO);
+--------------------------------
+% mkfifo ~/.plan                    # isn't this everywhere yet?
+% mknod  ~/.plan p                  # in case you don't have mkfifo
+--------------------------------
+use POSIX qw(:errno_h);
+
+$SIG{PIPE} = 'IGNORE';
+# ...
+$status = print FIFO "Are you there?\n";
+if (!$status && $! == EPIPE) {
+    warn "My reader has forsaken me!\n";
+    next;
+}
+--------------------------------
+use POSIX;
+print _POSIX_PIPE_BUF, "\n";
+--------------------------------
+% kill -l
+HUP INT QUIT ILL TRAP ABRT BUS FPE KILL USR1 SEGV USR2 PIPE 
+ALRM TERM CHLD CONT STOP TSTP TTIN TTOU URG XCPU XFSZ VTALRM 
+PROF WINCH POLL PWR
+--------------------------------
+% perl -e 'print join(" ", keys %SIG), "\n"'
+XCPU ILL QUIT STOP EMT ABRT BUS USR1 XFSZ TSTP INT IOT USR2 INFO TTOU
+ALRM KILL HUP URG PIPE CONT SEGV VTALRM PROF TRAP IO TERM WINCH CHLD
+FPE TTIN SYS
+--------------------------------
+% perl -MConfig -e 'print $Config{sig_name}'
+ZERO HUP INT QUIT ILL TRAP ABRT EMT FPE KILL BUS SEGV SYS PIPE ALRM
+TERM URG STOP TSTP CONT CHLD TTIN TTOU IO XCPU XFSZ VTALRM PROF WINCH
+INFO USR1 USR2 IOT
+--------------------------------
+use Config;
+defined $Config{sig_name} or die "No sigs?";
+$i = 0;                     # Config prepends fake 0 signal called "ZERO".
+foreach $name (split(' ', $Config{sig_name})) {
+    $signo{$name} = $i;
+    $signame[$i] = $name;
+    $i++;
+}
+--------------------------------
+kill  9     => $pid;                    # send $pid a signal 9
+kill -1     => $pgrp;                   # send whole job a signal 1
+kill  USR1  => $$;                      # send myself a SIGUSR1
+kill  HUP   => @pids;                   # send a SIGHUP to processes in @pids
+--------------------------------
+use POSIX qw(:errno_h);
+
+if (kill 0 => $minion) {
+    print "$minion is alive!\n";
+} elsif ($! == EPERM) {             # changed uid
+    print "$minion has escaped my control!\n";
+} elsif ($! == ESRCH) {
+    print "$minion is deceased.\n";  # or zombied
+} else {
+    warn "Odd; I couldn't check on the status of $minion: $!\n";
+}
+--------------------------------
+$SIG{QUIT} = \&got_sig_quit;     # call &got_sig_quit for every SIGQUIT 
+$SIG{PIPE} = 'got_sig_pipe';     # call main::got_sig_pipe for every SIGPIPE 
+$SIG{INT}  = sub { $ouch++ };    # increment $ouch for every SIGINT
+--------------------------------
+$SIG{INT} = 'IGNORE';            # ignore the signal INT
+
+--------------------------------
+$SIG{STOP} = 'DEFAULT';          # restore default STOP signal handling
+--------------------------------
+# the signal handler
+sub ding {
+    $SIG{INT} = \&ding;
+    warn "\aEnter your name!\n";
+}
+
+# prompt for name, overriding SIGINT
+sub get_name {
+    local $SIG{INT} = \&ding;
+    my $name;
+
+    print "Kindly Stranger, please enter your name: ";
+    chomp( $name = <> );
+    return $name;
+}
+--------------------------------
+$SIG{INT} = \&got_int;
+sub got_int {
+    $SIG{INT} = \&got_int;          # but not for SIGCHLD!
+    # ...
+}
+--------------------------------
+my $interrupted = 0;
+
+sub got_int {
+    $interrupted = 1;
+    $SIG{INT} = 'DEFAULT';          # or 'IGNORE'
+    die;
+}
+
+eval {
+    $SIG{INT} = \&got_int;
+    # ... long-running code that you don't want to restart
+};
+
+if ($interrupted) {
+    # deal with the signal
+}
+----------------------------
+$SIG{INT} = \&catcher;
+sub catcher {
+    # ...
+    $SIG{INT} = \&catcher;
+}
+----------------------------
+use Config;
+print "Hurrah!\n" if $Config{d_sigaction};
+----------------------------
+$SIG{INT} = 'IGNORE';
+----------------------------
+$SIG{INT} = \&tsktsk;
+
+sub tsktsk {
+    $SIG{INT} = \&tsktsk;           # See ``Writing A Signal Handler''
+    warn "\aThe long habit of living indisposeth us for dying.\n";
+}
+----------------------------
+% stty -a
+speed 9600 baud; 38 rows; 80 columns;
+lflags: icanon isig iexten echo echoe -echok echoke -echonl echoctl
+       -echoprt -altwerase -noflsh -tostop -flusho pendin -nokerninfo
+       -extproc
+iflags: -istrip icrnl -inlcr -igncr ixon -ixoff ixany imaxbel -ignbrk
+        brkint -inpck -ignpar -parmrk
+oflags: opost onlcr oxtabs
+cflags: cread cs8 -parenb -parodd hupcl -clocal -cstopb -crtscts -dsrflow
+        -dtrflow -mdmbuf
+cchars: discard = ^O; dsusp = ^Y; eof = ^D; eol = <undef;>
+        eol2 = <undef; erase = ^H; intr = ^C; kill = ^U; lnext = ^V;>
+        min = 1; quit = ^\; reprint = ^R; start = ^Q; status = <undef;>
+        stop = ^S; susp = ^Z; time = 0; werase = ^W;
+----------------------------
+$SIG{CHLD} = 'IGNORE';
+
+----------------------------
+use POSIX ":sys_wait_h";
+
+$SIG{CHLD} = \&REAPER;
+sub REAPER {
+    my $stiff;
+    while ($stiff = waitpid(-1, &WNOHANG) > 0) {
+        # do something with $stiff if you want
+    }
+    $SIG{CHLD} = \&REAPER;                  # install *after* calling waitpid
+}
+---------------------------
+$exit_value  = $? >> 8;
+$signal_num  = $? & 127;
+$dumped_core = $? & 128;
+---------------------------
+use POSIX qw(:signal_h :errno_h);
+
+$SIG{CHLD} = \&REAPER;
+sub REAPER {
+    my $pid;
+
+    $pid = waitpid(-1, &WNOHANG);
+
+    if ($pid == -1) {
+        # no child waiting.  Ignore it.
+    } elsif (WIFEXITED($?)) {
+        print "Process $pid exited.\n";
+    } else {
+        print "False alarm on $pid.\n";
+    }
+    $SIG{CHLD} = \&REAPER;          # in case of unreliable signals
+}
+---------------------------
+use Config;
+$has_nonblocking = $Config{d_waitpid} eq "define" ||
+                   $Config{d_wait4}   eq "define";
+---------------------------
+use POSIX qw(:signal_h);
+
+$sigset = POSIX::SigSet->new(SIGINT);    # define the signals to block
+$old_sigset = POSIX::SigSet->new;        # where the old sigmask will be kept
+
+unless (defined sigprocmask(SIG_BLOCK, $sigset, $old_sigset)) {
+    die "Could not block SIGINT\n";
+}
+---------------------------
+unless (defined sigprocmask(SIG_UNBLOCK, $old_sigset)) {
+    die "Could not unblock SIGINT\n";
+}
+---------------------------
+use POSIX qw(:signal_h);
+
+$sigset = POSIX::SigSet->new( SIGINT, SIGKILL );
+-----------------------------
+$SIG{ALRM} = sub { die "timeout" };
+
+eval {
+    alarm(3600);
+    # long-time operations here
+    alarm(0);
+};
+
+if ($@) {
+    if ($@ =~ /timeout/) {
+                            # timed out; do what you will here
+    } else {
+        die;                # propagate unexpected exception
+    } 
+} 
+-----------------------------
+Make is like Pascal: everybody likes it, so they go in and change it.
+                                            --Dennis Ritchie
+%%
+I eschew embedded capital letters in names; to my prose-oriented eyes,
+they are too awkward to read comfortably. They jangle like bad typography.
+                                            --Rob Pike
+%%
+God made the integers; all else is the work of Man.  
+                                            --Kronecker
+%%
+I'd rather have :rofix than const.          --Dennis Ritchie
+%%
+If you want to program in C, program in C.  It's a nice language.
+I use it occasionally...   :-)              --Larry Wall
+%%
+Twisted cleverness is my only skill as a programmer.       
+                                            --Elizabeth Zwicky
+%%
+Basically, avoid comments. If your code needs a comment to be understood,
+it would be better to rewrite it so it's easier to understand.  
+                                            --Rob Pike
+%%
+Comments on data are usually much more helpful than on algorithms.  
+                                            --Rob Pike
+%% 
+Programs that write programs are the happiest programs in the world.
+                                            --Andrew Hume 
+%%
+-----------------------------

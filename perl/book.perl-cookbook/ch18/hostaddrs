@@ -1,0 +1,11 @@
+#!/usr/bin/perl
+# hostaddrs - canonize name and show addresses
+use Socket;
+use Net::hostent;
+$name = shift;
+if ($hent = gethostbyname($name)) {
+    $name      = $hent->name;                # in case different
+    $addr_ref  = $hent->addr_list;
+    @addresses = map { inet_ntoa($_) } @$addr_ref;
+}
+print "$name => @addresses\n";

@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+# os_snipe - redirect to a Jargon File entry about current OS
+$dir = 'http://www.wins.uva.nl/%7Emes/jargon';
+for ($ENV{HTTP_USER_AGENT}) {
+    $page  =    /Mac/            && 'm/Macintrash.html'
+             || /Win(dows )?NT/  && 'e/evilandrude.html'
+             || /Win|MSIE|WebTV/ && 'm/MicroslothWindows.html'
+             || /Linux/          && 'l/Linux.html'
+             || /HP-UX/          && 'h/HP-SUX.html'
+             || /SunOS/          && 's/ScumOS.html'
+             ||                     'a/AppendixB.html';
+}
+print "Location: $dir/$page\n\n";

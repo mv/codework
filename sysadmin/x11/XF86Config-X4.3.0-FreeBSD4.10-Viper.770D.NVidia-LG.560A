@@ -1,0 +1,104 @@
+# $Id: XF86Config-X4.3.0-FreeBSD4.10-Viper.770D.NVidia-LG.560A 6 2006-09-10 15:35:16Z marcus $
+
+Section "ServerLayout"
+	Identifier     "XFree86 Configured"
+	Screen      0  "Screen0" 0 0
+	InputDevice    "Mouse0" "CorePointer"
+	InputDevice    "Keyboard0" "CoreKeyboard"
+EndSection
+
+Section "Files"
+	RgbPath      "/usr/X11R6/lib/X11/rgb"
+	ModulePath   "/usr/X11R6/lib/modules"
+	FontPath     "/usr/X11R6/lib/X11/fonts/misc/"
+	FontPath     "/usr/X11R6/lib/X11/fonts/Speedo/"
+	FontPath     "/usr/X11R6/lib/X11/fonts/Type1/"
+	FontPath     "/usr/X11R6/lib/X11/fonts/75dpi/"
+	FontPath     "/usr/X11R6/lib/X11/fonts/100dpi/"
+EndSection
+
+Section "Module"
+	Load  "dbe"
+	Load  "dri"
+	Load  "extmod"
+	Load  "glx"
+	Load  "record"
+	Load  "xtrap"
+	Load  "speedo"
+	Load  "type1"
+EndSection
+
+Section "InputDevice"
+	Identifier  "Keyboard0"
+	Driver      "keyboard"
+EndSection
+
+Section "InputDevice"
+	Identifier  "Mouse0"
+	Driver      "mouse"
+	Option	    "Protocol" "auto"
+	Option	    "Device" "/dev/sysmouse"
+EndSection
+
+Section "Monitor"
+    Identifier   "Monitor0"
+    VendorName   "Monitor Vendor"
+    ModelName    "StudioWorks"
+    DisplaySize  280    210
+    HorizSync    30.0 - 61.0
+    VertRefresh  50.0 - 120.0
+    ModeLine     "1400x1050" 129.0 1400 1464 1656 1960 1050 1051 1054 1100 +hsync +vsync
+    ModeLine     "1400x1050" 151.0 1400 1464 1656 1960 1050 1051 1054 1100 +hsync +vsync
+    ModeLine     "1400x1050" 162.0 1400 1464 1656 1960 1050 1051 1054 1100 +hsync +vsync
+    ModeLine     "1400x1050" 184.0 1400 1464 1656 1960 1050 1051 1054 1100 +hsync +vsync
+    Option      "dpms"
+EndSection
+
+Section "Device"
+        ### Available Driver options are:-
+        ### Values: <i>: integer, <f>: float, <bool>: "True"/"False",
+        ### <string>: "String", <freq>: "<f> Hz/kHz/MHz"
+        ### [arg]: arg optional
+        #Option     "SWcursor"           	# [<bool>]
+        #Option     "HWcursor"           	# [<bool>]
+        #Option     "NoAccel"            	# [<bool>]
+        #Option     "ShowCache"          	# [<bool>]
+        #Option     "ShadowFB"           	# [<bool>]
+        #Option     "UseFBDev"           	# [<bool>]
+        #Option     "Rotate"             	# [<str>]
+        #Option     "VideoKey"           	# <i>
+        #Option     "FlatPanel"          	# [<bool>]
+        #Option     "FPDither"           	# [<bool>]
+        #Option     "CrtcNumber"         	# <i>
+	Identifier  "Card0"
+	Driver      "nv"
+	VendorName  "nVidia Corporation"
+	BoardName   "NV5 [RIVA TNT2/TNT2 Pro]"
+	BusID       "PCI:1:0:0"
+EndSection
+
+Section "Screen"
+	Identifier "Screen0"
+	Device     "Card0"
+	Monitor    "Monitor0"
+    DefaultDepth     16
+
+    SubSection "Display"
+            Depth     8
+            Modes "1024x768" "800x600" "640x480"
+    EndSubSection
+    SubSection "Display"
+            Depth     15
+            Modes "1024x768" "800x600" "640x480"
+    EndSubSection
+    SubSection "Display"
+            Depth     16
+            Modes "1024x768" "800x600" "640x480"
+    EndSubSection
+    SubSection "Display"
+            Depth     24
+            Modes "1024x768" "800x600" "640x480"
+    EndSubSection
+
+EndSection
+

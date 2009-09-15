@@ -1,0 +1,852 @@
+$object = {};                       # hash reference
+bless($object, "Data::Encoder");    # bless $object into Data::Encoder class
+bless($object);                     # bless $object into current package
+----------------------------
+$obj = [3,5];
+print ref($obj), " ", $obj->[1], "\n";
+bless($obj, "Human::Cannibal");
+print ref($obj), " ", $obj->[1], "\n";
+
+ARRAY 5
+Human::Cannibal 5
+----------------------------
+$obj->{Stomach} = "Empty";   # directly accessing an object's contents
+$obj->{NAME}    = "Thag";       
+ # uppercase field name to make it stand out (optional)
+----------------------------
+$encoded = $object->encode("data");
+----------------------------
+$encoded = Data::Encoder->encode("data");
+----------------------------
+sub new {
+    my $class = shift;
+    my $self  = {};         # allocate new hash for object
+    bless($self, $class);
+    return $self;
+}
+----------------------------
+$object = Class->new();
+----------------------------
+$object = Class::new("Class");
+----------------------------
+sub class_only_method {
+    my $class = shift;
+    die "class method called on object" if ref $class;
+    # more code here
+} 
+----------------------------
+sub instance_only_method {
+    my $self = shift;
+    die "instance method called on class" unless ref $self;
+    # more code here
+} 
+----------------------------
+$lector = new Human::Cannibal;
+feed $lector "Zak";
+move $lector "New York";
+----------------------------
+$lector = Human::Cannibal->new();
+$object->feed("Zak");
+$object->move("New York");
+----------------------------
+printf STDERR "stuff here\n";
+----------------------------
+move $obj->{FIELD};                 # probably wrong
+move $ary[$i];                      # probably wrong
+----------------------------
+$obj->move->{FIELD};                # Surprise!
+$ary->move->[$i];                   # Surprise!
+----------------------------
+$obj->{FIELD}->move();              # Nope, you wish
+$ary[$i]->move;                     # Nope, you wish
+----------------------------
+sub new {
+    my $class = shift;
+    my $self  = { };
+    bless($self, $class);
+    return $self;
+} 
+----------------------------
+sub new { bless( { }, shift ) }
+
+----------------------------
+sub new { bless({}) }
+----------------------------
+sub new {
+    my $self = { };  # allocate anonymous hash
+    bless($self);
+    # init two sample attributes/data members/fields
+    $self->{START} = time();  
+    $self->{AGE}   = 0;
+    return $self;
+} 
+----------------------------
+sub new {
+    my $classname  = shift;         # What class are we constructing?
+    my $self      = {};             # Allocate new memory
+    bless($obref, $classname);      # Mark it of the right type
+    $self->{START}  = time();       # init data fields
+    $self->{AGE}    = 0;
+    return $obref;                  # And give it back
+} 
+----------------------------
+sub new {
+    my $classname  = shift;         # What class are we constructing?
+    my $self      = {};             # Allocate new memory
+    bless($self, $classname);       # Mark it of the right type
+    $self->_init(@_);               # Call _init with remaining args
+    return $self;
+} 
+
+# "private" method to initialize fields.  It always sets START to
+# the current time, and AGE to 0.  If called with arguments, _init
+# interprets them as key+value pairs to initialize the object with.
+sub _init {
+    my $self = shift;
+    $self->{START} = time();
+    $self->{AGE}   = 0;
+    if (@_) {
+        my %extra = @_;
+        @$self{keys %extra} = values %extra;
+    } 
+} 
+----------------------------
+sub DESTROY {
+    my $self = shift;
+    printf("$self dying at %s\n", scalar localtime);
+} 
+----------------------------
+$self->{WHATEVER} = $self;
+----------------------------
+sub get_name {
+    my $self = shift;
+    return $self->{NAME};
+} 
+
+sub set_name {
+    my $self      = shift;
+    $self->{NAME} = shift;
+} 
+----------------------------
+sub name {
+    my $self = shift;
+    if (@_) { $self->{NAME} = shift } 
+    return $self->{NAME};
+} 
+----------------------------
+sub age {
+    my $self = shift;
+    my $prev = $self->{AGE};
+    if (@_) { $self->{AGE} = shift } 
+    return $prev;
+} 
+# sample call of get and set: happy birthday!
+$obj->age( 1 + $obj->age );
+----------------------
+$him = Person->new();
+$him->{NAME} = "Sylvester";
+$him->{AGE}  = 23;
+----------------------
+use Carp;
+sub name {
+    my $self = shift;
+    return $self->{NAME} unless @_;
+    local $_ = shift;
+    croak "too many arguments" if @_;
+    if ($^W) {
+        /[^\s\w'-]/         && carp "funny characters in name";
+        /\d/                && carp "numbers in name";
+        /\S+(\s+\S+)+/      || carp "prefer multiword name";
+        /\S/                || carp "name is blank";
+    } 
+    s/(\w+)/\u\L$1/g;       # enforce capitalization
+    $self->{NAME} = $_;
+} 
+----------------------
+package Person;
+
+# this is the same as before...
+sub new {
+     my $that  = shift;
+     my $class = ref($that) || $that;
+     my $self = {
+           NAME  => undef,
+           AGE   => undef,
+           PEERS => [],
+    ;
+    bless($self, $class);
+    return $self;
+}
+
+use Alias qw(attr);
+use vars qw($NAME $AGE $PEERS);
+
+sub name {
+    my $self = attr shift;
+    if (@_) { $NAME = shift; }
+    return    $NAME;
+}
+
+sub age {
+    my $self = attr shift;
+    if (@_) { $AGE = shift; }
+    return    $AGE;
+}
+
+sub peers {
+    my $self = attr shift;
+    if (@_) { @PEERS = @_; }
+    return    @PEERS;
+}
+
+sub exclaim {
+    my $self = attr shift;
+    return sprintf "Hi, I'm %s, age %d, working with %s",
+            $NAME, $AGE, join(", ", @PEERS);
+}
+
+sub happy_birthday {
+    my $self = attr shift;
+    return ++$AGE;
+}
+-------------------------
+package Person;
+
+$Body_Count = 0; 
+
+sub population { return $Body_Count }
+
+sub new {                                   # constructor
+    $Body_Count++;
+    return bless({}, shift);
+}
+
+sub DESTROY { --$BodyCount }                # destructor
+
+# later, the user can say this:
+package main;
+
+for (1..10) { push @people, Person->new }
+printf "There are %d people alive.\n", Person->population();
+
+There are 10 people alive.
+-----------------------
+$him = Person->new();
+$him->gender("male");
+
+$her = Person->new();
+$her->gender("female");
+-----------------------
+FixedArray->Max_Bounds(100);                # set for whole class
+$alpha = FixedArray->new();
+printf "Bound on alpha is %d\n", $alpha->Max_Bounds();
+100
+$beta = FixedArray->new();
+$beta->Max_Bounds(50);                      # still sets for whole class
+printf "Bound on alpha is %d\n", $alpha->Max_Bounds();
+50
+-----------------------
+package FixedArray;
+$Bounds = 7;  # default
+sub new { bless( {}, shift ) }
+sub Max_Bounds {
+    my $proto  = shift;
+    $Bounds    = shift if @_;          # allow updates
+    return $Bounds;
+} 
+-----------------------
+sub Max_Bounds { $Bounds }
+-----------------------
+sub new {
+    my $class = shift;
+    my $self = bless({}, $class);
+    $self->{Max_Bounds_ref} = \$Bounds;
+    return $self;
+} 
+-----------------------
+use Class::Struct;          # load struct-building module
+
+struct Person => {          # create a definition for a "Person"
+    name   => '$',          #    name field is a scalar
+    age    => '$',          #    age field is also a scalar
+    peers  => '@',          #    but peers field is an array (reference)
+};
+
+my $p = Person->new();      # allocate an empty Person struct
+
+$p->name("Jason Smythe");                   # set its name field
+$p->age(13);                                # set its age field
+$p->peers( ["Wilbur", "Ralph", "Fred" ] );  # set its peers field
+
+# or this way:
+@{$p->peers} = ("Wilbur", "Ralph", "Fred");
+
+# fetch various values, including the zeroth friend
+printf "At age %d, %s's first friend is %s.\n",
+    $p->age, $p->name, $p->peers(0);
+--------------------------
+use Class::Struct;
+
+struct Person => {name => '$',      age  => '$'};
+struct Family => {head => 'Person', address => '$', members => '@'};
+
+$folks  = Family->new();
+$dad    = $folks->head;
+$dad->name("John");
+$dad->age(34);
+
+printf("%s's age is %d\n", $folks->head->name, $folks->head->age);
+--------------------------
+sub Person::age {
+    use Carp;
+    my ($self, $age) = @_;
+    if    (@_  > 2) {  confess "too many arguments" } 
+    elsif (@_ == 1) {  return $struct->{'age'}      }
+    elsif (@_ == 2) {
+        carp "age `$age' isn't numeric"   if $age !~ /^\d+/;
+        carp "age `$age' is unreasonable" if $age > 150;
+        $self->{'age'} = $age;
+    } 
+} --------------------------
+
+if ($^W) { 
+    carp "age `$age' isn't numeric"   if $age !~ /^\d+/;
+    carp "age `$age' is unreasonable" if $age > 150;
+}
+} --------------------------
+my $gripe = $^W ? \&carp : \&croak;
+$gripe->("age `$age' isn't numeric")   if $age !~ /^\d+/;
+$gripe->("age `$age' is unreasonable") if $age > 150;
+} --------------------------
+struct Family => [head => 'Person', address => '$', members => '@'];
+
+} --------------------------
+struct Card => { 
+    name    => '$',
+    color   => '$',
+    cost    => '$',
+    type    => '$',
+    release => '$',
+    text    => '$',
+};
+} --------------------------
+struct hostent => { reverse qw{
+    $ name
+    @ aliases
+    $ addrtype
+    $ length
+    @ addr_list
+}};
+} --------------------------
+#define h_type h_addrtype
+#define h_addr h_addr_list[0]
+} --------------------------
+# make (hostent object)->type() same as (hostent object)->addrtype()
+*hostent::type = \&hostent::addrtype;
+
+# make (hostenv object)->addr() same as (hostenv object)->addr_list(0)
+sub hostent::addr { shift->addr_list(0,@_) }
+} --------------------------
+package Extra::hostent;
+use Net::hostent;
+@ISA = qw(hostent);
+sub addr { shift->addr_list(0,@_) } 
+1;
+} --------------------------
+my $proto  = shift;
+my $class  = ref($proto) || $proto;
+my $parent = ref($proto) && $proto;
+} --------------------------
+$ob1 = SomeClass->new();
+# later on
+$ob2 = (ref $ob1)->new();
+} --------------------------
+$ob1 = Widget->new();
+$ob2 = $ob1->new();
+} --------------------------
+sub new {
+    my $proto  = shift;
+    my $class  = ref($proto) || $proto;
+    my $parent = ref($proto) && $proto;
+
+    my $self;
+    # check whether we're shadowing a new from @ISA
+    if (@ISA && $proto->SUPER::can('new') {
+        $self = $proto->SUPER::new(@_);
+    } else { 
+        $self = {};
+        bless ($self, $proto);
+    }
+    bless($self, $class);
+
+    $self->{PARENT}  = $parent;
+    $self->{START}   = time();   # init data fields
+    $self->{AGE}     = 0;
+    return $self;
+} 
+---------------------------
+$methname = "flicker";
+$obj->$methname(10);         # calls $ob->flicker(10);
+
+# call three methods on the object, by name
+foreach $m ( qw(start run stop) ) {
+    $obj->$m();
+} 
+---------------------------
+@methods = qw(name rank serno);
+%his_info = map { $_ => $ob->$_() } @methods;
+
+# same as this:
+
+%his_info = (
+    'name'  => $ob->name(),
+    'rank'  => $ob->rank(),
+    'serno' => $ob->serno(),
+);
+---------------------------
+my $fnref = sub { $ob->method(@_) };
+---------------------------
+$fnref->(10, "fred");
+---------------------------
+$obj->method(10, "fred");
+---------------------------
+$obj->can('method_name')->($obj_target, @arguments)
+   if $obj_target->isa( ref $obj );
+---------------------------
+$obj->isa("HTTP::Message");                  # as object method
+HTTP::Response->isa("HTTP::Message");       # as class method
+
+if ($obj->can("method_name")) { .... }       # check method validity
+---------------------------
+$has_io = $fd->isa("IO::Handle");
+$itza_handle = IO::Socket->isa("IO::Handle");
+---------------------------
+$his_print_method = $obj->can('as_string');
+---------------------------
+Some_Module->VERSION(3.0);
+$his_vers = $obj->VERSION();
+---------------------------
+use Some_Module 3.0;
+---------------------------
+use vars qw($VERSION);
+$VERSION = '1.01';
+---------------------------
+package Person;
+sub new {
+    my $class = shift;
+    my $self  = { };
+    return bless $self, $class;
+} 
+sub name {
+    my $self = shift;
+    $self->{NAME} = shift if @_;
+    return $self->{NAME};
+} 
+sub age {
+    my $self = shift;
+    $self->{AGE} = shift if @_;
+    return $self->{AGE};
+} 
+---------------------------
+use Person;
+my $dude = Person->new();
+$dude->name("Jason");
+$dude->age(23);
+printf "%s is age %d.\n", $dude->name, $dude->age;
+---------------------------
+package Employee;
+use Person;
+@ISA = ("Person");
+1;
+---------------------------
+use Employee;
+my $empl = Employee->new();
+$empl->name("Jason");
+$empl->age(23);
+printf "%s is age %d.\n", $empl->name, $empl->age;
+---------------------------
+$him = Person::new();               # WRONG
+---------------------------
+sub meth { 
+    my $self = shift;
+    $self->SUPER::meth();
+}---------------------------
+$self->meth();                # Call wherever first meth is found
+$self->Where::meth();         # Start looking in package "Where"
+$self->SUPER::meth();         # Call overridden version
+}---------------------------
+sub new {
+    my $classname  = shift;         # What class are we constructing?
+    my $self       = $classname->SUPER::new(@_);
+    $self->_init(@_);
+    return $self;                   # And give it back
+} 
+
+sub _init {
+    my $self = shift;
+    $self->{START}   = time();   # init data fields
+    $self->{AGE}     = 0;
+    $self->{EXTRA}   = { @_ };   # anything extra
+}
+}---------------------------
+$obj = Widget->new( haircolor => red, freckles => 121 );
+
+}---------------------------
+my $self = bless {}, $class;
+for my $class (@ISA) {
+    my $meth = $class . "::_init";
+    $self->$meth(@_) if $class->can("_init");
+} 
+}---------------------------
+package Person;
+use strict;
+use Carp;
+use vars qw($AUTOLOAD %ok_field);
+
+# Authorize four attribute fields
+for my $attr ( qw(name age peers parent) ) { $ok_field{$attr}++; } 
+
+sub AUTOLOAD {
+    my $self = shift;
+    my $attr = $AUTOLOAD;
+    $attr =~ s/.*:://;
+    return unless $attr =~ /[^A-Z]/;  # skip DESTROY and all-cap methods
+    croak "invalid attribute method: ->$attr()" unless $ok_field{$attr};
+    $self->{uc $attr} = shift if @_;
+    return $self->{uc $attr};
+}
+sub new {
+    my $proto  = shift;
+    my $class  = ref($proto) || $proto;
+    my $parent = ref($proto) && $proto;
+    my $self = {};
+    bless($self, $class);
+    $self->parent($parent);
+    return $self;
+} 
+1;
+-----------------------------
+use Person;
+my ($dad, $kid);
+$dad = Person->new;
+$dad->name("Jason");
+$dad->age(23);
+$kid = $dad->new;
+$kid->name("Rachel");
+$kid->age(2);
+printf "Kid's parent is %s\n", $kid->parent->name;
+Jason
+-----------------------------
+sub AUTOLOAD {
+    my $self = shift;
+    my $attr = $AUTOLOAD;
+    $attr =~ s/.*:://;
+    return if $attr eq 'DESTROY';   
+
+    if ($ok_field{$attr}) {
+        $self->{uc $attr} = shift if @_;
+        return $self->{uc $attr};
+    } else {
+        my $superior = "SUPER::$attr";
+        $self->$superior(@_);
+    } 
+}
+-----------------------------
+sub Employee::age {
+    my $self = shift;
+    $self->{Employee_age} = shift if @_;
+    return $self->{Employee_age};
+} 
+-----------------------------
+package Person;
+use Class::Attributes;  # see explanation below
+mkattr qw(name age peers parent);
+-----------------------------
+package Employee;
+@ISA = qw(Person);
+use Class::Attributes;
+mkattr qw(salary age boss);
+-----------------------------
+package Class::Attributes;
+use strict;
+use Carp;
+use Exporter ();
+use vars qw(@ISA @EXPORT);
+@ISA = qw(Exporter);
+@EXPORT = qw(mkattr);
+sub mkattr {
+    my $hispack = caller();
+    for my $attr (@_) {
+        my($field, $method);
+        $method = "${hispack}::$attr";
+        ($field = $method) =~ s/:/_/g; 
+        no strict 'refs'; # here comes the kluglich bit
+        *$method = sub {
+            my $self = shift;
+            confess "too many arguments" if @_ > 1;
+            $self->{$field} = shift if @_;
+            return $self->{$field};   
+        };
+    } 
+} 
+1;
+-----------------------------
+$node->{NEXT} = $node;
+-----------------------------
+package Ring;
+
+# return an empty ring structure
+sub new {
+    my $class = shift;
+    my $node  = { };
+    $node->{NEXT} = $node->{PREV} = $node;
+    my $self  = { DUMMY => $node, COUNT => 0 };
+    bless $self, $class;
+    return $self;
+}
+-----------------------------
+use Ring;
+
+$COUNT = 1000;
+for (1 .. 20) { 
+    my $r = Ring->new();
+    for ($i = 0; $i < $COUNT; $i++) { $r->insert($i) } 
+}
+-----------------------------
+# when a Ring is destroyed, destroy the ring structure it contains 
+sub DESTROY {
+    my $ring = shift;
+    my $node;
+    for ( $node  =  $ring->{DUMMY}->{NEXT};
+          $node !=  $ring->{DUMMY}; 
+          $node  =  $node->{NEXT} )
+    {
+             $ring->delete_node($node);
+    } 
+    $node->{PREV} = $node->{NEXT} = undef;
+} 
+
+# delete a node from the ring structure
+sub delete_node {
+    my ($ring, $node) = @_;
+    $node->{PREV}->{NEXT} = $node->{NEXT};
+    $node->{NEXT}->{PREV} = $node->{PREV};
+    --$ring->{COUNT};
+} 
+-----------------------------
+# $node = $ring->search( $value ) : find $value in the ring
+# structure in $node
+sub search {
+    my ($ring, $value) = @_;
+    my $node = $ring->{DUMMY}->{NEXT};
+    while ($node != $ring->{DUMMY} && $node->{VALUE} != $value) {
+          $node = $node->{NEXT};
+    }
+    return $node;
+} 
+
+# $ring->insert( $value ) : insert $value into the ring structure
+sub insert_value {
+    my ($ring, $value) = @_;
+    my $node = { VALUE => $value };
+    $node->{NEXT} = $ring->{DUMMY}->{NEXT};
+    $ring->{DUMMY}->{NEXT}->{PREV} = $node;
+    $ring->{DUMMY}->{NEXT} = $node;
+    $node->{PREV} = $ring->{DUMMY};
+    ++$ring->{COUNT};
+} 
+
+# $ring->delete_value( $value ) : delete a node from the ring
+# structure by value
+sub delete_value {
+    my ($ring, $value) = @_;
+    my $node = $ring->search($value);
+    return if $node == $ring->{DUMMY};
+    $ring->delete_node($node);
+}
+
+1;
+-------------------------------
+use overload ('<=>' => \&threeway_compare);
+sub threeway_compare {
+    my ($s1, $s2) = @_;
+    uc($s1->{NAME}) cmp uc($s2->{NAME});
+} 
+
+use overload ( '""'  => \&stringify );
+sub stringify {
+    my $self = shift;
+    return sprintf "%s (%05d)", 
+            ucfirst(lc($self->{NAME})),
+            $self->{IDNUM};
+}
+-------------------------------
+package TimeNumber;
+use overload '+' => \&my_plus,
+             '-' => \&my_minus,
+             '*' => \&my_star,
+             '/' => \&my_slash;
+-------------------------------
+sub my_plus {
+    my($left, $right) = @_;
+    my $answer = $left->new();
+    $answer->{SECONDS} = $left->{SECONDS} + $right->{SECONDS};
+    $answer->{MINUTES} = $left->{MINUTES} + $right->{MINUTES};
+    $answer->{HOURS}   = $left->{HOURS}   + $right->{HOURS};
+
+    if ($answer->{SECONDS} >= 60) {
+        $answer->{SECONDS} %= 60;
+        $answer->{MINUTES} ++;
+    } 
+
+    if ($answer->{MINUTES} >= 60) {
+        $answer->{MINUTES} %= 60;
+        $answer->{HOURS}   ++;
+    } 
+
+    return $answer;
+
+} 
+----------------------------
+#!/usr/bin/perl
+# show_strnum - demo operator overloading
+use StrNum;           
+    
+$x = StrNum("Red"); $y = StrNum("Black");
+$z = $x + $y; $r = $z * 3;
+print "values are $x, $y, $z, and $r\n";
+print "$x is ", $x < $y ? "LT" : "GE", " $y\n";
+
+values are Red, Black, RedBlack, and 0
+Red is GE Black
+----------------------------
+#!/usr/bin/perl
+# demo_fixnum - show operator overloading
+use FixNum;
+
+FixNum->places(5);
+
+$x = FixNum->new(40);
+$y = FixNum->new(12);
+
+print "sum of $x and $y is ", $x + $y, "\n";
+print "product of $x and $y is ", $x * $y, "\n";
+
+$z = $x / $y;
+printf "$z has %d places\n", $z->places;
+$z->places(2) unless $z->places;
+print "div of $x by $y is $z\n";
+print "square of that is ", $z * $z, "\n";
+
+sum of STRFixNum: 40 and STRFixNum: 12 is STRFixNum: 52
+product of STRFixNum: 40 and STRFixNum: 12 is STRFixNum: 480
+STRFixNum: 3 has 0 places
+div of STRFixNum: 40 by STRFixNum: 12 is STRFixNum: 3.33
+square of that is STRFixNum: 11.11
+-------------------------------
+#!/usr/bin/perl
+# demo_valuering - show tie class
+use ValueRing;
+tie $color, 'ValueRing', qw(red blue);
+print "$color $color $color $color $color $color\n";
+red blue red blue red blue
+
+$color = 'green';
+print "$color $color $color $color $color $color\n";
+green red blue green red blue
+-------------------------------
+no UnderScore;
+-------------------------------
+#!/usr/bin/perl
+# nounder_demo - show how to ban $_ from your program
+no UnderScore;
+@tests = (
+    "Assignment"  => sub { $_ = "Bad" },
+    "Reading"     => sub { print }, 
+    "Matching"    => sub { $x = /badness/ },
+    "Chop"        => sub { chop },
+    "Filetest"    => sub { -x }, 
+    "Nesting"     => sub { for (1..3) { print } },
+);
+
+while ( ($name, $code) = splice(@tests, 0, 2) ) {
+    print "Testing $name: ";
+    eval { &$code };
+    print $@ ? "detected" : "missed!";
+    print "\n";
+} 
+-------------------------------
+Testing Assignment: detected
+Testing Reading: detected
+Testing Matching: detected
+Testing Chop: detected
+Testing Filetest: detected
+Testing Nesting: 123missed!
+------------------------------
+#!/usr/bin/perl 
+# appendhash_demo - show magic hash that autoappends
+use Tie::AppendHash;
+tie %tab, 'Tie::AppendHash';
+
+$tab{beer} = "guinness";
+$tab{food} = "potatoes";
+$tab{food} = "peas";
+
+while (my($k, $v) = each %tab) {
+    print "$k => [@$v]\n";
+}
+------------------------------
+food => [potatoes peas]
+beer => [guinness]
+------------------------------
+#!/usr/bin/perl -w
+# revhash_demo - show hash that permits key *or* value lookups
+use strict;
+use Tie::RevHash;
+my %tab;
+tie %tab, 'Tie::RevHash';
+%tab = qw{
+    Red         Rojo
+    Blue        Azul
+    Green       Verde
+};
+$tab{EVIL} = [ "No way!", "Way!!" ];
+
+while ( my($k, $v) = each %tab ) {
+    print ref($k) ? "[@$k]" : $k, " => ",
+        ref($v) ? "[@$v]" : $v, "\n";
+} 
+------------------------------
+[No way! Way!!] = EVIL>
+EVIL => [No way! Way!!]
+Blue => Azul
+Green => Verde
+Rojo => Red
+Red => Rojo
+Azul => Blue
+Verde => Green
+------------------------------
+use Counter;
+tie *CH, 'Counter';
+while (<CH>) {
+
+    print "Got $_\n";
+} 
+------------------------------
+use Tie::Tee;
+tie *TEE, 'Tie::Tee', *STDOUT, *STDERR;
+print TEE "This line goes both places.\n";
+------------------------------
+#!/usr/bin/perl
+# demo_tietee
+use Tie::Tee;
+use Symbol;
+
+@handles = (*STDOUT);
+for $i ( 1 .. 10 ) {
+    push(@handles, $handle = gensym());
+    open($handle, ">/tmp/teetest.$i");
+} 
+
+tie *TEE, 'Tie::Tee', @handles;
+print TEE "This lines goes many places.\n";

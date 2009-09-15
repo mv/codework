@@ -1,0 +1,86 @@
+# XFree86 4 configuration created by pyxf86config
+
+Section "ServerLayout"
+    Identifier     "X.org Configured"
+	Screen      0  "Screen0" 0 0
+	InputDevice    "Mouse0" "CorePointer"
+	InputDevice    "Keyboard0" "CoreKeyboard"
+EndSection
+
+Section "Files"
+        RgbPath      "/usr/X11R6/lib/X11/rgb"
+        ModulePath   "/usr/X11R6/lib/modules"
+        FontPath     "/usr/X11R6/lib/X11/fonts/misc/"
+        FontPath     "/usr/X11R6/lib/X11/fonts/TTF/"
+        FontPath     "/usr/X11R6/lib/X11/fonts/Speedo/"
+        FontPath     "/usr/X11R6/lib/X11/fonts/Type1/"
+        FontPath     "/usr/X11R6/lib/X11/fonts/CID/"
+        FontPath     "/usr/X11R6/lib/X11/fonts/75dpi/"
+        FontPath     "/usr/X11R6/lib/X11/fonts/100dpi/"
+EndSection
+
+Section "Module"
+        Load  "record"
+        Load  "extmod"
+        Load  "dbe"
+        Load  "dri"
+        Load  "glx"
+        Load  "xtrap"
+        Load  "freetype"
+        Load  "type1"
+        Load  "speedo"
+EndSection
+
+Section "InputDevice"
+        Identifier  "Keyboard0"
+        Driver      "keyboard"
+EndSection
+
+Section "InputDevice"
+        Identifier  "Mouse0"
+        Driver      "mouse"
+        Option      "Protocol" "auto"
+        Option      "Device" "/dev/mouse"
+EndSection
+
+Section "Monitor"
+	Identifier   "Monitor0"
+	VendorName   "LG"
+	ModelName    "StudioWorks"
+	DisplaySize  280	210
+	HorizSync    30.0 - 61.0
+	VertRefresh  50.0 - 120.0
+	ModeLine     "1400x1050" 129.0 1400 1464 1656 1960 1050 1051 1054 1100 +hsync +vsync
+	ModeLine     "1400x1050" 151.0 1400 1464 1656 1960 1050 1051 1054 1100 +hsync +vsync
+	ModeLine     "1400x1050" 162.0 1400 1464 1656 1960 1050 1051 1054 1100 +hsync +vsync
+	ModeLine     "1400x1050" 184.0 1400 1464 1656 1960 1050 1051 1054 1100 +hsync +vsync
+	Option	    "dpms"
+EndSection
+
+Section "Device"
+        Identifier  "Videocard0"
+        Driver      "i810"
+        VendorName  "Intel Corp."
+        BoardName   "82810E DC-133 CGC [Chipset Graphics Controller]"
+        BusID       "PCI:0:1:0"
+EndSection
+
+Section "Screen"
+	Identifier "Screen0"
+	Device     "Videocard0"
+	Monitor    "Monitor0"
+	DefaultDepth     16
+	SubSection "Display"
+		Modes    "800x600"
+	EndSubSection
+	SubSection "Display"
+		Depth     16
+		Modes    "1024x768" "800x600" "640x480"
+	EndSubSection
+EndSection
+
+Section "DRI"
+	Group        0
+	Mode         0666
+EndSection
+

@@ -1,0 +1,71 @@
+Programming the Perl DBI
+by Alligator Descartes and Tim Bunce
+
+
+The following changes were made in the 9/00 reprint:
+
+
+{19} last line on page, ch02/updatemegadata/updatemegadatafixed code example:
+The last line on page 19 now reads:
+	
+     	next unless unpack( "A64", $_ ) eq $siteName;
+
+
+{20} The line
+
+	substr( $_, 64+64, 16, pack( "A16", $siteMapRef ) );
+
+now reads
+	
+     	substr($_, 64+64, 16) = pack( "A16", $siteMapRef ) );
+
+
+{72} "IN =" now reads "IN".
+
+
+{75} last paragraph:
+On the second line from the bottom, it did read CREATETABLE; it now reads 
+CREATE TABLE. One space in between.
+
+
+{115} "uppercase" now reads "lowercase" in the comment (###) line.
+
+
+{129} last line:
+"foreach $item" now reads "foreach $name."
+
+
+{130} above 3rd paragraph: 
+"foreach $item" now reads "foreach $name".
+
+
+[233] did read:
+A German translation of this text and other Perl module documentation (all
+probably slightly out-of-date) is available, thanks to O'Reilly, at:
+	
+     	http://www.oreilly.de/catalog/perlmodger
+
+now reads:
+
+A German translation of this text is available, thanks to O'Reilly, at:
+        
+     	http://www.oreilly.de/catalog/perldbiger/
+
+
+{304} "Stored Procedures"
+The first code example:
+
+  $sth = $dbh->prepare("BEGIN foo(:1, :2) END;");
+
+now reads:
+
+  $sth = $dbh->prepare("BEGIN foo(:1, :2); END;");
+
+Similarly, the second code example:
+
+  $sth = $dbh->prepare("BEGIN :result = func_name(:id, :changeme) END;");
+
+now reads:
+
+  $sth = $dbh->prepare("BEGIN :result = func_name(:id, :changeme); END;");
+

@@ -1,0 +1,276 @@
+http://www.perl.com/CPAN/modules/by-category/15_World_Wide_Web_HTML_HTTP_CGI/
+
+------------------------------
+use LWP::Simple;
+$content = get($URL);
+------------------------------
+use LWP::Simple;
+unless (defined ($content = get $URL)) {
+    die "could not get $URL\n";
+}
+------------------------------
+% titlebytes http://www.tpj.com/
+http://www.tpj.com/ =>
+    The Perl Journal (109 lines, 4530 bytes)
+------------------------------
+use LWP::Simple;
+use URI::URL;
+
+my $url = url('http://www.perl.com/cgi-bin/cpan_mod');
+$url->query_form(module => 'DB_File', readme => 1);
+$content = get($url);
+------------------------------
+use HTTP::Request::Common qw(POST);
+use LWP::UserAgent;
+
+$ua = LWP::UserAgent->new();
+my $req = POST 'http://www.perl.com/cgi-bin/cpan_mod',
+               [ module => 'DB_File', readme => 1 ];
+$content = $ua->request($req)->as_string;
+------------------------------
+field1=value1&field2=value2&field3=value3
+------------------------------
+http://www.site.com/path/to
+/script.cgi?field1=value1&field2=value2&field3=value3
+------------------------------
+$ua->proxy(['http', 'ftp'] => 'http://proxy.myorg.com:8081');
+------------------------------
+use HTML::LinkExtor;
+
+$parser = HTML::LinkExtor->new(undef, $base_url);
+$parser->parse_file($filename);
+@links = $parser->links;
+foreach $linkarray (@links) {
+    my @element = @$linkarray;
+    my $elt_type = shift @element;                  # element type
+
+    # possibly test whether this is an element we're interested in
+    while (@element) {
+        # extract the next attribute and its value
+        my ($attr_name, $attr_value) = splice(@element, 0, 2);
+        # ... do something with them ...
+    }
+}
+------------------------------
+<A HREF="http://www.perl.com/">Home page</A>
+<IMG SRC="images/big.gif" LOWSRC="images/big-lowres.gif">
+------------------------------
+[
+  [ a,   href   => "http://www.perl.com/" ],
+  [ img, src    =>"images/big.gif",
+         lowsrc => "images/big-lowres.gif" ]
+]
+------------------------------
+if ($elt_type eq 'a' && $attr_name eq 'href') {
+    print "ANCHOR: $attr_value\n" 
+        if $attr_value->scheme =~ /http|ftp/;
+}
+if ($elt_type eq 'img' && $attr_name eq 'src') {
+    print "IMAGE:  $attr_value\n";
+}
+------------------------------
+<URL:http://www.perl.com>
+------------------------------
+@URLs = ($message =~ /<URL:(.*?)>/g);
+------------------------------
+BEGIN {
+    print "<TABLE>";
+    $_ = encode_entities(scalar <>);
+    s/\n\s+/ /g;  # continuation lines
+    while ( /^(\S+?:)\s*(.*)$/gm ) {                # parse heading
+        print "<TR><TH ALIGN='LEFT'>$1</TH><TD>$2</TD></TR>\n";
+    }
+    print "</TABLE><HR>";
+}
+------------------------------
+$ascii = `lynx -dump $filename`;
+------------------------------
+use HTML::FormatText;
+use HTML::Parse;
+
+$html = parse_htmlfile($filename);
+$formatter = HTML::FormatText->new(leftmargin => 0, rightmargin => 50);
+$ascii = $formatter->format($html);
+------------------------------
+use HTML::TreeBuilder;
+use HTML::FormatText;
+
+$html = HTML::TreeBuilder->new();
+$html->parse($document);
+
+$formatter = HTML::FormatText->new(leftmargin => 0, rightmargin => 50);
+
+$ascii = $formatter->format($html);
+------------------------------
+($plain_text = $html_text) =~ s/<[^>]*>//gs;     #WRONG
+------------------------------
+use HTML::Parse;
+use HTML::FormatText;
+$plain_text = HTML::FormatText->new->format(parse_html($html_text));
+------------------------------
+% perl -pe 's/<[^>]*>//g' file
+------------------------------
+<IMG SRC = "foo.gif"
+     ALT = "Flurp!">
+------------------------------
+
+% perl -0777 -pe 's/<[^>]*>//gs' file
+------------------------------
+{
+    local $/;               # temporary whole-file input mode
+    $html = <FILE>;
+    $html =~ s/<[^>]*>//gs;
+}
+------------------------------
+<IMG SRC = "foo.gif" ALT = "A > B">
+
+<!-- <A comment> -->
+
+<script>if (a<b && a>c)</script>
+
+<# Just data #>
+
+<![INCLUDE CDATA [ >>>>>>>>>>>> ]]>
+------------------------------
+<!-- This section commented out.
+    <B>You can't see me!</B>
+-->
+------------------------------
+package MyParser;
+use HTML::Parser;
+use HTML::Entities qw(decode_entities);
+
+@ISA = qw(HTML::Parser);
+
+sub text {
+    my($self, $text) = @_;
+    print decode_entities($text);
+}
+
+package main;
+MyParser->new->parse_file(*F);
+------------------------------
+($title) = ($html =~ m#<TITLE>\s*(.*?)\s*</TITLE>#is);
+
+------------------------------
+% htitle http://www.ora.com
+www.oreilly.com -- Welcome to O'Reilly & Associates!
+
+% htitle http://www.perl.com/ http://www.perl.com/nullvoid
+http://www.perl.com/: The www.perl.com Home Page
+http://www.perl.com/nullvoid: 404 File Not Found
+------------------------------
+sub template {
+    my ($filename, $fillings) = @_;
+    my $text;
+    local $/;                   # slurp mode (undef)
+    local *F;                   # create local filehandle
+    open(F, "< $filename")      || return;
+    $text = <F>;                # read whole file
+    close(F);                   # ignore retval
+    # replace quoted words with value in %$fillings hash
+    $text =~ s{ %% ( .*? ) %% }
+              { exists( $fillings->{$1} )
+                      ? $fillings->{$1}
+                      : ""
+              }gsex;
+    return $text;
+}
+------------------------------
+<!-- simple.template for internal template() function -->
+<HTML><HEAD><TITLE>Report for %%username%%</TITLE></HEAD>
+<BODY><H1>Report for %%username%%</H1>
+%%username%% logged in %%count%% times, for a total of %%total%% minutes.
+------------------------------
+<!-- fancy.template for Text::Template -->
+<HTML><HEAD><TITLE>Report for {$user}</TITLE></HEAD>
+<BODY><H1>Report for {$user}</H1>
+{ lcfirst($user) } logged in {$count} times, for a total of 
+{ int($seconds / 60) } minutes.
+------------------------------
+%fields = (
+            username => $whats_his_name,
+            count    => $login_count,
+            total    => $minute_used,
+);
+
+------------------------------
+You owe: {$total}
+------------------------------
+The average was {$count ?  ($total/$count) : 0}.
+------------------------------
+use LWP::Simple;
+mirror($URL, $local_filename);
+------------------------------
+use LWP::RobotUA;
+$ua = LWP::RobotUA->new('websnuffler/0.1', 'me@wherever.com');
+------------------------------
+403 (Forbidden) Forbidden by robots.txt
+
+------------------------------
+% GET http://www.webtechniques.com/robots.txt 
+User-agent: *
+     Disallow: /stats
+     Disallow: /db
+     Disallow: /logs
+     Disallow: /store
+     Disallow: /forms
+     Disallow: /gifs
+     Disallow: /wais-src
+     Disallow: /scripts
+     Disallow: /config
+------------------------------
+% GET http://www.cnn.com/robots.txt | head
+# robots, scram
+# $I d : robots.txt,v 1.2 1998/03/10 18:27:01 mreed Exp $
+User-agent: *
+Disallow: /
+  |
+User-agent:     Mozilla/3.01 (hotwired-test/0.1)
+Disallow:   /cgi-bin
+Disallow:   /TRANSCRIPTS
+Disallow:   /development
+----------------------------
+while (<LOGFILE>) {
+  my ($client, $identuser, $authuser, $date, $time, $tz, $method,
+      $url, $protocol, $status, $bytes) =
+  /^(\S+) (\S+) (\S+) \[([^:]+):(\d+:\d+:\d+) ([^\]]+) "(\S+) (.*?) (\S+)"
+      (\S+) (\S+)$/;
+  # ...
+}
+----------------------------
+<HTML><HEAD><TITLE>Hi!</TITLE></HEAD><BODY>
+<H1>Welcome to Scooby World!</H1>
+I have <A HREF="pictures.html">pictures</A> of the crazy dog
+himself.  Here's one!<P>
+<IMG SRC="scooby.jpg" ALT="Good doggy!"><P>
+<BLINK>He's my hero!</BLINK>  I would like to meet him some day,
+and get my picture taken with him.<P>
+P.S. I am deathly ill.  <A HREF="shergold.html">Please send
+cards</A>.
+</BODY></HTML>
+----------------------------
+% htmlsub picture photo scooby.html
+<HTML><HEAD><TITLE>Hi!</TITLE></HEAD><BODY>
+<H1>Welcome to Scooby World!</H1>
+I have <A HREF="pictures.html">photos</A> of the crazy dog
+himself.  Here's one!<P>
+<IMG SRC="scooby.jpg" ALT="Good doggy!"><P>
+<BLINK>He's my hero!</BLINK>  I would like to meet him some day,
+and get my photo taken with him.<P>
+P.S. I am deathly ill.  <A HREF="shergold.html">Please send
+cards</A>.
+</BODY></HTML>
+----------------------------
+% hrefsub shergold.html cards.html scooby.html
+<HTML><HEAD><TITLE>Hi!</TITLE></HEAD><BODY>
+<H1>Welcome to Scooby World!</H1>
+I have <A HREF="pictures.html">pictures</A> of the crazy dog
+himself.  Here's one!<P>
+<IMG SRC="scooby.jpg" ALT="Good doggy!"><P>
+<BLINK>He's my hero!</BLINK>  I would like to meet him some day,
+and get my picture taken with him.<P>
+P.S. I am deathly ill.  <a href="cards.html">Please send
+cards</A>.
+</BODY></HTML>
+----------------------------

@@ -1,0 +1,23 @@
+#!/usr/bin/perl
+# sortdemo - show auto dbm sorting
+use strict;
+use DB_File;
+
+$DB_BTREE->{'compare'} = sub {
+    my ($key1, $key2) = @_ ;
+    "\L$key1" cmp "\L$key2" ;
+};
+
+my %hash;
+my $filename = '/tmp/sorthash.db';
+tie(%hash, "DB_File", $filename, O_RDWR|O_CREAT, 0666, $DB_BTREE)
+    or die "can't tie $filename: $!";
+
+my $i = 0;
+for my $word (qw(Can't you go camp down by Gibraltar)) {
+    $hash{$word} = ++$i;
+}
+
+while (my($word, $number) = each %hash) {
+    printf "%-12s %d\n", $word, $number;
+}

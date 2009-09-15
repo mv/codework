@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+# cmd3sel - control all three of kids in, out, and error.
+use IPC::Open3;
+use IO::Select;
+
+$cmd = "grep vt33 /none/such - /etc/termcap";
+$pid = open3(*CMD_IN, *CMD_OUT, *CMD_ERR, $cmd);
+
+$SIG{CHLD} = sub {
+    print "REAPER: status $? on $pid\n" if waitpid($pid, 0) > 0
+};
+
+print CMD_IN "This line has a vt33 lurking in it\n";
+close(CMD_IN);
+
+$selector = IO::Select->new();
+$selector->add(*CMD_ERR, *CMD_OUT);
+
+while (@ready = $selector->can_read) {
+    foreach $fh (@ready) {
+        if (fileno($fh) == fileno(CMD_ERR)) {print "STDERR: ", scalar <CMD_ERR>}
+        else                                {print "STDOUT: ", scalar <CMD_OUT>}
+        $selector->remove($fh) if eof($fh);
+    }
+}
+
+close(CMD_CUT);
+close(CMD_ERR);

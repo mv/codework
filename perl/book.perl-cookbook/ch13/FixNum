@@ -1,0 +1,86 @@
+package FixNum;
+
+use strict;
+
+my $PLACES = 0;
+
+sub new {
+    my $proto   = shift;
+    my $class   = ref($proto) || $proto;
+    my $parent  = ref($proto) && $proto;
+
+    my $v = shift;
+    my $self = {
+        VALUE  => $v,
+        PLACES => undef,
+    }; 
+    if ($parent && defined $parent->{PLACES}) {
+        $self->{PLACES} = $parent->{PLACES};
+    } elsif ($v =~ /(\.\d*)/) {
+        $self->{PLACES} = length($1) - 1;
+    }  else {
+        $self->{PLACES} = 0;
+    } 
+    return bless $self, $class;
+} 
+
+sub places {
+    my $proto = shift;
+    my $self  = ref($proto) && $proto;
+    my $type  = ref($proto) || $proto;
+
+    if (@_) {
+        my $places = shift;
+        ($self ? $self->{PLACES} : $PLACES) = $places;
+    } 
+    return $self ? $self->{PLACES} : $PLACES;
+} 
+
+sub _max { $_[0] > $_[1] ? $_[0] : $_[1] } 
+
+use overload '+'    => \&add,
+             '*'    => \&multiply,
+             '/'    => \&divide,
+             '<=>'  => \&spaceship,
+             '""'   => \&as_string,
+             '0+'   => \&as_number;
+
+sub add {
+    my ($this, $that, $flipped) = @_;
+    my $result = $this->new( $this->{VALUE} + $that->{VALUE} );
+    $result->places( _max($this->{PLACES}, $that->{PLACES} ));
+    return $result;
+} 
+
+sub multiply {
+    my ($this, $that, $flipped) = @_;
+    my $result = $this->new( $this->{VALUE} * $that->{VALUE} );
+    $result->places( _max($this->{PLACES}, $that->{PLACES} ));
+    return $result;
+} 
+
+sub divide {
+    my ($this, $that, $flipped) = @_;
+    my $result = $this->new( $this->{VALUE} / $that->{VALUE} );
+    $result->places( _max($this->{PLACES}, $that->{PLACES} ));
+    return $result;
+} 
+
+sub as_string {
+    my $self = shift;
+    return sprintf("STR%s: %.*f", ref($self), 
+        defined($self->{PLACES}) ? $self->{PLACES} : $PLACES, 
+            $self->{VALUE});
+} 
+
+sub as_number {
+    my $self = shift;
+    return $self->{VALUE};
+} 
+    
+sub spaceship {
+    my ($this, $that, $flipped) = @_;
+    $this->{VALUE} <=> $that->{VALUE};
+} 
+
+1;

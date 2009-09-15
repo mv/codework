@@ -1,0 +1,2 @@
+$fields = ["Stonehenge","Wiltshire","SU 123 400","Stone Circle","The most popularly known stone circle in the world without a shadow of a doubt. This is a complex site with a known sequence of creation and re-design over a period of 3000 years from a simple timber ring and ditch to the massive trilithons and henge seen today."];
+$fields = [ 'Castlerigg', 'Cumbria', 'NY 291 236', 'Stone Circle', 'One of the loveliest stone circles remaining today. This site is comprised of large rounded boulders set within a natural amphitheatre formed by surrounding hills.' ];

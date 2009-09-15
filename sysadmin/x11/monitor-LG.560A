@@ -1,0 +1,14 @@
+
+Section "Monitor"
+    Identifier   "Monitor0"
+    VendorName   "LG"
+    ModelName    "StudioWorks"
+    DisplaySize  280    210
+    HorizSync    30.0 - 61.0
+    VertRefresh  50.0 - 120.0
+    ModeLine     "1400x1050" 129.0 1400 1464 1656 1960 1050 1051 1054 1100 +hsync +vsync
+    ModeLine     "1400x1050" 151.0 1400 1464 1656 1960 1050 1051 1054 1100 +hsync +vsync
+    ModeLine     "1400x1050" 162.0 1400 1464 1656 1960 1050 1051 1054 1100 +hsync +vsync
+    ModeLine     "1400x1050" 184.0 1400 1464 1656 1960 1050 1051 1054 1100 +hsync +vsync
+    Option      "dpms"
+EndSection

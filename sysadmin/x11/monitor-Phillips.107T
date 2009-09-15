@@ -1,0 +1,8 @@
+
+Section "Monitor"
+    #DisplaySize    310   230     # mm
+    Identifier      "Monitor0"
+    VendorName      "PHL"
+    ModelName       "PHILIPS 107T"
+    Option          "DPMS"
+EndSection

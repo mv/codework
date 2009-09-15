@@ -1,0 +1,7 @@
+
+Section "Device"
+    Identifier  "Videocard0"
+    Driver      "i810"
+    VendorName  "Videocard vendor"
+    BoardName   "Intel 810"
+EndSection

@@ -1,0 +1,26 @@
+#!/usr/bin/perl -w
+# commify_series - show proper comma insertion in list output
+
+@lists = (
+    [ 'just one thing' ],
+    [ qw(Mutt Jeff) ],
+    [ qw(Peter Paul Mary) ],
+    [ 'To our parents', 'Mother Theresa', 'God' ],
+    [ 'pastrami', 'ham and cheese', 'peanut butter and jelly', 'tuna' ],
+    [ 'recycle tired, old phrases', 'ponder big, happy thoughts' ],
+    [ 'recycle tired, old phrases', 
+      'ponder big, happy thoughts', 
+      'sleep and dream peacefully' ],
+    );
+
+foreach $aref (@lists) {
+    print "The list is: " . commify_series(@$aref) . ".\n";
+} 
+
+sub commify_series {
+    my $sepchar = grep(/,/ => @_) ? ";" : ",";
+    (@_ == 0) ? ''                                      :
+    (@_ == 1) ? $_[0]                                   :
+    (@_ == 2) ? join(" and ", @_)                       :
+                join("$sepchar ", @_[0 .. ($#_-1)], "and $_[-1]");
+}

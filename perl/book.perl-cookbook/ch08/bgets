@@ -1,0 +1,13 @@
+#!/usr/bin/perl 
+# bgets - get a string from an address in a binary file
+use IO::Seekable;
+($file, @addrs) = @ARGV             or die "usage: $0 addr ...";
+open(FH, $file)                     or die "cannot open $file: $!";
+$/ = "\000";
+
+foreach $addr (@addrs) {
+    $addr = oct $addr if $addr =~ /^0/;
+    seek(FH, $addr, SEEK_SET)
+        or die "can't seek to $addr in $file: $!";
+    printf qq{%#x %#o %d "%s"\n}, $addr, $addr, $addr, scalar <>;
+}

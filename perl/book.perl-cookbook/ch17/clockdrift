@@ -1,0 +1,20 @@
+#!/usr/bin/perl
+# clockdrift - compare another system's clock with this one
+use strict;
+use Socket;
+
+my ($host, $him, $src, $port, $ipaddr, $ptime, $delta);
+my $SECS_of_70_YEARS      = 2_208_988_800;
+
+socket(MsgBox, PF_INET, SOCK_DGRAM, getprotobyname("udp"))
+    or die "socket: $!";
+$him = sockaddr_in(scalar(getservbyname("time", "udp")), 
+    inet_aton(shift || '127.1'));
+defined(send(MsgBox, 0, 0, $him))
+    or die "send: $!";
+defined($src = recv(MsgBox, $ptime, 4, 0))
+    or die "recv: $!";
+($port, $ipaddr) = sockaddr_in($src);
+$host = gethostbyaddr($ipaddr, AF_INET);
+my $delta = (unpack("N", $ptime) - $SECS_of_70_YEARS) - time();
+print "Clock on $host is $delta seconds ahead of this one.\n";

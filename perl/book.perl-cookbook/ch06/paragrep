@@ -1,0 +1,9 @@
+#!/usr/bin/perl
+# paragrep - trivial paragraph grepper
+die "usage: $0 pat [files]\n" unless @ARGV;
+$/ = '';
+$pat = shift;
+eval { "" =~ /$pat/; 1 }      or die "$0: Bad pattern $pat: $@\n";
+while (<>) {
+    print "$ARGV $.: $_" if /$pat/o;
+}

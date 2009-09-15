@@ -1,0 +1,227 @@
+#!/usr/bin/perl -w
+# chemiserie - simple CGI shopping for shirts and sweaters
+
+use strict;
+use CGI qw(:standard);
+use CGI::Carp qw(fatalsToBrowser);
+
+my %States;    	         # state table mapping pages to functions
+my $Current_Screen;    	# the current screen
+
+# Hash of pages and functions.
+
+%States = (
+    'Default'     => \&front_page,
+    'Shirt'       => \&shirt,
+    'Sweater'     => \&sweater,
+    'Checkout'    => \&checkout,
+    'Card'        => \&credit_card,
+    'Order'       => \&order,
+    'Cancel'      => \&front_page,
+);
+
+$Current_Screen = param(".State") || "Default";
+die "No screen for $Current_Screen" unless $States{$Current_Screen};
+
+# Generate the current page.
+
+standard_header();
+
+while (my($screen_name, $function) = each %States) {
+    $function->($screen_name eq $Current_Screen);
+}
+standard_footer();
+exit;
+
+################################
+# header, footer, menu functions
+################################
+
+sub standard_header {
+    print header(), start_html(-Title => "Shirts", -BGCOLOR=>"White");
+    print start_form(); # start_multipart_form() if file upload
+}
+
+sub standard_footer { print end_form(), end_html() }
+
+sub shop_menu {
+    print p(defaults("Empty My Shopping Cart"),
+        to_page("Shirt"),
+        to_page("Sweater"),
+        to_page("Checkout"));
+}
+
+#############################
+# subroutines for each screen
+#############################
+
+# The default page.
+sub front_page {
+    my $active = shift;
+    return unless $active;
+
+    print "<H1>Hi!</H1>\n";
+    print "Welcome to our Shirt Shop!  Please make your selection from ";
+    print "the menu below.\n";
+
+    shop_menu();
+}
+
+# Page to order a shirt from.
+sub shirt {
+    my $active = shift;
+    my @sizes  = qw(XL L M S);
+    my @colors = qw(Black White);
+
+    my ($size, $color, $count) =
+      (param("shirt_size"), param("shirt_color"), param("shirt_count"));
+
+    # sanity check
+    if ($count) {
+        $color = $colors[0] unless grep { $_ eq $color } @colors;
+        $size  = $sizes[0]  unless grep { $_ eq $size  } @sizes;
+        param("shirt_color", $color);
+        param("shirt_size",  $size);
+    }
+
+    unless ($active) {
+        print hidden("shirt_size")  if $size;
+        print hidden("shirt_color") if $color;
+        print hidden("shirt_count") if $count;
+        return;
+    }
+
+    print h1("T-Shirt");
+    print p("What a shirt!  This baby is decked out with all the options.",
+        "It comes with full luxury interior, cotton trim, and a collar",
+        "to make your eyes water!  Unit price: \$33.00");
+    print h2("Options");
+    print p("How Many?", textfield("shirt_count"));
+    print p("Size?",  popup_menu("shirt_size",  \@sizes ),
+        "Color?", popup_menu("shirt_color", \@colors));
+
+    shop_menu();
+}
+
+# Page to order a sweater from.
+sub sweater {
+    my $active = shift;
+    my @sizes  = qw(XL L M);
+    my @colors = qw(Chartreuse Puce Lavender);
+
+    my ($size, $color, $count) =
+      (param("sweater_size"), param("sweater_color"), param("sweater_count"));
+
+    # sanity check
+    if ($count) {
+        $color = $colors[0] unless grep { $_ eq $color } @colors;
+        $size  = $sizes[0]  unless grep { $_ eq $size  } @sizes;
+        param("sweater_color", $color);
+        param("sweater_size",  $size);
+    }
+
+    unless ($active) {
+        print hidden("sweater_size")  if $size;
+        print hidden("sweater_color") if $color;
+        print hidden("sweater_count") if $count;
+        return;
+    }
+
+    print h1("Sweater");
+    print p("Nothing implies preppy elegance more than this fine",
+        "sweater.  Made by peasant workers from black market silk,",
+        "it slides onto your lean form and cries out ``Take me,",
+        "for I am a god!''.  Unit price: \$49.99.");
+    print h2("Options");
+    print p("How Many?", textfield("sweater_count"));
+    print p("Size?",  popup_menu("sweater_size",  \@sizes));
+    print p("Color?", popup_menu("sweater_color", \@colors));
+
+    shop_menu();
+}
+
+# Page to display current order for confirmation.
+sub checkout {
+    my $active = shift;
+
+    return unless $active;
+
+    print h1("Order Confirmation");
+    print p("You ordered the following:");
+    print order_text();
+    print p("Is this right?  Select 'Card' to pay for the items",
+        "or 'Shirt' or 'Sweater' to continue shopping.");
+    print p(to_page("Card"),
+        to_page("Shirt"), 
+        to_page("Sweater"));
+}
+
+# Page to gather credit-card information.
+sub credit_card {
+    my $active = shift;
+    my @widgets = qw(Name Address1 Address2 City Zip State Phone Card Expiry);
+
+    unless ($active) {
+        print map { hidden($_) } @widgets;
+        return;
+    }
+
+    print pre(p("Name:          ", textfield("Name")),
+    	  p("Address:       ", textfield("Address1")),
+    	  p("               ", textfield("Address2")),
+    	  p("City:          ", textfield("City")),
+    	  p("Zip:           ", textfield("Zip")),
+    	  p("State:         ", textfield("State")),
+    	  p("Phone:         ", textfield("Phone")),
+    	  p("Credit Card #: ", textfield("Card")),
+    	  p("Expiry:        ", textfield("Expiry")));
+
+    print p("Click on 'Order' to order the items.  Click on 'Cancel' to return 
+shopping.");
+
+    print p(to_page("Order"), to_page("Cancel"));
+}
+
+# Page to complete an order.
+sub order {
+    my $active = shift;
+
+    unless ($active) {
+        return;
+    }
+
+    # you'd check credit card values here
+
+    print h1("Ordered!");
+    print p("You have ordered the following toppings:");
+    print order_text();
+
+    print p(defaults("Begin Again"));
+}
+
+# Returns HTML for the current order ("You have ordered ...")
+sub order_text {
+    my $html = '';
+
+    if (param("shirt_count")) {
+        $html .= p("You have ordered ", param("shirt_count"),
+    	       " shirts of size ",  param("shirt_size"),
+    	       " and color ", param("shirt_color"), ".");
+    }
+    if (param("sweater_count")) {
+        $html .= p("You have ordered ",  param("sweater_count"),
+    	       " sweaters of size ", param("sweater_size"),
+    	       " and color ", param("sweater_color"), ".");
+    }
+    $html = p("Nothing!") unless $html;
+    $html .= p("For a total cost of ", calculate_price());
+    return $html;
+}
+
+sub calculate_price {
+    my $shirts   = param("shirt_count")   || 0;
+    my $sweaters = param("sweater_count") || 0;
+    return sprintf("\$%.2f", $shirts*33 + $sweaters * 49.99);
+}
+
+sub to_page { submit(-NAME => ".State", -VALUE => shift) }

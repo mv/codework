@@ -1,0 +1,22 @@
+
+Section "Device"
+    Identifier  "Card0"
+    Driver      "i810"
+    VendorName  "Intel Corp."
+    BoardName   "82810E DC-133 CGC [Chipset Graphics Controller]"
+    BusID       "PCI:0:1:0"
+EndSection
+
+    ### Available Driver options are:-
+    ### Values: <i>: integer, <f>: float, <bool>: "True"/"False",
+    ### <string>: "String", <freq>: "<f> Hz/kHz/MHz"
+    ### [arg]: arg optional
+    #Option     "NoAccel"                   # [<bool>]
+    #Option     "SWcursor"                  # [<bool>]
+    #Option     "ColorKey"                  # <i>
+    #Option     "CacheLines"                # <i>
+    #Option     "Dac6Bit"                   # [<bool>]
+    #Option     "DRI"                       # [<bool>]
+    #Option     "NoDDC"                     # [<bool>]
+    #Option     "ShowCache"                 # [<bool>]
+    #Option     "XvMCSurfaces"              # <i>

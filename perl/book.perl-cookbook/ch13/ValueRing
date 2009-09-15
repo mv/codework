@@ -1,0 +1,24 @@
+package ValueRing;
+
+# this is the constructor for scalar ties
+sub TIESCALAR {
+    my ($class, @values) = @_;
+    bless  \@values, $class;
+    return \@values;
+} 
+
+# this intercepts read accesses
+sub FETCH {
+    my $self = shift;
+    push(@$self, shift(@$self));
+    return $self->[-1];
+} 
+
+# this intercepts write accesses
+sub STORE {
+    my ($self, $value) = @_;
+    unshift @$self, $value;
+    return $value;
+} 
+
+1;

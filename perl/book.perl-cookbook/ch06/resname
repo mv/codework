@@ -1,0 +1,24 @@
+#!/usr/bin/perl -p
+# resname - change all "foo.bar.com" style names in the input stream
+# into "foo.bar.com [204.148.40.9]" (or whatever) instead
+
+use Socket;                 # load inet_addr
+s{                          #
+    (                       # capture the hostname in $1
+        (?:                 # these parens for grouping only
+            (?! [-_]  )     # lookahead for neither underscore nor dash
+            [\w-] +         # hostname component
+            \.              # and the domain dot
+        ) +                 # now repeat that whole thing a bunch of times
+        [A-Za-z]            # next must be a letter
+        [\w-] +             # now trailing domain part
+    )                       # end of $1 capture
+}{                          # replace with this:
+    "$1 " .                 # the original bit, plus a space
+           ( ($addr = gethostbyname($1))   # if we get an addr
+            ? "[" . inet_ntoa($addr) . "]" #        format it
+            : "[???]"                      # else mark dubious
+           )
+}gex;               # /g for global
+                    # /e for execute
+                    # /x for nice formatting

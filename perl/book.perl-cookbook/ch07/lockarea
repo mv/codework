@@ -1,0 +1,206 @@
+#!/usr/bin/perl -w
+# lockarea - demo record locking with fcntl
+
+use strict;
+
+my $FORKS = shift || 1;
+my $SLEEP = shift || 1;
+
+use Fcntl;
+use POSIX qw(:unistd_h :errno_h);
+
+my $COLS = 80;
+my $ROWS = 23;
+
+# when's the last time you saw *this* mode used correctly?
+open(FH, "+> /tmp/lkscreen")            or  die $!;
+
+select(FH);
+$| = 1;
+select STDOUT;
+
+# clear screen
+for (1 .. $ROWS) {
+        print FH " " x $COLS, "\n";
+}
+
+my $progenitor = $$;
+fork while $FORKS-- > 0;
+
+print "hello from $$\n";
+
+if ($progenitor == $$) {
+        $SIG{INT} = \&genocide;
+} else {
+        $SIG{INT} = sub { die "goodbye from $$" };
+}
+
+while (1) {
+        my $line_num = int rand($ROWS);
+        my $line;
+        my $n;
+
+        # move to line
+        seek(FH, $n = $line_num * ($COLS+1), SEEK_SET)              or next;
+
+        # get lock
+        my $place = tell(FH);
+        my $him;
+        next unless defined($him = lock(*FH, $place, $COLS));
+
+        # read line
+        read(FH, $line, $COLS) == $COLS                             or next;
+        my $count = ($line =~ /(\d+)/) ? $1 : 0;
+        $count++;
+
+        # update line
+        seek(FH, $place, 0)                                         or die $!;
+        my $update = sprintf($him
+                            ? "%6d: %d ZAPPED %d"
+                            : "%6d: %d was just here",
+                        $count, $$, $him);
+        my $start = int(rand($COLS - length($update)));
+        die "XXX" if $start + length($update) > $COLS;
+        printf FH "%*.*s\n", -$COLS, $COLS, " " x $start . $update;
+
+        # release lock and go to sleep
+        unlock(*FH, $place, $COLS);
+        sleep $SLEEP if $SLEEP;
+}
+die "NOT REACHED";                              # just in case
+
+# lock($handle, $offset, $timeout) - get an fcntl lock
+sub lock {
+        my ($fh, $start, $till) = @_;
+        ##print "$$: Locking $start, $till\n";
+        my $lock = struct_flock(F_WRLCK, SEEK_SET, $start, $till, 0);
+        my $blocker = 0;
+        unless (fcntl($fh, F_SETLK, $lock)) {
+            die "F_SETLK $$ @_: $!" unless $! == EAGAIN || $! == EDEADLK;
+            fcntl($fh, F_GETLK, $lock)          or die "F_GETLK $$ @_: $!";
+            $blocker = (struct_flock($lock))[-1];
+            ##print "lock $$ @_: waiting for $blocker\n";
+            $lock = struct_flock(F_WRLCK, SEEK_SET, $start, $till, 0);
+            unless (fcntl($fh, F_SETLKW, $lock)) {
+                warn "F_SETLKW $$ @_: $!\n";
+                return;  # undef
+            }
+        }
+        return $blocker;
+}
+
+# unlock($handle, $offset, $timeout) - release an fcntl lock
+sub unlock {
+        my ($fh, $start, $till) = @_;
+        ##print "$$: Unlocking $start, $till\n";
+        my $lock = struct_flock(F_UNLCK, SEEK_SET, $start, $till, 0);
+        fcntl($fh, F_SETLK, $lock) or die "F_UNLCK $$ @_: $!";
+}
+
+# OS-dependent flock structures
+
+# Linux struct flock
+#   short l_type;
+#   short l_whence;
+#   off_t l_start;
+#   off_t l_len;
+#   pid_t l_pid;
+BEGIN {
+        # c2ph says: typedef='s2 l2 i', sizeof=16
+        my $FLOCK_STRUCT = 's s l l i';
+
+        sub linux_flock {
+            if (wantarray) {
+                my ($type, $whence, $start, $len, $pid) =
+                    unpack($FLOCK_STRUCT, $_[0]);
+                return ($type, $whence, $start, $len, $pid);
+            } else {
+                my ($type, $whence, $start, $len, $pid) = @_;
+                return pack($FLOCK_STRUCT,
+                        $type, $whence, $start, $len, $pid);
+            }
+        }
+
+}
+
+# SunOS struct flock:
+#   short   l_type;         /* F_RDLCK, F_WRLCK, or F_UNLCK */
+#   short   l_whence;       /* flag to choose starting offset */
+#   long    l_start;        /* relative offset, in bytes */
+#   long    l_len;          /* length, in bytes; 0 means lock to EOF */
+#   short   l_pid;          /* returned with F_GETLK */
+#   short   l_xxx;          /* reserved for future use */
+BEGIN {
+        # c2ph says: typedef='s2 l2 s2', sizeof=16
+        my $FLOCK_STRUCT = 's s l l s s';
+
+        sub sunos_flock {
+            if (wantarray) {
+                my ($type, $whence, $start, $len, $pid, $xxx) =
+                    unpack($FLOCK_STRUCT, $_[0]);
+                return ($type, $whence, $start, $len, $pid);
+            } else {
+                my ($type, $whence, $start, $len, $pid) = @_;
+                return pack($FLOCK_STRUCT,
+                        $type, $whence, $start, $len, $pid, 0);
+            }
+        }
+
+}
+
+# (Free)BSD struct flock:
+#   off_t   l_start;        /* starting offset */
+#   off_t   l_len;          /* len = 0 means until end of file */
+#   pid_t   l_pid;          /* lock owner */
+#   short   l_type;         /* lock type: read/write, etc. */
+#   short   l_whence;       /* type of l_start */
+BEGIN {
+        # c2ph says: typedef="q2 i s2", size=24
+        my $FLOCK_STRUCT = 'll ll i s s';   # XXX: q is ll
+
+        sub bsd_flock {
+            if (wantarray) {
+                my ($xxstart, $start, $xxlen, $len, $pid, $type, $whence) =
+                    unpack($FLOCK_STRUCT, $_[0]);
+                return ($type, $whence, $start, $len, $pid);
+            } else {
+                my ($type, $whence, $start, $len, $pid) = @_;
+                my ($xxstart, $xxlen) = (0,0);
+                return pack($FLOCK_STRUCT,
+                    $xxstart, $start, $xxlen, $len, $pid, $type, $whence);
+            }
+        }
+}
+
+# alias the fcntl structure at compile time
+BEGIN {
+        for ($^O) {
+            *struct_flock =                do                           {
+                                    /bsd/  &&  \&bsd_flock
+                                           ||
+                                /linux/    &&    \&linux_flock
+                                           ||
+                              /sunos/      &&      \&sunos_flock
+                                           ||
+                      die "unknown operating system $^O, bailing out";
+            };
+        }
+}
+
+# install signal handler for children
+BEGIN {
+        my $called = 0;
+
+        sub genocide {
+            exit if $called++;
+            print "$$: Time to die, kiddies.\n" if $$ == $progenitor;
+            my $job = getpgrp();
+            $SIG{INT} = 'IGNORE';
+            kill -2, $job if $job;  # killpg(SIGINT, job)
+            1 while wait > 0;
+            print "$$: My turn\n" if $$ == $progenitor;
+            exit;
+        }
+}
+
+END { &genocide }

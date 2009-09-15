@@ -1,0 +1,287 @@
+@entry = stat("/usr/bin/vi") or die "Couldn't stat /usr/bin/vi : $!";
+----------------------------
+@entry = stat("/usr/bin")    or die "Couldn't stat /usr/bin : $!";
+----------------------------
+@entry = stat(INFILE)        or die "Couldn't stat INFILE : $!";
+----------------------------
+use File::stat;
+
+$inode = stat("/usr/bin/vi");
+$ctime = $inode->ctime;
+$size  = $inode->size;
+
+----------------------------
+open( F, "< $filename" )
+    or die "Opening $filename: $!\n";
+unless (-s F && -T _) {
+    die "$filename doesn't have text in it.\n";
+}
+----------------------------
+opendir(DIRHANDLE, "/usr/bin") or die "couldn't open /usr/bin : $!";
+while ( defined ($filename = readdir(DIRHANDLE)) ) {
+    print "Inside /usr/bin is something called $filename\n";
+}
+closedir(DIRHANDLE);
+----------------------------
+($READTIME, $WRITETIME) = (stat($filename))[8,9];
+
+utime($NEWREADTIME, $NEWWRITETIME, $filename);
+----------------------------
+$SECONDS_PER_DAY = 60 * 60 * 24;
+($atime, $mtime) = (stat($file))[8,9];
+$atime -= 7 * $SECONDS_PER_DAY;
+$mtime -= 7 * $SECONDS_PER_DAY;
+
+utime($atime, $mtime, $file)
+    or die "couldn't backdate $file by a week w/ utime: $!";
+----------------------------
+$mtime = (stat $file)[9];
+utime(time, $mtime, $file);
+----------------------------
+use File::stat;
+utime(time, stat($file)->mtime, $file);
+----------------------------
+unlink($FILENAME)                 or die "Can't delete $FILENAME: $!\n";
+unlink(@FILENAMES) == @FILENAMES  or die "Couldn't unlink all of @FILENAMES: $!\n";
+----------------------------
+unless (($count = unlink(@filelist)) == @filelist) {
+    warn "could only delete $count of "
+            . (@filelist) . " files";
+}
+----------------------------
+use File::Copy;
+copy($oldfile, $newfile);
+----------------------------
+open(IN,  "< $oldfile")                     or die "can't open $oldfile: $!";
+open(OUT, "> $newfile")                     or die "can't open $newfile: $!";
+
+$blksize = (stat IN)[11] || 16384;          # preferred block size?
+while ($len = sysread IN, $buf, $blksize) {
+    if (!defined $len) {
+        next if $! =~ /^Interrupted/;
+        die "System read error: $!\n";
+    }
+    $offset = 0;
+    while ($len) {          # Handle partial writes.
+        defined($written = syswrite OUT, $buf, $len, $offset)
+            or die "System write error: $!\en";
+        $len    -= $written;
+        $offset += $written;
+    };
+}
+
+close(IN);
+close(OUT);
+----------------------------
+system("cp $oldfile $newfile");       # unix
+system("copy $oldfile $newfile");     # dos, vms
+----------------------------
+use File::Copy;
+
+copy("datafile.dat", "datafile.bak")
+    or die "copy failed: $!";
+
+move("datafile.new", "datafile.dat")
+    or die "move failed: $!";
+----------------------------
+%seen = ();
+
+sub do_my_thing {
+    my $filename = shift;
+    my ($dev, $ino) = stat $filename;
+
+    unless (! $seen{$dev, $ino}++) {
+        # do something with $filename because we haven't
+        # seen it before
+    }
+}
+--------------------------
+foreach $filename (@files) {
+    ($dev, $ino) = stat $filename;
+    push( @{ $seen{$dev,$ino} }, $filename);
+}
+
+foreach $devino (sort keys %seen) {
+    ($dev, $ino) = split(/$;/o, $devino);
+    if (@{$seen{$devino}} > 1) {
+        # @{$seen{$devino}} is a list of filenames for the same file
+    }
+}
+--------------------------
+opendir(DIR, $dirname) or die "can't opendir $dirname: $!";
+while (defined($file = readdir(DIR))) {
+    # do something with "$dirname/$file"
+}
+closedir(DIR);
+--------------------------
+$dir = "/usr/local/bin";
+print "Text files in $dir are:\n";
+opendir(BIN, $dir) or die "Can't open $dir: $!";
+while( defined ($file = readdir BIN) ) {
+    print "$file\n" if -T "$dir/$file";
+}
+closedir(BIN);
+--------------------------
+while ( defined ($file = readdir BIN) ) {
+    next if $file =~ /^\.\.?$/;     # skip . and ..
+    # ...
+}
+--------------------------
+use DirHandle;
+
+sub plainfiles {
+   my $dir = shift;
+   my $dh = DirHandle->new($dir)   or die "can't opendir $dir: $!";
+   return sort                     # sort pathnames
+          grep {    -f     }       # choose only "plain" files
+          map  { "$dir/$_" }       # create full paths
+          grep {  !/^\./   }       # filter out dot files
+          $dh->read();             # read all entries
+}
+-------------------------
+@list = <*.c>;
+@list = glob("*.c");
+-------------------------
+opendir(DIR, $path);
+@files = grep { /\.c$/ } readdir(DIR);
+closedir(DIR);
+-------------------------
+use File::KGlob;
+
+@files = glob("*.c");
+-------------------------
+@files = grep { /\.[ch]$/i } readdir(DH);
+
+-------------------------
+use DirHandle;
+
+$dh = DirHandle->new($path)   or die "Can't open $path : $!\n"; @files = grep { /\.[ch]$/i } $dh->read();
+-------------------------
+opendir(DH, $dir)        or die "Couldn't open $dir for reading: $!";
+
+@files = ();
+while( defined ($file = readdir(DH)) ) {
+    next unless /\.[ch]$/i;
+
+    my $filename = "$dir/$file";
+    push(@files, $filename) if -T $file;
+}
+-------------------------
+@dirs = map  { $_->[1] }                # extract pathnames
+        sort { $a->[0] <=> $b->[0] }    # sort names numeric
+        grep { -d $_->[1] }             # path is a dir
+        map  { [ $_, "$path/$_" ] }     # form (name, path)
+        grep { /^\d+$/ }                # just numerics
+        readdir(DIR);                   # all files
+-------------------------
+use File::Find;
+sub process_file {
+    # do whatever;
+}
+find(\&process_file, @DIRLIST);
+-------------------------
+@ARGV = qw(.) unless @ARGV;
+use File::Find;
+find sub { print $File::Find::name, -d && '/', "\n" }, @ARGV;
+-------------------------
+use File::Find;
+@ARGV = ('.') unless @ARGV;
+my $sum = 0;
+find sub { $sum += -s }, @ARGV;
+print "@ARGV contains $sum bytes\n";
+-------------------------
+use File::Find;
+@ARGV = ('.') unless @ARGV;
+my ($saved_size, $saved_name) = (-1, '');
+sub biggest {
+    return unless -f && -s _ > $saved_size;
+    $saved_size = -s _;
+    $saved_name = $File::Find::name;
+}
+find(\&biggest, @ARGV);
+print "Biggest file $saved_name in @ARGV is $saved_size bytes long.\n";
+-------------------------
+use File::Find;
+@ARGV = ('.') unless @ARGV;
+my ($age, $name);
+sub youngest {
+    return if defined $age && $age > -M;
+    $age = (stat(_))[9];
+    $name = $File::Find::name;
+}
+find(\&youngest, @ARGV);
+print "$name " . scalar(localtime($age)) . "\n";
+-------------------------
+find sub { print $File::Find::name if -d }, @ARGV;
+-------------------------
+find { print $name if -d } @ARGV;
+-------------------------
+foreach $file (@NAMES) {
+    my $newname = $file;
+    # change $file
+    rename($file, $newname) or  
+        warn "Couldn't rename $file to $newname: $!\n";
+}
+-------------------------
+% rename 's/\.orig$//'  *.orig
+% rename 'tr/A-Z/a-z/ unless /^Make/'  *
+% rename '$_ .= ".bad"'  *.f
+% rename 'print "$_: "; s/foo/bar/ if <STDIN> =~ /^y/i'  *
+% find /tmp -name '*~' -print | rename 's/^(.+)~$/.#$1/'
+--------------------------
+use File::Basename;
+
+$base = basename($path);
+$dir  = dirname($path);
+($base, $dir, $ext) = fileparse($path);
+--------------------------
+$path = '/usr/lib/libc.a';
+$file = basename($path);    
+$dir  = dirname($path);     
+
+print "dir is $dir, file is $file\n";
+# dir is /usr/lib, file is libc.a
+--------------------------
+$path = '/usr/lib/libc.a';
+($name,$dir,$ext) = fileparse($path,'\..*');
+
+print "dir is $dir, name is $name, extension is $ext\n";
+# dir is /usr/lib/, name is libc, extension is .a
+--------------------------
+fileparse_set_fstype("MacOS");
+$path = "Hard%20Drive:System%20Folder:README.txt";
+($name,$dir,$ext) = fileparse($path,'\..*');
+
+print "dir is $dir, name is $name, extension is $ext\n";
+# dir is Hard%20Drive:System%20Folder, name is README, extension is .txt
+--------------------------
+sub extension {
+    my $path = shift;
+    my $ext = (fileparse($path,'\..*'))[2];
+    $ext =~ s/^\.//;
+    return $ext;
+}
+--------------------------
+% lst -l /etc
+12695 0600      1     root    wheel      512 Fri May 29 10:42:41 1998 
+    /etc/ssh_random_seed
+12640 0644      1     root    wheel    10104 Mon May 25  7:39:19 1998 
+    /etc/ld.so.cache
+12626 0664      1     root    wheel    12288 Sun May 24 19:23:08 1998 
+    /etc/psdevtab
+12304 0644      1     root     root      237 Sun May 24 13:59:33 1998 
+    /etc/exports
+12309 0644      1     root     root     3386 Sun May 24 13:24:33 1998 
+    /etc/inetd.conf
+12399 0644      1     root     root    30205 Sun May 24 10:08:37 1998 
+    /etc/sendmail.cf
+18774 0644      1     gnat  perldoc     2199 Sun May 24  9:35:57 1998 
+    /etc/X11/XMetroconfig
+12636 0644      1     root    wheel      290 Sun May 24  9:05:40 1998 
+    /etc/mtab
+12627 0640      1     root     root        0 Sun May 24  8:24:31 1998 
+    /etc/wtmplock
+12310 0644      1     root  tchrist       65 Sun May 24  8:23:04 1998 
+    /etc/issue
+....
+----------------------------

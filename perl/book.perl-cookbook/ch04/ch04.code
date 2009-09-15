@@ -1,0 +1,589 @@
+@nested = ("this", "that", "the", "other");
+@nested = ("this", "that", ("the", "other"));
+-----------------------------
+@tune = ( "The", "Star-Spangled", "Banner" );
+-----------------------------
+@a = ("quick", "brown", "fox");
+-----------------------------
+@a = qw(Why are you teasing me?);
+-----------------------------
+@lines = (<<"END_OF_HERE_DOC" =~ m/^\s*(.+)/gm);
+    The boy stood on the burning deck,
+    It was as hot as glass.
+END_OF_HERE_DOC
+-----------------------------
+@bigarray = ();
+open(DATA, "< mydatafile")       or die "Couldn't read from datafile: $!\n";
+while (<DATA>) {
+    chomp;
+    push(@bigarray, $_);
+}
+-----------------------------
+$banner = 'The Mines of Moria';
+$banner = q(The Mines of Moria);
+-----------------------------
+$name   =  "Gandalf";
+$banner = "Speak, $name, and enter!";
+$banner = qq(Speak, $name, and welcome!);
+-----------------------------
+$his_host   = 'www.perl.com';
+$host_info  = `nslookup $his_host`; # expand Perl variable
+
+$perl_info  = qx(ps $$);            # that's Perl's $$
+$shell_info = qx'ps $$';            # that's the new shell's $$
+-----------------------------
+@banner = ('Costs', 'only', '$4.95');
+@banner = qw(Costs only $4.95);
+@banner = split(' ', 'Costs only $4.95');
+-----------------------------
+@banner = qw|The vertical bar (\|) looks and behaves like a pipe.|;
+-----------------------------
+@ships  = qw(Niña Pinta Santa María);               # WRONG
+@ships  = ('Niña', 'Pinta', 'Santa María');         # right
+-----------------------------
+sub commify_series {
+    (@_ == 0) ? ''                                      :
+    (@_ == 1) ? $_[0]                                   :
+    (@_ == 2) ? join(" and ", @_)                       :
+                join(", ", @_[0 .. ($#_-1)], "and $_[-1]");
+}
+-----------------------------
+@array = ("red", "yellow", "green");
+print "I have ", @array, " marbles.\n";
+print "I have @array marbles\n.";
+I have redyellowgreen marbles.
+I have red yellow green marbles.
+-----------------------------
+# grow or shrink @ARRAY
+$#ARRAY = $NEW_LAST_ELEMENT_INDEX_NUMBER;-----------------------------
+-----------------------------
+$ARRAY[$NEW_LAST_ELEMENT_INDEX_NUMBER] = $VALUE;
+
+-----------------------------
+sub what_about_that_array {
+    print "The array now has ", scalar(@people), " elements.\n";
+    print "The index of the last element is $#people.\n";
+    print "Element #3 is `$people[3]'.\n";
+}
+
+@people = qw(Crosby Stills Nash Young);
+what_about_that_array();
+prints: 
+The array now has 4 elements.
+The index of the last element is 3.
+Element #3 is `Young'.
+whereas: 
+$#people--;
+what_about_that_array();
+prints: 
+The array now has 3 elements.
+The index of the last element is 2.
+Element #3 is `'.
+-----------------------------
+$#people = 10_000;
+what_about_that_array();
+
+prints: 
+
+The array now has 10001 elements.
+The index of the last element is 10000.
+Element #3 is `'.
+-----------------------------
+$people[10_000] = undef;
+-----------------------------
+
+foreach $item (LIST) {
+    # do something with $item
+}
+-----------------------------
+foreach $user (@bad_users) {
+        complain($user);
+}
+-----------------------------
+foreach $var (sort keys %ENV) {
+    print "$var=$ENV{$var}\n";
+}
+-----------------------------
+foreach $user (@all_users) {
+    $disk_space = get_usage($user);     # find out how much disk space in use
+    if ($disk_space > $MAX_QUOTA) {     # if it's more than we want ...
+        complain($user);                # ... then object vociferously
+    }
+}
+-----------------------------
+ombining with a while loop: 
+while (<FM>) {              # $_ is set to the line just read
+    chomp;                  # $_ has a trailing \n removed, if it had one
+    foreach (split) {       # $_ is split on whitespace, into @_
+                            # then $_ is set to each chunk in turn
+        $_ = reverse;       # the characters in $_ are reversed
+        print;              # $_ is printed
+    }
+}
+-----------------------------
+foreach my $item (@array) {
+    print "i = $item\n";
+}
+-----------------------------
+@array = (1,2,3);
+foreach $item (@array) {
+    $item--;
+}
+print "@array";
+0 1 2
+
+# multiply everything in @a and @b by seven
+@a = ( .5, 3 ); @b =( 0, 1 );
+foreach $item (@a, @b) {
+    $item *= 7;
+    print "$item ";
+}
+3.5 21 0 7
+----------------------------
+# trim whitespace in the scalar, the array, and all the values
+# in the hash
+foreach ($scalar, @array, @hash{keys %hash}) {
+    s/^\s+//;
+    s/\s+$//;
+}
+----------------------------
+for $item (@array) {  # same as foreach $item (@array)
+    # do something
+}
+
+for (@array)      {   # same as foreach $_ (@array)
+    # do something
+}
+----------------------------
+# iterate over elements of array in $ARRAYREF
+foreach $item (@$ARRAYREF) {
+    # do something with $item
+}
+
+for ($i = 0; $i <= $#$ARRAYREF; $i++) {
+    # do something with $ARRAYREF->[$i]
+}
+----------------------------
+@fruits = ( "Apple", "Blackberry" );
+$fruit_ref = \@fruits;
+foreach $fruit (@$fruit_ref) {
+    print "$fruit tastes good in a pie.\n";
+}
+Apple tastes good in a pie.
+Blackberry tastes good in a pie.
+----------------------------
+
+for ($i=0; $i <= $#$fruit_ref; $i++) {
+    print "$fruit_ref->[$i] tastes good in a pie.\n";
+}
+----------------------------
+%seen = ();
+@uniq = ();
+foreach $item (@list) {
+    unless ($seen{$item})
+        # if we get here, we have not seen it before
+        $seen{$item} = 1;
+        push(@uniq, $item);
+    }
+}
+--------------------------
+%seen = ();
+foreach $item (@list) {
+    push(@uniq, $item) unless $seen{$item}++;
+}
+--------------------------
+%seen = ();
+foreach $item (@list) {
+    $seen{$item}++;
+}
+@uniq = keys %seen;
+--------------------------
+%seen = ();
+@unique = grep { ! $seen{$_} ++ } @list;
+--------------------------
+# generate a list of users logged in, removing duplicates
+%ucnt = ();
+for (`who`) {
+    s/\s.*\n//;   # kill from first space till end-of-line, yielding username
+    $ucnt{$_}++;  # record the presence of this user
+}
+# extract and print unique keys
+@users = sort keys %ucnt;
+print "users logged in: @users\n";
+--------------------------
+# assume @A and @B are already loaded
+%seen = (); 	                 # lookup table to test membership of B
+@aonly = ();	                 # answer
+
+# build lookup table
+foreach $item (@B) { $seen{$item} = 1 }
+
+# find only elements in @A and not in @B
+foreach $item (@A) {
+    unless ($seen{$item}) {
+        # it's not in %seen, so add to @aonly
+        push(@aonly, $item);
+    }
+}
+--------------------------
+my %seen; 	# lookup table
+my @aonly;	# answer
+
+# build lookup table
+@seen{@B} = ();
+
+foreach $item (@A) {
+    push(@aonly, $item) unless exists $seen{$item};
+}
+--------------------------------
+foreach $item (@A) {
+    push(@aonly, $item) unless $seen{$item};
+    $seen{$item} = 1;                       # mark as seen
+}
+--------------------------------
+$hash{"key1"} = 1;
+$hash{"key2"} = 2;
+--------------------------------
+@hash{"key1", "key2"} = (1,2);
+
+--------------------------------
+@seen{@B} = ();
+
+--------------------------------
+@seen{@B} = (1) x @B;
+
+--------------------------------
+@a = (1, 3, 5, 6, 7, 8);
+@b = (2, 3, 5, 7, 9);
+
+@union = @isect = @diff = ();
+%union = %isect = ();
+%count = ();
+--------------------------------
+foreach $e (@a) { $union{$e} = 1 }
+
+foreach $e (@b) {
+    if ( $union{$e} ) { $isect{$e} = 1 }
+    $union{$e} = 1;
+}
+@union = keys %union;
+@isect = keys %isect;
+--------------------------------
+foreach $e (@a, @b) { $union{$e}++ && $isect{$e}++ }
+
+@union = keys %union;
+@isect = keys %isect;
+--------------------------------
+foreach $e (@a, @b) { $count{$e}++ }
+
+foreach $e (keys %count) {
+    push(@union, $e);
+    if ($count{$e} == 2) {
+        push @isect, $e;
+    } else {
+        push @diff, $e;
+    }
+}
+--------------------------------
+@isect = @diff = @union = ();
+
+foreach $e (@a, @b) { $count{$e}++ }
+
+foreach $e (keys %count) {
+    push(@union, $e);
+    push @{ $count{$e} == 2 ? \@isect : \@diff }, $e;
+}
+--------------------------------
+# push
+push(@ARRAY1, @ARRAY2);
+--------------------------------
+@ARRAY1 = (@ARRAY1, @ARRAY2);
+
+--------------------------------
+@members = ("Time", "Flies");
+@initiates = ("An", "Arrow");
+push(@members, @initiates);
+# @members is now ("Time", "Flies", "An", "Arrow")
+--------------------------------
+splice(@members, 2, 0, "Like", @initiates);
+print "@members\n";
+splice(@members, 0, 1, "Fruit");
+splice(@members, -2, 2, "A", "Banana");
+print "@members\n";
+--------------------------------
+This is output:
+Time Flies Like An Arrow
+Fruit Flies Like A Banana
+--------------------------------
+# reverse @ARRAY into @REVERSED
+@REVERSED = reverse @ARRAY;
+--------------------------------
+for ($i = $#ARRAY; $i >= 0; $i--) {
+    # do something with $ARRAY[$i]
+}
+-------------------------------
+# two-step: sort then reverse
+@ascending = sort { $a cmp $b } @users;
+@descending = reverse @ascending;
+
+# one-step: sort with reverse comparison
+@descending = sort { $b cmp $a } @users;
+-------------------------------
+# remove $N elements from front of @ARRAY (shift $N)
+@FRONT = splice(@ARRAY, 0, $N);
+
+# remove $N elements from the end of the array (pop $N)
+@END = splice(@ARRAY, -$N);
+-------------------------------
+sub shift2 (\@) {
+    return splice(@{$_[0]}, 0, 2);
+}
+
+sub pop2 (\@) {
+    return splice(@{$_[0]}, -2);
+}
+-------------------------------
+@friends = qw(Peter Paul Mary Jim Tim);
+($this, $that) = shift2(@friends);
+# $this contains Peter, $that has Paul, and
+# @friends has Mary, Jim, and Tim
+
+@beverages = qw(Dew Jolt Cola Sprite Fresca);
+@pair = pop2(@beverages);
+# $pair[0] contains Sprite, $pair[1] has Fresca,
+# and @beverages has (Dew, Jolt, Cola)
+-------------------------------
+$line[5] = \@list;
+@got = pop2( @{ $line[5] } );
+-------------------------------
+my($match, $found, $item);
+foreach $item (@array) {
+    if ($criterion) {
+        $match = $item;  # must save
+        $found = 1;
+        last;
+    }
+}
+if ($found) {
+    ## do something with $match
+} else {
+    ## unfound
+}
+---------------------------
+my($i, $match_idx);
+for ($i = 0; $i < @array; $i++) {
+    if ($criterion) {
+        $match_idx = $i;    # save the index
+        last;
+    }
+}
+
+if (defined $match_idx) {
+    ## found in $array[$match_idx]
+} else {
+    ## unfound
+}
+---------------------------
+foreach $employee (@employees) {
+    if ( $employee->category() eq 'engineer' ) {
+        $highest_engineer = $employee;
+        last;
+    }
+}
+print "Highest paid engineer is: ", $highest_engineer->name(), "\n";
+---------------------------
+for ($i = 0; $i < @ARRAY; $i++) {
+    last if $criterion;
+}
+if ($i < @ARRAY) {
+    ## found and $i is the index
+} else {
+    ## not found
+}
+---------------------------
+@MATCHING = grep { TEST ($_) } @LIST;
+---------------------------
+@MATCHING = ();
+foreach (@LIST) {
+    push(@MATCHING, $_) if TEST ($_);
+}
+---------------------------
+@bigs = grep { $_ > 1_000_000 } @nums;
+@pigs = grep { $users{$_} > 1e7 } keys %users;
+---------------------------
+@matching = grep { /^gnat / } `who`;
+------------------------------
+@engineers = grep { $_->position() eq 'Engineer' } @employees;
+------------------------------
+
+@secondary_assistance = grep { $_->income >= 26_000 &&
+                               $_->income <  30_000 }
+                        @applicants;
+------------------------------
+@Sorted = sort { $a <=> $b } Unsorted;
+
+------------------------------
+# @pids is an unsorted array of process IDs
+foreach my $pid (sort { $a <=> $b } @pids) {
+    print "$pid\n";
+}
+print "Select a process ID to kill:\n";
+chomp ($pid = <>);
+die "Exiting ... \n" unless $pid && $pid =~ /^\d+$/;
+kill('TERM',$pid);
+sleep 2;
+kill('KILL',$pid);
+------------------------------
+@descending = sort { $b <=> $a } @unsorted;
+------------------------------
+package Sort_Subs;
+sub revnum { $b <=> $a }
+
+package Other_Pack;
+@all = sort Sort_Subs::revnum 4, 19, 8, 3;
+
+------------------------------
+@all = sort { $b <=> $a } 4, 19, 8, 3;
+
+------------------------------
+@ordered = sort { compare() } @unordered;
+
+------------------------------
+@precomputed = map { [compute(),$_] } @unordered;
+@ordered_precomputed = sort { $a->[0] <=> $b->[0] } @precomputed;
+@ordered = map { $_->[1] } @ordered_precomputed;
+------------------------------
+@ordered = map { $_->[1] }
+           sort { $a->[0] <=> $b->[0] }
+           map { [compute(), $_] }
+           @unordered;
+------------------------------
+@ordered = sort { $a->name cmp $b->name } @employees;
+
+------------------------------
+foreach $employee (sort { $a->name cmp $b->name } @employees) {
+    print $employee->name, " earns \$", $employee->salary, "\n";
+}
+------------------------------
+@sorted_employees = sort { $a->name cmp $b->name } @employees;
+foreach $employee (@sorted_employees) {
+    print $employee->name, " earns \$", $employee->salary, "\n";
+}
+# load %bonus
+foreach $employee (@sorted_employees) {
+    if ( $bonus{ $employee->ssn } ) {
+      print $employee->name, " got a bonus!\n";
+    }
+}
+------------------------------
+@sorted = sort { $a->name cmp $b->name
+                           ||
+                  $b->age <=> $a->age } @employees;
+------------------------------
+use User::pwent qw(getpwent);
+@users = ();
+# fetch all users
+while (defined($user = getpwent)) {
+    push(@users, $user);
+}
+    @users = sort { $a->name cmp $b->name } @users;
+foreach $user (@users) {
+    print $user->name, "\n";
+}
+------------------------------
+@sorted = sort { substr($a,1,1) cmp substr($b,1,1) } @names;
+
+------------------------------
+@sorted = sort { length $a <=> length $b } @strings;
+
+------------------------------
+@temp = map { [ length $_, $_ ] } @strings;
+@temp = sort { $a->[0] <=> $b->[0] } @temp;
+@sorted = map { $_->[1] } @temp;
+------------------------------
+@sorted = map  { $_->[1] }
+          sort { $a->[0] <=> $b->[0] }
+          map  { [ length $_, $_ ] }
+          @strings;
+---------------------------
+@temp = map { [ /(\d+)/, $_ ] } @fields;
+@sorted_temp = sort { $a->[0] <=> $b->[0] } @temp;
+@sorted_fields = map { $_->[1] } @sorted_temp;
+---------------------------
+@sorted_fields = map  { $_->[1] }
+                 sort { $a->[0] <=> $b->[0] }
+                 map  { [ /(\d+)/, $_ ] }
+                 @fields;
+---------------------------
+print map  { $_->[0] }             # whole line
+      sort {
+              $a->[1] <=> $b->[1]  # gid
+                      ||
+              $a->[2] <=> $b->[2]  # uid
+                      ||
+              $a->[3] cmp $b->[3]  # login
+      }
+      map  { [ $_, (split /:/)[3,2,0] ] }
+      `cat /etc/passwd`;
+---------------------------
+unshift(@circular, pop(@circular));  # the last shall be first
+push(@circular, shift(@circular));   # and vice versa
+---------------------------
+sub grab_and_rotate ( \@ ) {
+    my $listref = shift;
+    my $element = $listref->[0];
+    push(@$listref, shift @$listref);
+    return $element;
+}
+
+@processes = ( 1, 2, 3, 4, 5 );
+while (1) {
+    $process = grab_and_rotate(@processes);
+    print "Handling process $process\n";
+    sleep 1;
+}
+---------------------------
+# fisher_yates_shuffle( \@array ) : generate a random permutation
+# of @array in place
+sub fisher_yates_shuffle {
+    my $array = shift;
+    my $i;
+    for ($i = @$array; --$i; ) {
+        my $j = int rand ($i+1);
+        next if $i == $j;
+        @$array[$i,$j] = @$array[$j,$i];
+    }
+}
+
+fisher_yates_shuffle( \@array );    # permutes @array in place
+-----------------------------
+$permutations = factorial( scalar @array );
+@shuffle = @array [ n2perm( 1+int(rand $permutations), $#array ) ];
+-----------------------------
+sub naive_shuffle {                             # don't do this
+    for (my $i = 0; $i < @_; $i++) {
+        my $j = int rand @_;                    # pick random element
+        ($_[$i], $_[$j]) = ($_[$j], $_[$i]);    # swap 'em
+    }
+}
+-----------------------------
+awk      cp       ed       login    mount    rmdir    sum
+basename csh      egrep    ls       mt       sed      sync
+cat      date     fgrep    mail     mv       sh       tar
+chgrp    dd       grep     mkdir    ps       sort     touch
+chmod    df       kill     mknod    pwd      stty     vi
+chown    echo     ln       more     rm       su
+-----------------------------
+% echo man bites dog | permute
+
+-----------------------------
+use Math::BigInt;
+    sub factorial {
+    my $n = shift;
+    my $s = 1;
+    $s *= $n-- while $n > 0;
+    return $s;
+}
+print factorial(Math::BigInt->new("500"));
++1220136... (1035 digits total)
+-----------------------------

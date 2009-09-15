@@ -1,0 +1,498 @@
+%age = ( "Nat",   24,
+         "Jules", 25,
+         "Josh",  17  );
+-------------------------
+$age{"Nat"}   = 24;
+$age{"Jules"} = 25;
+$age{"Josh"}  = 17;
+-------------------------
+%food_color = (
+               "Apple"  => "red",
+               "Banana" => "yellow",
+               "Lemon"  => "yellow",
+               "Carrot" => "orange"
+              );
+-------------------------
+%food_color = (
+                Apple  => "red",
+                Banana => "yellow",
+                Lemon  => "yellow",
+                Carrot => "orange"
+               );
+-------------------------
+$HASH{$KEY} = $VALUE;
+
+-------------------------
+# %food_color defined per the introduction
+$food_color{Raspberry} = "pink";
+print "Known foods:\n";
+foreach $food (keys %food_color) {
+    print "$food\n";
+}
+-------------------------
+
+# does %HASH have a value for $KEY ?
+if (exists($HASH{$KEY})) {
+    # it exists
+} else {
+    # it doesn't
+}
+-------------------------
+# %food_color per the introduction
+foreach $name ("Banana", "Martini") {
+    if (exists $food_color{$name}) {
+        print "$name is a food.\n";
+    } else {
+        print "$name is a drink.\n";
+    }
+}
+
+Banana is a food.
+Martini is a drink.
+----------------------
+%age = ();
+$age{"Toddler"} = 3;
+$age{"Unborn"} = 0;
+$age{"Phantasm"} = undef;
+
+foreach $thing ("Toddler", "Unborn", "Phantasm", "Relic") {
+    print "$thing: ";
+    print "Exists " if exists $age{$thing};
+    print "Defined " if defined $age{$thing};
+    print "True " if $age{$thing};
+    print "\n";
+}
+
+Toddler: Exists Defined True 
+Unborn: Exists Defined 
+Phantasm: Exists 
+Relic: 
+----------------------
+%name = ();
+while (<>) {
+    chomp;
+    next if $name{$_};              # WRONG attempt to skip
+    $name{$_} = -s $_;
+}
+----------------------
+    next if exists $name{$_};
+
+----------------------
+# remove $KEY and its value from %HASH
+delete($HASH{$KEY});
+----------------------
+# %food_color as per Introduction
+sub print_foods {
+    my @foods = keys %food_color;
+    my $food;
+
+    print "Keys: @foods\n";
+    print "Values: ";
+
+    foreach $food (@foods) {
+        my $color = $food_color{$food};
+
+        if (defined $color) {
+            print "$color ";
+        } else {
+            print "(undef) ";
+        }
+    }
+    print "\n";
+}
+
+print "Initially:\n";
+print_foods();
+
+print "\nWith Banana undef\n";
+undef $food_color{"Banana"};
+print_foods();
+
+print "\nWith Banana deleted\n";
+delete $food_color{"Banana"};
+print_foods();
+
+Initially:
+Keys: Banana Apple Carrot Lemon
+Values: yellow red orange yellow 
+
+With Banana undef
+Keys: Banana Apple Carrot Lemon
+Values: (undef) red orange yellow 
+
+With Banana deleted
+Keys: Apple Carrot Lemon
+Values: red orange yellow 
+----------------------------
+delete @food_color{"Banana", "Apple", "Cabbage"};
+
+----------------------------
+
+while(($key, $value) = each(%HASH)) {
+    # do something with $key and $value
+}
+----------------------------
+foreach $key (keys %HASH) {
+    $value = $HASH{$key};
+    # do something with $key and $value
+}
+----------------------------
+# %food_color per the introduction
+while(($food, $color) = each(%food_color)) {
+    print "$food is $color.\n";
+}
+Banana is yellow.
+Apple is red.
+Carrot is orange.
+Lemon is yellow.
+
+foreach $food (keys %food_color) {
+    my $color = $food_color{$food};
+    print "$food is $color.\n";
+}
+Banana is yellow.
+Apple is red.
+Carrot is orange.
+Lemon is yellow.
+----------------------------
+foreach $food (sort keys %food_color) {
+    print "$food is $food_color{$food}.\n";
+}
+Apple is red.
+Banana is a food.
+Martini is a drink.
+Banana is yellow.
+Carrot is orange.
+Lemon is yellow.
+----------------------------
+while ( ($k,$v) = each %food_color) {
+    print "Processing $k\n";
+    keys %food_color;               # goes back to the start of %food_color
+}
+----------------------------
+while ( ($k,$v) = each %hash ) {
+    print "$k => $v\n";
+}
+----------------------------
+print map { "$_ => $hash{$_}\n" } keys %hash;
+
+----------------------------
+print "@{[ %hash ]}\n";
+
+----------------------------
+{
+    my @temp = %hash;
+    print "@temp";
+}
+------------------------
+foreach $k (sort keys %hash) {
+    print "$k => $hash{$k}\n";
+}
+------------------------
+use Tie::IxHash;
+tie %HASH, "Tie::IxHash";
+# manipulate %HASH
+@keys = keys %HASH;         # @keys is in insertion order
+------------------------
+# initialize
+use Tie::IxHash;
+
+tie %food_color, "Tie::IxHash";
+$food_color{Banana} = "Yellow";
+$food_color{Apple}  = "Green";
+$food_color{Lemon}  = "Yellow";
+
+print "In insertion order, the foods are:\n";
+foreach $food (keys %food_color) {
+    print "  $food\n";
+}
+
+print "Still in insertion order, the foods' colors are:\n";
+while (( $food, $color ) = each %food_color ) {
+    print "$food is colored $color.\n";
+}
+
+In insertion order, the foods are:
+  Banana
+  Apple
+  Lemon
+Still in insertion order, the foods' colors are:
+Banana is colored Yellow.
+Apple is colored Green.
+Lemon is colored Yellow.
+------------------------
+%ttys = ();
+
+open(WHO, "who|")                   or die "can't open who: $!";
+while (<WHO>) {
+    ($user, $tty) = split;
+    push( @{$ttys{$user}}, $tty );
+}
+
+foreach $user (sort keys %ttys) {
+    print "$user: @{$ttys{$user}}\n";
+}
+---------------------------
+foreach $user (sort keys %ttys) {
+    print "$user: ", scalar( @{$ttys{$user}} ), " ttys.\n";
+    foreach $tty (sort @{$ttys{$user}}) {
+        @stat = stat("/dev/$tty");
+        $user = @stat ? ( getpwuid($stat[4]) )[0] : "(not available)";
+        print "\t$tty (owned by $user)\n";
+        }
+}
+---------------------------
+sub multihash_delete {
+    my ($hash, $key, $value) = @_;
+    my $i;
+
+    return unless ref( $hash->{$key} );
+    for ($i = 0; $i < @{ $hash->{$key} }; $i++) {
+        if ($hash->{$key}->[$i] eq $value) {
+            splice( @{$hash->{$key}}, $i, 1);
+            last;
+        }
+    }
+
+    delete $hash->{$key} unless @{$hash->{$key}};
+}
+---------------------------
+# %LOOKUP maps keys to values
+%REVERSE = reverse %LOOKUP;
+---------------------------
+%surname = ( "Mickey" => "Mantle", "Babe" => "Ruth" );
+%first_name = reverse %surname;
+print $first_name{"Mantle"}, "\n";
+Mickey
+---------------------------
+("Mickey", "Mantle", "Babe", "Ruth")
+---------------------------
+
+("Ruth", "Babe", "Mantle", "Mickey")
+
+---------------------------
+("Ruth" => "Babe", "Mantle" => "Mickey")
+
+---------------------------
+# %food_color as per the introduction
+while (($food,$color) = each(%food_color)) {
+    push(@{$foods_with_color{$color}}, $food);
+}
+
+print "@{$foods_with_color{yellow}} were yellow foods.\n";
+Banana Lemon were yellow foods.
+----------------------------
+
+# %HASH is the hash to sort
+@keys = sort { criterion() } (keys %hash);
+foreach $key (@keys) {
+    $value = $hash{$key};
+    # do something with $key, $value
+}
+----------------------------
+foreach $food (sort keys %food_color) {
+    print "$food is $food_color{$food}.\n";
+}
+----------------------------
+@foods = sort { length($food_color{$a}) <=> length($food_color{$b}) } 
+    keys %food_color;
+foreach $food (@foods) {
+    print "$food is $food_color{$food}.\n";
+}
+----------------------------
+@foods = sort { length($food_color{$a}) <=> length($food_color{$b}) } 
+    keys %food_color;
+----------------------------
+%merged = (%A, %B);
+
+----------------------------
+%merged = ();
+while ( ($k,$v) = each(%A) ) {
+    $merged{$k} = $v;
+}
+while ( ($k,$v) = each(%B) ) {
+    $merged{$k} = $v;
+}
+----------------------------
+# %food_color as per the introduction
+%drink_color = ( Galliano  => "yellow",
+                 "Mai Tai" => "blue" );
+
+%ingested_colors = (%drink_color, %food_color);
+----------------------------
+# %food_color per the introduction, then
+%drink_color = ( Galliano  => "yellow",
+                 "Mai Tai" => "blue" );
+
+%substance_color = ();
+while (($k, $v) = each %food_color) {
+        $substance_color{$k} = $v;
+} 
+while (($k, $v) = each %drink_color) {
+    $substance_color{$k} = $v;
+} 
+----------------------------
+foreach $substanceref ( \%food_color, \%drink_color ) {
+    while (($k, $v) = each %$substanceref) {
+        $substance_color{$k} = $v;
+    }
+}
+----------------------------
+foreach $substanceref ( \%food_color, \%drink_color ) {
+    while (($k, $v) = each %$substanceref) {
+        if (exists $substance_color{$k}) {
+            print "Warning: $k seen twice.  Using the first definition.\n";
+            next;
+        }
+        $substance_color{$k} = $v;
+    }
+}
+----------------------------
+@all_colors{keys %new_colors} = values %new_colors;
+
+----------------------------
+my @common = ();
+foreach (keys %hash1) {
+	push(@common, $_) if exists $hash2{$_};
+}
+# @common now contains common keys
+----------------------------
+my @this_not_that = ();
+foreach (keys %hash1) {
+	push(@this_not_that, $_) unless exists $hash2{$_};
+}
+----------------------------
+# %food_color per the introduction
+
+# %citrus_color is a hash mapping citrus food name to its color.
+%citrus_color = ( Lemon  => "yellow",
+                  Orange => "orange",
+                  Lime   => "green" );
+
+# build up a list of non-citrus foods
+@non_citrus = ();
+
+foreach (keys %food_color) {
+    push (@non_citrus, $_) unless exists $citrus_color{$_};
+}
+---------------------------
+use Tie::RefHash;
+tie %hash, "Tie::RefHash";
+# you may now use references as the keys to %HASH
+---------------------------
+Class::Somewhere=HASH(0x72048)
+ARRAY(0x72048)
+---------------------------
+use Tie::RefHash;
+use IO::File;
+
+tie %name, "Tie::RefHash";
+foreach $filename ("/etc/termcap", "/vmunix", "/bin/cat") {
+    $fh = IO::File->new("< $filename") or next;
+    $name{$fh} = $filename;
+}
+print "open files: ", join(", ", values %name), "\n";
+foreach $file (keys %name) {
+    seek($file, 0, 2);      # seek to the end
+    printf("%s is %d bytes long.\n", $name{$file}, tell($file));
+}
+---------------------------
+# presize %hash to $num
+keys(%hash) = $num;
+---------------------------
+# will have 512 users in %users
+keys(%users) = 512;
+---------------------------
+keys(%users) = 1000;
+---------------------------
+%count = ();
+foreach $element (@ARRAY) {
+    $count{$element}++;
+}---------------------------
+%father = ( 'Cain'      => 'Adam',
+            'Abel'      => 'Adam',
+            'Seth'      => 'Adam',
+            'Enoch'     => 'Cain',
+            'Irad'      => 'Enoch',
+            'Mehujael'  => 'Irad',
+            'Methusael' => 'Mehujael',
+            'Lamech'    => 'Methusael',
+            'Jabal'     => 'Lamech',
+            'Jubal'     => 'Lamech',
+            'Tubalcain' => 'Lamech',
+            'Enos'      => 'Seth' );
+-----------------------------
+while (<>) {
+    chomp;
+    do {
+        print "$_ ";        # print the current name
+        $_ = $father{$_};   # set $_ to $_'s father
+    } while defined;        # until we run out of fathers
+    print "\n";
+}
+-----------------------------
+while ( ($k,$v) = each %father ) {
+    push( @{ $children{$v} }, $k );
+}
+
+$" = ', ';                  # separate output with commas
+while (<>) {
+    chomp;
+    if ($children{$_}) {
+        @children = @{$children{$_}};
+    } else {
+        @children = "nobody";
+    }
+    print "$_ begat @children.\n";
+}
+-----------------------------
+foreach $file (@files) {
+    local *F;               # just in case we want a local FH
+    unless (open (F, "<$file")) {
+        warn "Couldn't read $file: $!; skipping.\n";
+        next;
+    }
+    
+    while (<F>) {
+        next unless /^\s*#\s+include\s+<([^>]+)>/;
+        push(@{$includes{$1}}, $file);
+    }
+    close F;
+}
+-----------------------------
+@include_free = ();                 # list of files that don't include others
+@uniq{map { @$_ } values %includes} = undef;
+foreach $file (sort keys %uniq) {
+        push( @include_free , $file ) unless $includes{$file};
+}
+-----------------------------
+% du cookbook
+19      pcb/fix
+20      pcb/rev/maybe/yes
+10      pcb/rev/maybe/not
+705     pcb/rev/maybe
+54      pcb/rev/web
+1371    pcb/rev
+3       pcb/pending/mine
+1016    pcb/pending
+2412    pcb
+-----------------------------
+2412 pcb
+   |    1371 rev
+   |       |    705 maybe
+   |       |      |      675 .
+   |       |      |       20 yes
+   |       |      |       10 not
+   |       |    612 .
+   |       |     54 web
+   |    1016 pending
+   |       |        1013 .
+   |       |           3 mine
+   |      19 fix
+   |       6 .
+-----------------------------
+% dutree
+% dutree /usr
+% dutree -a 
+% dutree -a /bin
+-----------------------------

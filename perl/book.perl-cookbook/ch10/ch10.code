@@ -1,0 +1,395 @@
+sub hello { 
+    $greeted++;          # global variable 
+    print "hi there\n!";
+}
+---------------------------
+hello();                 # call subroutine hello with no arguments/parameters
+---------------------------
+sub hypotenuse {
+    return sqrt( ($_[0] ** 2) + ($_[1] ** 2) );
+}
+
+$diag = hypotenuse(3,4);  # $diag is 5
+---------------------------
+sub hypotenuse {
+    my ($side1, $side2) = @_;
+    return sqrt( ($side1 ** 2) + ($side1 ** 2) );
+}
+---------------------------
+print hypotenuse(3, 4), "\n";               # prints 5
+
+@a = (3, 4);
+print hypotenuse(@a), "\n";                 # prints 5
+---------------------------
+@both = (@men, @women);
+---------------------------
+@nums = (1.4, 3.5, 6.7);
+@ints = int_all(@nums);        # @nums unchanged
+sub int_all {
+    my @retlist = @_;          # make safe copy for return
+    for my $n (@retlist) { $n = int($n) } 
+    return @retlist;
+} 
+---------------------------
+@nums = (1.4, 3.5, 6.7);
+trunc_em(@nums);               # @nums now (1,3,6)
+sub trunc_em {
+    for (@_) { $_ = int($_) }  # truncate each argument
+} 
+---------------------------
+$line = chomp(<>);                  # WRONG
+
+---------------------------
+sub somefunc {
+    my $variable;                 # $variable is invisible outside somefunc()
+    my ($another, @an_array, %a_hash);     # declaring many variables at once
+
+    # ...
+}
+----------------------------
+my ($name, $age) = @ARGV;
+my $start        = fetch_time();
+----------------------------
+my ($a, $b) = @pair;
+my $c = fetch_time();
+
+sub check_x {
+    my $x = $_[0];       
+    my $y = "whatever";  
+    run_check();
+    if ($condition) {
+        print "got $x\n";
+    }
+}
+----------------------------
+sub save_array {
+    my @arguments = @_;
+    push(@Global_Array, \@arguments);
+}
+----------------------------
+{
+    my $variable;
+    sub mysub {
+        # ... accessing $variable
+    }
+}
+----------------------------
+BEGIN {
+    my $variable = 1;                       # initial value
+    sub othersub {                          # ... accessing $variable
+    }
+}
+----------------------------
+{
+    my $counter;
+    sub next_counter { return ++$counter }
+}
+----------------------------
+BEGIN {
+    my $counter = 42;
+    sub next_counter { return ++$counter }
+    sub prev_counter { return --$counter }
+}
+---------------------------
+$this_function = (caller(0))[3];
+---------------------------
+($package, $filename, $line, $subr, $has_args, $wantarray )= caller($i);
+#   0         1         2       3       4          5
+---------------------------
+$me  = whoami();
+$him = whowasi();
+
+sub whoami  { (caller(1))[3] }
+sub whowasi { (caller(2))[3] }
+---------------------------
+array_diff( \@array1, \@array2 );
+
+---------------------------
+@a = (1, 2);
+@b = (5, 8);
+@c = add_vecpair( \@a, \@b );
+print "@c\n";
+6 10 
+
+sub add_vecpair {		      	 # assumes both vectors the same length
+    my ($x, $y) = @_;	 		  # copy in the array references
+    my @result;
+
+    for (my $i=0; $i < @$x; $i++) {
+      $result[$i] = $x->[$i] + $y->[$i];
+    }
+
+    return @result;
+}
+---------------------------
+unless (@_ == 2 && ref($x) eq 'ARRAY' && ref($y) eq 'ARRAY') {
+    die "usage: add_vecpair ARRAYREF1 ARRAYREF2";
+}
+---------------------------
+if (wantarray()) {
+    # list context
+} 
+elsif (defined wantarray()) {
+    # scalar context
+} 
+else {
+    # void context
+} 
+---------------------------
+if (wantarray()) {
+    print "In list context\n";
+    return @many_things;
+} elsif (defined wantarray()) {
+    print "In scalar context\n";
+    return $one_thing;
+} else {
+    print "In void context\n";
+    return;  # nothing
+}
+
+mysub();                    # void context
+
+$a = mysub();               # scalar context
+if (mysub()) {  }           # scalar context
+
+@a = mysub();               # list context
+print mysub();              # list context
+---------------------------
+thefunc(INCREMENT => "20s", START => "+5m", FINISH => "+30m");
+thefunc(START => "+5m", FINISH => "+30m");
+thefunc(FINISH => "+30m");
+thefunc(START => "+5m", INCREMENT => "15s");
+---------------------------
+sub thefunc {
+    my %args = ( 
+        INCREMENT   => '10s', 
+        FINISH      => 0, 
+        START       => 0, 
+        @_,         # argument pair list goes here
+    );
+    if ($args{INCREMENT}  =~ /m$/ ) { ..... }
+} 
+---------------------------
+($a, undef, $c) = func();
+---------------------------
+($a, $c) = (func())[0,2];
+---------------------------
+($array_ref, $hash_ref) = somefunc();
+
+sub somefunc {
+    my @array;
+    my %hash;
+
+    # ...
+
+    return ( \@array, \%hash );
+}
+---------------------------
+sub fn { 
+    .....
+    return (\%a, \%b, \%c); # or                           
+    return \(%a,  %b,  %c); # same thing
+}
+---------------------------
+(%h0, %h1, %h2)  = fn();    # WRONG!
+@array_of_hashes = fn();    # eg: $array_of_hashes[2]->{"keystring"}
+($r0, $r1, $r2)  = fn();    # eg: $r2->{"keystring"}
+
+---------------------------
+sub empty_retval {
+    return ( wantarray ? () : undef );
+}
+---------------------------
+if (@a = yourfunc()) { ... }
+---------------------------
+unless ($a = sfunc()) { die "sfunc failed" }
+unless (@a = afunc()) { die "afunc failed" }
+unless (%a = hfunc()) { die "hfunc failed" }
+---------------------------
+ioctl(....) or die "can't ioctl: $!";
+---------------------------
+@results = myfunc 3 , 5;
+---------------------------
+@results = myfunc(3 , 5);
+---------------------------
+sub myfunc($);
+@results = myfunc 3 , 5;
+---------------------------
+@results = ( myfunc(3), 5 );
+---------------------------
+sub LOCK_SH () { 1 }
+sub LOCK_EX () { 2 }
+sub LOCK_UN () { 4 }
+---------------------------
+sub mypush (\@@) {
+  my $array_ref = shift;
+  my @remainder = @_;
+
+  # ...
+}---------------------------
+ mypush( $x > 10 ? @a : @b , 3, 5 );		# WRONG
+
+}---------------------------
+ mypush( @{ $x > 10 ? @a : @b }, 3, 5 );	# RIGHT
+}---------------------------
+sub hpush(\%@) {
+    my $href = shift;
+    while ( my ($k, $v) = splice(@_, 0, 2) ) {
+        $href->{$k} = $v;
+    } 
+} 
+hpush(%pieces, "queen" => 9, "rook" => 5);
+}---------------------------
+die "some message";         # raise exception
+}---------------------------
+eval { func() };
+if ($@) {
+    warn "func raised an exception: $@";
+} 
+}---------------------------
+eval { $val = func() };
+warn "func blew up: $@" if $@;
+}---------------------------
+eval { $val = func() };
+if ($@ && $@ !~ /Full moon!/) {
+    die;    # re-raise unknown errors
+}
+}---------------------------
+if (defined wantarray()) {
+        return;
+} else {
+    die "pay attention to my error!";
+}
+}---------------------------
+$age = 18;          # global variable
+if (CONDITION) {
+    local $age = 23;
+    func();         # sees temporary value of 23
+} # restore old value at block exit
+}---------------------------
+$para = get_paragraph(*FH);        # pass filehandle glob 
+$para = get_paragraph(\*FH);       # pass filehandle by glob reference
+$para = get_paragraph(*IO{FH});    # pass filehandle by IO reference
+sub get_paragraph {
+    my $fh = shift;  
+    local $/ = '';        
+    my $paragraph = <$fh>;
+    chomp($paragraph);
+    return $paragraph;
+} 
+--------------------------
+$contents = get_motd();
+sub get_motd {
+    local *MOTD;
+    open(MOTD, "/etc/motd")        or die "can't open motd: $!";
+    local $/ = undef;  # slurp full file;
+    local $_ = <MOTD>;
+    close (MOTD);
+    return $_;
+} 
+--------------------------
+my @nums = (0 .. 5);
+sub first { 
+    local $nums[3] = 3.14159;
+    second();
+}
+sub second {
+    print "@nums\n";
+} 
+second();
+0 1 2 3 4 5
+first();
+0 1 2 3.14159 4 5
+--------------------------
+sub first {
+    local $SIG{INT} = 'IGNORE';
+    second();
+} 
+--------------------------
+sub func {
+    local($x, $y) = @_;
+    #....
+} 
+--------------------------
+sub func {
+    my($x, $y) = @_;
+    #....
+} 
+--------------------------
+&func(*Global_Array);
+sub func {
+    local(*aliased_array) = shift;
+    for (@aliased_array) { .... }
+} 
+--------------------------
+func(\@Global_Array);
+sub func {
+    my $array_ref  = shift;
+    for (@$array_ref) { .... }
+} 
+--------------------------
+undef &grow;                # silence -w complaints of redefinition
+*grow = \&expand;           
+grow();                     # calls expand()
+
+{
+    local *grow = \&shrink;         # only until this block exists
+        grow();                 # calls shrink()
+}
+--------------------------
+*one::var = \%two::Table;   # make %one::var alias for %two::Table
+*one::big = \&two::small;   # make &one::big alias for &two::small
+--------------------------
+local *fred = \&barney;     # temporarily alias &fred to &barney
+--------------------------
+$string =  red("careful here");
+print $string;
+<FONT COLOR='red'>careful here</FONT>
+--------------------------
+sub red { "<FONT COLOR='red'>@_</FONT>" }
+--------------------------
+sub color_font {
+    my $color = shift;
+    return "<FONT COLOR='$color'>@_</FONT>";
+}
+sub red    { color_font("red", @_)     }
+sub green  { color_font("green", @_)   }
+sub blue   { color_font("blue", @_)    }
+sub purple { color_font("purple", @_)  }
+# etc
+--------------------------
+@colors = qw(red blue green yellow orange purple violet);
+for my $name (@colors) {
+    no strict 'refs';
+    *$name = sub { "<FONT COLOR='$name'>@_</FONT>" };
+} 
+--------------------------
+*$name = sub ($) { "<FONT COLOR='$name'>$_[0]</FONT>" };
+--------------------------
+sub AUTOLOAD {
+    use vars qw($AUTOLOAD);
+    my $color = $AUTOLOAD;
+    $color =~ s/.*:://;
+    return "<FONT COLOR='$color'>@_</FONT>";
+} 
+#note: sub chartreuse isn't defined.
+print chartreuse("stuff");
+--------------------------
+{
+    local *yellow = \&violet;  
+    local (*red, *green) = (\&green, \&red);
+    print_stuff();
+} 
+--------------------------
+sub outer {
+    my $x = $_[0] + 35;
+    sub inner { return $x * 19 }   # WRONG
+    return $x + inner();
+} 
+--------------------------
+sub outer {
+    my $x = $_[0] + 35;
+    local *inner = sub { return $x * 19 };
+    return $x + inner();
+} 
+--------------------------

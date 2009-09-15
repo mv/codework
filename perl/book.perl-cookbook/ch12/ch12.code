@@ -1,0 +1,627 @@
+package Alpha;
+$name = "first";
+
+package Omega;
+$name = "last";
+
+package main;
+print "Alpha is $Alpha::name, Omega is $Omega::name.\n";
+Alpha is first, Omega is last.
+------------------------
+ides in the file File/Find.pm under most filesystems. For example: 
+require "FileHandle.pm";            # run-time load
+require FileHandle;                 # ".pm" assumed; same as previous
+use FileHandle;                     # compile-time load
+
+require "Cards/Poker.pm";           # run-time load
+require Cards::Poker;               # ".pm" assumed; same as previous
+use Cards::Poker;                   # compile-time load
+------------------------
+1    package Cards::Poker;
+2    use Exporter;
+3    @ISA = ('Exporter');
+4    @EXPORT = qw(&shuffle @card_deck);
+5    @card_deck = ();                       # initialize package global
+6    sub shuffle { }                        # fill-in definition later
+7    1;                                     # don't forget this
+------------------------
+package YourModule;
+use strict;
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $VERSION);
+
+use Exporter;
+$VERSION = 1.00;              # Or higher
+@ISA = qw(Exporter);
+
+@EXPORT      = qw(...);       # Symbols to autoexport (:DEFAULT tag)
+@EXPORT_OK   = qw(...);       # Symbols to export on request
+%EXPORT_TAGS = (              # Define names for sets of symbols
+    TAG1 => [...],
+    TAG2 => [...],
+    ...
+);
+
+########################
+# your code goes here
+########################
+
+1;                            # this should be your last line
+--------------------------
+use YourModule;               # Import default symbols into my package.
+use YourModule qw(...);       # Import listed symbols into my package.
+use YourModule ();            # Do not import any symbols
+use YourModule qw(:TAG1);     # Import whole tag set
+--------------------------
+    @EXPORT = qw(&F1 &F2 @List);
+    @EXPORT = qw( F1  F2 @List);        # same thing
+--------------------------
+    @EXPORT_OK = qw(Op_Func %Table);
+--------------------------
+   %EXPORT_TAGS = (
+        Functions => [ qw(F1 F2 Op_Func) ],
+        Variables => [ qw(@List %Table)  ],
+);
+--------------------------
+    use YourModule qw(:Functions %Table);
+--------------------------
+    @{ $YourModule::EXPORT_TAGS{Functions} }, 
+--------------------------
+# no import
+BEGIN {
+    unless (eval "require $mod") {
+        warn "couldn't load $mod: $@";
+    }
+}
+
+# imports into current package
+BEGIN {
+    unless (eval "use $mod") {
+        warn "couldn't load $mod: $@";
+    }
+}
+--------------------------
+BEGIN {
+    my($found, @DBs, $mod);
+    $found = 0;
+    @DBs = qw(Giant::Eenie Giant::Meanie Mouse::Mynie Moe);
+    for $mod (@DBs) {
+        if (eval "require $mod") {
+            $mod->import();         # if needed
+            $found = 1;
+            last;
+        }
+    }
+    die "None of @DBs loaded" unless $found;
+}
+-----------------------
+BEGIN {
+    unless (@ARGV == 2 && (2 == grep {/^\d+$/} @ARGV)) {
+        die "usage: $0 num1 num2\n";
+    }
+}
+use Some::Module;
+use More::Modules;
+-----------------------
+if ($opt_b) {
+    require Math::BigInt;
+}
+-----------------------
+use Fcntl qw(O_EXCL O_CREAT O_RDWR);
+-----------------------
+require Fcntl;
+Fcntl->import(qw(O_EXCL O_CREAT O_RDWR));
+-----------------------
+sub load_module {
+    require $_[0];  #WRONG
+    import  $_[0];  #WRONG
+}
+-----------------------
+load_module('Fcntl', qw(O_EXCL O_CREAT O_RDWR));
+
+sub load_module {
+    eval "require $_[0]";
+    die if $@;
+    $_[0]->import(@_[1 .. $#_]);
+}
+-----------------------
+package Alpha;
+my $aa = 10;
+   $x = "azure";
+
+package Beta;
+my $bb = 20;
+   $x = "blue";
+
+package main;
+print "$aa, $bb, $x, $Alpha::x, $Beta::x\n";
+10, 20, , azure, blue
+-----------------------
+# Flipper.pm
+package Flipper;
+use strict;
+
+require Exporter;
+use vars qw(@ISA @EXPORT $VERSION);
+@ISA     = qw(Exporter);
+@EXPORT  = qw(flip_words flip_boundary);
+$VERSION = 1.0;
+
+my $Separatrix = ' ';  # default to blank; must precede functions
+
+sub flip_boundary {
+    my $prev_sep = $Separatrix;
+    if (@_) { $Separatrix = $_[0] }
+    return $prev_sep;
+}
+sub flip_words {
+    my $line  = $_[0];
+    my @words = split($Separatrix, $line);
+    return join($Separatrix, reverse @words);
+}
+1;
+-----------------------
+$this_pack = _     _PACKAGE_     _;
+
+-----------------------
+$that_pack = caller();
+-----------------------
+print "I am in package _     _PACKAGE_     _\n";              # WRONG!
+I am in package _     _PACKAGE_     _
+-----------------------
+package Alpha;
+runit('$line = <TEMP>');
+
+package Beta;
+sub runit {
+    my $codestr = shift;
+    eval $codestr;
+    die if $@;
+}
+-----------------------
+package Beta;
+sub runit {
+    my $codestr = shift;
+    my $hispack = caller;
+    eval "package $hispack; $codestr";
+    die if $@;
+}
+--------------------------
+package Alpha;
+runit( sub { $line = <TEMP> } );
+
+package Beta;
+sub runit {
+    my $coderef = shift;
+    &$coderef();
+}
+--------------------------
+open (FH, "< /etc/termcap")
+    or die "can't open /etc/termcap: $!";
+($a, $b, $c) = nreadline(3, 'FH');
+
+use Symbol ();
+use Carp;
+sub nreadline {
+    my ($count, $handle) = @_;
+    my(@retlist,$line);
+
+    croak "count must be > 0" unless $count > 0;
+    $handle = Symbol::qualify($handle, (caller())[0]);
+    croak "need open filehandle" unless defined fileno($handle);
+
+    push(@retlist, $line) while defined($line = <$handle>) && $count--;
+    return @retlist;
+}
+--------------------------
+$Logfile = "/tmp/mylog" unless defined $Logfile;
+open(LF, ">>$Logfile")
+    or die "can't append to $Logfile: $!";
+select(((select(LF), $|=1))[0]);  # unbuffer LF
+logmsg("startup");
+
+sub logmsg {
+    my $now = scalar gmtime;
+    print LF "$0 $$ $now: @_\n"
+        or die "write to $Logfile failed: $!";
+}
+
+END {
+    logmsg("shutdown");
+    close(LF)                     
+        or die "close $Logfile failed: $!";
+}
+----------------------------
+% perl -e 'for (@INC) { printf "%d %s\n", $i++, $_ }'
+0 /usr/local/perl/lib/i686-linux/5.004
+1 /usr/local/perl/lib
+2 /usr/local/perl/lib/site_perl/i686-linux
+3 /usr/local/perl/lib/site_perl
+4 .
+----------------------------
+# syntax for sh, bash, ksh, or zsh
+$ export PERL5LIB=$HOME/perllib
+
+# syntax for csh or tcsh
+% setenv PERL5LIB ~/perllib
+----------------------------
+use lib "/projects/spectre/lib";
+----------------------------
+use FindBin;
+use lib $FindBin::Bin;
+----------------------------
+use FindBin qw($Bin);
+use lib "$Bin/../lib";
+----------------------------
+% h2xs -XA -n Planets
+% h2xs -XA -n Astronomy::Orbits
+----------------------------
+package Astronomy::Orbits;
+----------------------------
+require Exporter;
+require AutoLoader;
+@ISA = qw(Exporter AutoLoader);
+----------------------------
+require Exporter;
+require DynaLoader;
+@ISA = qw(Exporter DynaLoader);
+----------------------------
+% make dist
+----------------------------
+require Exporter;
+require SelfLoader;
+@ISA = qw(Exporter SelfLoader);
+#
+# other initialization or declarations here
+#
+_     _DATA_     _
+sub abc { .... }
+sub def { .... }
+-------------------------
+% h2xs -Xn Sample
+% cd Sample
+% perl Makefile.PL LIB=~/perllib
+% (edit Sample.pm)
+% make install
+-------------------------
+package FineTime;
+use strict;
+require Exporter;
+use vars qw(@ISA @EXPORT_OK);
+@ISA = qw(Exporter);
+@EXPORT_OK = qw(time);
+
+sub time() { ..... }  # TBA
+-------------------------
+use FineTime qw(time);
+$start = time();
+1 while print time() - $start, "\n";
+-------------------------
+sub even_only {
+    my $n = shift;
+    die "$n is not even" if $n & 1;  # one way to test
+    #....
+}
+-------------------------
+use Carp;
+sub even_only {
+    my $n = shift;
+    croak "$n is not even" if $n % 2;  # here's another
+    #....
+}
+-------------------------
+use Carp;
+sub even_only {
+    my $n = shift;
+    if ($n & 1) {         # test whether odd number
+        carp "$n is not even, continuing";
+        ++$n;
+    }
+    #....
+}
+-------------------------
+{
+    no strict 'refs';
+    $val  = ${ $packname . "::" . $varname };
+    @vals = @{ $packname . "::" . $aryname };
+    &{ $packname . "::" . $funcname }("args");
+    ($packname . "::" . $funcname) -> ("args");
+}
+-------------------------
+eval "package $packname; \$'$val = \$$varname"; # set $main'val
+die if $@;
+-------------------------
+printf "log2  of 100 is %.2f\n", log2(100);
+printf "log10 of 100 is %.2f\n", log10(100);
+-------------------------
+$packname = 'main';
+for ($i = 2; $i < 1000; $i++) {
+    $logN = log($i);
+    eval "sub ${packname}::log$i { log(shift) / $logN }";
+    die if $@;
+}
+-------------------------
+$packname = 'main';
+for ($i = 2; $i < 1000; $i++) {
+    my $logN = log($i);
+    no strict 'refs';
+    *{"${packname}::log$i"} = sub { log(shift) / $logN };
+}
+-------------------------
+*blue       = \&Colors::blue;
+*main::blue = \&Colors::azure;
+-------------------------
+Can't locate sys/syscall.ph in @INC (did you run h2ph?)
+(@INC contains: /usr/lib/perl5/i686-linux/5.00404 /usr/lib/perl5
+/usr/lib/perl5/site_perl/i686-linux /usr/lib/perl5/site_perl .)
+at some_program line 7.
+-------------------------
+% cd /usr/include; h2ph sys/syscall.h
+-------------------------
+% cd /usr/include; h2ph *.h */*.h
+-------------------------
+% cd /usr/include; find . -name '*.h' -print | xargs h2ph
+-------------------------
+# file FineTime.pm
+package main;
+require 'sys/syscall.ph';
+die "No SYS_gettimeofday in sys/syscall.ph"
+    unless defined &SYS_gettimeofday;
+
+package FineTime;
+    use strict;
+require Exporter;
+use vars qw(@ISA @EXPORT_OK);
+@ISA = qw(Exporter);
+@EXPORT_OK = qw(time);
+
+sub time() {
+    my $tv = pack("LL", ());  # presize buffer to two longs
+    syscall(&main::SYS_gettimeofday, $tv, undef) >= 0
+        or die "gettimeofday: $!";
+    my($seconds, $microseconds) = unpack("LL", $tv);
+    return $seconds + ($microseconds / 1_000_000);
+}
+
+1;
+-----------------------------
+% cat > tio.c <<EOF && cc tio.c && a.out
+#include <sys/ioctl.h>
+main() { printf("%#08x\n", TIOCSTI); }
+EOF
+0x005412
+-----------------------------
+% perl Makefile.PL
+% make
+-----------------------------
+% h2xs -cn FineTime
+-----------------------------
+% perl Makefile.PL
+-----------------------------
+'LIBS'      => [''],   # e.g., '-lm'
+-----------------------------
+'LIBS'      => ['-L/usr/redhat/lib -lrpm'],
+-----------------------------
+% perl Makefile.PL LIB=~/perllib
+-----------------------------
+package FineTime;
+use strict;
+use vars qw($VERSION @ISA @EXPORT_OK);
+require Exporter;
+require DynaLoader;
+@ISA = qw(Exporter DynaLoader);
+@EXPORT_OK = qw(time);
+$VERSION = '0.01';
+bootstrap FineTime $VERSION;
+1;
+--------------------------
+#include <unistd.h>
+#include <sys/time.h>
+#include "EXTERN.h"
+#include "perl.h"
+#include "XSUB.h"
+
+MODULE = FineTime           PACKAGE = FineTime
+
+double
+time()
+    CODE:
+        struct timeval tv;
+        gettimeofday(&tv,0);
+        RETVAL = tv.tv_sec + ((double) tv.tv_usec) / 1000000;
+    OUTPUT:
+        RETVAL
+--------------------------
+% make install
+mkdir ./blib/lib/auto/FineTime
+cp FineTime.pm ./blib/lib/FineTime.pm
+/usr/local/bin/perl -I/usr/lib/perl5/i686-linux/5.00403  -I/usr/lib/perl5
+/usr/lib/perl5/ExtUtils/xsubpp -typemap 
+	/usr/lib/perl5/ExtUtils/typemap FineTime.xs
+FineTime.tc && mv FineTime.tc FineTime.ccc -c -Dbool=char -DHAS_BOOL 
+    -O2-DVERSION=\"0.01\" -DXS_VERSION=\"0.01\" -fpic 
+    -I/usr/lib/perl5/i686-linux/5.00403/CORE  
+FineTime.cRunning Mkbootstrap for FineTime ()
+chmod 644 FineTime.bs
+LD_RUN_PATH="" cc -o blib/arch/auto/FineTime/FineTime.so 
+    -shared -L/usr/local/lib FineTime.o
+chmod 755 blib/arch/auto/FineTime/FineTime.so
+cp FineTime.bs ./blib/arch/auto/FineTime/FineTime.bs
+chmod 644 blib/arch/auto/FineTime/FineTime.bs
+Installing /home/tchrist/perllib/i686-linux/./auto/FineTime/FineTime.so
+Installing /home/tchrist/perllib/i686-linux/./auto/FineTime/FineTime.bs
+Installing /home/tchrist/perllib/./FineTime.pm
+Writing /home/tchrist/perllib/i686-linux/auto/FineTime/.packlist
+Appending installation info to /home/tchrist/perllib/i686-linux/perllocal.pod
+--------------------------
+% perl -I ~/perllib -MFineTime=time -le '1 while print time()' | head
+888177070.090978
+888177070.09132
+888177070.091389
+888177070.091453
+888177070.091515
+888177070.091577
+888177070.091639
+888177070.0917
+888177070.091763
+888177070.091864
+-----------------------------
+=head2 Discussion
+
+If we had a dot-h file with function prototype declarations, we
+could include that, but since we're writing this one from scratch,
+we'll use the -c flag to omit building code to translate any
+#define symbols. The -n flag says to create a module directory
+named FineTime/, which will have the following files.
+-----------------------------
+=for troff
+.EQ
+log sub n (x) = { {log sub e (x)} over {log sub e (n)} }
+.EN
+-----------------------------
+=for later
+next if 1 .. ?^$?;
+s/^(.)/>$1/;
+s/(.{73})........*/$1<SNIP>/;
+
+=cut back to perl
+-----------------------------
+=begin comment
+
+if (!open(FILE, $file)) {
+    unless ($opt_q) {
+        warn "$me: $file: $!\n";
+        $Errors++;
+    }
+    next FILE;
+}
+
+$total = 0;
+$matches = 0;
+
+=end comment
+-----------------------------
+% gunzip Some-Module-4.54.tar.gz
+% tar xf Some-Module-4.54
+% cd Some-Module-4.54
+% perl Makefile.PL
+% make
+% make test
+% make install
+-----------------------
+% gunzip MD5-1.7.tar.gz
+% tar xf MD5-1.7.tar
+% cd MD5-1.7
+% perl Makefile.PL 
+Checking if your kit is complete...
+Looks good
+Writing Makefile for MD5
+% make
+mkdir ./blib
+mkdir ./blib/lib
+-----------------------
+cp MD5.pm ./blib/lib/MD5.pm
+AutoSplitting MD5 (./blib/lib/auto/MD5)
+/usr/bin/perl -I/usr/local/lib/perl5/i386 ...
+...
+cp MD5.bs ./blib/arch/auto/MD5/MD5.bs
+chmod 644 ./blib/arch/auto/MD5/MD5.bsmkdir ./blib/man3
+Manifying ./blib/man3/MD5.3
+% make test
+PERL_DL_NONLAZY=1 /usr/bin/perl -I./blib/arch -I./blib/lib
+-I/usr/local/lib/perl5/i386-freebsd/5.00404 -I/usr/local/lib/perl5 test.pl
+1..14
+ok 1
+ok 2
+...
+ok 13
+ok 14
+% sudo make install
+Password:
+Installing /usr/local/lib/perl5/site_perl/i386-freebsd/./auto/MD5/
+    MD5.so
+Installing /usr/local/lib/perl5/site_perl/i386-freebsd/./auto/MD5/
+    MD5.bs
+Installing /usr/local/lib/perl5/site_perl/./auto/MD5/autosplit.ix
+Installing /usr/local/lib/perl5/site_perl/./MD5.pm
+Installing /usr/local/lib/perl5/man/man3/./MD5.3
+Writing /usr/local/lib/perl5/site_perl/i386-freebsd/auto/MD5/.packlist
+Appending installation info to /usr/local/lib/perl5/i386-freebsd/
+5.00404/perllocal.pod
+-----------------------
+# if you just want the modules installed in your own directory
+% perl Makefile.PL LIB=~/lib
+
+# if you have your own a complete distribution
+% perl Makefile.PL PREFIX=~/perl5-private
+----------------------
+package Some::Module;  # must live in Some/Module.pm
+
+use strict;
+
+require Exporter;
+use vars       qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+
+# set the version for version checking
+$VERSION     = 0.01;
+
+@ISA         = qw(Exporter);
+@EXPORT      = qw(&func1 &func2 &func4);
+%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
+
+# your exported package globals go here,
+# as well as any optionally exported functions
+@EXPORT_OK   = qw($Var1 %Hashit &func3);
+
+use vars qw($Var1 %Hashit);
+# non-exported package globals go here
+use vars      qw(@more $stuff);
+
+# initialize package globals, first exported ones
+$Var1   = '';
+%Hashit = ();
+
+# then the others (which are still accessible as $Some::Module::stuff)
+$stuff  = '';
+@more   = ();
+
+# all file-scoped lexicals must be created before
+# the functions below that use them.
+
+# file-private lexicals go here
+my $priv_var    = '';
+my %secret_hash = ();
+
+# here's a file-private function as a closure,
+# callable as &$priv_func.
+my $priv_func = sub {
+    # stuff goes here.
+};
+
+# make all your functions, whether exported or not;
+# remember to put something interesting in the {} stubs
+sub func1      { .... }    # no prototype
+sub func2()    { .... }    # proto'd void
+sub func3($$)  { .... }    # proto'd to 2 scalars
+
+# this one isn't auto-exported, but could be called!
+sub func4(\%)  { .... }    # proto'd to 1 hash ref
+
+END { }       # module clean-up code here (global destructor)
+
+1;
+--------------------------
+% pmdesc
+--------------------------
+FileHandle (2.00) - supply object methods for filehandles
+IO::File (1.06021) - supply object methods for filehandles
+IO::Select (1.10) - OO interface to the select system call
+IO::Socket (1.1603) - Object interface to socket communications
+...
+--------------------------
+% pmdesc -v
+
+<<<Modules from /usr/lib/perl5/i686-linux/5.00404>>>
+
+FileHandle (2.00) - supply object methods for filehandles
+    ...
+--------------------------

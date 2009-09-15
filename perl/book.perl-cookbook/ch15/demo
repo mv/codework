@@ -1,0 +1,31 @@
+#!/usr/bin/perl -w
+# demo POSIX termios
+
+use POSIX qw(:termios_h);
+
+$term = POSIX::Termios->new;
+$term->getattr(fileno(STDIN));
+
+$erase = $term->getcc(VERASE);
+$kill = $term->getcc(VKILL);
+printf "Erase is character %d, %s\n", $erase, uncontrol(chr($erase));
+printf "Kill is character %d, %s\n", $kill, uncontrol(chr($kill));
+
+$term->setcc(VERASE, ord('#'));
+$term->setcc(VKILL, ord('@'));
+$term->setattr(1, TCSANOW);
+
+print("erase is #, kill is @; type something: ");
+$line = <STDIN>;
+print "You typed: $line";
+
+$term->setcc(VERASE, $erase);
+$term->setcc(VKILL, $kill);
+$term->setattr(1, TCSANOW);
+
+sub uncontrol {
+    local $_ = shift;
+    s/([\200-\377])/sprintf("M-%c",ord($1) & 0177)/eg;
+    s/([\0-\37\177])/sprintf("^%c",ord($1) ^ 0100)/eg;
+    return $_;
+} 

@@ -1,0 +1,372 @@
+use Socket;
+
+@addresses = gethostbyname($name)   or die "Can't resolve $name: $!\n";
+@addresses = map { inet_ntoa($_) } @addresses[4 .. $#addresses];
+# @addresses is a list of IP addresses ("208.201.239.48", "208.201.239.48")
+---------------------------
+use Socket;
+
+$address = inet_ntoa(inet_aton($name));
+# $address is a single IP address "208.201.239.48"
+---------------------------
+use Socket;
+
+$name = gethostbyaddr(inet_aton($address), AF_INET)
+            or die "Can't resolve $address: $!\n";
+# $name is the hostname ("www.perl.com")
+---------------------------
+use Socket;
+$packed_address = inet_aton("208.146.140.1");
+$ascii_address  = inet_ntoa($packed_address);
+---------------------------
+$packed = gethostbyname($hostname)
+            or die "Couldn't resolve address for $hostname: $!\n";
+$address = inet_ntoa($packed);
+print "I will use $address as the address for $hostname\n";
+---------------------------
+# $address is the IP address I'm checking, like "128.138.243.20"
+use Socket;
+$name    = gethostbyaddr(inet_aton($address), AF_INET)
+                or die "Can't look up $address : $!\n";
+@addr    = gethostbyname($name)
+                or die "Can't look up $name : $!\n";
+$found   = grep { $address eq inet_ntoa($_) } @addr[4..$#addr];
+---------------------------
+% mxhost cnn.com
+10 mail.turner.com
+30 alfw2.turner.com
+---------------------------
+% hostaddrs www.ora.com
+helio.ora.com => 204.148.40.9
+
+% hostaddrs www.whitehouse.gov
+www.whitehouse.gov => 198.137.240.91 198.137.240.92
+---------------------------
+use Net::FTP;
+
+$ftp = Net::FTP->new("ftp.host.com")    or die "Can't connect: $@\n";
+$ftp->login($username, $password)       or die "Couldn't login\n";
+$ftp->cwd($directory)                   or die "Couldn't change directory\n";
+$ftp->get($filename)                    or die "Couldn't get $filename\n";
+$ftp->put($filename)                    or die "Couldn't put $filename\n";
+------------------------
+$ftp = Net::FTP->new("ftp.host.com",
+                     Timeout => 30,
+                     Debug   => 1)
+    or die "Can't connect: $@\n";
+------------------------
+$ftp->login()
+    or die "Couldn't authenticate.\n";
+
+$ftp->login($username)
+    or die "Still couldn't authenticate.\n";
+
+$ftp->login($username, $password)
+    or die "Couldn't authenticate, even with explicit username
+            and password.\n";
+
+$ftp->login($username, $password, $account)
+    or die "No dice.  It hates me.\n";
+------------------------
+$ftp->put($localfile, $remotefile)
+    or die "Can't send $localfile: $!\n";
+------------------------
+$ftp->put(*STDIN, $remotefile)
+    or die "Can't send from STDIN: $!\n";
+------------------------
+$ftp->get($remotefile, $localfile)
+    or die "Can't fetch $remotefile : $!\n";
+------------------------
+$ftp->get($remotefile, *STDOUT)
+    or die "Can't fetch $remotefile: $!\n";
+------------------------
+$ftp->cwd("/pub/perl/CPAN/images/g-rated");
+print "I'm in the directory ", $ftp->pwd(), "\n";
+------------------------
+   $ftp->mkdir("/pub/gnat/perl", 1)
+    or die "Can't create /pub/gnat/perl recursively: $!\n";
+------------------------
+@lines = $ftp->ls("/pub/gnat/perl")
+    or die "Can't get a list of files in /pub/gnat/perl: $!";
+$ref_to_lines = $ftp->dir("/pub/perl/CPAN/src/latest.tar.gz")
+    or die "Can't check status of latest.tar.gz: $!\n";
+------------------------
+$ftp->quit()    or warn "Couldn't quit.  Oh well.\n";
+------------------------
+use Mail::Mailer;
+
+$mailer = Mail::Mailer->new();
+$mailer->open({ From    => $from_address,
+                To      => $to_address,
+                Subject => $subject,
+              })
+    or die "Can't open: $!\n";
+print $mailer $body;
+$mailer->close();
+------------------------
+open(SENDMAIL, "|/usr/lib/sendmail -oi -t -odq")
+                    or die "Can't fork for sendmail: $!\n";
+print SENDMAIL <<"EOF";
+From: User Originating Mail <me\@host>
+To: Final Destination <you\@otherhost>
+Subject: A relevant subject line
+
+Body of the message goes here, in as many lines as you like.
+EOF
+close(SENDMAIL)     or warn "sendmail didn't close nicely";
+------------------------
+$mailer = Mail::Mailer->new("sendmail");
+------------------------
+$mailer = Mail::Mailer->new("mail", "/u/gnat/bin/funkymailer");
+------------------------
+$mailer = Mail::Mailer->new("smtp", "mail.myisp.com");
+------------------------
+eval {
+    $mailer = Mail::Mailer->new("bogus", "arguments");
+    # ...
+};
+if ($@) {
+    # the eval failed
+    print "Couldn't send mail: $@\n";
+} else {
+    # the eval succeeded
+    print "The authorities have been notified.\n";
+}
+------------------------
+$mailer->open( 'From'    => 'Nathan Torkington <gnat@frii.com>',
+               'To'      => 'Tom Christiansen <tchrist@perl.com>',
+               'Subject' => 'The Perl Cookbook' );
+------------------------
+print $mailer <<EO_SIG;
+Are we ever going to finish this book?
+My wife is threatening to leave me.
+She says I love EMACS more than I love her.
+Do you have a recipe that can help me?
+
+Nat
+EO_SIG
+------------------------
+close($mailer)                      or die "can't close mailer: $!";
+
+------------------------
+open(SENDMAIL, "|/usr/sbin/sendmail -oi -t -odq")
+            or die "Can't fork for sendmail: $!\n";
+print SENDMAIL <<"EOF";
+From: Tom Christiansen <tchrist\@perl.com>
+To: Nathan Torkington <gnat\@frii.com>
+Subject: Re: The Perl Cookbook
+
+(1) We will never finish the book.
+(2) No man who uses EMACS is deserving of love.
+(3) I recommend coq au vi.
+
+tom
+EOF
+close(SENDMAIL);
+------------------------
+use Net::NNTP;
+
+$server = Net::NNTP->new("news.host.dom")
+    or die "Can't connect to news server: $@\n";
+($narticles, $first, $last, $name) = $server->group( "misc.test" )
+    or die "Can't select misc.test\n";
+$headers  = $server->head($first)
+    or die "Can't get headers from article $first in $name\n";
+$bodytext = $server->body($first)
+    or die "Can't get body from article $first in $name\n";
+$article  = $server->article($first)
+    or die "Can't get article $first from $name\n";
+
+$server->postok()
+    or warn "Server didn't tell me I could post.\n";
+
+$server->post( [ @lines ] )
+    or die "Can't post: $!\n";
+------------------------
+<0401@jpl-devvax.JPL.NASA.GOV>
+------------------------
+$server = Net::NNTP->new("news.mycompany.com")
+    or die "Couldn't connect to news.mycompany.com: $@\n";
+------------------------
+$grouplist = $server->list()
+    or die "Couldn't fetch group list\n";
+
+foreach $group (keys %$grouplist) {
+    if ($grouplist->{$group}->[2] eq 'y') {
+        # I can post to $group
+    }
+}
+------------------------
+($narticles, $first, $last, $name) = $server->group("comp.lang.perl.misc")
+    or die "Can't select comp.lang.perl.misc\n";
+------------------------
+@lines = $server->article($message_id)
+    or die "Can't fetch article $article_number: $!\n";
+------------------------
+@group = $server->group("comp.lang.perl.misc")
+    or die "Can't select group comp.lang.perl.misc\n";
+@lines = $server->head($group[1])
+    or die "Can't get headers from first article in comp.lang.perl.misc\n";
+------------------------
+$server->post(@message)
+    or die "Can't post\n";
+------------------------
+unless ($server->postok()) {
+    warn "You may not post.\n";
+}
+------------------------
+$pop = Net::POP3->new($mail_server)
+    or die "Can't open connection to $mail_server : $!\n";
+$pop->login($username, $password)
+    or die "Can't authenticate: $!\n";
+$messages = $pop->list
+    or die "Can't get list of undeleted messages: $!\n";
+foreach $msgid (keys %$messages) {
+    $message = $pop->get($msgid);
+    unless (defined $message) {
+        warn "Couldn't fetch $msgid from server: $!\n";
+        next;
+    }
+    # $message is a reference to an array of lines
+    $pop->delete($msgid);
+}
+---------------------------
+$pop = Net::POP3->new( "pop.myisp.com" )
+    or die "Can't connect to pop.myisp.com: $!\n";
+---------------------------
+$pop = Net::POP3->new( "pop.myisp.com",
+                       Timeout => 30 )
+    or die "Can't connect to pop.myisp.com : $!\n";
+---------------------------
+$pop->login("gnat", "S33kr1T Pa55w0rD")
+    or die "Hey, my username and password didn't work!\n";
+
+$pop->login( "midget" )             # use Net::Netrc to find password
+    or die "Authentication failed.\n";
+
+$pop->login()                       # current username and Net::Netrc
+    or die "Authentication failed.  Miserably.\n";
+---------------------------
+$pop->apop( $username, $password )
+    or die "Couldn't authenticate: $!\n";
+---------------------------
+%undeleted = $pop->list();
+foreach $msgnum (keys %undeleted) {
+    print "Message $msgnum is $undeleted{$msgnum} bytes long.\n";
+}
+---------------------------
+print "Retrieving $msgnum : ";
+$message = $pop->get($msgnum);
+if ($message) {
+    # succeeded
+    print "\n";
+    print @$message;                # print the message
+} else {
+        # failed
+    print "failed ($!)\n";
+}
+---------------------------
+use Net::Telnet;
+
+$t = Net::Telnet->new( Timeout => 10,
+                       Prompt  => '/%/',
+                       Host    => $hostname );
+
+$t->login($username, $password);
+@files = $t->cmd("ls");
+$t->print("top");
+(undef, $process_string) = $t->waitfor('/\d+ processes/');
+$t->close;
+-------------------/
+[\$%#>] $//[\$%#>] $/
+
+-------------------/
+$telnet = Net::Telnet->new( Errmode => sub { main::log(@_) }, ... );
+-------------------/
+$telnet->login($username, $password)
+    or die "Login failed: @{[ $telnet->errmsg() ]}\n";
+-------------------/
+$telnet->waitfor('/--more--/')
+-------------------/
+use Net::Ping;
+
+$p = Net::Ping->new()
+    or die "Can't create new ping object: $!\n";
+print "$host is alive" if $p->ping($host);
+$p->close;
+-------------------/
+# use TCP if we're not root, ICMP if we are
+$pong = Net::Ping->new( $> ? "tcp" : "icmp" );
+
+(defined $pong)
+    or die "Couldn't create Net::Ping object: $!\n";
+
+if ($pong->ping("kingkong.com")) {
+    print "The giant ape lives!\n";
+} else {
+    print "All hail mighty Gamera, friend of children!\n";
+}
+-------------------/
+use Net::Whois;
+
+$domain_obj = Net::Whois::Domain->new($domain_name)
+    or die "Couldn't get information on $domain_name: $!\n";
+
+# call methods on $domain_obj to get name, tag, address, etc.
+-------------------/
+$d = Net::Whois::Domain->new( "perl.org" )
+    or die "Can't get information on perl.org\n";
+-------------------/
+print "The domain is called ", $d->domain, "\n";
+print "Its tag is ", $d->tag, "\n";
+-------------------/
+print "Mail for ", $d->name, " should be sent to:\n";
+print map { "\t$_\n" } $d->address;
+print "\t", $d->country, "\n";
+-------------------/
+$contact_hash = $d->contacts;
+if ($contact_hash) {
+    print "Contacts:\n";
+    foreach $type (sort keys %$contact_hash) {
+        print "  $type:\n";
+        foreach $line (@{$contact_hash->{$type}}) {
+            print "    $line\n";
+        }
+    }
+} else {
+    print "No contact information.\n";
+}
+-------------------/
+% cat > expn
+#!/usr/bin/perl -w
+...
+^D
+% ln expn vrfy
+-------------------/
+% expn gnat@frii.com
+Expanding gnat at frii.com (gnat@frii.com):
+calisto.frii.com Hello coprolith.frii.com [207.46.130.14],
+    pleased to meet you
+<gnat@mail.frii.com>
+-------------------/
+% expn gnat@frii.com
+Expanding gnat at mail.frii.net (gnat@frii.com):
+deimos.frii.com Hello coprolith.frii.com [207.46.130.14],
+    pleased to meet you
+Nathan Torkington <gnat@deimos.frii.com>
+
+Expanding gnat at mx1.frii.net (gnat@frii.com):
+phobos.frii.com Hello coprolith.frii.com [207.46.130.14],
+    pleased to meet you
+<gnat@mail.frii.com>
+
+Expanding gnat at mx2.frii.net (gnat@frii.com):
+europa.frii.com Hello coprolith.frii.com [207.46.130.14],
+    pleased to meet you
+<gnat@mail.frii.com>
+
+Expanding gnat at mx3.frii.net (gnat@frii.com):
+ns2.winterlan.com Hello coprolith.frii.com [207.46.130.14],
+    pleased to meet you
+550 gnat... User unknown
+-------------------------

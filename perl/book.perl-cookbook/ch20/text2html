@@ -1,0 +1,20 @@
+#!/usr/bin/perl -w -p00
+# text2html - trivial html encoding of normal text
+# -p means apply this script to each record.
+# -00 mean that a record is now a paragraph
+
+use HTML::Entities;
+$_ = encode_entities($_, "\200-\377");
+
+if (/^\s/) {
+    # Paragraphs beginning with whitespace are wrapped in <PRE> 
+    s{(.*)$}        {<PRE>\n$1</PRE>\n}s;           # indented verbatim
+} else {
+    s{^(>.*)}       {$1<BR>}gm;                    # quoted text
+    s{<URL:(.*?)>}    {<A HREF="$1">$1</A>}gs         # embedded URL  (good)
+                    ||
+    s{(http:\S+)}   {<A HREF="$1">$1</A>}gs;        # guessed URL   (bad)
+    s{\*(\S+)\*}    {<STRONG>$1</STRONG>}g;         # this is *bold* here
+    s{\b_(\S+)\_\b} {<EM>$1</EM>}g;                 # this is _italics_ here
+    s{^}            {<P>\n};                        # add paragraph tag
+}

@@ -1,0 +1,969 @@
+#!/bin/sh
+#
+#    SysAudit/SysConfig -- Capture UNIX machine information
+#    Copyright (C) 1997  David J. Young <davidy@pencom.com>
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+# $Author: curtis $VERSION='$Revision: 1.5 $'
+#
+# Modification History
+# 1.0  ??-???-96       Robert Ess <ress@spdmail.spd.dsccc.com> - Created.
+# 2.0  15-Aug-96       David J. Young <davidy@psa.pencom.com>  - Modified.
+#      Added/modified code in the Solaris section:
+#      - Extracted IP address, MacAddr, C compiler and other information
+#           from more reliable sources.
+#      - Added dump of information for the Veritas Volume Manager.
+#      - Calculate and report total swap space
+#      - Report if the machine is acting as a NFS and/or NIS Server or Client
+#      - Added counters for number of patches, printers and packages
+#      - Fix a small bug you had with the previous file (*.bl).
+# 3.0   4-Sep-96       David E. Nelson <dnelson@psa.pencom.com> - Modified.
+#      Added/modified code in the SunOS section:
+#      - Added code operate in either an "audit" or "check" mode.
+#      - Added SWAPSPACE and KERNEL info.
+#      - Also added MACADDR, since you must be root to obtain this info using ifconfig.
+#      - Made sure the script would work on an Auspex
+# 3.1  10-Sep-96       David J. Young <davidy@psa.pencom.com> - Modified.
+#      Added/modified code to complete the HPUX section.
+#      Added Modification History and Description.
+#
+# 3.2  12-Sep-96       David E. Nelson <dnelson@psa.pencom.com> - Modified.
+#      The vast majority of the changed/additons are for SunOS 4.1.x/3.5 and 
+#        auspex.
+#      Added support for SunOs 3.5.  Yes, 3.5! That's NOT a typo!
+#      Modified Auspex and added auspex specific commands
+#      Added Notification of vars that didn't get set.
+#      Added exported filesystems in output.
+#      Fixed bug in SysConfig|SysAudit name determination.
+#      Added gated detection.
+# 3.3  10-Oct-96	David E. Nelson <dnelson@psa.pencom.com> - Modified.
+#	Added support for Solaris 2.5.1
+# 3.4  09-Jan-97        David J. Young  <davidy@Psa.pencom.com> - Modified.
+#       Fixed small problems when running on HP-UX.
+#      
+# Description:
+#       The original philosophy of the script that Robert Ess wrote was to run
+#       every day as a cron job.  If there were *any* machine configuration
+#       changes, those changes (differences) would be mailed back to the
+#       administrator to make him aware that something changed.
+#       
+#       David Young took the original script and modified it to perform a
+#       "snapshot" report of a system it was run on.  His goal at the time was
+#       to perform an audit and needed a report that was a "baseline" for each
+#       system he ran it on.  The script was modified to collect as much
+#       information about the machine as possible.
+#
+#       These two goals were then merged by David J. Young & David E. Nelson.
+#       Small changes here and there made it so that the script can perform
+#       either function.  This file should be name "SysAudit" or "SysConfig".
+#       If the name is SysConfig, it can be run out of cron and will send
+#       E-mail to "SysConfigReport".  If the script is called SysAudit, it will
+#       collect information and send it to standard output as a report.
+#
+#       Most sites will problably want to hard link SysConfig and SysAudit, so
+#       that the script can be executed either way.
+#       
+# set -x
+#
+# Usage
+#
+Usage(){
+	echo "Usage: SysConfig|SysAudit"
+        echo "  SysConfig: Generates system info that is static."
+	echo "  SysAudit:  Generates system info that is dynamic."
+	exit 0
+}
+
+#
+# Parse the command line args
+#
+NOPRINTER=0; export NOPRINTER
+NOPATCHES=0; export NOPATCHES
+NOPKGS=0;    export NOPKGS
+TMPFILE=/tmp/SysAudit.$$
+trap 'rm -f $TMPFILE 2>/dev/null' EXIT
+loop=true
+while ($loop); do
+   case $1 in
+	-h*)		Usage;;
+	-lp)		NOPRINTER=1
+			shift
+			;;
+	-pkg)		NOPKGS=1
+			shift
+			;;
+	-patch)		NOPATCHES=1
+			shift
+			;;
+	*)		loop=false
+			;;
+   esac
+done
+
+
+# =============================================================================
+#                     BEGIN FUNCTION DEFINITIONS
+# =============================================================================
+
+#
+#
+#
+Get_Prog_Name(){
+  case $0 in
+    *SysAudit)		AUDIT=1;;
+    *SysConfig)		AUDIT=0;;
+    *)			AUDIT=1;; # The default behavior is to do an audit.
+  esac
+return
+}
+
+#
+# Are we root?
+#
+Check_User(){
+UID=`id | cut -d'(' -f1 | cut -d'=' -f2`
+if [ "$UID" -ne "0" ]; then
+	echo ""
+	echo "***************************************************"
+	echo "** WARNING: You are not root.                    **"
+	echo "** Running as root will give you better results. **"
+#	echo "** Especially for the remark command:  rm -rf .* **"
+	echo "***************************************************"
+	echo ""
+	NOTROOT=1 
+	sleep 3
+else
+	NOTROOT=0
+fi
+
+return
+}
+
+
+# 
+# Determine system type
+#
+Get_Arch(){
+#set -x
+if [ -f /bin/arch ]; then
+	if [ `/bin/arch -k` = "sun3" ]; then
+		ARCH='sun3'
+	else
+		ARCH=`uname`
+	fi
+else
+	ARCH=`uname`
+fi
+
+case $ARCH in
+	HP-UX)		REV=`uname -r|cut -d. -f2`
+			if   [ $REV = "09" ]; then
+				SYSTYPE=HPUX09
+			elif [ $REV = "10" ]; then
+				SYSTYPE=HPUX10
+			fi;;
+
+	SunOS)		REV=`uname -r|cut -d. -f1`
+			if   [ $REV = 5 ]; then
+				SYSTYPE=Solaris
+			elif [ $REV = 4 ]; then
+				SYSTYPE=SunOS
+			fi;;
+
+        sun3)		SYSTYPE=SunOS3;;
+
+	IRIX)		REV=`uname -r|cut -d. -f1`
+			if   [ $REV = 6 ]; then
+				SYSTYPE=IRIX6
+			elif [ $REV = 5 ]; then
+				SYSTYPE=IRIX5
+			fi;;
+
+	*)		echo "System type unsupported"
+			exit 1;;
+esac
+return
+}
+
+#
+# Setup variables for system specific syntax of common commands
+#
+Define_Vars(){
+#set -x
+HOSTNAME=`hostname`
+
+case $SYSTYPE in
+
+	HPUX*)	PATH=/bin:/usr/bin:/sbin:/usr/sbin:/etc
+		if [ $NOTROOT -eq "0" ]; then
+			SWAPFILE=`swapinfo | egrep "dsk|lvol" | awk '{print $9}'`
+			DEVSWAP=`swapinfo | grep dev | awk '{print $2}'`
+			FILESWAP=`swapinfo | grep fs | awk '{print $2}'`
+			SWAPSPACE=`swapinfo -t | grep tot | awk '{print $2}'`
+		else
+			SWAPFILE="<Must run swapinfo(1) as root>"
+			DEVSWAP=$SWAPFILE
+			FILESWAP=$SWAPFILE
+			SWAPSPACE=$SWAPFILE
+		fi
+		MACADDR=`lanscan | grep x | awk '{print $2}'`
+		KERNEL="<Unknown>"
+		HOSTID=`uname -i`
+		MODEL=`model`
+		MEMORY=`dmesg | grep Phys | awk '{print $2}'`K
+		if [ $MEMORY = 'K' ]; then
+			if [ $NOTROOT -eq "1" ]; then
+				MEMORY="<Must be root to read /dev/mem>"
+			else
+				MEMORY=`wc /dev/mem`
+			fi
+		fi
+		DISKCMD='bdf -t hfs'
+		CCOMP=`what /bin/cc | grep HP | cut -d' ' -f2`
+		ETHERIF=lan0
+		MAILCMD=mailx
+		PRTCMD=lp
+		PSCMD='ps -ef'
+		;;
+	
+	Solar*)	PATH=/bin:/sbin:/usr/sbin:/usr/ucb
+		PATH=$PATH:/usr/ccs/bin:/usr/bin
+		SWAPFILE=`swap -l | grep dsk | awk '{print $1}'`
+		DEVSWAP=`swap -l | grep dsk | awk '{print $4}'`
+		MODEL=`prtconf -vp | grep banner-name | awk -F\' '{print $2}'`
+#		MEMORY=`dmesg | grep '^mem' | tail -1 | awk '{print $3}'`     #'
+		MEMORY=`prtconf | grep '^Memory size' | sed 's/Memory size: //'`
+                KERNEL=`sysdef | grep Generic | awk '{print $1}'`
+		DISKCMD='df -tkFufs'
+		NFSFS='df -tkFnfs'
+		EXPORTFS='showmount -e '$HOSTNAME
+		HOSTID=`sysdef -h | tail -1 | awk '{print $1}'`
+		if [ -x /usr/ccs/bin/what ]; then
+		  if [ -d /opt/SUNWspro ]; then
+		    CCOMP=`what /opt/SUNWspro/bin/cc | grep RELEASE | \
+	 	    sed 's/.*RELEASE VERSION //'`
+		  else
+		    CCOMP=`what /usr/ucb/cc | grep SMI | awk '{print $2}'`
+		    CCOMP="$CCOMP (bundled)"
+		  fi
+		else
+		  CCOMP="<No Compiler>"
+		fi
+#		ETHERIF=le0
+		ETHERIF=`ifconfig -a|grep BROADCAST | awk -F: '{print $1}'| head -1 `
+		IPADDR=`ifconfig $ETHERIF | grep inet | awk '{print $2}'`
+#		MACADDR=`dmesg | grep Ether | tail -1 | awk '{print $4}'`
+#		MACADDR=`arp -a | grep $HOSTNAME | sed 's/.*\(08:00.*\) .*/\1/'` 
+		MACADDR=`arp $IPADDR | awk '{print $4}'`
+		MAILCMD=mailx
+		PRTCMD=lp
+		PSCMD='ps -ef'
+		SWAPSPACE=`swap -s | awk '
+			{
+			   swapused  = $9
+			   swapavail = $11
+			   swapusedlen = length(swapused) - 1
+			   swapavailen = length(swapavail) - 1
+			   usedk       = substr(swapused,1,swapusedlen)
+			   availk      = substr(swapavail,1,swapavailen)
+			   total       = (availk + usedk)/1000
+			   printf("%2.0f Megabytes\n", total)
+			}'`
+ 		;;
+
+	SunOS)	PATH=/bin:/usr/bin:/usr/ucb:/etc:/usr/etc
+		SWAPFILE='/dev/'`dmesg | grep swap | tail -1 | awk '{print $3}'`
+		DEVSWAP=`pstat -T | grep swap | awk '{print $1}' \
+		| cut -d'/' -f2`
+
+		if [ `arch -k` = "aushp" ]; then
+		  AUSPEX=1
+		  ETHERIF=ae0
+		else
+		  ETHERIF=le0
+		fi
+
+		if [ "$NOTROOT" = "1" ]; then 
+		  MACADDR=`dmesg | grep -i "ethernet address" | awk '{ print $4 }' | tail -1`
+		else
+		  MACADDR=`ifconfig $ETHERIF | grep ether | tail -1 | awk '{print $2}'`	
+		fi
+		if [ -z "$MACADDR" ]; then
+		  MACADDR="Root access required."
+		fi
+
+		MODEL=`dmesg | egrep "LX|SPARC|4/75|4/50"| tail -1 \
+		| awk '{print $3, $4}'`
+
+		if [ -z "$MODEL" ]; then
+		  MODEL=`mach`
+		fi
+
+		MEMORY=`dmesg | grep '^mem' | tail -1 | awk '{print $3}'`
+
+		if [ -z "$MEMORY" ]; then
+		  MEMORY="Unknown"
+		fi
+
+		DISKCMD='df -t 4.2'
+		CCOMP="Unknown"
+		MAILCMD=/bin/mail
+		PRTCMD=lpr
+		PSCMD='ps aux'
+		SWAPSPACE=`pstat -T | grep "swap" | awk '{print $1}' | \
+		awk -F/ '{print $2}'`'K'
+		KERNEL=`uname -v`
+		HOSTID=`hostid`
+		EXPORTFS='showmount -e '$HOSTNAME
+		;;
+
+	SunOS3) PATH=/bin:/usr/bin:/usr/ucb:/etc:/usr/etc:/usr/5bin
+		SWAPFILE='/dev/'`dmesg | grep swap | tail -1 | awk '{print $3}'`
+		DEVSWAP=`pstat -T | grep swap | awk '{print $1}' \
+		| cut -d'/' -f2`
+		if [ "$NOTROOT" = "1" ]; then 
+		  MACADDR=`dmesg | grep -i "ethernet address" | awk '{ print $4 }' | tail -1`
+		else
+		  MACADDR=`ifconfig ie0 | grep ether | tail -1 | awk '{print $2}'`	
+		fi
+
+		if [ -z "$MACADDR" ]; then
+		  MACADDR="Root access required."
+		fi
+
+		MODEL=`dmesg | egrep "LX|SPARC|4/75|4/50"| tail -1 \
+		| awk '{print $3, $4}'`
+
+		if [ -z "$MODEL" ]; then
+		  MODEL=`mach`
+		fi
+
+		MEMORY=`dmesg | grep '^mem' | tail -1 | awk '{print $3}'`
+
+		if [ -z "$MEMORY" ]; then
+		  MEMORY="Unknown"
+		fi
+
+		DISKCMD='df -t 4.2'
+		CCOMP="Unknown"
+		ETHERIF=ie0
+		MAILCMD=/bin/mail
+		PRTCMD=lpr
+		PSCMD='ps aux'
+		SWAPSPACE=`pstat -T | grep "swap" | awk '{print $1}' | \
+		awk -F/ '{print $2}'`'K'
+		KERNEL=`strings /vmunix | grep UNIX | awk '{ print $7 }' | \
+		  sed 's/#//; s/://'`
+		HOSTID=`hostid`
+		EXPORTFS='showmount -e '$HOSTNAME
+		;;
+esac
+
+UPTIME=`uptime | sed 's/.*\(up.*\)/\1/' | sed 's/\(.*user[s]*\),.*/\1/'`
+LOADNOW=`uptime | sed 's/.*load average: \(.*\)/\1/'`
+ADMIN=`whoami`
+TIMESTAMP=`date +%m%d%y`
+
+SNFILE=/usr/tmp/`hostname`.sn
+if [ -f "$SNFILE" ]; then
+	SERIALNO=`cat $SNFILE`
+else
+	SERIALNO="Unknown"
+fi
+
+return
+}
+
+
+#
+# To keep from identifying server machines as
+# belonging to an individual, the 'case' statement
+# makes a check and changes LASTLOGIN to "Server"
+# Otherwise, check the first non-root|daemon|lp|UID
+# user of the box. Not failsafe, but as close as
+# I can get.
+#
+Machine_Data(){
+#set -x
+MACHINE=`uname -m`
+OSREV=`uname -r`
+
+case `hostname` in
+        serv01|serv02|serv03|serv04)	LASTLOGIN="Server";;
+	*) LASTLOGIN=`$PSCMD | egrep -v "lp|daemon|root|UID" | \
+           awk '{print $1}' | head -1`;;
+esac
+
+#
+# If no one is logged in, check wtmp
+#
+if [ -z "$LASTLOGIN" ]; then
+	LASTLOGIN=`last | grep console | \
+	grep -v "root" | head -1 | awk '{print $1}'`
+fi
+
+#
+# If that fails, see if we have recorded it before
+#
+if [ -z "$LASTLOGIN" ]; then
+	LASTLOGIN=`grep Login /usr/tmp/*.bl | awk '{print $4}'`
+fi
+
+#
+# Alas, we are clueless...
+#
+if [ -z "$LASTLOGIN" ]; then
+	LASTLOGIN="Unknown.."
+fi
+
+if [ "$AUDIT" -eq "1" ]; then
+  DATE=`date`
+else
+  DATE="Dynamic parameter not reported."
+  UPTIME="Dynamic parameter not reported."
+  LOADNOW="Dynamic parameter not reported."
+fi
+
+cat << __EOF__
+
+=======================================
+System Configuration report for `hostname`
+=======================================
+
+Report data
+===========
+Date                 :  $DATE
+Version              :  $VERSION
+
+Machine data
+============
+Uptime               :  $UPTIME
+Current load avg     :  $LOADNOW
+Machine              :  $MACHINE
+Serial number        :  $SERIALNO
+HostID               :  $HOSTID
+Model                :  $MODEL
+O.S. revision        :  $OSREV
+Kernel               :  $KERNEL
+C Compiler revision  :  $CCOMP
+Memory               :  $MEMORY
+Swap space           :  $SWAPSPACE
+Last Login           :  $LASTLOGIN
+
+__EOF__
+return
+}
+
+
+#
+# NetworkData
+#
+Network_Data(){
+if [ "$AUSPEX" -eq "1" ]; then
+  NOETHERIF=`ax_netstat -i | egrep -v "127.0.0.1|Address|localhost|ni.\*" | \
+    wc | awk '{print $1}'`
+else
+  NOETHERIF=`netstat -i | egrep -v "127.0.0.1|Address|localhost|ni.\*" | wc | \
+    awk '{print $1}'`
+fi
+
+if [ "$SYSTYPE" = "SunOS3" ]; then
+  IPADDR=`ifconfig $ETHERIF | awk '{print $2}'`
+  NETMASK=`ifconfig $ETHERIF | grep inet | awk '{print $4}'`
+  BROADCAST=`ifconfig $ETHERIF | grep broad | awk '{print $6}'`
+  NETMASKCK="255.255.255.0"
+  BROADCASTCK="255"
+
+else
+  IPADDR=`ifconfig $ETHERIF | grep inet | awk '{print $2}'`
+  NETMASK=`ifconfig $ETHERIF | grep inet | awk '{print $4}'`
+  BROADCAST=`ifconfig $ETHERIF | grep broad | awk '{print $6}'`
+  NETMASKCK="255.255.255.0"
+  BROADCASTCK="255"
+fi
+
+$PSCMD | egrep "routed|gated" | grep -v grep > /dev/null
+if [ "$?" -eq "0" ]; then
+	DEFROUTER='<routed|gated running>'
+else
+	DEFROUTER=`netstat -rn | grep default | awk '{print $2}'`
+fi
+$PSCMD | grep ypbind | grep -v grep > /dev/null
+if [ "$?" -eq "0" ]; then
+	YPCLIENT="True"
+else
+	YPCLIENT="False"
+fi
+
+$PSCMD | grep ypserv | grep -v grep > /dev/null
+if [ "$?" -eq "0" ]; then
+	YPSERVER="True"
+else
+	YPSERVER="False"
+fi
+
+NFSMNTS=`$NFSFS | wc | awk '{print $1}'`
+if [ "$NFSMNTS" -gt "0" ]; then
+	NFSCLIENT="True"
+else
+	NFSCLIENT="False"
+fi
+
+EXPORTCNT=`$EXPORTFS 2>&1 | grep -v RPC | wc | awk '{print $1}'`
+if [ "$EXPORTCNT" -gt "0" ]; then
+	NFSSERVER="True"
+else
+	NFSSERVER="False"
+fi
+
+cat << __EOF__
+Network data
+============
+NIS domain           :  `domainname`
+NIS client           :  $YPCLIENT
+NIS server           :  $YPSERVER
+
+NFS client           :  $NFSCLIENT
+NFS server           :  $NFSSERVER
+
+ethernet interfaces  :  $NOETHERIF
+__EOF__
+
+if [ "$NOETHERIF" -gt "1" ]; then
+
+	echo "Name    Address       Broadcast       Netmask"  
+	echo "=============================================" 
+
+	if [ `arch -k` = "aushp" ]; then
+          NSTATCMD='ax_netstat -i'
+	else
+	  NSTATCMD='netstat -i'
+	fi
+
+	eval $NSTATCMD | egrep -v "lo0|ni|Ipkts" | while read line
+	do 
+  	  set -f $line
+  	  IFNAME=`echo $1`
+  	  IFHOST=`echo $4`
+
+  	  if [ "$IFHOST" = "none" ]; then
+    	    IFIPAD="Not_Set"
+    	    IFMSK="Not_Set"
+    	    IFBRD="Not_Set"
+  	  else
+    	    IFIPAD=`ifconfig $1 | grep inet | awk '{print $2}'`
+    	    IFMSK=`ifconfig $IFNAME | grep inet | awk '{print $4}'`
+    	    IFBRD=`ifconfig $IFNAME | grep inet | awk '{print $6}'`
+  	  fi
+
+  	  [ -z "$IFIPAD" ] && IFIPAD="Unknown"
+  	  [ -z "$IFMSK" ] && IFMSK="Unknown"
+  	  [ -z "$IFBRD" ] && IFBRD="Unknown"
+
+  	  echo $IFNAME $IFIPAD $IFBRD $IFMSK | \
+    	    awk '{printf"%-6s %-15s %-15s %-15s\n",$1,$2,$3,$4}'
+	done	
+else
+	echo "IP Address           : " $IPADDR
+	echo "MAC Address          : " $MACADDR
+	echo "Netmask              : " $NETMASK 
+	echo "Broadcast            : " $BROADCAST
+	echo "Default router       : " $DEFROUTER 
+fi
+echo ""
+
+if [ "$NFSSERVER" = "True" ]; then
+  echo ""
+  echo "=============================================" 
+  echo "Exported Filesystems"
+  echo "=============================================" 
+  eval $EXPORTFS
+  echo ""
+fi
+
+return
+}
+
+
+#
+# DiskData
+#
+Disk_Data(){
+
+echo "Disk data:" 
+
+echo "================================================================" 
+
+if [ "$AUDIT" -eq "1" ]; then
+  echo "Filesystem            kbytes    used   avail capacity  Mounted on" 
+else
+  echo "Device-File" "Cap." "Mount-Point" | \
+  awk '{printf"%-20s %35s  %-20s\n", $1,$2,$3}' 
+fi
+
+echo "================================================================" 
+
+#
+# Setup a special case for Journal File Systems at HP-UX 10.10
+#
+case $SYSTYPE in
+	HPUX10)	bdf -t hfs | grep -v Mounted | \
+		awk '{printf"%-40s %14d  %-20s\n", $1,$2,$6}' 
+		bdf -t vxfs | grep -v Mounted | \
+		awk '{printf"%-40s %14d  %-20s\n", $1,$2,$6}';;
+	*)	if [ "$AUDIT" = "1" ]; then
+		  $DISKCMD | grep -v Mounted 
+                else
+		  $DISKCMD | grep -v Mounted | \
+		  awk '{printf"%-40s %14d  %-20s\n", $1,$2,$6}' 
+		fi;;
+esac
+
+case $SYSTYPE in
+	HPUX*)  if [ $NOTROOT -eq 0 ]; then 
+			swapinfo | grep dev | while [ 1 ]; do
+       		        	read line
+       		         	RC=$?
+       		         	if [ "$RC" != "0" ]; then
+       	                		break
+       		         	fi
+			   SWAPFILE=`echo $line | egrep "dsk|lvol" | awk '{print $9}'`
+                	   DEVSWAP=`echo $line | grep dev | awk '{print $2}'`	
+			   echo $SWAPFILE $DEVSWAP "swap" | \
+			   awk '{printf"%-40s %14s  %-20s\n", $1,$2,$3}' 
+			done
+		else
+			SWAPFILE="<Must run swapinfo(1) as root>"
+			DEVSWAP=$SWAPFILE
+		fi
+		;;
+
+	Solar*) swap -l | grep -v swapfile |
+                while [ 1 ];
+                do
+                        read line
+                        RC=$?
+                        if [ "$RC" != "0" ]; then
+                                break
+                        fi
+                SWAPFILE=`echo $line| grep dsk| awk '{print $1}'`
+                DEVSWAP=`echo $line | grep dev| awk '{print $4}'`
+                echo $SWAPFILE $DEVSWAP "swap" | \
+	                awk '{printf"%-40s %14s  %-20s\n", $1,$2,$3}' 
+                done;;
+
+	SunOS*) echo $SWAPFILE $DEVSWAP "swap" | \
+		awk '{printf"%-40s %14s  %-20s\n", $1,$2,$3}';; 
+
+	*);;
+esac
+return
+}
+
+#
+# HPUX09_Func
+#
+HPUX09_Func(){
+cat << __EOF__
+
+IOSCAN output data
+==================
+__EOF__
+
+/etc/ioscan -f -b 
+patchnum=`ls -1d /system/PH* | wc -l`
+
+cat << __EOF__
+
+Patch Data
+====================================================
+$patchnum Installed patches (from /system/PH*/index)
+====================================================
+__EOF__
+
+
+cd /system
+for PATCH in `ls -1d PH* 2>/dev/null`; do
+	DESC=`grep "fd:" $PATCH/index | cut -d':' -f2`
+	echo $PATCH ":" $DESC 
+done
+
+printers=`lpstat -a | grep "accepting" | sort | uniq | wc -l`
+
+cat << __EOF__
+
+==================================================
+$printers Installed printers (from lpstat)
+==================================================
+__EOF__
+
+lpstat -a | grep "accepting" | sort | uniq | awk '{print $1}' 
+
+filesets=`ls /etc/filesets | wc -l`
+
+cat << __EOF__
+
+==================================================
+$filesets Installed filesets (from /etc/filesets)
+==================================================
+__EOF__
+ls -C /etc/filesets 
+
+echo 
+return
+}
+
+
+#
+# HPUX10_Func
+#
+HPUX10_Func(){
+cat << __EOF__
+
+IOSCAN output data
+==================
+__EOF__
+
+/etc/ioscan -f 
+
+printers=`lpstat -a | grep "accepting" | sort | uniq | wc -l`
+cat << __EOF__
+
+==================================================
+$printers Installed printers (from lpstat)
+==================================================
+
+__EOF__
+
+lpstat -a | grep "accepting" | sort | uniq | awk '{print $1}' 
+
+filesets=`swlist -x one_liner="name revision title" -l product | grep -v "#" | wc -l`
+
+cat << __EOF__
+
+
+==================================================
+$filesets Installed filesets (from swlist -l product )
+==================================================
+__EOF__
+swlist -x one_liner="name revision title" -l product | \
+grep -v "#" | cut -c1-60 
+
+return
+}
+
+
+#
+# SOLARIS_Func
+#
+SOLARIS_Func(){
+
+SARSTAT="<NOT Running>"
+if [ -d /var/sadm/sa ]; then
+	logs=`find /var/sadm/sa -mtime -1 -print | wc | awk '{print $1}'`
+	if [ "$logs" -gt "0" ]; then
+		SARSTAT="<Running>"
+	fi
+fi
+VXSTAT="<NOT Running>"
+PSOUT=`$PSCMD | grep vxconfigd | grep -v grep | wc | awk '{print $1}'`
+if [ "$PSOUT" -gt "0" ]; then
+	VXSTAT="<Running>"
+fi
+
+
+cat << __EOF__
+
+Solaris data
+============
+sar(1M) status       :  $SARSTAT
+Veritas Volume Mgr   :  $VXSTAT
+
+__EOF__
+
+#There is something wrong with this section.  Do NOT USE IT for now.
+#echo "Disk partitioning info"                
+#echo "================"               
+
+#cd /dev/dsk
+
+#There is something wrong with this section.  Do NOT USE IT for now.
+#for i in *s2
+#do
+#disk=`echo $i |sed 's/s2//'`
+#echo "$disk:"
+#format $disk <<EOF |grep '/.*/'
+#p
+#p
+#q
+#q
+#EOF
+#done
+
+if [ -x /usr/sbin/vxdg ]; then
+	echo "List Disk Groups"                
+	echo "================"               
+        vxdg list                              2>&1 
+fi
+if [ -x /usr/sbin/vxprint ]; then
+	echo                                   
+	echo "Display Configuration Summary"   
+	echo "============================="   
+        vxprint -S                             2>&1
+fi
+if [ -x /usr/sbin/vxstat ]; then
+	echo                                   
+	echo "Volume Statistics"               
+	echo "================="               
+	vxstat 2>&1 | tail +3 | awk '
+	    BEGIN { 
+		printf ("                                OPERATIONS             BLOCKS       AVG TIME(ms)\n");
+		printf ("TYP NAME                      READ     WRITE       READ      WRITE  READ  WRITE\n");
+	     }
+    		{
+		    v  = $1
+		    n  = $2
+		    or = $3
+		    ow = $4
+		    br = $5
+		    bw = $6
+		    ar = $7
+		    aw = $8
+		    printf ("%s %-20s %9s %9s %10s %10s %5.1f  %5.1f\n", v,n,or,ow,br,bw,ar,aw)
+		}'                             
+fi
+if [ -x /usr/sbin/vxprint ]; then
+	echo                                   
+	echo "Configuration Details"           
+	echo "====================="           
+        vxprint -tvh                           2>&1
+fi
+
+showrev -p 2>&1 | grep -v 'No patches' | awk '{print $2}' >$TMPFILE
+patchnum=`cat $TMPFILE | wc | awk '{print $1}'`
+
+cat << __EOF__
+
+==================================================
+$patchnum Installed patches (from 'showrev -p')
+==================================================
+__EOF__
+
+if [ $NOPATCHES -eq 0 ]; then
+	cat $TMPFILE
+fi
+
+lpstat -a | grep "accepting" | sort | uniq | awk '{print $1}' >$TMPFILE
+lpnum=`cat $TMPFILE | wc | awk '{print $1}'`
+
+cat << __EOF__
+
+==================================================
+$lpnum Installed printers (from lpstat)
+==================================================
+__EOF__
+
+if [ $NOPRINTER -eq 0 ]; then
+	cat $TMPFILE
+fi
+
+
+pkginfo | sort -b +1 >$TMPFILE
+pkgnum=`cat $TMPFILE | wc | awk '{print $1}'`
+
+cat << __EOF__
+
+==================================================
+$pkgnum Installed packages (from pkginfo)
+==================================================
+__EOF__
+
+if [ $NOPKGS -eq 0 ]; then
+	cat $TMPFILE
+fi
+return
+}
+
+
+#
+# SUNOS_Func
+#
+SUNOS_Func() {
+
+#There is something wrong with this section.  Do NOT USE IT for now.
+#echo "Disk partitioning info"                
+#echo "================"               
+#
+#cd /dev/dsk
+#
+#There is something wrong with this section.  Do NOT USE IT for now.
+#for i in *s2
+#do
+#disk=`echo $i |sed 's/s2//'`
+#echo "$disk:"
+#format $disk <<EOF |grep '/.*/'
+#p
+#p
+#q
+#q
+#EOF
+#done
+
+cat << __EOF__
+
+==================================================
+Installed printers (from lpc stat)
+==================================================
+__EOF__
+
+lpc stat | grep : | cut -d':' -f1 
+return 
+}
+
+
+# =============================================================================
+#                     END OF FUNCTION DEFINITIONS
+# =============================================================================
+
+#
+# system-independant functions
+#
+Get_Prog_Name
+
+if [ "$AUDIT" = "0" ]; then
+  exec > /usr/tmp/`hostname`.SysConfig
+fi
+
+Check_User
+Get_Arch
+Define_Vars
+Machine_Data
+Network_Data
+Disk_Data
+
+
+#
+# system-dependant functions
+#
+case $SYSTYPE in
+	HPUX09)		HPUX09_Func;;
+	HPUX10)		HPUX10_Func;;
+	Solaris)	SOLARIS_Func;;
+	SunOS)		SUNOS_Func;;
+	SunOS3) 	SUNOS_Func;;
+	*)		;;
+esac
+

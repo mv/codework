@@ -1,8 +1,0 @@
-#
-# $Id: list_fed_eis.txt 6 2006-09-10 15:35:16Z marcus $
-#
-# label1        label2  hostname        ip              tnsnames    service_name        schema          cd_mun  cd_uf  concentrador    estadual     root        oracle
-#
-
-BSB_EIS         bsbdf5  HFBSBDF5        10.5.1.128      bsb_eis     EIS                 EIS             xxx     xx     xxx             xx           Deuterium!1 Delphi!1
-RIO_EIS         riorj5  HFRIORJ5        10.3.1.128      rio_eis     EIS                 EIS             xxx     xx     xxx             xx           Deuterium!1 Delphi!1

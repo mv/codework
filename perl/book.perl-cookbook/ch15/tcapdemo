@@ -1,0 +1,72 @@
+#!/usr/bin/perl -w
+# tcapdemo - show off direct cursor placement
+
+use POSIX;
+use Term::Cap;
+    
+init();                     # Initialize Term::Cap.
+zip();                      # Bounce lines around the screen.
+finish();                   # Clean up afterward.
+exit();
+
+# Two convenience functions.  clear_screen is obvious, and
+# clear_end clears to the end of the screen.
+sub clear_screen { $tcap->Tputs('cl', 1, *STDOUT) } 
+sub clear_end    { $tcap->Tputs('cd', 1, *STDOUT) } 
+
+# Move the cursor to a particular location.
+sub gotoxy {
+    my($x, $y) = @_;
+    $tcap->Tgoto('cm', $x, $y, *STDOUT);
+} 
+
+# Get the terminal speed through the POSIX module and use that
+# to initialize Term::Cap.
+sub init { 
+    $| = 1;
+    $delay = (shift() || 0) * 0.005;
+    my $termios = POSIX::Termios->new();
+    $termios->getattr;
+    my $ospeed = $termios->getospeed;
+    $tcap = Term::Cap->Tgetent ({ TERM => undef, OSPEED => $ospeed });
+    $tcap->Trequire(qw(cl cm cd));
+}
+
+# Bounce lines around the screen until the user interrupts with
+# Ctrl-C.
+sub zip { 
+    clear_screen();
+    ($maxrow, $maxcol) = ($tcap->{_li} - 1, $tcap->{_co} - 1);
+
+    @chars = qw(* - / | \ _ );
+    sub circle { push(@chars, shift @chars); }
+
+    $interrupted = 0;
+    $SIG{INT} = sub { ++$interrupted };
+
+    $col = $row = 0;
+    ($row_sign, $col_sign) = (1,1);
+
+    do {
+        gotoxy($col, $row);
+        print $chars[0];
+        select(undef, undef, undef, $delay);
+
+        $row += $row_sign;
+        $col += $col_sign;
+
+        if    ($row == $maxrow) { $row_sign = -1; circle; } 
+        elsif ($row == 0 )      { $row_sign = +1; circle; }
+
+        if    ($col == $maxcol) { $col_sign = -1; circle; } 
+        elsif ($col == 0 )      { $col_sign = +1; circle; }
+    
+    } until $interrupted;
+
+}
+
+# Clean up the screen.
+sub finish { 
+    gotoxy(0, $maxrow);
+    clear_end();
+}

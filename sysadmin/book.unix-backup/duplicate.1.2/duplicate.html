@@ -1,0 +1,75 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.6 [en] (WinNT; I) [Netscape]">
+   <title>Backup Central</title>
+</head>
+<body>
+<b><font face="Arial,Helvetica"></font></b>&nbsp;
+<table COLS=1 WIDTH="100%" >
+<tr>
+<td>
+<center><b><font face="Arial,Helvetica"><font size=+2>Create a Standby
+Root Mirror: duplicate.sh</font></font></b></center>
+<font face="Arial,Helvetica"></font>
+<p><font face="Arial,Helvetica">This script works for Solaris machines
+only, but does support multiple Sun architectures.&nbsp; It duplicates
+the root disk to another disk using newfs, fsck, and dump.&nbsp; It then
+sets the EEPROM settings to automatically boot off that disk the next time
+the system is rebooted.</font>
+<h2>
+<font face="Arial,Helvetica">Copying the OS</font></h2>
+<font face="Arial,Helvetica">To copy the OS, it performs the following
+steps:</font>
+<ul>
+<li>
+<font face="Arial,Helvetica">Partition the copy drive to look the same
+as the drive we are booted from</font></li>
+
+<li>
+<font face="Arial,Helvetica">newfs the appropriate filesystems on the other
+drive</font></li>
+
+<li>
+<font face="Arial,Helvetica">fsck the appropriate fileystems on the other
+drive</font></li>
+
+<li>
+<font face="Arial,Helvetica">Use dump/restore to copy the OS over to the
+other drive</font></li>
+
+<li>
+<font face="Arial,Helvetica">Modifies the /etc/vfstab to look right on
+the other drive</font></li>
+</ul>
+<font face="Arial,Helvetica">This is typically done via cron once a night.&nbsp;
+The duplication can be halted if you are planning on an OS upgrade, patch
+installation, application installation, or other risky project.&nbsp; If
+anything happens to your OS as a result of this project, you can safely
+boot off the old disk if you halted the duplication for the length of the
+project.</font>
+<h2>
+<font face="Arial,Helvetica">Setting the alternate boot</font></h2>
+<font face="Arial,Helvetica">duplicate.sh uses the disk aliases (e.g. disk0
+disk3) already available.&nbsp; It looks at the disk we are currently booted
+from (e.g. disk0), and then sets the boot argument to the other disk (e.g.
+boot disk3).&nbsp; That way, the next time the system reboots, it boots
+from this disk.&nbsp; This continually tests the process and the other
+disk.&nbsp; A neat feature of this is that if the system panics for any
+reason, it automatically boots from the other disk when it comes back up.</font>
+<h2>
+<font face="Arial,Helvetica">Don't Forget</font></h2>
+<font face="Arial,Helvetica">Remember to disable the duplication process
+for a few days any time you are planning an upgrade of any kind.&nbsp;
+When you install patches or applications that require a reboot, make sure
+you set the boot alias to boot off the drive that you just modified.&nbsp;
+Otherwise, you will boot off the alternate disk that was not modified.&nbsp;
+Of course, you could also immediately run duplicate.sh, but I wouldn't
+advise that.&nbsp; I would make sure that the change didn't negatively
+affect your system.</font></td>
+</tr>
+</table>
+<font face="Arial,Helvetica"></font>
+</body>
+</html>

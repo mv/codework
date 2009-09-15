@@ -1,0 +1,14 @@
+#!/usr/bin/perl -w
+# jam - stuff characters down STDIN's throat
+require 'sys/ioctl.ph';
+die "no TIOCSTI" unless defined &TIOCSTI;
+sub jam {
+    local $SIG{TTOU} = "IGNORE"; # "Stopped for tty output"
+    local *TTY;  # make local filehandle
+    open(TTY, "+</dev/tty")                 or die "no tty: $!";
+    for (split(//, $_[0])) {
+        ioctl(TTY, &TIOCSTI, $_)            or die "bad TIOCSTI: $!";
+    }
+    close(TTY);
+}
+jam("@ARGV\n");

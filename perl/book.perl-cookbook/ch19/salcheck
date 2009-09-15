@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+# salcheck - check for salaries
+use DBI;
+use CGI qw(:standard :html3);
+
+$limit = param("LIMIT");
+
+print header(), start_html("Salary Query"),
+      h1("Search"),
+      start_form(),
+      p("Enter minimum salary", textfield("LIMIT")),
+      submit(),
+      end_form();
+
+if (defined $limit) {
+    $dbh = DBI->connect("dbi:mysql:somedb:server.host.dom:3306", 
+        "username", "password") 
+        or die "Connecting: $DBI::errstr";
+    $sth = $dbh->prepare("SELECT name,salary FROM employees 
+        WHERE salary > $limit")
+        or die "Preparing: ", $dbh->errstr;
+    $sth->execute
+        or die "Executing: ", $sth->errstr;
+
+    print h1("Results"), "<TABLE BORDER=1>";
+
+    while (@row = $sth->fetchrow()) {
+           print Tr( td( \@row ) );
+    }
+
+    print "</TABLE>\n";
+    $sth->finish;
+    $dbh->disconnect;
+}
+
+print end_html();

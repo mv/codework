@@ -1,0 +1,166 @@
+#!/usr/bin/perl -w
+# fwdport -- act as proxy forwarder for dedicated services
+
+use strict;                 # require declarations
+use Getopt::Long;           # for option processing
+use Net::hostent;       Example 17-8    # by-name interface for host info
+use IO::Socket;             # for creating server and client sockets
+use POSIX ":sys_wait_h";    # for reaping our dead children
+
+my (
+    %Children,              # hash of outstanding child processes
+    $REMOTE,                # whom we connect to on the outside
+    $LOCAL,                 # where we listen to on the inside
+    $SERVICE,               # our service name or port number
+    $proxy_server,          # the socket we accept() from
+    $ME,                    # basename of this program
+);
+
+($ME = $0) =~ s,.*/,,;      # retain just basename of script name
+
+check_args();               # processing switches
+start_proxy();              # launch our own server
+service_clients();          # wait for incoming
+die "NOT REACHED";          # you can't get here from there
+
+# process command line switches using the extended
+# version of the getopts library.
+sub check_args { 
+    GetOptions(
+        "remote=s"    => \$REMOTE,
+        "local=s"     => \$LOCAL,
+        "service=s"   => \$SERVICE,
+    ) or die <<EOUSAGE;
+    usage: $0 [ --remote host ] [ --local interface ] [ --service service ]   
+EOUSAGE
+    die "Need remote"                   unless $REMOTE;
+    die "Need local or service"         unless $LOCAL || $SERVICE;
+}
+
+# begin our server 
+sub start_proxy {
+    my @proxy_server_config = (
+      Proto     => 'tcp',
+      Reuse     => 1,
+      Listen    => SOMAXCONN,
+    );
+    push @proxy_server_config, LocalPort => $SERVICE if $SERVICE;
+    push @proxy_server_config, LocalAddr => $LOCAL   if $LOCAL;
+    $proxy_server = IO::Socket::INET->new(@proxy_server_config)
+                    or die "can't create proxy server: $@";
+    print "[Proxy server on ", ($LOCAL || $SERVICE), " initialized.]\n";
+}
+
+sub service_clients { 
+    my (
+        $local_client,              # someone internal wanting out
+        $lc_info,                   # local client's name/port information
+        $remote_server,             # the socket for escaping out
+        @rs_config,                 # temp array for remote socket options
+        $rs_info,                   # remote server's name/port information
+        $kidpid,                    # spawned child for each connection
+    );
+
+    $SIG{CHLD} = \&REAPER;          # harvest the moribund
+
+    accepting();
+
+    # an accepted connection here means someone inside wants out
+    while ($local_client = $proxy_server->accept()) {
+        $lc_info = peerinfo($local_client);
+        set_state("servicing local $lc_info");
+        printf "[Connect from $lc_info]\n";
+
+        @rs_config = (
+            Proto     => 'tcp',
+            PeerAddr  => $REMOTE,
+        );
+        push(@rs_config, PeerPort => $SERVICE) if $SERVICE;
+
+        print "[Connecting to $REMOTE...";
+        set_state("connecting to $REMOTE");                 # see below
+        $remote_server = IO::Socket::INET->new(@rs_config)
+                         or die "remote server: $@";
+        print "done]\n";
+
+        $rs_info = peerinfo($remote_server);
+        set_state("connected to $rs_info");
+
+        $kidpid = fork();
+        die "Cannot fork" unless defined $kidpid;
+        if ($kidpid) {
+            $Children{$kidpid} = time();            # remember his start time
+            close $remote_server;                   # no use to master
+            close $local_client;                    # likewise
+            next;                                   # go get another client
+        } 
+
+        # at this point, we are the forked child process dedicated
+        # to the incoming client.  but we want a twin to make i/o
+        # easier.
+
+        close $proxy_server;                        # no use to slave
+
+        $kidpid = fork(); 
+        die "Cannot fork" unless defined $kidpid;
+
+        # now each twin sits around and ferries lines of data.
+        # see how simple the algorithm is when you can have
+        # multiple threads of control?
+
+        # this is the fork's parent, the master's child
+        if ($kidpid) {              
+            set_state("$rs_info --> $lc_info");
+            select($local_client); $| = 1;
+            print while <$remote_server>;
+            kill('TERM', $kidpid);      # kill my twin cause we're done
+            } 
+        # this is the fork's child, the master's grandchild
+        else {                      
+            set_state("$rs_info <-- $lc_info");
+            select($remote_server); $| = 1;
+            print while <$local_client>;
+            kill('TERM', getppid());    # kill my twin cause we're done
+        } 
+        exit;                           # whoever's still alive bites it
+    } continue {
+        accepting();
+    } 
+}
+
+# helper function to produce a nice string in the form HOST:PORT
+sub peerinfo {
+    my $sock = shift;
+    my $hostinfo = gethostbyaddr($sock->peeraddr);
+    return sprintf("%s:%s", 
+                    $hostinfo->name || $sock->peerhost, 
+                    $sock->peerport);
+} 
+
+# reset our $0, which on some systems make "ps" report
+# something interesting: the string we set $0 to!
+sub set_state { $0 = "$ME [@_]" } 
+
+# helper function to call set_state
+sub accepting {
+    set_state("accepting proxy for " . ($REMOTE || $SERVICE));
+}
+
+# somebody just died.  keep harvesting the dead until 
+# we run out of them.  check how long they ran.
+sub REAPER { 
+    my $child;
+    my $start;
+    while (($child = waitpid(-1,WNOHANG)) > 0) {
+        if ($start = $Children{$child}) {
+            my $runtime = time() - $start;
+            printf "Child $child ran %dm%ss\n", 
+                $runtime / 60, $runtime % 60;
+            delete $Children{$child};
+        } else {
+            print "Bizarre kid $child exited $?\n";
+        } 
+    }
+    # If I had to choose between System V and 4.2, I'd resign. --Peter Honeyman
+    $SIG{CHLD} = \&REAPER; 
+};

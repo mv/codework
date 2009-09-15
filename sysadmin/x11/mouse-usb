@@ -1,0 +1,9 @@
+
+
+Section "InputDevice"
+    Identifier "Mouse1"
+    Driver "mouse"
+    Option "Protocol"   "IMPS/2"
+    Option "Device"     "/dev/input/mice"
+    Option "ZAxisMapping"   "4 5"           #this part is for the wheel
+EndSection

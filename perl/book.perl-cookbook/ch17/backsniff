@@ -1,0 +1,27 @@
+#!/usr/bin/perl -w
+# backsniff - log attempts to connect to particular ports
+
+use Sys::Syslog;
+use Socket;
+
+# identify my port and address
+$sockname          = getsockname(STDIN)
+                     or die "Couldn't identify myself: $!\n";
+($port, $iaddr)    = sockaddr_in($sockname);
+$my_address        = inet_ntoa($iaddr);
+
+# get a name for the service
+$service = (getservbyport ($port, "tcp"))[0] || $port;
+# now identify remote address
+$sockname          = getpeername(STDIN)
+                         or die "Couldn't identify other end: $!\n";
+($port, $iaddr)    = sockaddr_in($sockname);
+$ex_address        = inet_ntoa($iaddr);
+
+# and log the information
+openlog("sniffer", "ndelay", "daemon");
+syslog("notice", "Connection from %s to %s:%s\n", $ex_address, 
+
+        $my_address, $service);
+closelog();
+exit;

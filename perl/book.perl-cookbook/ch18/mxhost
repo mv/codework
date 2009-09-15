@@ -1,0 +1,12 @@
+#!/usr/bin/perl
+# mxhost - find mx exchangers for a host
+use Net::DNS;
+
+$host = shift;
+$res = Net::DNS::Resolver->new();
+@mx = mx($res, $host)
+   or die "Can't find MX records for $host (".$res->errorstring,")\n";
+
+foreach $record (@mx) {
+    print $record->preference, " ", $record->exchange, "\n";
+}

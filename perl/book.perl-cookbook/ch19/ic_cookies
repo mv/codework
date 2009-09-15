@@ -1,0 +1,28 @@
+#!/usr/bin/perl -w
+# ic_cookies - sample CGI script that uses a cookie
+use CGI qw(:standard);
+
+use strict;
+
+my $cookname = "favorite ice cream";
+my $favorite = param("flavor");
+my $tasty    = cookie($cookname) || 'mint';
+
+unless ($favorite) {
+    print header(), start_html("Ice Cookies"), h1("Hello Ice Cream"),
+          hr(), start_form(),
+            p("Please select a flavor: ", textfield("flavor",$tasty)),
+              end_form(), hr();
+    exit;
+}
+
+my $cookie = cookie(
+                -NAME    => $cookname,
+                -VALUE   => $favorite,
+                -EXPIRES => "+2y",
+            );
+
+print header(-COOKIE => $cookie),
+      start_html("Ice Cookies, #2"),
+      h1("Hello Ice Cream"),
+      p("You chose as your favorite flavor `$favorite'.");

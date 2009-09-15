@@ -1,0 +1,25 @@
+#!/usr/bin/perl -w
+# surl - sort URLs by their last modification date
+
+use LWP::UserAgent;
+use HTTP::Request;
+use URI::URL qw(url);
+
+my($url, %Date);
+my $ua = LWP::UserAgent->new();
+
+while ( $url = url(scalar <>) ) {
+    my($req, $ans);
+    next unless $url->scheme =~ /^(file|https?)$/;
+    $ans = $ua->request(HTTP::Request->new("HEAD", $url));
+    if ($ans->is_success) {
+        $Date{$url} = $ans->last_modified || 0;  # unknown
+    } else {
+        print STDERR "$url: Error [", $ans->code, "] ", $ans->message, "!\n";
+    }
+}
+
+foreach $url ( sort { $Date{$b} <=> $Date{$a} } keys %Date ) {
+    printf "%-25s %s\n", $Date{$url} ? (scalar localtime $Date{$url})
+                                     : "<NONE SPECIFIED>", $url;
+}

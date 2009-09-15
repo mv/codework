@@ -1,0 +1,45 @@
+package StrNum;
+
+use Exporter ();
+@ISA = 'Exporter';
+@EXPORT = qw(StrNum);  # unusual
+
+use overload        (
+        '<=>'   => \&spaceship,
+        'cmp'   => \&spaceship,
+        '""'    => \&stringify,
+        'bool'  => \&boolify,
+        '0+'    => \&numify,
+        '+'     => \&concat,
+        '*'     => \&repeat,
+);
+
+# constructor
+sub StrNum($) { 
+    my ($value) = @_; 
+    return bless \$value; 
+} 
+
+sub stringify { ${ $_[0] } } 
+sub numify    { ${ $_[0] } } 
+sub boolify   { ${ $_[0] } } 
+
+# providing <=> gives us <, ==, etc. for free.
+sub spaceship { 
+    my ($s1, $s2, $inverted) = @_;
+    return $inverted ? $$s2 cmp $$s1 : $$s1 cmp $$s2;
+} 
+
+# this uses stringify
+sub concat { 
+    my ($s1, $s2, $inverted) = @_;
+    return StrNum $inverted ? ($s2 . $s1) : ($s1 . $s2);
+} 
+
+# this uses stringify
+sub repeat { 
+    my ($s1, $s2, $inverted) = @_;
+    return StrNum $inverted ? ($s2 x $s1) : ($s1 x $s2);
+}
+
+1;

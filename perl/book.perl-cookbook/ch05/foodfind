@@ -1,0 +1,21 @@
+#!/usr/bin/perl -w
+# foodfind - find match for food or color
+
+$given = shift @ARGV or die "usage: foodfind food_or_color\n";
+
+%color = (
+           "Apple"  => "red",
+           "Banana" => "yellow",
+           "Lemon"  => "yellow",           
+           "Carrot" => "orange"
+         );    
+
+%food = reverse %color;    
+
+if (exists $color{$given}) {
+        print "$given is a food with color $color{$given}.\n";
+}    
+if (exists $food{$given}) {
+        print "$food{$given} is a food with color $given.\n";
+}
+

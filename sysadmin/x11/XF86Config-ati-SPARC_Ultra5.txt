@@ -1,0 +1,87 @@
+# Prevent monitor from blanking / turning off
+Section "ServerFlags"
+         Option "BlankTime" "0"
+         Option "StandbyTime" "0"
+EndSection
+
+Section "ServerLayout"
+        Identifier "wsfb"
+        Screen 0 "Screen0" 0 0
+        InputDevice "commouse0" "CorePointer"
+        InputDevice "Keyboard0" "CoreKeyboard"
+EndSection
+
+Section "Files"
+        RgbPath "/usr/X11R6/lib/X11/rgb"
+        ModulePath "/usr/X11R6/lib/modules"
+        FontPath "/usr/X11R6/lib/X11/fonts/misc/"
+        FontPath "/usr/X11R6/lib/X11/fonts/Speedo/"
+        FontPath "/usr/X11R6/lib/X11/fonts/Type1/"
+        FontPath "/usr/X11R6/lib/X11/fonts/CID/"
+        FontPath "/usr/X11R6/lib/X11/fonts/75dpi/"
+        FontPath "/usr/X11R6/lib/X11/fonts/100dpi/"
+EndSection
+
+Section "Module"
+        Load "dbe"
+        Load "extmod"
+        Load "glx"
+        Load "record"
+        Load "xtrap"
+        Load "speedo"
+        Load "type1"
+        Load "freetype"
+EndSection
+
+# All Sun keyboards (USB Type 6, Serial Type 3/4/5/6)
+Section "InputDevice"
+        Identifier "Keyboard0"
+        Driver "keyboard"
+        Option "Protocol" "wskbd"
+        Option "Device" "/dev/wskbd0"
+        Option "XkbRules" "xfree86"
+        Option "XkbLayout" "us"
+EndSection
+
+# Serial mice on com ports
+Section "InputDevice"
+        Identifier "commouse0"
+        Driver "mouse"
+        Option "Protocol" "SunMouse"
+        Option "Device" "/dev/tty00"
+        Option "Baudrate" "1200"
+EndSection
+
+Section "Monitor"
+        Identifier "Monitor"
+        VendorName "Relisys"
+        ModelName "RE518B"
+        HorizSync 30-69
+        VertRefresh 50-150
+EndSection
+
+Section "Device"
+        Identifier "Card0"
+        Driver "ati"
+        BusID "PCI:1:2:0"
+        Option "composite_sync" "True"
+EndSection
+
+# 1152x864 16bpp seems to be the maximum for my setup
+Section "Screen"
+        Identifier "Screen0"
+        Device "Card0"
+        Monitor "Monitor"
+        DefaultDepth 16
+        SubSection "Display"
+                Depth 8
+        EndSubSection
+        SubSection "Display"
+                Depth 16
+                Modes "1024x768"
+               #Modes "1152x864"
+        EndSubSection
+        SubSection "Display"
+                Depth 24
+        EndSubSection
+EndSection

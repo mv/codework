@@ -1,0 +1,120 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>Using Hostdump</TITLE>
+</HEAD>
+<BODY>
+
+<B><FONT FACE="Times" SIZE=2><P>Using <I>Hostdump.sh</P>
+</B></I><P ALIGN="JUSTIFY">To back up one or more UNIX systems, simply give the script their names.  It will automatically determine the names of all their file system and back them up to the tape drive device that you specify.  Issue the following command:</P>
+</FONT><FONT FACE="Courier" SIZE=2><P ALIGN="JUSTIFY"># <B>Hostdump.sh  <I>level device logfile system [system2 … systemx]</P>
+</B></I></FONT><FONT FACE="Times" SIZE=2><P ALIGN="JUSTIFY">Sometimes you don't want to back up an entire system.  To back up less than the entire system, add the name of the file system(s) that you want after the system name.  If you want to back up more than one file system from the same system, you will need to specify the system name before each file system.  Issue the following command:</P>
+</FONT><FONT FACE="Courier" SIZE=2><P ALIGN="JUSTIFY"># <B>Hostdump.sh  <I>level device logfile system:/filesys system:/filesys</P>
+</B></I></FONT><FONT FACE="Times" SIZE=2><P ALIGN="JUSTIFY"></P>
+</FONT><B><I><FONT FACE="Courier" SIZE=2><P ALIGN="JUSTIFY">level</P><DIR>
+
+</B></I></FONT><FONT FACE="Times" SIZE=2><P ALIGN="JUSTIFY">A valid <I>dump</I> level between 0 and 9</P></DIR>
+
+</FONT><B><I><FONT FACE="Courier" SIZE=2><P ALIGN="JUSTIFY">device</P><DIR>
+
+</B></I></FONT><FONT FACE="Times" SIZE=2><P ALIGN="JUSTIFY">A <EM>non-rewinding</EM> tape device, such as <I>/dev/rmt/0n</I>, or <I>/dev/nrmt0</I>.  (The script will test to see if the device you specify is actually a no-rewind device.)</P></DIR>
+
+</FONT><B><I><FONT FACE="Courier" SIZE=2><P ALIGN="JUSTIFY">logfile </P><DIR>
+
+</B></I></FONT><FONT FACE="Times" SIZE=2><P ALIGN="JUSTIFY">This will be an absolute pathname to a logfile that will contain stdout &amp; stderr from script.  This pathname should be a name that can be associated with the tape.  When I used this script for production backups, I named the tapes and the logfiles after the name of the system, tape drive, and level.  You could use something like this:</P>
+</FONT><I><FONT FACE="Courier" SIZE=1><P>/backuplogs/apollo.DevRmt0n.Level0.12.13.1996</P></DIR>
+
+</FONT><B><FONT FACE="Courier" SIZE=2><P ALIGN="JUSTIFY">system1 [system2 … systemx]</P><DIR>
+
+</B></I></FONT><FONT FACE="Times" SIZE=2><P ALIGN="JUSTIFY">This is a list of one or more systems that you want the script to back up to the device you listed with the second argument.  Each system you list will be written to the tape, in the order they were listed.  The script will automatically look at each system’s <I>fstab</I> file, and create a list of file systems to be backed up.</P></DIR>
+
+</FONT><B><I><FONT FACE="Courier" SIZE=2><P ALIGN="JUSTIFY">system:/filesys [system:/filesys]</P><DIR>
+
+</B></I></FONT><FONT FACE="Times" SIZE=2><P ALIGN="JUSTIFY">If you are backing up the whole system, it is best to use the option above and have <I>Hostdump.sh</I> figure out which file sytems to back up.  But if you want to limit the file systems included, you can list as many as you want in this format.</P></DIR>
+
+</FONT><B><I><FONT FACE="Courier" SIZE=2><P ALIGN="JUSTIFY">system1 system2 system3:/filesys system4:filesys</P><DIR>
+
+</B></I></FONT><FONT FACE="Times" SIZE=2><P ALIGN="JUSTIFY">You can also mix and match the options like this.  Any systems that are listed without an accompanying file system name will receive a full backup.  Any systems that have a file system listed after them will only have that file system backed up.</P></DIR>
+
+<P ALIGN="JUSTIFY">Advanced Option 1:  Special Case File Systems</P><DIR>
+
+<P ALIGN="JUSTIFY">You may have file systems that are listed in the <I>fstab </I>file that you want to exclude on a regular basis.  Or you may want to back up the <I>/tmp</I> file system, which is normally excluded by <I>Hostdump.sh</I>. <I>Hostdump.sh </I>can handle both of these special cases.  If you want to exclude file systems that would normally be included, you put that file systems’s name in a file called </FONT><B><I><FONT FACE="Courier" SIZE=2>fstab</B></FONT><FONT FACE="Times" SIZE=2>.exclude</I>, on the system where you want to exclude it.  (For </FONT><B><I><FONT FACE="Courier" SIZE=2>fstab</B></FONT><FONT FACE="Times" SIZE=2>,</I> you need to substitute whatever that version of UNIX calls the <I>fstab</I> file.  For example, you would use <I>/etc/vfstab.exclude </I>on Solaris.)  To include file systems that are not in the <I>fstab</I> file, or are normally excluded by <I>Hostdump.sh</I>, put that file system’s name in a file called </FONT><B><I><FONT FACE="Courier" SIZE=2>fstab</B></FONT><FONT FACE="Times" SIZE=2>.include</I>, on the system where you want to include it.</P>
+<P ALIGN="JUSTIFY">For example, assume that on a Solaris system called <I>apollo</I>, you want to exclude the <I>/home</I> file system. Normally it would get backed up since it is in <I>/etc/vfstab</I>.  Suppose that you want to include the <I>/tmp </I>file system.  You would create two files on <I>apollo</I>.</P>
+<P ALIGN="JUSTIFY">One would be called <I>/etc/vfstab.exclude</I>, and it would contain the entry:</P>
+</FONT><FONT FACE="Courier" SIZE=1><P>/home</P>
+</FONT><FONT FACE="Times" SIZE=2><P ALIGN="JUSTIFY">The second file would be called <I>/etc/vfstab.include</I>, and it would contain the entry:</P>
+</FONT><FONT FACE="Courier" SIZE=1><P>/tmp</P></DIR>
+
+</FONT><FONT FACE="Times" SIZE=2><P ALIGN="JUSTIFY">Advanced Option 2:  Systems Bigger Than a Tape</P><DIR>
+
+<I><P ALIGN="JUSTIFY">Hostdump.sh</I>, like the <I>dump</I> and <I>restore</I> commands, was not originally designed with today’s systems in mind.  The script was first written to back up Ultrix systems (the largest of which was 7GB at the time) to 8mm compressed drives (the smallest of which was 10GB).  The original author never envisioned a system where the disk was bigger than a tape.  Then Hostdump.sh (and I) met HP’s that shipped with 20GB of disk and one 6GB DDS tape drive!  Something had to be done.</P></DIR>
+
+<U><P ALIGN="JUSTIFY">The "NOTE" should begin here.</P>
+<OL>
+
+<OL>
+
+</U><P ALIGN="JUSTIFY"><LI>This is where backup philosophy enters again.  Please remember the essential elements to a good backup</LI></P></OL>
+</OL>
+
+
+<UL>
+<P ALIGN="JUSTIFY"><LI>Automation (Should not require me to swap tapes in the middle of the night.)</LI></P>
+<P ALIGN="JUSTIFY"><LI>Intelligence (Should figure out for itself what to back up.  Include lists bad! )</LI></P>
+<P ALIGN="JUSTIFY"><LI>Comprehensive (Don’t forget anything!)</LI></P></UL>
+
+<P ALIGN="JUSTIFY">&nbsp;</P>
+<U><P ALIGN="JUSTIFY">The "NOTE" should end here, but the &gt;bullets go outside of it.</P><DIR>
+
+</U><P ALIGN="JUSTIFY">The easiest thing would be to scrap the original idea of looking at the <I>fstab</I>, and give it a list of file systems to back up.  That would be an easy option to include, and the job would get done.  Essentially, that’s what I’ve done, but with a twist.  I recommend doing it in the following manner:</P></DIR>
+
+
+<UL>
+<P ALIGN="JUSTIFY"><LI>Use Hostdump.sh in the regular manner, excluding enough file systems in </FONT><FONT FACE="Courier" SIZE=2>fstab</FONT><FONT FACE="Times" SIZE=2>.exclude, so that what is left will fit on one tape</LI></P>
+<P ALIGN="JUSTIFY"><LI>Using the advanced option to include the excluded file systems onto another tape or tapes.</LI></P></UL>
+<DIR>
+
+<EM><P ALIGN="JUSTIFY">Why is it important to do it this way?</EM>  It goes back to the second essential element of a good backup –intelligence.  Say, for example, that you have only had two include lists.  You tell <I>Hostdump.sh</I> to backup <I>/</I>, <I>/usr</I>, <I>/var</I>, <I>/opt,</I> and <I>/home1</I> on one tape, and <I>/home2</I> and <I>/home3</I> on another.  What happens when you add <I>/home4</I>?  Unless someone or something tells the backup program, it will never get backed up.  You’ll never know it either, until someone asks you to restore <I>/home4/yourboss/really-important-presentation-to-the-board-of-directors.doc</I>.  So, whenever you are in a situation like this, whether you are using this program or not, you need to find a way to back up the entire system on one tape drive (excluding certain file systems), then back up the excluded file systems on another tape.  That way, when you add <I>/home4</I>, it will be automatically included on the first tape.  The worst thing to happen is for the new <I>/home4</I> fills up your first tape <EM>(which you would immediately know because you monitor your backups, right?)</EM>, and you have to manually add it to the second tape and exclude it from the first.</P>
+<P ALIGN="JUSTIFY">To use this option, run <I>hostdump.sh</I> a second or third time, specifying the file systems that were excluded in </FONT><B><I><FONT FACE="Courier" SIZE=2>fstab</B></FONT><FONT FACE="Times" SIZE=2>.exclude</I>.  It is easier to explain this option with an example. In this example, <I>elvis</I> is the name of the Solaris system you want to back up.  You are using <I>Hostdump.sh</I> for the first time, and you know that a full backup will fit onto three different tapes.  You have divided up the file systems equally in the following manner:</P>
+<P ALIGN="JUSTIFY">Tape 1:  OS file systems (<I>/</I>, <I>/usr</I>, <I>/var</I>, <I>/opt</I>, etc.),<I> /home1</P>
+</I><P ALIGN="JUSTIFY">Tape 2: <I>/home2</I>, <I>/home3</I>, <I>/home4</P>
+</I><P ALIGN="JUSTIFY">Tape 3: <I>/home5</I>, <I>/home6</P>
+</I><P ALIGN="JUSTIFY">&nbsp;</P></DIR>
+
+<OL TYPE="a">
+
+<P ALIGN="JUSTIFY"><LI>First back up the whole system, excluding /home2-6, on the first tape.  </LI></P></OL>
+
+
+<UL>
+<P ALIGN="JUSTIFY"><LI>Create a file on elvis called <I>/etc/vfstab.exclude</I><B> </B>containing the following lines:</LI></P></UL>
+<DIR>
+<DIR>
+
+</FONT><FONT FACE="Courier" SIZE=1><P>/home2</P>
+<P>/home3</P>
+<P>/home4</P>
+<P>/home5</P>
+<P>/home6</P></DIR>
+</DIR>
+
+
+<UL>
+</FONT><FONT FACE="Times" SIZE=2><P ALIGN="JUSTIFY"><LI>Then run this command every night: </LI></P>
+</FONT><FONT FACE="Courier" SIZE=2><P ALIGN="JUSTIFY"><LI># Hostdump.sh level device1 blocking-factor logfile1 elvis</LI></P>
+</FONT><FONT FACE="Times" SIZE=2><P ALIGN="JUSTIFY"><LI>This will back up the entire system, excluding what is in /etc/vfstab.exclude.</LI></P></UL>
+
+<P ALIGN="JUSTIFY">&nbsp;</P>
+<OL TYPE="a">
+
+<P ALIGN="JUSTIFY"><LI>Second, back up the other file systems on other tapes.  Run these two commands every night:</LI></P></OL>
+<DIR>
+<DIR>
+
+</FONT><FONT FACE="Courier" SIZE=1><P># <B>Hostdump.sh <I>level device2 blocking-factor logfile2</I> elvis:/home1 elvis:/home2 elvis:/home3 elvis:/home4</FONT><FONT FACE="Courier New" SIZE=1> </P>
+</B></FONT><FONT FACE="Courier" SIZE=1><P># <B>Hostdump.sh <I>level device3 blocking-factor logfile3</I> elvis:/home5 elvis:/home6</P>
+</B></FONT><FONT SIZE=2></DIR>
+</DIR>
+</FONT></BODY>
+</HTML>

@@ -1,0 +1,14 @@
+#!/usr/bin/perl
+# countfrom - count number of messages from each sender
+
+$filename = $ARGV[0] || "-";
+
+open(FILE, "<$filename")         or die "Can't open $filename : $!";
+
+while(<FILE>) {
+    if (/^From: (.*)/) { $from{$1}++ }
+}
+
+foreach $person (sort keys %from) {    
+    print "$person: $from{$person}\n";
+}

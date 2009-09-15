@@ -1,0 +1,316 @@
+# using arrays
+print "Today is day ", (localtime)[7], " of the current year.\n";
+Today is day 117 of the current year.
+
+# using Time::tm objects
+use Time::localtime;
+$tm = localtime;
+print "Today is day ", $tm->yday, " of the current year.\n";
+Today is day 117 of the current year.
+------------------------
+($DAY, $MONTH, $YEAR) = (localtime)[3,4,5];
+
+------------------------
+use Time::localtime;
+$tm = localtime;
+($DAY, $MONTH, $YEAR) = ($tm->mday, $tm->mon, $tm->year);
+------------------------
+($day, $month, $year) = (localtime)[3,4,5];
+printf("The current date is %04d %02d %02d\n", $year+1900, $month+1, $day);
+The current date is 1998 04 28
+------------------------
+($day, $month, $year) = (localtime)[3..5];
+
+------------------------
+use Time::localtime;
+$tm = localtime;
+printf("The current date is %04d-%02d-%02d\n", $tm->year+1900, 
+    ($tm->mon)+1, $tm->mday);
+The current date is 1998-04-28
+------------------------
+printf("The current date is %04d-%02d-%02d\n",
+       sub {($_[5]+1900, $_[4]+1, $_[3])}->(localtime));
+------------------------
+use POSIX qw(strftime);
+print strftime "%Y-%m-%d\n", localtime;
+------------------------
+use Time::Local;
+$TIME = timelocal($sec, $min, $hours, $mday, $mon, $year);
+$TIME = timegm($sec, $min, $hours, $mday, $mon, $year);
+------------------------
+# $hours, $minutes, and $seconds represent a time today,
+# in the current time zone
+use Time::Local;
+$time = timelocal($seconds, $minutes, $hours, (localtime)[3,4,5]);
+------------------------
+# $day is day in month (1-31)
+# $month is month in year (1-12)
+# $year is four-digit year e.g., 1967
+# $hours, $minutes and $seconds represent UTC time 
+use Time::Local;
+$time = timegm($seconds, $minutes, $hours, $day, $month-1, $year-1900);
+------------------------------
+($seconds, $minutes, $hours, $day_of_month, $month, $year,
+    $wday, $yday, $isdst) = localtime($TIME);
+------------------------------
+use Time::localtime;        # or Time::gmtime
+$tm = localtime($TIME);     # or gmtime($TIME)
+$seconds = $tm->sec;
+# ...
+------------------------------
+($seconds, $minutes, $hours, $day_of_month, $month, $year,
+    $wday, $yday, $isdst) = localtime($time);
+printf("Dateline: %02d:%02d:%02d-%04d/%02d/%02d\n",
+    $hours, $minutes, $seconds, $year+1900, $month+1,
+    $day_of_month);
+------------------------------
+use Time::localtime;
+$tm = localtime($time);
+printf("Dateline: %02d:%02d:%02d-%04d/%02d/%02d\n",
+    $tm->hour, $tm->min, $tm->sec, $tm->year+1900,
+    $tm->mon+1, $tm->mday);
+------------------------------
+$when = $now + $difference;
+$then = $now - $difference;
+------------------------------
+use Date::Calc qw(Add_Delta_Days);
+($y2, $m2, $d2) = Add_Delta_Days($y, $m, $d, $offset);
+------------------------------
+use Date::DateCalc qw(Add_Delta_DHMS);
+($year2, $month2, $day2, $h2, $m2, $s2) = 
+    Add_Delta_DHMS( $year, $month, $day, $hour, $minute, $second,
+                $days_offset, $hour_offset, $minute_offset, $second_offset );
+------------------------------
+$birthtime = 96176750;                  # 18/Jan/1973, 3:45:50 am
+$interval = 5 +                         # 5 seconds
+            17 * 60 +                   # 17 minutes
+            2  * 60 * 60 +              # 2 hours
+            55 * 60 * 60 * 24;          # and 55 days
+$then = $birthtime + $interval;
+print "Then is ", scalar(localtime($then)), "\n";
+Then is Wed Mar 14 06:02:55 1973
+------------------------------
+use Date::Calc qw(Add_Delta_DHMS);
+($year, $month, $day, $hh, $mm, $ss) = Add_Delta_DHMS(
+    1973, 1, 18, 3, 45, 50, # 18/Jan/1973, 3:45:50 am
+             55, 2, 17, 5); # 55 days, 2 hrs, 17 min, 5 sec
+print "To be precise: $hh:$mm:$ss, $month/$day/$year\n";
+To be precise: 6:2:55, 3/14/1973
+-----------------------------
+use Date::DateCalc qw(Add_Delta_Days);
+($year, $month, $day) = Add_Delta_Days(1973, 1, 18, 55);
+print "Nat was 55 days old on: $month/$day/$year\n";
+Nat was 55 days old on: 3/14/1973
+-----------------------------
+$seconds = $recent - $earlier;
+
+-----------------------------
+use Date::Calc qw(Delta_Days);
+$days = Delta_Days( $year1, $month1, $day1, $year2, $month2, $day2);
+-----------------------------
+use Date::Calc qw(Delta_DHMS);
+($days, $hours, $minutes, $seconds) =
+  Delta_DHMS( $year1, $month1, $day1, $hour1, $minute1, $seconds1,  # earlier
+              $year2, $month2, $day2, $hour2, $minute2, $seconds2); # later
+-----------------------------
+$bree = 361535725;          # 16 Jun 1981, 4:35:25
+$nat  =  96201950;          # 18 Jan 1973, 3:45:50
+
+$difference = $bree - $nat;
+print "There were $difference seconds between Nat and Bree\n";
+There were 266802575 seconds between Nat and Bree
+
+$seconds    =  $difference % 60;
+$difference = ($difference - $seconds) / 60;
+$minutes    =  $difference % 60;
+$difference = ($difference - $minutes) / 60;
+$hours      =  $difference % 24;
+$difference = ($difference - $hours)   / 24;
+$days       =  $difference % 7;
+$weeks      = ($difference - $days)    /  7;
+
+print "($weeks weeks, $days days, $hours:$minutes:$seconds)\n";
+(441 weeks, 0 days, 23:49:35)
+-----------------------------
+use Date::Calc qw(Delta_Days);
+@bree = (1981, 6, 16);      # 16 Jun 1981
+@nat  = (1973, 1, 18);      # 18 Jan 1973
+$difference = Delta_Days(@nat, @bree);
+print "There were $difference days between Bree and Nat\n";
+There were 3071 days between Bree and Nat
+-----------------------------
+use Date::Calc qw(Delta_DHMS);
+@bree = (1981, 6, 16, 4, 35, 25);   # 16 Jun 1981, 4:35:25
+@nat  = (1973, 1, 18, 3, 45, 50);   # 18 Jan 1973, 3:45:50
+@diff = Delta_DHMS(@nat, @bree);
+print "Bree came $diff[0] days, $diff[1]:$diff[2]:$diff[3] after Nat\n";
+Bree came 3071 days, 0:49:35 after Nat
+-----------------------------
+($MONTHDAY, $WEEKDAY, $YEARDAY) = (localtime $DATE)[3,6,7];
+$WEEKNUM = int($YEARDAY / 7) + 1;
+-----------------------------
+use Date::Calc qw(Day_of_Week Week_Number Day_of_Year);
+# you have $year, $month, and $day
+# $day is day of month, by definition.
+$wday = Day_of_Week($year, $month, $day);
+$wnum = Week_Number($year, $month, $day);
+$dnum = Day_of_Year($year, $month, $day);
+-----------------------------
+use Date::Calc qw(Day_of_Week Week_Number);
+
+$year  = 1981;
+$month = 6;         # (June)
+$day   = 16;
+
+@days = qw:Error Monday Tuesday Wednesday Thursday Friday Saturday Sunday:;
+
+$wday = Day_of_Week($year, $month, $day);
+print "$month/$day/$year was a $days[$wday]\n";
+
+$wnum = Week_Number($year, $month, $day);
+print "in the $wnum week.\n";
+6/16/1981 was a Tuesday
+in the 25 week.
+-----------------------------
+use Time::Local;
+# $date is "1998-06-03" (YYYY-MM-DD form).
+($yyyy, $mm, $dd) = ($date =~ /(\d+)-(\d+)-(\d+)/;
+# calculate epoch seconds at midnight on that day in this timezone
+$epoch_seconds = timelocal(0, 0, 0, $dd, $mm, $yyyy);
+-----------------------------
+use Date::Manip qw(ParseDate UnixDate);
+$date = ParseDate($STRING);
+if (!$date) {
+    # bad date
+} else {
+    @VALUES = UnixDate($date, @FORMATS);
+}
+------------------------------
+use Date::Manip qw(ParseDate UnixDate);
+
+while (<>) {
+    $date = ParseDate($_);
+    if (!$date) {
+        warn "Bad date string: $_\n";
+        next;
+    } else {
+        ($year, $month, $day) = UnixDate($date, "%Y", "%m", "%d");
+        print "Date was $month/$day/$year\n";
+    }
+}
+------------------------------
+use POSIX qw(strftime);
+$STRING = strftime($FORMAT, $SECONDS, $MINUTES, $HOUR,
+                   $DAY_OF_MONTH, $MONTH, $YEAR, $WEEKDAY,
+                   $YEARDAY, $DST);
+------------------------------
+use Date::Manip qw(UnixDate);
+$STRING = UnixDate($DATE, $FORMAT);
+------------------------------
+Sun Sep 21 15:33:36 1997
+
+------------------------------
+use Time::Local;
+$time = timelocal(50, 45, 3, 18, 0, 73);
+print "Scalar localtime gives: ", scalar(localtime($time)), "\n";
+Scalar localtime gives: Thu Jan 18 03:45:50 1973
+------------------------------
+use POSIX qw(strftime);
+use Time::Local;
+$time = timelocal(50, 45, 3, 18, 0, 73);
+print "strftime gives: ", strftime("%A %D", localtime($time)), "\n";
+strftime gives: Thursday 01/18/73
+------------------------------
+use Date::Manip qw(ParseDate UnixDate);
+$date = ParseDate("18 Jan 1973, 3:45:50");
+$datestr = UnixDate($date, "%a %b %e %H:%M:%S %z %Y");    # as scalar
+print "Date::Manip gives: $datestr\n";
+Date::Manip gives: Thu Jan 18 03:45:50 GMT 1973
+------------------------------
+use Time::HiRes qw(gettimeofday);
+$t0 = gettimeofday;
+## do your operation here
+$t1 = gettimeofday;
+$elapsed = $t1-$t0;
+# $elapsed is a floating point value, representing number
+# of seconds between $t1 and $t2
+---------------------------
+require 'sys/syscall.ph';
+
+# initialize the structures returned by gettimeofday
+$TIMEVAL_T = "LL";
+$done = $start = pack($TIMEVAL_T, ());
+
+# prompt
+print "Press return when ready: ";
+
+# read the time into $start
+syscall(&SYS_gettimeofday, $start, 0)) != -1
+           || die "gettimeofday: $!";
+
+# read a line
+$line = <>;
+
+# read the time into $done
+syscall(&SYS_gettimeofday, $done, 0) != -1
+       || die "gettimeofday: $!";
+
+# expand the structure
+@start = unpack($TIMEVAL_T, $start);
+@done  = unpack($TIMEVAL_T, $done);
+
+# fix microseconds
+for ($done[1], $start[1]) { $_ /= 1_000_000 }
+    
+# calculate time difference
+$delta_time = sprintf "%.4f", ($done[0]  + $done[1]  )
+                                         -
+                              ($start[0] + $start[1] );
+
+print "That took $delta_time seconds\n";
+Press return when ready: 
+That took 0.3037 seconds
+---------------------------
+use Time::HiRes qw(gettimeofday);
+# take mean sorting time
+$size = 500;
+$number_of_times = 100;
+$total_time = 0;
+
+for ($i = 0; $i < $number_of_times; $i++) {
+    my (@array, $j, $begin, $time);
+    # populate array
+    @array = ();
+    for ($j=0; $j<$size; $j++) { push(@array, rand) }
+
+    # sort it
+    $begin = gettimeofday;
+    @array = sort { $a <=> $b } @array;
+    $time = gettimeofday-$t1;
+    $total_time += $time;
+}
+
+printf "On average, sorting %d random numbers takes %.5f seconds\n",
+    $size, ($total_time/$number_of_times);
+On average, sorting 500 random numbers takes 0.02821 seconds
+-----------------------------
+use Time::HiRes qw(sleep);
+sleep($time_to_sleep);
+-----------------------------
+while (<>) {
+    select(undef, undef, undef, 0.25);
+    print;
+}
+-----------------------------
+use Time::HiRes qw(sleep);
+while (<>) {
+    sleep(0.25);
+    print;
+}
+-----------------------------
+use Date::Manip qw(ParseDate DateCalc);
+$d1 = ParseDate("Tue, 26 May 1998 23:57:38 -0400");
+$d2 = ParseDate("Wed, 27 May 1998 05:04:03 +0100");
+print DateCalc($d1, $d2);
++0:0:0:0:0:6:25
+-----------------------------

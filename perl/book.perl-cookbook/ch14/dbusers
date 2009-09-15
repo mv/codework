@@ -1,0 +1,29 @@
+#!/usr/bin/perl -w
+# dbusers - manage MySQL user table
+use DBI;
+use User::pwent;
+
+$dbh = DBI->connect('DBI:mysql:dbname:mysqlserver.domain.com:3306',
+                    'user', 'password',
+                    { RaiseError => 1 })
+  or die "connecting : $DBI::errstr\n";
+
+$dbh->do("CREATE TABLE users (uid INT, login CHAR(8))");
+
+$sql_fmt = "INSERT INTO users VALUES( %d, %s )";
+while ($user = getpwent) {
+    $sql = sprintf($sql_fmt, $user->uid, $dbh->quote($user->name));
+    $dbh->do($sql);
+}
+
+$sth = $dbh->prepare("SELECT * FROM users WHERE uid < 50");
+$sth->execute;
+
+while ((@row) = $sth->fetchrow) {
+    print join(", ", map {defined $_ ? $_ : "(null)"} @row), "\n";
+}
+$sth->finish;
+
+$dbh->do("DROP TABLE users");
+
+$dbh->disconnect;

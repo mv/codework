@@ -1,0 +1,19 @@
+#!/usr/bin/perl
+# grepauth - print lines that mention both Tom and Nat
+
+$multimatch = build_match_all(q/Tom/, q/Nat/);
+while (<>) {
+    print if &$multimatch;
+}
+exit;
+
+sub build_match_any { build_match_func('||', @_) }
+sub build_match_all { build_match_func('&&', @_) }
+sub build_match_func {
+    my $condition = shift;
+    my @pattern = @_;  # must be lexical variable, not dynamic one
+    my $expr = join $condition => map { "m/\$pattern[$_]/o" } (0..$#pattern);
+    my $match_func = eval "sub { local \$_ = shift if \@_; $expr }";
+    die if $@;  # propagate $@; this shouldn't happen!
+    return $match_func;
+}

@@ -1,0 +1,13 @@
+#!/usr/bin/perl -w
+# oreobounce - set a cookie and redirect the browser
+use CGI qw(:cgi);
+
+$oreo = cookie( -NAME    => 'filling',
+                -VALUE   => "vanilla crème",
+                -EXPIRES => '+3M',    # M for month, m for minute
+                -DOMAIN  => '.perl.com');
+
+$whither  = "http://somewhere.perl.com/nonesuch.html";
+
+print redirect( -URL     => $whither,
+                -COOKIE  => $oreo);

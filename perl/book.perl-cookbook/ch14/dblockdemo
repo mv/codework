@@ -1,0 +1,50 @@
+#!/usr/bin/perl
+# dblockdemo - demo locking dbm databases
+use DB_File;
+use strict;
+
+sub LOCK_SH { 1 }                   # In case you don't have
+sub LOCK_EX { 2 }                   # the standard Fcntl module.  You
+sub LOCK_NB { 4 }                   # should, but who can tell
+sub LOCK_UN { 8 }                   # how those chips fall?
+
+my($oldval, $fd, $db, %db, $value, $key);
+
+$key    = shift || 'default';
+$value  = shift || 'magic';
+$value .= " $$";
+
+$db = tie(%db, 'DB_File', '/tmp/foo.db', O_CREAT|O_RDWR, 0666)
+    or die "dbcreat /tmp/foo.db $!";
+$fd = $db->fd;                      # need this for locking
+print "$$: db fd is $fd\n";
+open(DB_FH, "+<&=$fd")
+    or die "dup $!";
+
+unless (flock (DB_FH, LOCK_SH | LOCK_NB)) {
+    print "$$: CONTENTION; can't read during write update!
+                Waiting for read lock ($!) ....";
+    unless (flock (DB_FH, LOCK_SH)) { die "flock: $!" }
+}
+print "$$: Read lock granted\n";
+
+$oldval = $db{$key};
+print "$$: Old value was $oldval\n";
+flock(DB_FH, LOCK_UN);
+
+unless (flock (DB_FH, LOCK_EX | LOCK_NB)) {
+    print "$$: CONTENTION; must have exclusive lock!
+                Waiting for write lock ($!) ....";
+    unless (flock (DB_FH, LOCK_EX)) { die "flock: $!" }
+}
+
+print "$$: Write lock granted\n";
+$db{$key} = $value;
+$db->sync;  # to flush
+sleep 10;
+
+flock(DB_FH, LOCK_UN);
+undef $db;
+untie %db;
+close(DB_FH);
+print "$$: Updated db to $key=$value\n";

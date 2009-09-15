@@ -1,0 +1,202 @@
+-----------------------
+use DB_File;         			# optional; overrides default
+dbmopen %HASH, FILENAME, 0666    	# open database, accessed through %HASH
+    or die "Can't open FILENAME: $!\n";
+
+$V = $HASH{KEY};            	# retrieve from database
+$HASH{KEY} = VALUE;            	# put value into database
+if (exists $HASH{KEY}) {   	# check whether in database
+    # ...
+}
+delete $HASH{KEY};     		# remove from database
+dbmclose %HASH;        		# close the database
+-----------------------
+use DB_File;            	# load database module
+
+tie %HASH, "DB_File", FILENAME	# open database, to be accessed
+    or die "Can't open FILENAME: $!\n";    # through %HASH
+
+$V = $HASH{KEY};            	# retrieve from database
+$HASH{KEY} = VALUE;            	# put value into database
+if (exists $HASH{KEY}) {       	# check whether in database
+    # ...
+}
+delete $HASH{KEY};            	# delete from database
+untie %hash;            	# close the database
+-----------------------
+gnat     ttyp1   May 29 15:39   (coprolith.frii.com)
+-----------------------
+dbmopen(%HASH, $FILENAME, 0666)         or die "Can't open FILENAME: $!\n";
+%HASH = ();
+dbmclose %HASH;
+-----------------------
+use DB_File;
+
+tie(%HASH, "DB_File", $FILENAME)        or die "Can't open FILENAME: $!\n";
+%HASH = ();
+untie %hash;
+-----------------------
+unlink $FILENAME
+    or die "Couldn't unlink $FILENAME to empty the database: $!\n";
+dbmopen(%HASH, $FILENAME, 0666)
+    or die "Couldn't create $FILENAME database: $!\n";
+-----------------------
+% db2gdbm /tmp/users.db /tmp/users.gdbm
+-----------------------
+%OUTPUT = (%INPUT1, %INPUT2);
+
+-----------------------
+%OUTPUT = ();
+foreach $href ( \%INPUT1, \%INPUT2 ) {
+    while (my($key, $value) = each(%$href)) {
+        if (exists $OUTPUT{$key}) {
+            # decide which value to use and set $OUTPUT{$key} if necessary
+        } else {
+            $OUTPUT{$key} = $value;
+        }
+    }
+}
+-----------------------
+use DB_File;
+
+# specify the Perl sub to do key comparison using the
+# exported $DB_BTREE hash reference
+$DB_BTREE->{'compare'} = sub {
+    my ($key1, $key2) = @_ ;
+    "\L$key1" cmp "\L$key2" ;
+};
+
+tie(%hash, "DB_File", $filename, O_RDWR|O_CREAT, 0666, $DB_BTREE)
+    or die "can't tie $filename: $!";
+-----------------------
+by           6
+camp         4
+Can't        1
+down         5
+Gibraltar    7
+go           3
+you          2
+-----------------------
+tie(%hash, "DB_File", undef, O_RDWR|O_CREAT, 0666, $DB_BTREE)
+        or die "can't tie: $!";
+-----------------------
+use DB_File;
+
+tie(@array, "DB_File", "/tmp/textfile", O_RDWR|O_CREAT, 0666, $DB_RECNO)
+    or die "Cannot open file 'text': $!\en" ;
+
+$array[4] = "a new line";
+untie @array;
+-----------------------
+    foreach $item (@lines) { }
+-----------------------
+    foreach $i (0 .. $dbobj->length - 1) { }
+-----------------------
+    for ($done_yet = $dbobj->get($k, $v, R_FIRST);
+         not $done_yet;
+         $done_yet = $dbobj->get($k, $v, R_NEXT) )
+    {
+        # process key or value
+    }
+-----------------------
+use MLDBM 'DB_File';
+tie(%HASH, 'MLDBM', [... other DBM arguments]) or die $!;
+-----------------------
+# %hash is a tied hash
+$hash{"Tom Christiansen"} = [ "book author", 'tchrist@perl.com' ];          
+$hash{"Tom Boutell"} = [ "shareware author", 'boutell@boutell.com' ];
+
+# names to compare
+$name1 = "Tom Christiansen";
+$name2 = "Tom Boutell";
+
+$tom1 = $hash{$name1};      # snag local pointer
+$tom2 = $hash{$name2};      # and another           
+
+print "Two Toming: $tom1 $tom2\n";
+
+ARRAY(0x73048)ARRAY(0x73e4c)
+----------------------
+if ($tom1->[0] eq $tom2->[0] &&
+    $tom1->[1] eq $tom2->[1]) {
+    print "You're having runtime fun with one Tom made two.\n";
+} else {
+    print "No two Toms are ever alike.\n";
+}
+---------------------
+if ($hash{$name1}->[0] eq $hash{$name2}->[0] &&     # INEFFICIENT
+    $hash{$name1}->[1] eq $hash{$name2}->[1]) {
+    print "You're having runtime fun with one Tom made two.\n";
+} else {
+    print "No two Toms are ever alike.\n";
+}
+---------------------
+$hash{"Tom Boutell"}->[0] = "Poet Programmer";      # WRONG
+---------------------
+$entry = $hash{"Tom Boutell"};                      # RIGHT
+$entry->[0] = "Poet Programmer";
+$hash{"Tom Boutell"} = $entry;
+---------------------
+use MLDBM 'DB_File';
+
+my ($VARIABLE1,$VARIABLE2);
+my $Persistent_Store = '/projects/foo/data';
+BEGIN {
+    my %data;
+    tie(%data, 'MLDBM', $Persistent_Store)
+        or die "Can't tie to $Persistent_Store : $!";
+    $VARIABLE1 = $data{VARIABLE1};
+    $VARIABLE2 = $data{VARIABLE2};
+    # ...
+    untie %data;
+}
+END {
+    my %data;
+    tie (%data, 'MLDBM', $Persistent_Store)
+        or die "Can't tie to $Persistent_Store : $!";
+    $data{VARIABLE1} = $VARIABLE1;
+    $data{VARIABLE2} = $VARIABLE2;
+    # ...
+    untie %data;
+}
+---------------------
+push(@{$db{$user}}, $duration);
+---------------------
+use DBI;
+
+$dbh = DBI->connect('DBI:driver', 'username', 'auth',
+            { PrintError => 1, RaiseError => 1})
+    or die "connecting: $DBI::errstr";
+$dbh->do(SQL)
+    or die "doing: ", $dbh->errstr;
+$sth = DBI->prepare(SQL)
+    or die "preparing: ", $dbh->errstr;
+$sth->execute
+    or die "executing: ", $sth->errstr;
+while (@row = $sth->fetchrow_array) {
+    # ...
+}
+$sth->finish;
+$dbh->disconnect;
+---------------------
+disconnect(DBI::db=HASH(0x9df84)) invalidates 1 active cursor(s) 
+	at -e line 1.
+---------------------
+% ggh http://www.perl.com/index.html
+---------------------
+% ggh perl
+---------------------
+% ggh mailto:
+---------------------
+% ggh -regexp '(?i)\bfaq\b'
+---------------------
+% ggh -epoch http://www.perl.com/perl/
+---------------------
+% ggh -gmtime http://www.perl.com/perl/
+---------------------
+% ggh | less
+---------------------
+% ggh -epoch | sort -rn | less
+---------------------
+% ggh -epoch | sort -rn | perl -pe 's/\d+/localtime $&/e' | less
+---------------------

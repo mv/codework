@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+# weekearly -- set someone's login date back a week
+use User::pwent;
+use IO::Seekable;
+
+$typedef = 'L A12 A16';         # linux fmt; sunos is "L A8 A16"
+$sizeof  = length(pack($typedef, ()));
+$user    = shift(@ARGV) || $ENV{USER} || $ENV{LOGNAME};
+
+$address = getpwnam($user)->uid * $sizeof;
+
+open (LASTLOG, "+</var/log/lastlog")
+    or die "can't update /usr/adm/lastlog: $!";
+seek(LASTLOG, $address, SEEK_SET)
+    or die "seek failed: $!";
+read(LASTLOG, $buffer, $sizeof) == $sizeof
+    or die "read failed: $!";
+
+($time, $line, $host) = unpack($typedef, $buffer);
+$time  -= 24 * 7 * 60 * 60;         # back-date a week
+$buffer = pack($typedef, $time, $line, $time);
+
+seek(LASTLOG, -$sizeof, SEEK_CUR)   # backup one record
+    or die "seek failed: $!";
+print LASTLOG $record;
+    
+close(LASTLOG)
+    or die "close failed: $!";

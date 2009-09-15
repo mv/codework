@@ -1,0 +1,460 @@
+if ($string =~ /PATTERN/) {
+    # is a number
+} else {
+    # is not
+}
+----------------------------
+warn "has nondigits"        if     /\D/;
+warn "not a natural number" unless /^\d+$/;             # rejects -3
+warn "not an integer"       unless /^-?\d+$/;           # rejects +3
+warn "not an integer"       unless /^[+-]?\d+$/;
+warn "not a decimal number" unless /^-?\d+\.?\d*$/;     # rejects .2
+warn "not a decimal number" unless /^-?(?:\d+(?:\.\d*)?|\.\d+)$/;
+warn "not a C float"
+       unless /^([+-]?)(?=\d|\.\d)\d*(\.\d*)?([Ee]([+-]?\d+))?$/;
+----------------------------
+sub getnum {
+    use POSIX qw(strtod);
+    my $str = shift;
+    $str =~ s/^\s+//;
+    $str =~ s/\s+$//;
+    $! = 0;
+    my($num, $unparsed) = strtod($str);
+    if (($str eq '') || ($unparsed != 0) || $!) {
+        return;
+    } else {
+        return $num;
+    } 
+} 
+
+sub is_numeric { defined scalar &getnum } 
+----------------------------
+# equal(NUM1, NUM2, ACCURACY) : returns true if NUM1 and NUM2 are
+# equal to ACCURACY number of decimal places
+
+sub equal {
+    my ($A, $B, $dp) = @_;
+
+    return sprintf("%.${dp}g", $A) eq sprintf("%.${dp}g", $B);
+  }
+----------------------------
+$wage = 536;                # $5.36/hour
+$week = 40 * $wage;         # $214.40
+printf("One week's wage is: \$%.2f\n", $week/100);
+
+One week's wage is: $214.40
+----------------------------
+$rounded = sprintf("%FORMATf", $unrounded);
+---------------------------
+$a = 0.255;
+$b = sprintf("%.2f", $a);
+print "Unrounded: $a\nRounded: $b\n";
+printf "Unrounded: $a\nRounded: %.2f\n", $a;
+
+Unrounded: 0.255
+Rounded: 0.26
+Unrounded: 0.255
+Rounded: 0.26
+---------------------------
+use POSIX;
+print "number\tint\tfloor\tceil\n";
+@a = ( 3.3 , 3.5 , 3.7, -3.3 );
+foreach (@a) {
+    printf( "% .1f\t% .1f\t% .1f\t% .1f\n", 
+        $_, int($_), floor($_), ceil($_) );
+}
+
+number  int     floor   ceil
+ 3.3     3.0     3.0     4.0
+ 3.5     3.0     3.0     4.0
+ 3.7     3.0     3.0     4.0
+-3.3    -3.0    -4.0    -3.0
+---------------------------
+sub dec2bin {
+    my $str = unpack("B32", pack("N", shift));
+    $str =~ s/^0+(?=\d)//;   # otherwise you'll get leading zeros
+    return $str;
+}
+---------------------------
+sub bin2dec {
+    return unpack("N", pack("B32", substr("0" x 32 . shift, -32)));
+}
+---------------------------
+$num = bin2dec('0110110');  # $num is 54
+$binstr = dec2bin(54);      # $binstr is 110110
+foreach ($X .. $Y) {
+    # $_ is set to every integer from X to Y, inclusive
+}
+
+foreach $i ($X .. $Y) {
+    # $i is set to every integer from X to Y, inclusive
+    }
+
+for ($i = $X; $i <= $Y; $i++) {
+    # $i is set to every integer from X to Y, inclusive
+}
+
+for ($i = $X; $i <= $Y; $i += 7) {
+    # $i is set to every integer from X to Y, stepsize = 7
+}
+-----------------------------
+print "Infancy is: ";
+foreach (0 .. 2) {
+    print "$_ ";
+}
+print "\n";
+
+print "Toddling is: ";
+foreach $i (3 .. 4) {
+    print "$i ";
+}
+print "\n";
+
+print "Childhood is: ";
+for ($i = 5; $i <= 12; $i++) {
+    print "$i ";
+}
+print "\n";
+
+Infancy is: 0 1 2 
+Toddling is: 3 4 
+Childhood is: 5 6 7 8 9 10 11 12 
+-----------------------------
+use Roman;
+$roman = roman($arabic);                        # convert to roman numerals
+$arabic = arabic($roman) if isroman($roman);    # convert from roman numerals
+-----------------------------
+use Roman;
+$roman_fifteen = roman(15);                         # "xv"
+print "Roman for fifteen is $roman_fifteen\n";
+$arabic_fifteen = arabic($roman_fifteen);
+print "Converted back, $roman_fifteen is $arabic_fifteen\n";
+
+Roman for fifteen is xv
+Converted back, xv is 15
+-----------------------------
+$random = int( rand( $Y-$X+1 ) ) + $X;
+
+-----------------------------
+$random = int( rand(51)) + 25;
+print "$random\n";
+-----------------------------
+$elt = $array[ rand @array ];
+-----------------------------
+@chars = ( "A" .. "Z", "a" .. "z", 0 .. 9, qw(% ! @ $ % ^ & *) );
+$password = join("", @chars[ map { rand @chars } ( 1 .. 8 ) ]);
+-----------------------------
+srand EXPR;
+-----------------------------
+use Math::TrulyRandom;
+$random = truly_random_value();
+
+use Math::Random;
+$random = random_uniform();
+-----------------------------
+sub gaussian_rand {
+    my ($u1, $u2);  # uniformly distributed random numbers
+    my $w;          # variance, then a weight
+    my ($g1, $g2);  # gaussian-distributed numbers
+
+    do {
+        $u1 = 2 * rand() - 1;
+        $u2 = 2 * rand() - 1;
+        $w = $u1*$u1 + $u2*$u2;
+    } while ( $w >= 1 );
+
+    $w = sqrt( (-2 * log($w))  / $w );
+    $g2 = $u1 * $w;
+    $g1 = $u2 * $w;
+    # return both if wanted, else just one
+    return wantarray ? ($g1, $g2) : $g1;
+}
+-----------------------------
+# weight_to_dist: takes a hash mapping key to weight and returns
+# a hash mapping key to probability
+sub weight_to_dist {
+    my %weights = @_;
+    my %dist    = ();
+    my $total   = 0;
+    my ($key, $weight);
+    local $_;
+
+    foreach (values %weights) {
+        $total += $_;
+    }
+
+    while ( ($key, $weight) = each %weights ) {
+        $dist{$key} = $weight/$total;
+    }
+
+    return %dist;
+}
+
+# weighted_rand: takes a hash mapping key to probability, and
+# returns the corresponding element
+sub weighted_rand {
+    my %dist = @_;
+    my ($key, $weight);
+
+    while (1) {                     # to avoid floating point inaccuracies
+        my $rand = rand;
+        while ( ($key, $weight) = each %dist ) {
+            return $key if ($rand -= $weight) < 0;
+        }
+    }
+}
+-----------------------------
+# gaussian_rand as above
+$mean = 25;
+$sdev = 2;
+$salary = gaussian_rand() * $sdev + $mean;
+printf("You have been hired at \$%.2f\n", $salary);
+-----------------------------
+BEGIN { 
+    use constant PI => 3.14159265358979;
+
+    sub deg2rad {
+        my $degrees = shift;
+        return ($degrees / 180) * PI;
+    }
+
+    sub rad2deg {
+        my $radians = shift;
+        
+return ($radians / PI) * 180;
+    }
+}
+-----------------------------
+$radians = deg2rad($degrees);
+$degrees = rad2deg($radians);
+-----------------------------
+# deg2rad and rad2deg defined either as above or from Math::Trig
+sub degree_sine {
+    my $degrees = shift;
+    my $radians = deg2rad($degrees);
+    my $result = sin($radians);
+
+    return $result;
+}
+-----------------------------
+sub tan {
+    my $theta = shift;
+
+    return sin($theta)/cos($theta);
+}
+-----------------------------
+use POSIX;
+
+$y = acos(3.7);
+-----------------------------
+use Math::Trig;
+
+$y = acos(3.7);
+-----------------------------
+eval {
+    $y = tan($pi/2);
+} or return undef;
+-----------------------------
+$log_e = log(VALUE);
+-----------------------------
+use POSIX qw(log10);
+$log_10 = log10(VALUE);
+-----------------------------
+sub log_base {
+    my ($base, $value) = @_;
+    return log($value)/log($base);
+}
+-----------------------------
+# log_base defined as above
+$answer = log_base(10, 10_000);
+print "log10(10,000) = $answer\n";
+log10(10,000) = 4
+-----------------------------
+use Math::Complex;
+printf "log2(1024) = %lf\n", logn(1024, 2); # watch out for argument order!
+log2(1024) = 10.000000
+---------------------------
+use PDL;
+# $a and $b are both pdl objects
+$c = $a * $b;
+---------------------------
+sub mmult {
+    my ($m1,$m2) = @_;
+    my ($m1rows,$m1cols) = matdim($m1);
+    my ($m2rows,$m2cols) = matdim($m2);
+
+    unless ($m1cols == $m2rows) {  # raise exception
+        die "IndexError: matrices don't match: $m1cols != $m2rows";
+    }
+
+    my $result = [];
+    my ($i, $j, $k);
+
+    for $i (range($m1rows)) {
+        for $j (range($m2cols)) {
+            for $k (range($m1cols)) {
+                $result->[$i][$j] += $m1->[$i][$k] * $m2->[$k][$j];
+            }
+        }
+    }
+    return $result;
+}
+
+sub range { 0 .. ($_[0] - 1) }
+
+sub veclen {
+    my $ary_ref = $_[0];
+    my $type = ref $ary_ref;
+    if ($type ne "ARRAY") { die "$type is bad array ref for $ary_ref" }
+    return scalar(@$ary_ref);
+}
+
+sub matdim {
+    my $matrix = $_[0];
+    my $rows = veclen($matrix);
+    my $cols = veclen($matrix->[0]);
+    return ($rows, $cols);
+}
+----------------------------
+$a = pdl [
+    [ 3, 2, 3 ],
+    [ 5, 9, 8 ],
+];
+
+$b = pdl [
+    [ 4, 7 ],
+    [ 9, 3 ],
+    [ 8, 1 ],
+];
+
+$c = $a x $b;  # x overload
+----------------------------
+# $c = $a * $b manually
+$c_real = ( $a_real * $b_real ) - ( $a_imaginary * $b_imaginary );
+$c_imaginary = ( $a_real * $b_imaginary ) + ( $b_real * $a_imaginary );
+
+----------------------------
+# $c = $a * $b using Math::Complex
+use Math::Complex;
+$c = $a * $b;
+----------------------------
+$a_real = 3; $a_imaginary = 5;              # 3 + 5i;
+$b_real = 2; $b_imaginary = -2;             # 2 - 2i;
+$c_real = ( $a_real * $b_real ) - ( $a_imaginary * $b_imaginary );
+$c_imaginary = ( $a_real * $b_imaginary ) + ( $b_real * $a_imaginary );
+print "c = ${c_real}+${c_imaginary}i\n";
+
+c = 16+4i
+----------------------------
+use Math::Complex;
+$a = Math::Complex->new(3,5);               # or Math::Complex->new(3,5);
+$b = Math::Complex->new(2,-2);
+$c = $a * $b;
+print "c = $c\n";
+
+c = 16+4i
+----------------------------
+use Math::Complex;
+$c = cplx(3,5) * cplx(2,-2);                # easier on the eye
+$d = 3 + 4*i;                               # 3 + 4i
+printf "sqrt($d) = %s\n", sqrt($d);
+
+sqrt(3+4i) = 2+i
+----------------------------
+$number = hex($hexadecimal);         # hexadecimal
+$number = oct($octal);               # octal
+----------------------------
+print "Gimme a number in decimal, octal, or hex: ";
+$num = <STDIN>;
+chomp $num;
+exit unless defined $num;
+$num = oct($num) if $num =~ /^0/; # does both oct and hex
+printf "%d %x %o\n", $num, $num, $num;
+----------------------------
+sub commify {
+    my $text = reverse $_[0];
+    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+    return scalar reverse $text;
+}
+----------------------------
+# more reasonable web counter :-)
+use Math::TrulyRandom;
+$hits = truly_random_value();       # negative hits!
+$output = "Your web page received $hits accesses last month.\n";
+print commify($output);
+Your web page received -1,740,525,205 accesses last month.
+----------------------------
+printf "It took %d hour%s\n", $time, $time == 1 ? "" : "s";
+
+printf "%d hour%s %s enough.\n", $time, 
+        $time == 1 ? ""   : "s";
+        $time == 1 ? "is" : "are";
+----------------------------
+printf "It took %d centur%s", $time, $time == 1 ? "y" : "ies";
+
+----------------------------
+sub noun_plural {
+    local $_ = shift;
+    # order really matters here!
+    s/ss$/sses/                             ||
+    s/([psc]h)$/${1}es/                     ||
+    s/z$/zes/                               ||
+    s/ff$/ffs/                              ||
+    s/f$/ves/                               ||
+    s/ey$/eys/                              ||
+    s/y$/ies/                               ||
+    s/ix$/ices/                             ||
+    s/([sx])$/$1es/                         ||
+    s/$/s/                                  ||
+                die "can't get here";
+    return $_;
+}
+*verb_singular = \&noun_plural;   # make function alias
+--------------------------
+use Lingua::EN::Inflect qw(PL classical);
+classical(1);               # why isn't this the default?
+while (<DATA>) {            # each line in the data
+    for (split) {           # each word on the line
+        print "One $_, two ", PL($_), ".\n";
+    }
+} 
+# plus one more
+$_ = 'secretary general';
+print "One $_, two ", PL($_), ".\n";
+
+__END__
+fish fly ox 
+species genus phylum 
+cherub radius jockey 
+index matrix mythos
+phenomenon formula 
+--------------------------
+That produces the following: 
+One fish, two fish.
+One fly, two flies.
+One ox, two oxen.
+One species, two species.
+One genus, two genera.
+One phylum, two phyla.
+One cherub, two cherubim.
+One radius, two radii.
+One jockey, two jockeys.
+One index, two indices.
+One matrix, two matrices.
+One mythos, two mythoi.
+One phenomenon, two phenomena.
+One formula, two formulae.
+One secretary general, two secretaries general.
+--------------------------
+% factors 8 9 96 2178
+8          2**3
+9          3**2
+96         2**5 3
+2178       2 3**2 11**2
+--------------------------
+% factors 239322000000000000000000
++239322000000000000000000 2**19 3 5**18 +39887 
+
+% factors 25000000000000000000000000
++25000000000000000000000000 2**24 5**26
+-----------------------------

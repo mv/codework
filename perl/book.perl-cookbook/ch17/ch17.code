@@ -1,0 +1,421 @@
+use Socket;
+
+$packed_ip   = inet_aton("208.146.240.1");
+$socket_name = sockaddr_in($port, $packed_ip);
+-------------------------------
+use Socket;
+
+$socket_name = sockaddr_un("/tmp/mysock");
+-------------------------------
+($port, $packed_ip) = sockaddr_in($socket_name);    # for PF_INET sockets
+($filename)         = sockaddr_un($socket_name);    # for PF_UNIX sockets
+-------------------------------
+$ip_address = inet_ntoa($packed_ip);
+$packed_ip  = inet_aton("204.148.40.9");
+$packed_ip  = inet_aton("www.oreilly.com");
+-------------------------------
+use IO::Socket;
+
+$socket = IO::Socket::INET->new(PeerAddr => $remote_host,
+                                PeerPort => $remote_port,
+                                Proto    => "tcp",
+                                Type     => SOCK_STREAM)
+    or die "Couldn't connect to $remote_host:$remote_port : $@\n";
+
+# ... do something with the socket
+print $socket "Why don't you call me anymore?\n";
+
+$answer = <$socket>;
+
+# and terminate the connection when we're done
+close($socket);
+-------------------------------
+use Socket;
+
+# create a socket
+socket(SERVER, PF_INET, SOCK_STREAM, getprotobyname('tcp'));
+
+# build the address of the remote machine
+$internet_addr = inet_aton($remote_host)
+    or die "Couldn't convert $remote_host into an Internet address: $!\n";
+$paddr = sockaddr_in($remote_port, $internet_addr);
+
+# connect
+connect(TO_SERVER, $paddr)
+    or die "Couldn't connect to $remote_host:$remote_port : $!\n";
+
+# ... do something with the socket
+print TO_SERVER "Why don't you call me anymore?\n";
+
+# and terminate the connection when we're done
+close(TO_SERVER);
+------------------------------
+$client = IO::Socket::INET->new("www.yahoo.com:80")
+    or die $@;
+------------------------------
+$s = IO::Socket::INET->new(PeerAddr => "Does not Exist",
+                           Peerport => 80,
+                           Type     => SOCK_STREAM )
+    or die $@;
+------------------------------
+$s = IO::Socket::INET->new(PeerAddr => "bad.host.com",
+                           PeerPort => 80,
+                           Type     => SOCK_STREAM,
+                           Timeout  => 5 )
+    or die $@;
+------------------------------
+$inet_addr = inet_aton("208.146.240.1");
+$paddr     = sockaddr_in($port, $inet_addr);
+bind(SOCKET, $paddr)         or die "bind: $!";
+------------------------------
+$inet_addr = gethostbyname("www.yahoo.com")
+                            or die "Can't resolve www.yahoo.com: $!";
+$paddr     = sockaddr_in($port, $inet_addr);
+bind(SOCKET, $paddr)        or die "bind: $!";
+------------------------------
+use IO::Socket;
+
+$server = IO::Socket::INET->new(LocalPort => $server_port,
+                                Type      => SOCK_STREAM,
+                                Reuse     => 1,
+                                Listen    => 10 )   # or SOMAXCONN
+    or die "Couldn't be a tcp server on port $server_port : $@\n";
+
+while ($client = $server->accept()) {
+    # $client is the new connection
+}
+
+close($server);
+------------------------------
+use Socket;
+
+# make the socket
+socket(SERVER, PF_INET, SOCK_STREAM, getprotobyname('tcp'));
+
+# so we can restart our server quickly
+setsockopt(SERVER, SOL_SOCKET, SO_REUSEADDR, 1);
+
+# build up my socket address
+$my_addr = sockaddr_in($server_port, INADDR_ANY);
+bind(SERVER, $my_addr)
+    or die "Couldn't bind to port $server_port : $!\n";
+
+# establish a queue for incoming connections
+listen(SERVER, SOMAXCONN)
+    or die "Couldn't listen on port $server_port : $!\n";
+
+# accept and process connections
+while (accept(CLIENT, SERVER)) {
+    # do something with CLIENT
+}
+
+close(SERVER);
+--------------------------------
+use Socket;
+
+while ($client_address = accept(CLIENT, SERVER)) {
+    ($port, $packed_ip) = sockaddr_in($client_address);
+    $dotted_quad = inet_ntoa($packed_ip);
+    # do as thou wilt
+}
+--------------------------------
+while ($client = $server->accept()) {
+    # ...
+}
+--------------------------------
+while (($client,$client_address) = $server->accept()) {
+    # ...
+}
+--------------------------------
+use Fcntl qw(F_GETFL F_SETFL O_NONBLOCK);
+
+$flags = fcntl($SERVER, F_GETFL, 0)
+            or die "Can't get flags for the socket: $!\n";
+
+$flags = fcntl($SERVER, F_SETFL, $flags | O_NONBLOCK)
+            or die "Can't set flags for the socket: $!\n";
+--------------------------------
+Use print or < > : 
+print SERVER "What is your name?\n";
+chomp ($response = <SERVER>);
+Or, use send and recv : 
+defined (send(SERVER, $data_to_send, $flags))
+    or die "Can't send : $!\n";
+
+recv(SERVER, $data_read, $maxlen, $flags)
+    or die "Can't receive: $!\n";
+Or, use the corresponding methods on an IO::Socket object: 
+use IO::Socket;
+
+$server->send($data_to_send, $flags)
+    or die "Can't send: $!\n";
+
+$server->recv($data_read, $flags)
+    or die "Can't recv: $!\n";
+To find out whether data can be read or written, use the select function, which is nicely wrapped by the standard IO::Socket class: 
+use IO::Select;
+
+$select = IO::Select->new();
+$select->add(*FROM_SERVER);
+$select->add($to_client);
+
+@read_from = $select->can_read($timeout);
+foreach $socket (@read_from) {
+    # read the pending data from $socket
+}
+-----------------------------------
+use IO::Select;
+
+$select = IO::Select->new();
+$select->add(*FROM_SERVER);
+$select->add($to_client);
+
+@read_from = $select->can_read($timeout);
+foreach $socket (@read_from) {
+    # read the pending data from $socket
+}
+-----------------------------------
+use Socket;
+require "sys/socket.ph";    # for &TCP_NODELAY
+
+setsockopt(SOCKET, SOL_SOCKET, &TCP_NODELAY, 1)
+    or die "Couldn't disable Nagle's algorithm: $!\n";
+-----------------------------------
+setsockopt(SOCKET, SOL_SOCKET, &TCP_NODELAY, 0)
+    or die "Couldn't enable Nagle's algorithm: $!\n";
+-----------------------------------
+$rin = '';                          # initialize bitmask
+vec($rin, fileno(SOCKET), 1) = 1;   # mark SOCKET in $rin
+# repeat calls to vec() for each socket to check
+
+$timeout = 10;                      # wait ten seconds
+
+$nfound = select($rout = $rin, undef, undef, $timeout);
+if (vec($rout, fileno(socket),1)){
+    # data to be read on SOCKET
+}
+-----------------------------------
+use Socket;
+socket(SockHandle, PF_INET, SOCK_DGRAM, getprotobyname("udp")) 
+    or die "socket: $!";
+-----------------------------------
+use IO::Socket;
+$handle = IO::Socket::INET->new(Proto => 'udp') 
+    or die "socket: $@";     # yes, it uses $@ here
+-----------------------------------
+$ipaddr   = inet_aton($HOSTNAME);
+$portaddr = sockaddr_in($PORTNO, $ipaddr);
+send(SockHandle, $MSG, 0, $portaddr) == length($MSG)
+        or die "cannot send to $HOSTNAME($PORTNO): $!";
+-----------------------------------
+$portaddr = recv(SockHandle, $MSG, $MAXLEN, 0)      or die "recv: $!";
+($portno, $ipaddr) = sockaddr_in($portaddr);
+$host = gethostbyaddr($ipaddr, AF_INET);
+print "$host($portno) said $MSG\n";
+-----------------------------------
+send(MYSOCKET, $msg_buffer, $flags, $remote_addr)
+    or die "Can't send: $!\n";
+-----------------------------------
+use IO::Socket;
+$server = IO::Socket::INET->new(LocalPort => $server_port,
+                                Proto     => "udp")
+    or die "Couldn't be a udp server on port $server_port : $@\n";
+-----------------------------------
+while ($him = $server->recv($datagram, $MAX_TO_READ, $flags)) {
+    # do something
+} 
+-----------------------------------
+use IO::Socket;
+
+unlink "/tmp/mysock";
+$server = IO::Socket::UNIX->new(LocalAddr => "/tmp/mysock",
+                                Type      => SOCK_DGRAM,
+                                Listen    => 5 )
+    or die $@;
+
+$client = IO::Socket::UNIX->new(PeerAddr  => "/tmp/mysock",
+                                Type      => SOCK_DGRAM,
+                                Timeout   => 10 )
+    or die $@;
+----------------------------------
+use Socket;
+    
+socket(SERVER, PF_UNIX, SOCK_STREAM, 0);
+unlink "/tmp/mysock";
+bind(SERVER, sockaddr_un("/tmp/mysock"))
+    or die "Can't create server: $!";
+
+socket(CLIENT, PF_UNIX, SOCK_STREAM, 0);
+connect(CLIENT, sockaddr_un("/tmp/mysock"))
+    or die "Can't connect to /tmp/mysock: $!";
+----------------------------------
+use Socket;
+
+$other_end         = getpeername(SOCKET)
+    or die "Couldn't identify other end: $!\n";
+($port, $iaddr)    = unpack_sockaddr_in($other_end);
+$ip_address        = inet_ntoa($iaddr);
+----------------------------------
+use Socket;
+
+$other_end        = getpeername(SOCKET)
+    or die "Couldn't identify other end: $!\n";
+($port, $iaddr)   = unpack_sockaddr_in($other_end);
+$actual_ip        = inet_ntoa($iaddr);
+$claimed_hostname = gethostbyaddr($iaddr, AF_INET);
+@name_lookup      = gethostbyname($claimed_hostname)
+    or die "Could not look up $claimed_hostname : $!\n";
+@resolved_ips     = map { inet_ntoa($_) }
+    @name_lookup[ 4 .. $#ips_for_hostname ];
+----------------------------------
+$packed_ip  = gethostbyname($name) or die "Couldn't look up $name : $!\n";
+$ip_address = inet_ntoa($packed_ip);
+----------------------------------
+use Sys::Hostname;
+
+$hostname = hostname();
+----------------------------------
+use POSIX qw(uname);
+($kernel, $hostname, $release, $version, $hardware) = uname();
+
+$hostname = (uname)[1];             # or just one
+----------------------------------
+use Socket;                         # for AF_INET
+$address  = gethostbyname($hostname)
+    or die "Couldn't resolve $hostname : $!";
+$hostname = gethostbyaddr($address, AF_INET)
+    or die "Couldn't re-resolve $hostname : $!";
+----------------------------------
+shutdown(SOCKET, 0);                # I/we have stopped reading data
+shutdown(SOCKET, 1);                # I/we have stopped writing data
+shutdown(SOCKET, 2);                # I/we have stopped using this socket
+----------------------------------
+$socket->shutdown(0);               # I/we have stopped reading data
+----------------------------------
+print SERVER "my request\n";        # send some data
+shutdown(SERVER, 1);                # send eof; no more writing
+$answer = <SERVER>;                 # but you can still read
+----------------------------------
+my $byte;
+while (sysread($handle, $byte, 1) == 1) {
+    print STDOUT $byte;
+}
+----------------------------------
+# set up the socket SERVER, bind and listen ...
+use POSIX qw(: sys_wait_h);
+
+sub REAPER {
+    1 until (-1 == waitpid(-1, WNOHANG));
+    $SIG{CHLD} = \&REAPER;                 # unless $] >= 5.002
+}
+
+$SIG{CHLD} = \&REAPER;
+
+while ($hisaddr = accept(CLIENT, SERVER)) {
+    next if $pid = fork;                    # parent
+    die "fork: $!" unless defined $pid;     # failure
+    # otherwise child
+    close(SERVER);                          # no use to child
+    # ... do something
+    exit;                                   # child leaves
+} continue { 
+    close(CLIENT);                          # no use to parent
+}
+------------------------------
+while ($inbuffer{$client} =~ s/(.*\n)//) {
+    push( @{$ready{$client}}, $1 );
+}
+------------------------------
+use Socket;
+
+socket(SERVER, PF_INET, SOCK_STREAM, getprotobyname('tcp'));
+setsockopt(SERVER, SOL_SOCKET, SO_REUSEADDR, 1);
+bind(SERVER, sockaddr_in($server_port, INADDR_ANY))
+    or die "Binding: $!\n";
+
+# accept loop
+while (accept(CLIENT, SERVER)) {
+    $my_socket_address = getsockname(CLIENT);
+    ($port, $myaddr)   = sockaddr_in($my_socket_address);
+}
+------------------------------
+$server = IO::Socket::INET->new(LocalPort => $server_port,
+                                Type      => SOCK_STREAM,
+                                Proto     => 'tcp',
+                                Listen    => 10)
+    or die "Can't create server socket: $@\n";
+
+while ($client = $server->accept()) {
+    $my_socket_address = $client->sockname();
+    ($port, $myaddr)   = sockaddr_in($my_socket_address);
+    # ...
+}
+------------------------------
+use Socket;
+
+$port = 4269;                       # port to bind to
+$host = "specific.host.com";        # virtual host to listen on
+
+socket(Server, PF_INET, SOCK_STREAM, getprotobyname("tcp"))
+    or die "socket: $!";
+bind(Server, sockaddr_in($port, inet_aton($host)))
+    or die "bind: $!";
+while ($client_address = accept(Client, Server)) {
+    # ...
+}
+------------------------------
+chroot("/var/daemon")
+    or die "Couldn't chroot to /var/daemon: $!";
+------------------------------
+$pid = fork;
+exit if $pid;
+die "Couldn't fork: $!" unless defined($pid);
+------------------------------
+use POSIX;
+
+POSIX::setsid()
+    or die "Can't start a new session: $!";
+------------------------------
+$time_to_die = 0;
+
+sub signal_handler {
+    $time_to_die = 1;
+}
+
+$SIG{INT} = $SIG{TERM} = $SIG{HUP} = \&signal_handler;
+# trap or ignore $SIG{PIPE}
+------------------------------
+until ($time_to_die) {
+    # ...
+}
+
+------------------------------
+$SELF = "/usr/local/libexec/myd";   # which program I am
+@ARGS = qw(-l /var/log/myd -d);     # program arguments
+
+$SIG{HUP} = \&phoenix;
+
+sub phoenix {
+    # close all your connections, kill your children, and
+    # generally prepare to be reincarnated with dignity.
+    exec($SELF, @ARGS)              or die "Couldn't restart: $!\n";
+}
+------------------------------
+$CONFIG_FILE = "/usr/local/etc/myprog/server_conf.pl";
+$SIG{HUP} = \&read_config;
+sub read_config {
+    do $CONFIG_FILE;
+} 
+------------------------------
+May 25 15:50:22 coprolith sniffer: Connection from 207.46.131.141 to
+207.46.130.164:echo 
+------------------------------
+echo    stream  tcp nowait  nobody /usr/scripts/snfsqrd sniffer
+
+------------------------------
+echo    stream  tcp nowait  nobody /usr/scripts/snfsqrd sniffer
+------------------------------
+% fwdport -s nntp -l fw.oursite.com -r news.bigorg.com
+------------------------------
+% fwdport -l myname:9191 -r news.bigorg.com:nntp
+------------------------------

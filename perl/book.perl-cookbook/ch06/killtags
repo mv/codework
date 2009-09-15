@@ -1,0 +1,7 @@
+#!/usr/bin/perl
+# killtags - very bad html tag killer
+undef $/;           # each read is whole file
+while (<>) {        # get one whole file at a time
+    s/<.*?>//gs;    # strip tags (terribly)
+    print;          # print file to STDOUT
+}

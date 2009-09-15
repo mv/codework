@@ -1,0 +1,34 @@
+#!/usr/bin/perl -w
+# mldbm_demo - show how to use MLDBM with DB_File
+
+use MLDBM "DB_File";
+
+$db = "/tmp/mldbm-array";
+
+tie %db, 'MLDBM', $db
+  or die "Can't open $db : $!";
+
+while(<DATA>) {
+    chomp;
+    ($user, $duration) = split(/\s+/, $_);
+    $array_ref = exists $db{$user} ? $db{$user} : [];
+    push(@$array_ref, $duration);
+    $db{$user} = $array_ref;
+}
+
+foreach $user (sort keys %db) {
+    print "$user: ";
+    $total = 0;
+    foreach $duration (@{ $db{$user} }) {
+        print "$duration ";
+        $total += $duration;
+    }
+        print "($total)\n";
+    }
+
+__END__
+gnat        15.3
+tchrist     2.5
+jules       22.1
+tchrist     15.9
+gnat        8.7

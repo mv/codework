@@ -1,0 +1,87 @@
+Programming the Perl DBI
+by Alligator Descartes and Tim Bunce
+
+
+The following changes were made in the 3/00 reprint:
+
+
+{xiv}  Resources, Boutell FAQ;
+Deleted ", with some specifics on integration with Perl and DBI."
+
+
+
+{16}  3rd uncommented code line:
+Changed 
+	unless @ARGV == 5;
+to
+	unless @ARGV == 6;
+
+
+{61}  2nd paragraph, last 2 lines:
+Changed
+
+		which would return the C<name> and C<location> fields
+		for the "Avebury" and "Stonehenge" rows.
+to
+		which would return the C<name> and C<location> fields
+		for the "Stonehenge" row, but reject the "Avebury" row.
+
+
+{64}  Changed second code example to:
+    SELECT name, description, location, url, content_type
+    FROM megaliths, media
+   
+
+
+{65}  Changed first code example to:
+
+    SELECT name, description, url, content_type
+    FROM megaliths, media
+    WHERE megaliths.id = megaliths_id
+
+
+
+{66}  Changed second code example to:
+
+    SELECT mega.name, mega.description, med.url, med.content_type
+    FROM megaliths mega, media med
+    WHERE mega.id = med.megaliths_id
+
+    
+    
+(73)  2nd Paragraph, last words;
+
+Eliminated double space between "go" and "wrong"
+    
+    
+
+{94}  Near the top of the code example;
+    In this statement:
+            $dbh = DBI->connect(...)
+    "%attr" now reads "\%attr".
+    
+    
+
+(115)  near the bottom;
+    "...it's a little slower then we'd like..." 
+"then" now reads "than".
+    
+
+
+{178}  Figure 8-1;
+    "RPC::pClient" now reads "RPC::PlClient"
+    "RPC::pServer" now reads "RPC::PlServer"
+    "DBD::ProxyServer" now reads "DBI::ProxyServer"
+
+
+
+{209} In the selectcol_arrayref section;
+          "selectall_arrayref will return..." 
+now reads 
+	  "selectcol_arrayref will return..."
+
+
+
+
+
+

@@ -1,0 +1,635 @@
+$var = *STDIN;
+mysub($var, *LOGFILE);
+------------------------
+use IO::File;
+
+$input = IO::File->new("< /usr/local/widgets/data")
+    or die "Couldn't open /usr/local/widgets/data for reading: $!\n";
+
+while (defined($line = $input->getline())) {
+    chomp($line);
+    STDOUT->print($line) if $line =~ /blue/;
+}
+$input->close();
+------------------------
+while (<STDIN>) {                   # reads from STDIN
+    unless (/\d/) {
+        warn "No digit found.\n";   # writes to STDERR
+    }
+    print "Read: ", $_;             # writes to STDOUT
+}
+END { close(STDOUT)                 or die "couldn't close STDOUT: $!" }
+------------------------
+open(LOGFILE, "> /tmp/log")     or die "Can't write /tmp/log: $!";
+
+------------------------
+close(FH)           or die "FH didn't close: $!";
+------------------------
+$old_fh = select(LOGFILE);                  # switch to LOGFILE for output
+print "Countdown initiated ...\n";
+select($old_fh);                            # return to original output
+print "You have 30 seconds to reach minimum safety distance.\n";
+------------------------
+open(SOURCE, "< $path")
+    or die "Couldn't open $path for reading: $!\n";
+
+open(SINK, "> $path")
+    or die "Couldn't open $path for writing: $!\n";
+------------------------
+use Fcntl;
+
+sysopen(SOURCE, $path, O_RDONLY)
+    or die "Couldn't open $path for reading: $!\n";
+
+sysopen(SINK, $path, O_WRONLY)
+    or die "Couldn't open $path for writing: $!\n";
+------------------------
+use IO::File;
+
+# like Perl's open
+$sink = IO::File->new("> $filename")
+    or die "Couldn't open $filename for writing: $!\n";
+
+# like Perl's sysopen
+$fh = IO::File->new($filename, O_WRONLY|O_CREAT)
+    or die "Couldn't open $filename for reading: $!\n";
+
+# like stdio's fopen(3)
+$fh = IO::File->new($filename, "r+")
+    or die "Couldn't open $filename for read and write: $!\n";
+------------------------
+sysopen(FILEHANDLE, $name, $flags)         or die "Can't open $name : $!";
+sysopen(FILEHANDLE, $name, $flags, $perms) or die "Can't open $name : $!";
+------------------------
+O_RDONLY            Read only
+O_WRONLY            Write only
+O_RDWR              Read and write
+O_CREAT             Create the file if it doesn't exist
+O_EXCL              Fail if the file already exists
+O_APPEND            Append to the file
+O_TRUNC             Truncate the file
+O_NONBLOCK          Non-blocking access
+------------------------
+open(FH, "< $path")                                 or die $!;
+sysopen(FH, $path, O_RDONLY)                        or die $!;
+------------------------
+open(FH, "> $path")                                 or die $!;
+sysopen(FH, $path, O_WRONLY|O_TRUNC|O_CREAT)        or die $!;
+sysopen(FH, $path, O_WRONLY|O_TRUNC|O_CREAT, 0600)  or die $!;
+------------------------
+sysopen(FH, $path, O_WRONLY|O_EXCL|O_CREAT)         or die $!;
+sysopen(FH, $path, O_WRONLY|O_EXCL|O_CREAT, 0600)   or die $!;
+------------------------
+open(FH, ">> $path")                                or die $!;
+sysopen(FH, $path, O_WRONLY|O_APPEND|O_CREAT)       or die $!;
+sysopen(FH, $path, O_WRONLY|O_APPEND|O_CREAT, 0600) or die $!;
+------------------------
+sysopen(FH, $path, O_WRONLY|O_APPEND)               or die $!;
+------------------------
+
+open(FH, "+< $path")                                or die $!;
+sysopen(FH, $path, O_RDWR)                          or die $!;
+------------------------
+sysopen(FH, $path, O_RDWR|O_CREAT)                  or die $!;
+sysopen(FH, $path, O_RDWR|O_CREAT, 0600)            or die $!;
+------------------------
+sysopen(FH, $path, O_RDWR|O_EXCL|O_CREAT)           or die $!;
+sysopen(FH, $path, O_RDWR|O_EXCL|O_CREAT, 0600)     or die $!;
+------------------------
+$filename =~ s#^(\s)#./$1#;
+open(HANDLE, "< $filename\0")          or die "cannot open $filename : $!\n";
+------------------------
+sysopen(HANDLE, $filename, O_RDONLY)   or die "cannot open $filename: $!\n";
+
+------------------------
+$filename = shift @ARGV;
+open(INPUT, $filename)               or die "Couldn't open $filename : $!\n";
+------------------------
+open(OUTPUT, ">$filename")
+    or die "Couldn't open $filename for writing: $!\n";
+------------------------
+use Fcntl;                          # for file constants
+
+sysopen(OUTPUT, $filename, O_WRONLY|O_TRUNC)
+    or die "Can't open $filename for writing: $!\n";
+------------------------
+$file =~ s#^(\s)#./$1#;
+open(OUTPUT, "> $file\0")
+        or die "Couldn't open $file for OUTPUT : $!\n";
+------------------------
+$filename =~ s{ ^ ~ ( [^/]* ) }
+              { $1
+                    ? (getpwnam($1))[7]
+                    : ( $ENV{HOME} || $ENV{LOGDIR}
+                         || (getpwuid($>))[7]
+                       )
+}ex;
+------------------------
+    ~user
+    ~user/blah
+    ~
+    ~/blah
+------------------------
+open($path, "< $path")
+    or die "Couldn't open $path for reading : $!\n";
+------------------------
+Argument "3\n" isn't numeric in multiply at tallyweb line 16, <LOG> chunk 17.
+
+------------------------
+Argument "3\n" isn't numeric in multiply at tallyweb
+    line 16, </usr/local/data/mylog3.dat> chunk 17.
+------------------------
+use IO::File;
+
+$fh = IO::File->new_tmpfile
+        or die "Unable to make new temporary file: $!";
+------------------------
+use IO::File;
+use POSIX qw(tmpnam);
+
+# try new temporary filenames until we get one that didn't already exist
+do { $name = tmpnam() }
+    until $fh = IO::File->new($name, O_RDWR|O_CREAT|O_EXCL);
+
+# install atexit-style handler so that when we exit or die,
+# we automatically delete this temporary file
+END { unlink($name) or die "Couldn't unlink $name : $!" }
+
+# now go on to use the file ...
+------------------------
+for (;;) {
+    $name = tmpnam();
+    sysopen(TMP, $tmpnam, O_RDWR | O_CREAT | O_EXCL) && last;
+}
+unlink $tmpnam;
+------------------------
+use IO::File;
+
+$fh = IO::File->new_tmpfile             or die "IO::File->new_tmpfile: $!";
+$fh->autoflush(1);
+print $fh "$i\n" while $i++ < 10;
+seek($fh, 0, 0)                         or die "seek: $!";
+print "Tmp file has: ", <$fh>;
+------------------------
+Use _     _DATA_     _ within a module: 
+while (<DATA>) {
+    # process the line
+}
+_     _DATA_     _
+# your data goes here
+------------------------
+while (<main::DATA>) {
+    # process the line
+}
+_     _END_     _
+# your data goes here
+------------------------
+use POSIX qw(strftime);
+
+$raw_time = (stat(DATA))[9];
+$size     = -s DATA;
+$kilosize = int($size / 1024) . 'k';
+
+print "<P>Script size is $kilosize\n";
+print strftime("<P>Last script update: %c (%Z)\n", localtime($raw_time));
+
+_     _DATA_     _
+DO NOT REMOVE THE PRECEDING LINE.
+Everything else in this file will be ignored.
+------------------------
+while (<>) {
+    # do something with the line
+}
+------------------------
+while (<>) {
+    # ...
+ }
+------------------------
+unshift(@ARGV, '-') unless @ARGV;
+while ($ARGV = shift @ARGV) {
+    unless (open(ARGV, $ARGV)) {
+        warn "Can't open $ARGV: $!\n";
+        next;
+    }
+    while (defined($_ = <ARGV>)) {
+        # ...
+    }
+------------------------
+@ARGV = glob("*.[Cch]") unless @ARGV;
+------------------------
+# arg demo 1: Process optional -c flag 
+if (@ARGV && $ARGV[0] eq '-c') { 
+    $chop_first++;
+    shift;
+}
+
+# arg demo 2: Process optional -NUMBER flag    
+if (@ARGV && $ARGV[0] =~ /^-(\d+)$/) { 
+    $columns = $1; 
+    shift;
+}
+
+# arg demo 3: Process clustering -a, -i, -n, or -u flags     
+while (@ARGV && $ARGV[0] =~ /^-(.+)/ && (shift, ($_ = $1), 1)) { 
+    next if /^$/; 
+    s/a// && (++$append,      redo);
+    s/i// && (++$ignore_ints, redo); 	    s/n// && (++$nostdout,    redo); 	    s/u// && (++$unbuffer,    redo); 	    die "usage: $0 [-ainu] [filenames] ...\n";    
+}
+-----------------------------
+undef $/;		     
+while (<>) { 	
+    # $_ now has the complete contents of 	
+    # the file whose name is in $ARGV     
+}
+-----------------------------
+{				# create block for local 	
+    local $/;				# record separator now undef 	
+    while (<>) { 	    
+        # do something; called functions still have 	    
+        # undeffed version of $/ 	
+    }     
+} 				# $/ restored here
+-----------------------------
+while (<>) { 	
+    print "$ARGV:$.:$_"; 	
+    close ARGV if eof;     
+}
+-----------------------------
+% perl -ne 'print if /login/'
+-----------------------------
+open(OLD, "< $old")         or die "can't open $old: $!";
+open(NEW, "> $new")         or die "can't open $new: $!";
+select(NEW);                # new default filehandle for print
+while (<OLD>) {
+    # change $_, then...
+    print NEW $_            or die "can't write $new: $!";
+}
+close(OLD)                  or die "can't close $old: $!";
+close(NEW)                  or die "can't close $new: $!";
+rename($old, "$old.orig")   or die "can't rename $old to $old.orig: $!";
+rename($new, $old)          or die "can't rename $new to $old: $!";
+-----------------------------
+while (<OLD>) {
+    if ($. == 20) {
+        print NEW "Extra line 1\n";
+        print NEW "Extra line 2\n";
+    }
+    print NEW $_;
+}
+---------------------------
+while (<OLD>) {
+    next if 20 .. 30;
+    print NEW $_;
+}
+=---------------------------
+% perl -i.orig -p -e 'FILTER COMMAND' file1 file2 file3 ...
+=---------------------------
+#!/usr/bin/perl -i.orig -p
+# filter commands go here
+=---------------------------
+while (<>) {
+    if ($ARGV ne $oldargv) {           # are we at the next file?
+        rename($ARGV, $ARGV . '.orig');
+        open(ARGVOUT, ">$ARGV");       # plus error check
+        select(ARGVOUT);
+        $oldargv = $ARGV;
+    }
+    s/DATE/localtime/e;
+}
+continue{
+    print;
+}
+select (STDOUT);                      # restore default output
+=---------------------------
+Dear Sir/Madam/Ravenous Beast,
+    As of DATE, our records show your account
+is overdue.  Please settle by the end of the month.
+Yours in cheerful usury,
+    --A. Moneylender
+=---------------------------
+Dear Sir/Madam/Ravenous Beast,
+    As of Sat Apr 25 12:28:33 1998, our records show your account
+is overdue.  Please settle by the end of the month.
+Yours in cheerful usury,
+    --A. Moneylender
+
+=---------------------------
+% perl -i.old -pe 's{\bhisvar\b}{hervar}g' *.[Cchy]
+
+% perl -i.old -ne 'print unless /^START$/ .. /^END$/' bigfile.text
+
+=---------------------------
+# set up to iterate over the *.c files in the current directory,
+# editing in place and saving the old file with a .orig extension
+local $^I   = '.orig';              # emulate  -i.orig
+local @ARGV = glob("*.c");          # initialize list of files
+while (<>) {
+    if ($. == 1) {
+        print "This line should appear at the top of each file\n";
+    }
+    s/\b(p)earl\b/${1}erl/ig;       # Correct typos, preserving case
+    print;
+} continue {close ARGV if eof} 
+=---------------------------
+open(FH, "+< FILE")                 or die "Opening: $!";
+@ARRAY = <FH>;
+# change ARRAY here
+seek(FH,0,0)                        or die "Seeking: $!";
+print FH @ARRAY                     or die "Printing: $!";
+truncate(FH,tell(FH))               or die "Truncating: $!";
+close(FH)                           or die "Closing: $!";
+=---------------------------
+open(F, "+< $infile")       or die "can't read $infile: $!";
+$out = '';
+while (<F>) {
+    s/DATE/localtime/eg;
+    $out .= $_;
+}
+seek(F, 0, 0)               or die "can't seek to start of $infile: $!";
+print F $out                or die "can't print to $infile: $!";
+truncate(F, tell(F))        or die "can't truncate $infile: $!";
+close(F)                    or die "can't close $infile: $!";
+=---------------------------
+open(FH, "+< $path")                or die "can't open $path: $!";
+flock(FH, 2)                        or die "can't flock $path: $!";
+# update file, then...
+close(FH)                           or die "can't close $path: $!";
+=---------------------------
+sub LOCK_SH()  { 1 }     #  Shared lock (for reading)
+sub LOCK_EX()  { 2 }     #  Exclusive lock (for writing)
+sub LOCK_NB()  { 4 }     #  Non-blocking request (don't stall)
+sub LOCK_UN()  { 8 }     #  Free the lock (careful!)
+=---------------------------
+if ($] < 5.004) {                   # test Perl version number
+     my $old_fh = select(FH);
+     local $| = 1;                  # enable command buffering
+     local $\ = '';                 # clear output record separator
+     print "";                      # trigger output flush
+     select($old_fh);               # restore previous filehandle
+}
+flock(FH, LOCK_UN);
+-----------------------------
+use Fcntl qw(:DEFAULT :flock);
+
+sysopen(FH, "numfile", O_RDWR|O_CREAT)
+                                    or die "can't open numfile: $!";
+flock(FH, LOCK_EX)                  or die "can't write-lock numfile: $!";
+# Now we have acquired the lock, it's safe for I/O
+$num = <FH> || 0;                   # DO NOT USE "or" THERE!!
+seek(FH, 0, 0)                      or die "can't rewind numfile : $!";
+truncate(FH, 0)                     or die "can't truncate numfile: $!";
+print FH $num+1, "\n"               or die "can't write numfile: $!";
+close(FH)                           or die "can't close numfile: $!";
+-----------------------------
+$old_fh = select(OUTPUT_HANDLE);
+$| = 1;
+select($old_fh);
+-----------------------------
+use IO::Handle;
+OUTPUT_HANDLE->autoflush(1);
+-----------------------------
+    select((select(OUTPUT_HANDLE), $| = 1)[0]);
+
+-----------------------------
+use FileHandle;
+
+STDERR->autoflush;          # already unbuffered in stdio
+$filehandle->autoflush(0);
+-----------------------------
+use IO::Handle;
+# assume REMOTE_CONN is an interactive socket handle,
+# but DISK_FILE is a handle to a regular file.
+autoflush REMOTE_CONN  1;           # unbuffer for clarity
+autoflush DISK_FILE    0;           # buffer this for speed
+-----------------------------
+$rin = '';
+# repeat next line for all filehandles to poll
+vec($rin, fileno(FH1), 1) = 1;
+vec($rin, fileno(FH2), 1) = 1;
+vec($rin, fileno(FH3), 1) = 1;
+
+$nfound = select($rout=$rin, undef, undef, 0);
+if ($nfound) {
+  # input waiting on one or more of those 3 filehandles
+  if (vec($r,fileno(FH1),1)) { 
+      # do something with FH1
+  }
+  if (vec($r,fileno(FH2),1)) {
+      # do something with FH2
+  }
+  if (vec($r,fileno(FH3),1)) {
+      # do something with FH3
+  }
+}
+----------------------------
+use IO::Select;
+
+$select = IO::Select->new();
+# repeat next line for all filehandles to poll
+$select->add(*FILEHANDLE);
+if (@ready = $select->can_read(0)) {
+    # input waiting on the filehandles in @ready
+}
+----------------------------
+$rin = '';
+vec($rin, fileno(FILEHANDLE), 1) = 1;
+$nfound = select($rin, undef, undef, 0);    # just check
+if ($nfound) {
+    $line = <FILEHANDLE>;
+    print "I read $line";
+}
+----------------------------
+use Fcntl;
+
+sysopen(MODEM, "/dev/cua0", O_NONBLOCK|O_RDWR)
+    or die "Can't open modem: $!\n";
+----------------------------
+use Fcntl;
+
+$flags = '';
+fcntl(HANDLE, F_GETFL, $flags)
+    or die "Couldn't get flags for HANDLE : $!\n";
+$flags |= O_NONBLOCK;
+fcntl(HANDLE, F_SETFL, $flags)
+    or die "Couldn't set flags for HANDLE: $!\n";
+----------------------------
+use POSIX qw(:errno_h);
+
+$rv = syswrite(HANDLE, $buffer, length $buffer);
+if (!defined($rv) && $! == EAGAIN) {
+    # would block
+} elsif ($rv != length $buffer) {
+    # incomplete write
+} else {
+    # successfully wrote
+}
+
+$rv = sysread(HANDLE, $buffer, $BUFSIZ);
+    or die "sysread: $!";
+if (!defined($rv) && $! == EAGAIN) {
+    # would block
+} else {
+    # successfully read $rv bytes from HANDLE
+}
+---------------------------
+$size = pack("L", 0);
+ioctl(FH, $FIONREAD, $size)     or die "Couldn't call ioctl: $!\n";
+$size = unpack("L", $size);
+
+# $size bytes can be read
+---------------------------
+require 'sys/ioctl.ph';
+
+$size = pack("L", 0);
+ioctl(FH, FIONREAD(), $size)    or die "Couldn't call ioctl: $!\n";
+$size = unpack("L", $size);
+---------------------------
+% grep FIONREAD /usr/include/*/*
+/usr/include/asm/ioctls.h:#define FIONREAD      0x541B
+---------------------------
+% cat > fionread.c
+#include <sys/ioctl.h>
+main() {
+    printf("%#08x\n", FIONREAD);
+}
+^D
+% cc -o fionread fionread
+% ./fionread
+0x4004667f
+---------------------------
+$FIONREAD = 0x4004667f;         # XXX: opsys dependent
+
+$size = pack("L", 0);
+ioctl(FH, $FIONREAD, $size)     or die "Couldn't call ioctl: $!\n";
+$size = unpack("L", $size);
+---------------------------
+$variable = *FILEHANDLE;        # save in variable
+subroutine(*FILEHANDLE);        # or pass directly
+
+sub subroutine {
+    my $fh = shift;
+    print $fh "Hello, filehandle!\n";
+}
+---------------------------
+use FileHandle;                   # make anon filehandle
+$fh = FileHandle->new();
+
+use IO::File;                     # 5.004 or higher
+$fh = IO::File->new();
+---------------------------
+$fh_a = IO::File->new("< /etc/motd")    or die "open /etc/motd: $!";
+$fh_b = *STDIN;
+some_sub($fh_a, $fh_b);
+---------------------------
+sub return_fh {             # make anon filehandle
+    local *FH;              # must be local, not my
+    # now open it if you want to, then...
+    return *FH;
+}
+
+$handle = return_fh();
+---------------------------
+sub accept_fh {
+    my $fh = shift;
+    print $fh "Sending to indirect filehandle\n";
+}
+---------------------------
+sub accept_fh {
+    local *FH = shift;
+    print  FH "Sending to localized filehandle\n";
+}
+---------------------------
+@fd = (*STDIN, *STDOUT, *STDERR);
+print $fd[1] "Type it: ";                           # WRONG
+$got = <$fd[0]>                                     # WRONG
+print $fd[2] "What was that: $got";                 # WRONG
+---------------------------
+print  { $fd[1] } "funny stuff\n";
+printf { $fd[1] } "Pity the poor %x.\n", 3_735_928_559;
+Pity the poor deadbeef.
+---------------------------
+$ok = -x "/bin/cat";                
+print { $ok ? $fd[1] : $fd[2] } "cat stat $ok\n";
+print { $fd[ 1 + ($ok || 0) ]  } "cat stat $ok\n";           
+-----------------------------
+$got = readline($fd[0]);
+
+-----------------------------
+use FileCache;
+cacheout ($path);         # each time you use a filehandle
+print $path "output";
+-----------------------------
+foreach $filehandle (@FILEHANDLES) {
+    print $filehandle $stuff_to_print;
+}
+-----------------------------
+open(MANY, "| tee file1 file2 file3 > /dev/null")   or die $!;
+print MANY "data\n"                                 or die $!;
+close(MANY)                                         or die $!;
+-----------------------------
+# `use strict' complains about this one:
+for $fh ('FH1', 'FH2', 'FH3')   { print $fh "whatever\n" }
+# but not this one:
+for $fh (*FH1, *FH2, *FH3)      { print $fh "whatever\n" }
+-----------------------------
+open (FH, "| tee file1 file2 file3 >/dev/null");
+print FH "whatever\n";
+-----------------------------
+# make STDOUT go to three files, plus original STDOUT
+open (STDOUT, "| tee file1 file2 file3") or die "Teeing off: $!\n";
+print "whatever\n"                       or die "Writing: $!\n";
+close(STDOUT)                            or die "Closing: $!\n";
+-----------------------------
+open(FH, "<&=$FDNUM");      # open FH to the descriptor itself
+open(FH, "<&$FDNUM");       # open FH to a copy of the descriptor
+
+use IO::Handle;
+
+$fh->fdopen($FDNUM, "r");   # open file descriptor 3 for reading
+-----------------------------
+use IO::Handle;
+$fh = IO::Handle->new();
+
+$fh->fdopen(3, "r");            # open fd 3 for reading
+-----------------------------
+$fd = $ENV{MHCONTEXTFD};
+open(MHCONTEXT, "<&=$fd")   or die "couldn't fdopen $fd: $!";
+# after processing
+close(MHCONTEXT)            or die "couldn't close context file: $!";
+-----------------------------
+*ALIAS = *ORIGINAL;
+
+-----------------------------
+open(OUTCOPY, ">&STDOUT")   or die "Couldn't dup STDOUT: $!";
+open(INCOPY,  "<&STDIN" )   or die "Couldn't dup STDIN : $!";
+-----------------------------
+open(OUTALIAS, ">&=STDOUT") or die "Couldn't alias STDOUT: $!";
+open(INALIAS,  "<&=STDIN")  or die "Couldn't alias STDIN : $!";
+open(BYNUMBER, ">&=5")      or die "Couldn't alias file descriptor 5: $!";
+-----------------------------
+# take copies of the file descriptors
+open(OLDOUT, ">&STDOUT");
+open(OLDERR, ">&STDERR");
+
+# redirect stdout and stderr
+open(STDOUT, "> /tmp/program.out")  or die "Can't redirect stdout: $!";
+open(STDERR, ">&STDOUT")            or die "Can't dup stdout: $!";
+
+# run the program
+system($joe_random_program);
+
+# close the redirected filehandles
+close(STDOUT)                       or die "Can't close STDOUT: $!";
+close(STDERR)                       or die "Can't close STDERR: $!";
+
+# restore stdout and stderr
+open(STDERR, ">&OLDERR")            or die "Can't restore stderr: $!";
+open(STDOUT, ">&OLDOUT")            or die "Can't restore stdout: $!";
+
+# avoid leaks by closing the independent copies
+close(OLDOUT)                       or die "Can't close OLDOUT: $!";
+close(OLDERR)                       or die "Can't close OLDERR: $!";
+-----------------------------
+% lockarea 5 &
+% rep -1 'cat /tmp/lkscreen'
+-----------------------------

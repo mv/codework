@@ -1,0 +1,21 @@
+
+#this is for the built-in mouse (i.e. touchpad) which is now running through GPM
+Section "InputDevice"
+    Identifier  "Mouse1"
+    Driver  "mouse"
+    Option "Protocol"    "MouseSystems"
+    Option "Device"      "/dev/gpmdata"
+EndSection
+
+#these lines are for the external mouse
+Section "InputDevice"
+    Identifier "Mouse2"
+    Driver "mouse"
+    Option "Protocol"   "IMPS/2"
+    Option "Device"     "/dev/input/mice"
+    Option "ZAxisMapping"   "4 5"           #this part is for the wheel
+EndSection
+
+#at the very bottom of the file, you need these lines
+    InputDevice "Mouse1"    "CorePointer"
+    InputDevice "Mouse2"    "SendCoreEvents"

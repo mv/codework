@@ -1,0 +1,6 @@
+#!/usr/bin/perl
+# prime_pattern -- find prime factors of argument using pattern matching
+for ($N = ('o' x shift); $N =~ /^(oo+?)\1+$/; $N =~ s/$1/o/g) {
+    print length($1), " ";
+}
+print length ($N), "\n";

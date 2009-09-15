@@ -1,0 +1,348 @@
+http://www.perl.com/CPAN/
+http://www.perl.com:8001/bad/mojo.html
+ftp://gatekeeper.dec.com/pub/misc/netlib.tar.Z
+ftp://anonymous@myplace:gatekeeper.dec.com/pub/misc/netlib.tar.Z
+file:///etc/motd
+----------------------
+http://mox.perl.com/cgi-bin/program?name=Johann&born=1685
+----------------------
+http://mox.perl.com/cgi-bin/program
+----------------------
+use CGI qw(:standard);
+$who   = param("Name");
+$phone = param("Number");
+@picks = param("Choices");
+----------------------
+print header( -TYPE    => 'text/plain',
+              -EXPIRES => '+3d' );
+----------------------
+use CGI::Carp;
+warn "This is a complaint";
+die "But this one is serious";
+----------------------
+BEGIN {
+    use CGI::Carp qw(carpout);
+    open(LOG, ">>/var/local/cgi-logs/mycgi-log")
+        or die "Unable to append to mycgi-log: $!\n";
+    carpout(*LOG);
+}
+----------------------
+use CGI::Carp qw(fatalsToBrowser);
+die "Bad error here";
+----------------------
+% perl -wc cgi-script		        # just compilation
+
+% perl -w  cgi-script		        # parms from stdin
+(offline mode: enter name=value pairs on standard input)
+name=joe
+number=10
+^D
+
+% perl -w  cgi-script name=joe number=10    # run with mock form input
+% perl -d  cgi-script name=joe number=10    # ditto, under the debugger
+
+# POST method script in csh
+% (setenv HTTP_METHOD POST; perl -w cgi-script name=joe number=10)
+# POST method script in sh
+% HTTP_METHOD=POST perl -w cgi-script name=joe number=10
+----------------------
+% perl -MCGI -le 'print CGI->VERSION'
+2.40
+----------------------
+$| = 1;
+
+----------------------
+#!/usr/bin/perl -T
+open(FH, "> $ARGV[0]") or die;
+----------------------
+Insecure dependency in open while running with -T switch at ...
+----------------------
+$file = $ARGV[0];                                   # $file tainted
+unless ($file =~ m#^([\w.-]+)$#) {                  # $1 is untainted
+    die "filename '$file' has invalid characters.\n";
+}
+$file = $1;                                         # $file untainted
+----------------------
+unless (-e $filename) {                     # WRONG!
+    open(FH, "> $filename");
+    # ...
+}
+----------------------
+Alias /perl/ /real/path/to/perl/scripts/
+
+<Location /perl>
+SetHandler  perl-script
+PerlHandler Apache::Registry
+Options ExecCGI
+</Location>
+
+PerlModule Apache::Registry
+PerlModule CGI
+PerlSendHeader On
+----------------------
+<Files *.perl>
+SetHandler  perl-script
+PerlHandler Apache::Registry
+Options ExecCGI
+</Files>
+----------------------
+system("command $input @files");            # UNSAFE
+----------------------
+system("command", $input, @files);          # safer
+----------------------
+chomp($now = `date`);
+----------------------
+die "cannot fork: $!" unless defined ($pid = open(SAFE_KID, "|-"));
+if ($pid == 0) {
+    exec('grep', $input, @files) or die "can't exec grep: $!";
+} else {
+    @output = <SAFE_KID>;
+    close SAFE_KID;                 # $? contains status
+}
+----------------------
+open(KID_TO_READ, "$program @options @args |");    # UNSAFE
+----------------------
+# add error processing as above
+die "cannot fork: $!" unless defined($pid = open(KID_TO_READ, "-|"));
+
+if ($pid) {   # parent
+   while (<KID_TO_READ>) {
+       # do something interesting
+   }
+   close(KID_TO_READ)               or warn "kid exited $?";
+
+} else {      # child
+   # reconfigure, then
+   exec($program, @options, @args)  or die "can't exec program: $!";
+}
+----------------------
+open(KID_TO_WRITE, "|$program $options @args");   # UNSAFE
+----------------------
+$pid = open(KID_TO_WRITE, "|-");
+die "cannot fork: $!" unless defined($pid = open(KID_TO_WRITE, "|-"));
+$SIG{ALRM} = sub { die "whoops, $program pipe broke" };
+
+if ($pid) {  # parent
+   for (@data) { print KID_TO_WRITE $_ }
+   close(KID_TO_WRITE)              or warn "kid exited $?";
+
+} else {     # child
+   # reconfigure, then
+   exec($program, @options, @args)  or die "can't exec program: $!";
+}
+
+----------------------
+print ol( li([ qw(red blue green)]) );
+<OL><LI>red</LI> <LI>blue</LI> <LI>green</LI></OL>
+@names = qw(Larry Moe Curly);
+print ul( li({ -TYPE => "disc" }, \@names) );
+<UL><LI TYPE="disc">Larry</LI> <LI TYPE="disc">Moe</LI> 
+    <LI TYPE="disc">Curly</LI></UL>
+-----------------------
+print li("alpha");
+    <LI>alpha</LI>
+print li( [ "alpha", "omega"] );
+    <LI>alpha</LI> <LI>omega</LI>
+-----------------------
+use CGI qw(:standard :html3);
+
+%hash = (
+    "Wisconsin"  => [ "Superior", "Lake Geneva", "Madison" ],
+    "Colorado"   => [ "Denver", "Fort Collins", "Boulder" ],
+    "Texas"      => [ "Plano", "Austin", "Fort Stockton" ],
+    "California" => [ "Sebastopol", "Santa Rosa", "Berkeley" ],
+);
+
+$\ = "\n";
+
+print "<TABLE> <CAPTION>Cities I Have Known</CAPTION>";
+print Tr(th [qw(State Cities)]);
+for $k (sort keys %hash) {
+    print Tr(th($k), td( [ sort @{$hash{$k}} ] ));
+}
+print "</TABLE>";
+-----------------------
+<TABLE> <CAPTION>Cities I Have Known</CAPTION>
+    <TR><TH>State</TH> <TH>Cities</TH></TR>
+    <TR><TH>California</TH> <TD>Berkeley</TD> <TD>Santa Rosa</TD> 
+        <TD>Sebastopol</TD> </TR>
+    <TR><TH>Colorado</TH> <TD>Boulder</TD> <TD>Denver</TD> 
+        <TD>Fort Collins</TD> </TR>
+    <TR><TH>Texas</TH> <TD>Austin</TD> <TD>Fort Stockton</TD> 
+        <TD>Plano</TD></TR>
+    <TR><TH>Wisconsin</TH> <TD>Lake Geneva</TD> <TD>Madison</TD> 
+        <TD>Superior</TD></TR>
+</TABLE>
+-----------------------
+print table
+        caption('Cities I have Known'),
+        Tr(th [qw(State Cities)]),
+        map { Tr(th($_), td( [ sort @{$hash{$_}} ] )) } sort keys %hash;
+-----------------------
+$url = "http://www.perl.com/CPAN/";
+print "Location: $url\n\n";
+exit;
+-----------------------
+use CGI qw(:standard);
+print header( -STATUS => '204 No response' );
+-----------------------
+Status: 204 No response
+Content-Type: text/html
+<blank line here>
+-----------------------
+#!/bin/sh
+
+cat <<EOCAT
+Status: 204 No response
+ 
+EOCAT
+-----------------------
+% telnet www.perl.com 80
+GET /bogotic HTTP/1.0
+<blank line here>
+HTTP/1.1 404 File Not Found
+Date: Tue, 21 Apr 1998 11:25:43 GMT
+Server: Apache/1.2.4
+Connection: close
+Content-Type: text/html
+
+<HTML><HEAD>
+<TITLE>404 File Not Found</TITLE>
+</HEAD><BODY>
+<H1>File Not Found</H1>
+The requested URL /bogotic was not found on this server.<P>
+</BODY></HTML>
+-----------------------
+% GET -esuSU http://mox.perl.com/perl/bogotic
+GET http://language.perl.com/bogotic
+Host: mox.perl.com
+User-Agent: lwp-request/1.32
+
+GET http://mox.perl.com/perl/bogotic --> 302 Moved Temporarily
+GET http://www.perl.com/perl/bogotic --> 302 Moved Temporarily
+GET http://language.perl.com/bogotic --> 404 File Not Found
+Connection: close
+Date: Tue, 21 Apr 1998 11:29:03 GMT
+Server: Apache/1.2.4
+Content-Type: text/html
+Client-Date: Tue, 21 Apr 1998 12:29:01 GMT
+Client-Peer: 208.201.239.47:80
+Title: Broken perl.com Links
+
+<HTML>
+<HEAD><TITLE>An Error Occurred</TITLE></HEAD>
+<BODY>
+<H1>An Error Occurred</h1>
+404 File Not Found
+</BODY>
+</HTML>
+------------------------------
+$preference_value = cookie("preference name");
+------------------------------
+$packed_cookie = cookie( -NAME    => "preference name",
+                         -VALUE   => "whatever you'd like",
+                         -EXPIRES => "+2y");
+------------------------------
+print header(-COOKIE => $packed_cookie);
+------------------------------
+print textfield("SEARCH");          # previous SEARCH value is the default
+------------------------------
+use CGI qw(:standard);
+print hidden("bacon");
+------------------------------
+    print submit(-NAME => ".State", -VALUE => "Checkout");
+------------------------------
+sub to_page { return submit( -NAME => ".State", -VALUE => shift ) }
+------------------------------
+$page = param(".State") || "Default";
+------------------------------
+if ($page eq "Default") {
+    front_page();
+} elsif ($page eq "Checkout") {
+    checkout();
+} else {
+    no_such_page();         # when we get a .State that doesn't exist
+}
+------------------------------
+%States = (
+    'Default'     => \&front_page,
+    'Shirt'       => \&shirt,
+    'Sweater'     => \&sweater,
+    'Checkout'    => \&checkout,
+    'Card'        => \&credit_card,
+    'Order'       => \&order,
+    'Cancel'      => \&front_page,
+);
+
+if ($States{$page}) {
+    $States{$page}->();   # call the correct subroutine 
+} else {
+    no_such_page();
+}
+----------------------------
+while (($state, $sub) = each %States) {
+    $sub->( $page eq $state );
+}
+----------------------------
+sub t_shirt {
+    my $active = shift;
+
+    unless ($active) {
+        print hidden("size"), hidden("color");
+        return;
+    }
+
+    print p("You want to buy a t-shirt?");
+    print p("Size: ", popup_menu('size', [ qw(XL L M S XS) ]));
+    print p("Color:", popup_menu('color', [ qw(Black White) ]));
+
+    print p( to_page("Shoes"), to_page("Checkout") );
+}
+----------------------------
+print header("Program Title"), begin_html();
+print standard_header(), begin_form();
+while (($state, $sub) = each %States) {
+    $sub->( $page eq $state );
+}
+print standard_footer(), end_form(), end_html();
+----------------------------
+# first open and exclusively lock the file
+open(FH, ">>/tmp/formlog")              or die "can't append to formlog: $!";
+flock(FH, 2)                            or die "can't flock formlog: $!";
+
+# either using the procedural interface
+use CGI qw(:standard);
+save_parameters(*FH);                   # with CGI::save
+
+# or using the object interface
+use CGI;
+$query = CGI->new();
+$query->save(*FH);
+
+close(FH)                               or die "can't close formlog: $!";
+----------------------------
+use CGI qw(:standard);
+open(MAIL, "|/usr/lib/sendmail -oi -t") or die "can't fork sendmail: $!";
+print MAIL <<EOF;
+From: $0 (your cgi script)
+To: hisname\@hishost.com
+Subject: mailed form submission
+
+EOF
+save_parameters(*MAIL);
+close(MAIL)                             or die "can't close sendmail: $!"; 
+----------------------------
+param("_timestamp", scalar localtime);
+param("_environs", %ENV);
+----------------------------
+use CGI;
+open(FORMS, "< /tmp/formlog")       or die "can't read formlog: $!";
+flock(FORMS, 1)                     or die "can't lock formlog: $!";
+while ($query = CGI->new(*FORMS)) {
+    last unless $query->param();     # means end of file
+    %his_env = $query->param('_environs');
+    $count  += $query->param('items requested')
+                unless $his_env{REMOTE_HOST} =~ /(^|\.)perl\.com$/
+}
+print "Total orders: $count\n";
+----------------------------

@@ -1,0 +1,20 @@
+#!/usr/bin/perl -w
+# checkuser - demonstrates reading and checking a user's password
+
+use Term::ReadKey;
+
+print "Enter your password: ";
+ReadMode 'noecho';
+$password = ReadLine 0;
+chomp $password;
+ReadMode 'normal';
+
+print "\n";
+
+($username, $encrypted) = ( getpwuid $< )[0,1];
+
+if (crypt($password, $encrypted) ne $encrypted) {
+    die "You are not $username\n";
+} else {
+    print "Welcome, $username\n";
+}

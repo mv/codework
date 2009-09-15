@@ -1,0 +1,668 @@
+------------------------------------
+$string = '\n';                     # two characters, \ and an n
+$string = 'Jon \'Maddog\' Orwant';  # literal single quotes
+-------------------------------------
+$string = "\n";                     # a "newline" character
+$string = "Jon \"Maddog\" Orwant";  # literal double quotes
+-------------------------------------
+$string = q/Jon 'Maddog' Orwant/;   # literal single quotes
+-------------------------------------
+$string = q[Jon 'Maddog' Orwant];   # literal single quotes
+$string = q{Jon 'Maddog' Orwant};   # literal single quotes
+$string = q(Jon 'Maddog' Orwant);   # literal single quotes
+$string = q<Jon 'Maddog' Orwant>;   # literal single quotes
+-------------------------------------
+$a = <<"EOF";
+This is a multiline here document
+terminated by EOF on a line by itself
+EOF
+-------------------------------------
+$value = substr($string, $offset, $count);
+$value = substr($string, $offset);
+    
+substr($string, $offset, $count) = $newstring;
+substr($string, $offset)         = $newtail;
+-------------------------------------
+# get a 5-byte string, skip 3, then grab 2 8-byte strings, then the rest
+($leading, $s1, $s2, $trailing) =
+    unpack("A5 x3 A8 A8 A*", $data);
+
+# split at five byte boundaries
+@fivers = unpack("A5" x (length($string)/5), $string);
+
+# chop string into individual characters
+@chars  = unpack("A1" x length($string), $string);
+-------------------------------------
+$string = "This is what you have";
+#         +012345678901234567890  Indexing forwards  (left to right)
+#          109876543210987654321- Indexing backwards (right to left)
+#           note that 0 means 10 or 20, etc. above
+
+$first  = substr($string, 0, 1);  # "T"
+$start  = substr($string, 5, 2);  # "is"
+$rest   = substr($string, 13);    # "you have"
+$last   = substr($string, -1);    # "e"
+$end    = substr($string, -4);    # "have"
+$piece  = substr($string, -8, 3); # "you"
+-------------------------------------
+$string = "This is what you have";
+print $string;
+This is what you have
+substr($string, 5, 2) = "wasn't"; # change "is" to "wasn't"
+This wasn't what you have
+substr($string, -12)  = "ondrous";# "This wasn't wondrous"
+This wasn't wondrous
+substr($string, 0, 1) = "";       # delete first character
+his wasn't wondrous
+substr($string, -10)  = "";       # delete last 10 characters
+his wasn'
+-------------------------------------
+# you can test substrings with =~
+if (substr($string, -10) =~ /pattern/) {
+    	print "Pattern matches in last 10 characters\n";
+}
+
+# substitute "at" for "is", restricted to first five characters
+substr($string, 0, 5) =~ s/is/at/g;
+-------------------------------------
+# exchange the first and last letters in a string
+$a = "make a hat";
+(substr($a,0,1), substr($a,-1)) = (substr($a,-1), substr($a,0,1));
+print $a;
+take a ham
+-------------------------------------
+# extract column with unpack
+$a = "To be or not to be";
+$b = unpack("x6 A6", $a);  # skip 6, grab 6
+print $b;
+or not
+
+($b, $c) = unpack("x6 A2 X5 A2", $a); # forward 6, grab 2; backward 5, grab 2
+print "$b\n$c\n";
+or
+be
+-------------------------------------
+sub cut2fmt {
+    my(@positions) = @_;
+    my $template   = '';
+    my $lastpos    = 1;
+    foreach $place (@positions) {
+        $template .= "A" . ($place - $lastpos) . " ";
+        $lastpos   = $place;
+    }
+    $template .= "A*";
+    return $template;
+}
+
+$fmt = cut2fmt(8, 14, 20, 26, 30);
+print "$fmt\n";
+A7 A6 A6 A6 A4 A*
+-------------------------------
+# use $b if $b is true, else $c
+$a = $b || $c;              
+
+# set $x to $y unless $x is already true
+$x ||= $y
+-------------------------------
+# use $b if $b is defined, else $c
+$a = defined($b) ? $b : $c;
+-------------------------------
+$foo = $bar || "DEFAULT VALUE";
+-------------------------------
+$dir = shift(@ARGV) || "/tmp";
+-------------------------------
+$dir = defined($ARGV[0]) ? shift(@ARGV) : "/tmp";
+-------------------------------
+$dir = @ARGV ? $ARGV[0] : "/tmp";
+-------------------------------
+$count{ $shell || "/bin/sh" }++;
+-------------------------------
+# find the user name on Unix systems
+$user = $ENV{USER}
+     || $ENV{LOGNAME}
+     || getlogin()
+     || (getpwuid($<))[0]
+     || "Unknown uid number $<";
+-------------------------------
+$starting_point ||= "Greenwich";
+-------------------------------
+@a = @b unless @a;          # copy only if empty
+@a = @b ? @b : @c;          # assign @b if nonempty, else @c
+-------------------------------
+($VAR1, $VAR2) = ($VAR2, $VAR1);
+-------------------------------
+$temp    = $a;
+$a       = $b;
+$b       = $temp;
+-------------------------------
+$a       = "alpha";
+$b       = "omega";
+($a, $b) = ($b, $a);        # the first shall be last -- and versa vice
+----------------------------
+($alpha, $beta, $production) = qw(January March August);
+# move beta       to alpha,
+# move production to beta,
+# move alpha      to production
+($alpha, $beta, $production) = ($beta, $production, $alpha);
+----------------------------
+$num  = ord($char);
+$char = chr($num);
+----------------------------
+$char = sprintf("%c", $num);                # slower than chr($num)
+printf("Number %d is character %c\n", $num, $num);
+Number 101 is character e
+----------------------------
+@ASCII = unpack("C*", $string);
+$STRING = pack("C*", @ascii);
+----------------------------
+$ascii_value = ord("e");    # now 101
+$character   = chr(101);    # now "e"
+----------------------------
+printf("Number %d is character %c\n", 101, 101);
+----------------------------
+@ascii_character_numbers = unpack("C*", "sample");
+print "@ascii_character_numbers\n";
+115 97 109 112 108 101
+
+$word = pack("C*", @ascii_character_numbers);
+$word = pack("C*", 115, 97, 109, 112, 108, 101);   # same
+print "$word\n";
+sample
+----------------------------
+$hal = "HAL";
+@ascii = unpack("C*", $hal);
+foreach $val (@ascii) {
+    $val++;                 # add one to each ASCII value
+}
+$ibm = pack("C*", @ascii);
+print "$ibm\n";             # prints "IBM"
+----------------------------
+@array = split(//, $string);
+
+@array = unpack("C*", $string);
+----------------------------
+while (/(.)/g) { 	# . is never a newline here
+        # do something with $1
+    }
+------------------------------
+%seen = ();
+$string = "an apple a day";
+foreach $byte (split //, $string) {
+    $seen{$1}++;
+}
+print "unique chars are: ", sort(keys %seen), "\n";
+unique chars are:  adelnpy
+------------------------------
+%seen = ();
+$string = "an apple a day";
+while ($string =~ /(.)/g) {
+    $seen{$1}++;
+}
+print "unique chars are: ", sort(keys %seen), "\n";
+unique chars are:  adelnpy
+------------------------------
+$sum = 0;
+foreach $ascval (unpack("C*", $string)) {
+    $sum += $ascval;
+}
+print "sum is $sum\n";
+# prints "1248" if $string was "an apple a day"
+------------------------------
+$sum = unpack("%32C*", $string);
+------------------------------
+#!/usr/bin/perl
+# sum - compute 16-bit checksum of all input files
+$checksum = 0;
+while (<>) { $checksum += unpack("%16C*", $_) }
+$checksum %= (2 ** 16) - 1;
+print "$checksum\n";
+------------------------------
+% perl sum /etc/termcap
+1510
+------------------------------
+% sum --sysv /etc/termcap
+1510 851 /etc/termcap
+------------------------------
+$revbytes = reverse($string);
+------------------------------
+$revwords = join(" ", reverse split(" ", $string));
+------------------------------
+$gnirts   = reverse($string);       # reverse letters in $string
+
+@sdrow    = reverse(@words);        # reverse elements in @words
+
+$confused = reverse(@words);        # reverse letters in join("", @words)
+---------------------------------
+# reverse word order
+$string = 'Yoda said, "can you see this?"';
+@allwords    = split(" ", $string);
+$revwords    = join(" ", reverse @allwords);
+print $revwords, "\n";
+this?" see you "can said, Yoda
+---------------------------------
+$revwords = join(" ", reverse split(" ", $string));
+---------------------------------
+$revwords = join("", reverse split(/(\s+)/, $string));
+---------------------------------
+$word = "reviver";
+$is_palindrome = ($word eq reverse($word));
+---------------------------------
+% perl -nle 'print if $_ eq reverse && length > 5' /usr/dict/words
+deedeed
+degged
+deified
+denned
+hallah
+kakkak
+murdrum
+redder
+repaper
+retter
+reviver
+rotator
+sooloos
+tebbet
+terret
+tut-tut
+---------------------------------
+while ($string =~ s/\t+/' ' x (length($&) * 8 - length($`) % 8)/e) {
+    # spin in empty loop until substitution finally fails
+}
+---------------------------------
+use Text::Tabs;
+@expanded_lines  = expand(@lines_with_tabs);
+@tabulated_lines = unexpand(@lines_without_tabs);
+---------------------------------
+while (<>) {
+    1 while s/\t+/' ' x (length($&) * 8 - length($`) % 8)/e;
+    print;
+}
+-------------------------------
+use Text::Tabs;
+$tabstop = 4;
+while (<>) { print expand($_) }
+-------------------------------
+use Text::Tabs;
+while (<>) { print unexpand($_) }
+-------------------------------
+You owe $debt to me.
+-------------------------------
+$text =~ s/\$(\w+)/${$1}/g;
+-------------------------------
+$text =~ s/(\$\w+)/$1/gee;
+-------------------------------
+use vars qw($rows $cols);
+no strict 'refs';                   # for ${$1}/g below
+my $text;
+
+($rows, $cols) = (24, 80);
+$text = q(I am $rows high and $cols long);  # single quotes!
+$text =~ s/\$(\w+)/${$1}/g;
+print $text;
+I am 24 high and 80 long
+-------------------------------
+$text = "I am 17 years old";
+$text =~ s/(\d+)/2 * $1/eg; 
+-------------------------------
+2 * 17
+-------------------------------
+$text = 'I am $AGE years old';      # note single quotes
+$text =~ s/(\$\w+)/$1/eg;           # WRONG
+-------------------------------
+'$AGE'
+-------------------------------
+$text =~ s/(\$\w+)/$1/eeg;          # finds my() variables
+-------------------------------
+# expand variables in $text, but put an error message in
+# if the variable isn't defined
+$text =~ s{
+     \$                         # find a literal dollar sign
+    (\w+)                       # find a "word" and store it in $1
+}{
+    no strict 'refs';           # for $$1 below
+    if (defined $$1) {
+        $$1;                    # expand global variables only
+    } else {
+        "[NO VARIABLE: \$$1]";  # error msg
+    }
+}egx;
+-----------------------------
+use locale;                     # needed in 5.004 or above
+
+$big = uc($little);             # "bo peep" -> "BO PEEP"
+$little = lc($big);             # "JOHN"    -> "john"
+$big = "\u$little";             # "bo peep" -> "BO PEEP"
+$little = "\l$big";             # "JOHN"    -> "john"
+-----------------------------
+$big = "\u$little";             # "bo"      -> "Bo"
+$little = "\l$big";             # "BoPeep"    -> "boPeep" 
+-----------------------------
+$beast   = "dromedary";
+# capitalize various parts of $beast
+$capit   = ucfirst($beast);         # Dromedary
+$capit = "\u\L$beast";              # (same)
+$capall  = uc($beast);              # DROMEDARY
+$capall  = "\U$beast";              # (same)
+$caprest = lcfirst(uc($beast));     # dROMEDARY
+$caprest = "\l\U$beast";            # (same)
+-----------------------------
+# capitalize each word's first character, downcase the rest
+$text = "thIS is a loNG liNE";
+$text =~ s/(\w+)/\u\L$1/g;
+print $text;
+This Is A Long Line
+-----------------------------
+if (uc($a) eq uc($b)) {
+    print "a and b are the same\n";
+}
+-----------------------------
+sub randcase {
+    rand(100) < 20 ? ("\040" ^ $1) : $1
+}
+-----------------------------
+$string &= "\177" x length($string);
+-----------------------------
+$answer = $var1 . func() . $var2;   # scalar only
+-----------------------------
+$answer = "STRING @{[ LIST EXPR ]} MORE STRING";
+$answer = "STRING ${\( SCALAR EXPR )} MORE STRING";
+----------------------------
+$phrase = "I have " . ($n + 1) . " guanacos.";
+$phrase = "I have ${\($n + 1)} guanacos.";
+----------------------------
+print "I have ",  $n + 1, " guanacos.\n";
+----------------------------
+some_func("What you want is @{[ split /:/, $rec ]} items");
+----------------------------
+die "Couldn't send mail" unless send_mail(<<"EOTEXT", $target);
+To: $naughty
+From: Your Bank
+Cc: @{ get_manager_list($naughty) }
+Date: @{[ do { my $now = `date`; chomp $now; $now } ]} (today)
+
+Dear $naughty,
+
+Today, you bounced check number @{[ 500 + int rand(100) ]} to us.
+Your account is now closed.
+
+Sincerely,
+the management
+EOTEXT
+----------------------------
+# all in one
+($var = <<HERE_TARGET) =~ s/^\s+//gm;
+    your text
+    goes here
+HERE_TARGET
+
+# or with two steps
+$var = <<HERE_TARGET;
+    your text
+    goes here
+HERE_TARGET
+$var =~ s/^\s+//gm;
+----------------------------
+($definition = <<'FINIS') =~ s/^\s+//gm;
+    The five varieties of camelids
+    are the familiar camel, his friends
+    the llama and the alpaca, and the
+    rather less well-known guanaco
+    and vicuña.
+FINIS
+----------------------------
+sub fix {
+    my $string = shift;
+    $string =~ s/^\s+//gm;
+    return $string;
+}
+
+print fix(<<"END");
+    My stuff goes here
+END
+
+# With function predeclaration, you can omit the parens:
+print fix <<"END";
+    My stuff goes here
+END
+---------------------------
+($quote = <<'    FINIS') =~ s/^\s+//gm;
+        ...we will have peace, when you and all your works have
+        perished--and the works of your dark master to whom you would
+        deliver us. You are a liar, Saruman, and a corrupter of men's
+        hearts.  --Theoden in /usr/src/perl/taint.c
+    FINIS
+$quote =~ s/\s+--/\n--/;      #move attribution to line of its own
+---------------------------
+if ($REMEMBER_THE_MAIN) {
+    $perl_main_C = dequote<<'    MAIN_INTERPRETER_LOOP';
+        @@@ int
+        @@@ runops() {
+        @@@     SAVEI32(runlevel);
+        @@@     runlevel++;
+        @@@     while ( op = (*op->op_ppaddr)() ) ;
+        @@@     TAINT_NOT;
+        @@@     return 0;
+        @@@ }
+    MAIN_INTERPRETER_LOOP
+    # add more code here if you want
+}
+---------------------------
+sub dequote;
+$poem = dequote<<EVER_ON_AND_ON;
+       Now far ahead the Road has gone,
+          And I must follow, if I can,
+       Pursuing it with eager feet,
+          Until it joins some larger way
+       Where many paths and errands meet.
+          And whither then? I cannot say.
+                --Bilbo in /usr/src/perl/pp_ctl.c
+EVER_ON_AND_ON
+print "Here's your poem:\n\n$poem\n";
+----------------------------
+sub dequote {
+    local $_ = shift;
+    my ($white, $leader);  # common whitespace and common leading string
+    if (/^\s*(?:([^\w\s]+)(\s*).*\n)(?:\s*\1\2?.*\n)+$/) {
+        ($white, $leader) = ($2, quotemeta($1));
+    } else {
+        ($white, $leader) = (/^(\s+)/, '');
+    }
+    s/^\s*?$leader(?:$white)?//gm;
+    return $_;
+}
+----------------------------
+    if (m{
+            ^                       # start of line
+            \s *                    # 0 or more whitespace chars
+            (?:                     # begin first non-remembered grouping
+                 (                  #   begin save buffer $1
+                    [^\w\s]         #     one byte neither space nor word
+                    +               #     1 or more of such
+                 )                  #   end save buffer $1
+                 ( \s* )            #   put 0 or more white in buffer $2
+                 .* \n              #   match through the end of first line
+             )                      # end of first grouping
+             (?:                    # begin second non-remembered grouping
+                \s *                #   0 or more whitespace chars
+                \1                  #   whatever string is destined for $1
+                \2 ?                #   what'll be in $2, but optionally
+                .* \n               #   match through the end of the line
+             ) +                    # now repeat that group idea 1 or more
+             $                      # until the end of the line
+          }x
+       )
+    {
+        ($white, $leader) = ($2, quotemeta($1));
+    } else {
+        ($white, $leader) = (/^(\s+)/, '');
+    }
+    s{
+         ^                          # start of each line (due to /m)
+         \s *                       # any amount of leading whitespace
+            ?                       #   but minimally matched
+         $leader                    # our quoted, saved per-line leader
+         (?:                        # begin unremembered grouping
+            $white                  #    the same amount
+         ) ?                        # optionalize in case EOL after leader
+    }{}xgm;
+-----------------------------
+@OUTPUT = wrap($LEADTAB, $NEXTTAB, @PARA);
+-----------------------------
+# merge multiple lines into one, then wrap one long line
+use Text::Wrap;
+undef $/;
+print wrap('', '', split(/\s*\n\s*/, <>));
+-----------------------------
+use Text::Wrap      qw(&wrap $columns);
+use Term::ReadKey   qw(GetTerminalSize);
+($columns) = GetTerminalSize();
+($/, $\)  = ('', "\n\n");   # read by paragraph, output 2 newlines
+while (<>) {                # grab a full paragraph
+    s/\s*\n\s*/ /g;         # convert intervening newlines to spaces
+    print wrap('', '', $_); # and format
+}
+-----------------------------
+# backslash
+$var =~ s/([CHARLIST])/\\$1/g;
+
+# double
+$var =~ s/([CHARLIST])/$1$1/g;
+-----------------------------
+$string =~ s/%/%%/g;
+-----------------------------
+$string = q(Mom said, "Don't do that.");
+$string =~ s/(['"])/\\$1/g;
+-----------------------------
+$string =~ s/([^A-Z])/\\$1/g;
+-----------------------------
+$string = "this \Qis a test!\E";
+$string = "this is\\ a\\ test\\!";
+$string = "this " . quotemeta("is a test!");
+-----------------------------
+$string =~ s/^\s+//;
+$string =~ s/\s+$//;
+-----------------------------
+$string = trim($string);
+@many   = trim(@many);
+
+sub trim {
+        my @out = @_;
+        for (@out) {
+            s/^\s+//;
+            s/\s+$//;
+    }
+    return wantarray ? @out : $out[0];
+}
+---------------------------
+# print what's typed, but surrounded by >< symbols
+while(<STDIN>) {
+    chomp;
+    print ">$_<\n";
+}
+---------------------------
+sub parse_csv {
+    my $text = shift;      # record containing comma-separated values
+    my @new  = ();
+    push(@new, $+) while $text =~ m{
+        # the first part groups the phrase inside the quotes.
+        # see explanation of this pattern in MRE
+        "([^\"\\]*(?:\\.[^\"\\]*)*)",?
+           |  ([^,]+),?
+           | ,
+       }gx;
+       push(@new, undef) if substr($text, -1,1) eq ',';
+       return @new;      # list of values that were comma-separated
+}  
+---------------------------
+
+sub parse_csv {
+    return quoteword(",",0, $_[0];
+}
+---------------------------
+$line = q<XYZZY,"","O'Reilly, Inc","Wall, Larry","a \"glug\" bit,",5,
+    "Error, Core Dumped">;
+@fields = parse_csv($line);
+for ($i = 0; $i < @fields; $i++) {
+    print "$i : $fields[$i]\n";
+}
+0 : XYZZY
+1 :
+2 : O'Reilly, Inc
+3 : Wall, Larry
+4 : a \"glug\" bit,
+5 : 5
+6 : Error, Core Dumped
+---------------------------
+
+ $CODE  = soundex($STRING);
+ @CODES = soundex(@LIST);
+---------------------------
+use Text::Soundex;
+use User::pwent;
+
+print "Lookup user: ";
+chomp($user = <STDIN>);
+exit unless defined $user;
+$name_code = soundex($user);
+
+while ($uent = getpwent()) {
+    ($firstname, $lastname) = $uent->gecos =~ /(\w+)[^,]*\b(\w+)/;
+
+    if ($name_code eq soundex($uent->name) ||
+        $name_code eq soundex($lastname)   ||
+        $name_code eq soundex($firstname)  )
+    {
+        printf "%s: %s %s\n", $uent->name, $firstname, $lastname;
+    }
+}
+---------------------------
+# very fast, but whitespace collapse
+while (<>) { 
+    for (split) { 
+        print $change{$_} || $_, " ";
+    } 
+    print "\n";
+}
+---------------------------
+my $pid = open(STDOUT, "|-");
+die "cannot fork: $!" unless defined $pid;
+unless ($pid) {             # child
+        while (<STDIN>) {
+        s/ $//;
+        print;
+    } 
+    exit;
+} 
+---------------------------
+% psgrep '/sh\b/'
+---------------------------
+% psgrep 'command =~ /sh$/'
+---------------------------
+% psgrep 'uid < 10'
+---------------------------
+% psgrep 'command =~ /^-/' 'tty ne "?"'
+---------------------------
+--------------------------
+$ psgrep 'tty =~ /^[p-t]/'
+--------------------------
+% psgrep 'uid && tty eq "?"'
+--------------------------
+% psgrep 'size > 10 * 2**10' 'uid != 0'
+--------------------------
+FLAGS   UID   PID  PPID PRI  NI   SIZE   RSS WCHAN     STA TTY TIME COMMAND
+     0   101  9751     1   0   0  14932  9652 do_select S   p1  0:25 netscape
+100000   101  9752  9751   0   0  10636   812 do_select S   p1  0:00 (dns helper)
+--------------------------
+eval "sub is_desirable { uid < 10 } " . 1;
+--------------------------
+% psgrep 'no strict "vars";
+          BEGIN { $id = getpwnam("nobody") }
+          uid == $id '
+--------------------------
+sub id()         { $_->{ID}   }
+sub title()      { $_->{TITLE} }
+sub executive()  { title =~ /(?:vice-)?president/i }
+
+# user search criteria go in the grep clause
+@slowburners = grep { id < 10 && !executive } @employees;
+--------------------------

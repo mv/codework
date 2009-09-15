@@ -1,0 +1,20 @@
+#!/usr/bin/perl -w
+# pipe2 - use pipe and fork so child can send to parent
+
+use IO::Handle;
+pipe(READER, WRITER);
+WRITER->autoflush(1);
+
+if ($pid = fork) {
+    close WRITER;
+    chomp($line = <READER>);
+    print "Parent Pid $$ just read this: `$line'\n";
+    close READER;
+    waitpid($pid,0);
+} else {
+    die "cannot fork: $!" unless defined $pid;
+    close READER;
+    print WRITER "Child Pid $$ is sending this\n";
+    close WRITER;  # this will happen anyway
+    exit;
+}

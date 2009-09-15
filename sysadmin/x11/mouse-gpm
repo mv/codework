@@ -1,0 +1,7 @@
+
+Section "InputDevice"
+    Identifier  "Mouse1"
+    Driver  "mouse"
+    Option "Protocol"    "MouseSystems"
+    Option "Device"      "/dev/gpmdata"
+EndSection

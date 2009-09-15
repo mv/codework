@@ -1,0 +1,10 @@
+#!/usr/bin/perl -n    
+# countchunks - count how many words are used.    
+# skip comments, and bail on file if _     _END_     _   
+# or _     _DATA_     _ seen.    
+for (split /\W+/) { 
+    next LINE if /^#/; 
+    close ARGV if /_     _(DATA|END)_     _/; 
+    $chunks++;     
+}     
+END { print "Found $chunks chunks\n" }
