@@ -1,0 +1,52 @@
+<project name="BotANT" default="execute" basedir=".">
+    <description>
+        $Id: teste.xml 6 2006-09-10 15:35:16Z marcus $
+        Modelo de tarefas
+    </description>
+
+    <property name="login"  value="appcns" />
+    <property name="senha"  value="appcns" />
+    <property name="suroot" value="power" />
+    <property name="dir1"   value="~/work/eis/snap" />
+    <property name="dir2"   value="/u01/app/oracle/admin" />
+    <property name="exec"   value="cr_snap.sh" />
+    <property name="pak"    value="eis-tab-v1.2.tar.gz" />
+
+    <target name="execute" >
+
+        <telnet server="${ip}">
+             <read>ogin:</read>
+             <write echo="false">${login}</write>
+             <read>assword:</read>
+             <write echo="false">${senha}</write>
+                 <read>$ </read>
+                 <write echo="false"> export PS1="$ "            </write>
+                 <read>$ </read>
+                 <write echo="false"> echo "" ;\
+                                      echo "   HOST=${HOST}    "  ;\
+                                      echo "     IP=${IP}      "  ;\
+                                      echo "    TNS=${TNS}     "  ;\
+                                      echo "LABEL_1=${LABEL_1} "  ;\
+                                      echo "LABEL_2=${LABEL_2} "  ;\
+                                      echo "SERVICE=${SERVICE} "  ;\
+                                      echo " SCHEMA=${SCHEMA}  "  ;\
+                                      echo " CD_MUN=${CD_MUN}  "  ;\
+                                      echo "  CD_UF=${CD_UF}   "  </write>
+                 <read>$ </read>
+                 <write echo="false"> echo "" ;\
+                                      echo "   host=${host}    "  ;\
+                                      echo "     ip=${ip}      "  ;\
+                                      echo "    tns=${tns}     "  ;\
+                                      echo "label_1=${label_1} "  ;\
+                                      echo "label_2=${label_2} "  ;\
+                                      echo "service=${service} "  ;\
+                                      echo " schema=${schema}  "  ;\
+                                      echo " cd_mun=${cd_mun}  "  ;\
+                                      echo "  cd_uf=${cd_uf}   "  </write>
+                 <read>$ </read>
+        </telnet>
+
+    </target>
+
+</project>
+

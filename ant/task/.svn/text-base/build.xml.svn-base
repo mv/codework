@@ -1,0 +1,161 @@
+<project name="BotANT" default="execute" basedir=".">
+    <description>
+        $Id: build.xml 6 2006-09-10 15:35:16Z marcus $
+        Modelo de tarefas
+          .     execute: shell normal
+          .      mk_dir: cria diretorio, se necessario
+          .     su_root: shell em root
+          .     sqlplus: dentro do SQLPLUS, em linha de comando
+          .    ftp_send: ftp put
+          . ftp_receive: ftp get
+    </description>
+
+    <property name="login"  value="oracle" />
+    <property name="senha"  value="${ORACLE}" />
+    <property name="suroot" value="${ROOT}" />
+
+    <property name="dir1"   value="~/work/eis/snap" />
+    <property name="dir2"   value="/u01/app/oracle/admin" />
+
+    <property name="exec"   value="cr_snap.sh" />
+    <property name="pak"    value="eis-tab-v1.2.tar.gz" />
+
+    <target name="execute" depends="ftp_send">
+
+        <telnet server="${ip}">
+             <read>ogin:</read>
+             <write echo="false">${login}</write>
+             <read>assword:</read>
+             <write echo="false">${senha}</write>
+             <read>$ </read>
+
+                 <write> cd ${dir1}  </write>
+                 <read>$ </read>
+
+                 <write> gunzip -c ${pak} | tar xf -  </write>
+                 <read>$ </read>
+
+                 <write> chmod 755 *sh  </write>
+                 <read>$ </read>
+
+                 <write> [ ! -f nohup.out ] || /bin/rm -f nohup.out </write>
+                 <read>$ </read>
+
+                 <write> nohup ./${exec} &amp; </write>
+                 <read>$ </read>
+
+        </telnet>
+    </target>
+
+    <target name="ftp_send" depends="mk_dir" >
+
+        <ftp server="${ip}"
+             remotedir="${dir1}"
+             userid="${login}"
+             password="${senha}"
+             depends="yes"
+             binary="yes"
+             action="send"
+        >
+            <fileset dir="send"/>
+
+        </ftp>
+
+    </target>
+
+    <target name="ftp_receive" depends="install_oraback">
+        <ftp server="${ip}"
+             remotedir="/u01/app/oracle/oraback"
+             userid="${login}"
+             password="${senha}"
+             depends="yes"
+             binary="yes"
+             action="get"
+        >
+            <fileset dir="receive">
+                <include name="oraback.conf_${host}"/>
+            </fileset>
+
+        </ftp>
+    </target>
+
+    <target name="mk_dir" >
+        <telnet server="${ip}">
+             <read>ogin:</read>
+             <write echo="false">${login}</write>
+             <read>assword:</read>
+             <write echo="false">${senha}</write>
+             <read>$ </read>
+
+                 <write> [ -d ${dir1} ] || mkdir -p ${dir1}  </write>
+                 <read>$ </read>
+
+        </telnet>
+    </target>
+
+    <target name="su_root" >
+        <telnet server="${ip}">
+            <read>ogin:</read>
+            <write echo="false">${login}</write>
+            <read>assword:</read>
+            <write echo="false">${senha}</write>
+            <read>$ </read>
+
+                <write echo="false"> su - </write>
+                <read>word: </read>
+
+                <write echo="false">${suroot}</write>
+                <read># </read>
+
+                <write> cd /tmp </write>
+                <read># </read>
+
+        </telnet>
+    </target>
+
+    <target name="sqlplus" >
+        <telnet server="${ip}">
+            <write echo="false">${login}</write>
+            <read>assword:</read>
+            <write echo="false">${senha}</write>
+            <read>$ </read>
+
+                <write> lsnrctl start  </write>
+                <read>$ </read>
+
+                <write> MUN  </write>
+                <read>$ </read>
+
+                <write> sqlplus internal  </write>
+                <read>SQL&gt; </read>
+
+                    <write> shutdown abort </write>
+                    <read>SQL&gt; </read>
+
+                    <write> startup </write>
+                    <read>SQL&gt; </read>
+
+                    <write> exit </write>
+                    <read>$ </read>
+
+                <write> EIS  </write>
+                <read>$ </read>
+
+                <write> sqlplus internal  </write>
+                <read>SQL&gt; </read>
+
+                    <write> shutdown abort </write>
+                    <read>SQL&gt; </read>
+
+                    <write> startup </write>
+                    <read>SQL&gt; </read>
+
+                    <write> exit </write>
+                    <read>$ </read>
+
+        </telnet>
+    </target>
+
+
+</project>
+

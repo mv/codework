@@ -1,0 +1,11 @@
+#
+# $Id: list_lab.txt 6 2006-09-10 15:35:16Z marcus $
+#
+# label1                label2  hostname        ip              tnsnames    service_name    schema          cd_mun  cd_uf  concentrador     estadual
+#
+
+Federal__192            fed11   federal         192.168.1.11    fedad       fedad           F00000000000001 xxxxxx  xx      xxx             xx
+Estadual_192            est15   estadual        192.168.1.15    estad       estad           E15000000000000 xxxxxx  xx      xxx             xx
+Concentrador_192        cnc13   concentrador    192.168.1.13    cncad       cncad           C35000000000001 xxxxxx  xx      xxx             xx
+Municipal_192           mun11   municipal       192.168.1.11    muni        muni            M35354990000000 354990  35      C35000000000001 E15000000000000
+Stage_192               stg19   stage           192.168.1.19    mun         mun             M35354990000000 354990  35      C35000000000001 E15000000000000

@@ -1,0 +1,21 @@
+# $Id: list_cnc.txt 6 2006-09-10 15:35:16Z marcus $
+# hostname  ip          tnsnames            schema          cd_mun  cd_uf   cnc     estadual
+#
+
+#
+# $Id: list_cnc.txt 6 2006-09-10 15:35:16Z marcus $
+#
+# label1            label2  hostname    ip          tnsnames    service_name        schema          cd_mun  cd_uf   concentrador    estadual            root        oracle
+#
+
+
+cnc_saopaulo        csposp  HCSPOSP1    10.11.30.1  cnc_spo     CNC.C35000000000001 C35000000000001 354780  35      xxx             E35000000000000     ao33h9T&    biImoYgZ
+cnc_osasco          cosasp  HCOSASP1    10.11.32.1  cnc_osa     CNC.C35000000000002 C35000000000002 353440  35      xxx             E35000000000000     ahvl@zby    b@8LXD3S
+cnc_riodejaneiro    criorj  HCRIORJ1    10.21.30.1  cnc_rio     CNC.C33000000000001 C33000000000001 330630  33      xxx             E33000000000000     -DbSnegO    Mi@AFHZt
+cnc_espiritosanto   cvites  HCVITES1    10.27.30.1  cnc_vit     CNC.C32000000000001 C32000000000001 320530  32      xxx             E32000000000000     BsJLHHoX    !-NMvJTz
+cnc_belohorizonte   cbhzmg  HCBHZMG1    10.31.30.1  cnc_bhz     CNC.C31000000000001 C31000000000001 310620  31      xxx             E31000000000000     YgYREEog    hucySsBN
+cnc_parana          ccrtpr  HCCRTPR1    10.41.30.1  cnc_crt     CNC.C41000000000001 C41000000000001 410020  41      xxx             E41000000000000     elPqP5Q9    gGGiT0PT
+cnc_campomourao     ccmopr  HCCMOPR1    10.44.30.1  cnc_cmo     CNC.C41000000000002 C41000000000002 410430  41      xxx             E41000000000000     ezEE5T0J    g#r263fP
+cnc_santacatarina   cflnsc  HCFLNSC1    10.48.30.1  cnc_fln     CNC.C42000000000001 C42000000000001 420540  42      xxx             E42000000000000     9S@#lqTX    0CYWJrJl
+cnc_campogrande     ccpgms  HCCPGMS1    10.67.30.1  cnc_cpg     CNC.C50000000000001 C50000000000001 500270  50      xxx             E50000000000000     FhH9-%wx    ucf6rYuY
+cnc_para            cblmpa  HCBLMPA1    10.91.30.1  cnc_blm     CNC.C15000000000001 C15000000000001 150240  15      xxx             E15000000000000     ci!rL!cq    HGFSftoS
