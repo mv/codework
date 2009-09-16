@@ -1,0 +1,19 @@
+$ time ./tab2csv emp1
+real    0m1.406s
+user    0m0.470s
+sys     0m0.140s
+
+titan[oracle@spcad]:/tmp/dbi/proc
+$ time ./tab2csv emp2
+
+real    2m14.260s
+user    0m43.860s
+sys     0m9.340s
+
+titan[oracle@spcad]:/tmp/dbi/proc
+$ time ./tab2csv emp3
+
+real    21m49.813s
+user    7m0.990s
+sys     1m40.840s
+

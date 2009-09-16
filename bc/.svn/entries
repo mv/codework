@@ -1,0 +1,53 @@
+8
+
+dir
+20084
+http://aurora.alejandro.inf.br:8080/repos/mdias/salto/branch/marcus.ferreira/bc
+http://aurora.alejandro.inf.br:8080/repos/mdias
+
+
+
+2006-11-29T13:40:43.592753Z
+4904
+marcus.ferreira
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+668e902b-d23d-45e4-8677-41cba24a12b6
+
+tutorial.bc.sh
+file
+
+
+
+
+2006-11-29T13:40:43.000000Z
+820b119fa7f876c05aab34cc42301ece
+2006-11-29T13:40:43.592753Z
+4904
+marcus.ferreira
+has-props
+
+f2c.bc
+file
+
+
+
+
+2006-11-29T13:40:43.000000Z
+0e7e2457b67198a55c87077378ca9e64
+2006-11-29T13:40:43.592753Z
+4904
+marcus.ferreira
+

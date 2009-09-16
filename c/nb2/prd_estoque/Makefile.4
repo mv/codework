@@ -1,0 +1,25 @@
+
+# Usando macros
+DEPENDS = cco-estoque.o mod_alteracao.o mod_atu_qtd.o mod_consolidacao.o mod_consulta.o mod_exclusao.o mod_insercao.o mod_relatorio.o
+CFLAGS = -Wall -O
+DEBUG = -DDEBUG -g
+
+cco-estoque: $(DEPENDS)
+	gcc $(CFLAGS) -o $@ $(DEPENDS)
+	ident cco-estoque.exe
+
+
+# $* - target without extension
+# $@ - target name
+# gcc -c -O mod_alteracao.c
+# gcc -c -O $*.c
+
+debug:
+	gcc $(DEBUG) $(CFLAGS) -o cco-estoque cco-estoque.c mod*.c
+	#
+	# DEBUG enabled
+	#
+	ident cco-estoque.exe
+
+clean:
+	rm *.exe *.o

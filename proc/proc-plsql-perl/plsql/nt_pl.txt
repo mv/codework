@@ -1,0 +1,28 @@
+$ time sqlplus -s scott/tiger @exec.sql emp1
+
+PL/SQL procedure successfully completed.
+
+
+real    0m1.684s
+user    0m0.015s
+sys     0m0.015s
+
+Administrator@PANDORA /cygdrive/c/tmp
+$ time sqlplus -s scott/tiger @exec.sql emp2
+
+PL/SQL procedure successfully completed.
+
+
+real    0m45.862s
+user    0m0.015s
+sys     0m0.015s
+
+Administrator@PANDORA /cygdrive/c/tmp
+$ time sqlplus -s scott/tiger @exec.sql emp3
+
+PL/SQL procedure successfully completed.
+
+
+real    7m27.852s
+user    0m0.015s
+sys     0m0.015s

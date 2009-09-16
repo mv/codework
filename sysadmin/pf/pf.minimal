@@ -1,0 +1,9 @@
+#
+# pf.conf
+#
+
+block in  all
+pass  out all keep state
+
+# sudo pfctl -e -f /etc/pf.conf
+

@@ -1,0 +1,16 @@
+#
+# pf.conf
+#
+
+tcp_services = "{ssh, smtp, domain, www, pop3, auth, pop3s}"
+udp_services = "{domain}"
+
+block in  all
+pass  out proto tcp to any port $tcp_services keep state
+pass      proto udp to any port $udp_services keep state
+
+# sudo pfctl -n -f /etc/pf.conf
+# sudo pfctl -e -f /etc/pf.conf
+# sudo pfctl -e -v -f /etc/pf.conf
+
+# sudo pfctl -s info

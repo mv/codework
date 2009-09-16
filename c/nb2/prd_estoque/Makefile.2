@@ -1,0 +1,36 @@
+
+
+cco-estoque: cco-estoque.o mod_alteracao.o mod_atu_qtd.o mod_consolidacao.o mod_consulta.o mod_exclusao.o mod_insercao.o mod_relatorio.o
+	gcc -o cco-estoque -O cco-estoque.o mod*.o
+	ident cco-estoque.exe
+
+mod_alteracao.o:    mod_alteracao.c
+	gcc -c -O mod_alteracao.c
+
+mod_atu_qtd.o:      mod_atu_qtd.c
+	gcc -c -O mod_atu_qtd.c
+
+mod_consolidacao.o: mod_consolidacao.c
+	gcc -c -O mod_consolidacao.c
+
+mod_consulta.o:     mod_consulta.c
+	gcc -c -O mod_consulta.c
+
+mod_exclusao.o:     mod_exclusao.c
+	gcc -c -O mod_exclusao.c
+
+mod_insercao.o:     mod_insercao.c
+	gcc -c -O mod_insercao.c
+
+mod_relatorio.o:    mod_relatorio.c
+	gcc -c -O mod_relatorio.c
+
+debug:
+	gcc -DDEBUG -o cco-estoque -O cco-estoque.c mod*.c
+	#
+	# DEBUG enabled
+	#
+	ident cco-estoque.exe
+
+clean:
+	rm *.exe *.o

@@ -1,0 +1,32 @@
+# $Id: install.txt 2383 2006-10-27 19:02:18Z marcus.ferreira $
+
+[ -z "SVN_BASE" ] && exit 1
+
+    # cd atg/svn/www/conf/
+    # chmod 644 *.*
+    # scp *.* appsvn@fsw2:/u01/subversion/www/conf/
+    #
+    # cd ../htdocs/
+    # chmod 644 *.*
+    # scp *.* appsvn@fsw2:/u01/subversion/www/htdocs/
+    #
+    # cd ../cgi/
+    # chmod 0755 *.*
+    # scp *.* appsvn@fsw2:/u01/subversion/www/cgi/
+
+cd $HTTPD_HOME/conf
+    /bin/mv httpd.conf httpd.conf.0
+    ln -s $SVN_BASE/www/conf/httpd.conf
+
+cd $HTTPD_HOME
+    /bin/rm -rf logs
+    ln -s $SVN_BASE/www/logs
+
+cd $HTTPD_HOME
+    /bin/mv htdocs/apa*.* $SVN_BASE/www/htdocs
+    /bin/rm -rf htdocs
+    ln -s $SVN_BASE/www/htdocs
+
+cd $HTTPD_HOME
+    /bin/cp ./cgi-bin/*  $SVN_BASE/www/cgi
+

@@ -1,0 +1,87 @@
+# page 5-28 PL/SQL User’s Guide and Reference
+#include <stdio.h>
+#include <sqlca.h>
+void sql_error();
+main()
+{
+char temp[32];
+EXEC SQL BEGIN DECLARE SECTION;
+char * uid = "scott/tiger";
+SQL_CURSOR generic_cv; /* cursor variable */
+int table_num; /* selector */
+struct /* EMP record */
+{
+int emp_num;
+char emp_name[11];
+char job_title[10];
+int manager;
+char hire_date[10];
+float salary;
+float commission;
+int dept_num;
+} emp_rec;
+struct /* DEPT record */
+{
+int dept_num;
+char dept_name[15];
+char location[14];
+} dept_rec;
+struct /* BONUS record */
+{
+char emp_name[11];
+char job_title[10];
+float salary;
+} bonus_rec;
+EXEC SQL END DECLARE SECTION;
+/* Handle Oracle errors. */
+EXEC SQL WHENEVER SQLERROR DO sql_error();
+/* Connect to Oracle. */
+EXEC SQL CONNECT :uid;
+/* Initialize cursor variable. */
+EXEC SQL ALLOCATE :generic_cv;
+/* Exit loop when done fetching. */
+EXEC SQL WHENEVER NOT FOUND DO break;
+for (;;)
+{
+printf("\n1 = EMP, 2 = DEPT, 3 = BONUS");
+printf("\nEnter table number (0 to quit): ");
+gets(temp);
+table_num = atoi(temp);
+if (table_num <= 0) break;
+/* Open cursor variable. */
+EXEC SQL EXECUTE
+BEGIN
+IF :table_num = 1 THEN
+OPEN :generic_cv FOR SELECT * FROM emp;
+ELSIF :table_num = 2 THEN
+OPEN :generic_cv FOR SELECT * FROM dept;
+ELSIF :table_num = 3 THEN
+OPEN :generic_cv FOR SELECT * FROM bonus;
+END IF;
+END;
+END-EXEC;
+for (;;)
+{
+switch (table_num)
+{
+case 1: /* Fetch row into EMP record. */
+EXEC SQL FETCH :generic_cv INTO :emp_rec;
+break;
+case 2: /* Fetch row into DEPT record. */
+EXEC SQL FETCH :generic_cv INTO :dept_rec;
+break;
+case 3: /* Fetch row into BONUS record. */
+EXEC SQL FETCH :generic_cv INTO :bonus_rec;
+break;
+}
+/* Process data record here. */
+}
+/* Close cursor variable. */
+EXEC SQL CLOSE :generic_cv;
+}
+exit(0);
+}
+void sql_error()
+{
+/* Handle SQL error here. */
+}

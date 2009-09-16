@@ -1,0 +1,78 @@
+emp1
+----
+
+Total logical records skipped:          0
+Total logical records read:          5000
+Total logical records rejected:         0
+Total logical records discarded:        0
+
+Run began on Mon Jun 10 16:28:34 2002
+Run ended on Mon Jun 10 16:28:36 2002
+
+Elapsed time was:     00:00:01.99
+CPU time was:         00:00:00.56
+
+emp2
+----
+
+Total logical records skipped:          0
+Total logical records read:        500000
+Total logical records rejected:         0
+Total logical records discarded:        0
+
+Run began on Mon Jun 10 16:21:27 2002
+Run ended on Mon Jun 10 16:24:16 2002
+
+Elapsed time was:     00:02:49.04
+CPU time was:         00:00:37.71
+
+emp3
+----
+
+Table SCOTT.EMP3:
+  4999991 Rows successfully loaded.
+  9 Rows not loaded due to data errors.
+  0 Rows not loaded because all WHEN clauses were failed.
+  0 Rows not loaded because all fields were null.
+
+
+Space allocated for bind array:                9998016 bytes(4844 rows)
+Space allocated for memory besides bind array:        0 bytes
+
+Total logical records skipped:          0
+Total logical records read:       5000000
+Total logical records rejected:         9
+Total logical records discarded:        0
+
+Run began on Mon Jun 10 16:55:33 2002
+Run ended on Mon Jun 10 18:11:05 2002
+
+Elapsed time was:     01:15:32.11
+CPU time was:         00:06:02.68
+
+10/06/2002 3:11
+
+
+emp1                    emp2                    emp3
+---------------         ---------------         --------------
+real        1.7         real     2:35.6
+user        0.0         user        0.0
+sys         0.0         sys         0.0
+
+
+real        1.6         real     2:25.6
+user        0.0         user        0.0
+sys         0.0         sys         0.0
+
+
+real        1.6         real     2:27.7
+user        0.1         user        0.0
+sys         0.0         sys         0.0
+
+
+
+
+
+
+
+

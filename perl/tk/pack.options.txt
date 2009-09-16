@@ -1,0 +1,36 @@
+
+pack
+----
+
+    -side => 'left' | 'right' | 'top' | 'bottom
+        Puts the widget against the specified side of the window or Frame
+
+    -fill => 'none' | 'x' | 'y'| 'both'
+        Causes the widget to fill the allocation rectangle in the specified direction
+
+    -expand => 1 | 0
+        Causes the allocation rectangle to fill the remaining space available in the window or Frame
+
+    -anchor => 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'center'
+        Anchors the widget inside the allocation rectangle
+
+    -after => $otherwidget
+        Puts $widget after $otherwidget in packing order
+
+    -before => $otherwidget
+        Puts $widget before $otherwidget in packing order
+
+    -in => $otherwindow
+        Packs $widget inside of $otherwindow rather than the parent of $widget, which is the default
+
+    -ipadx => amount
+        Increases the size of the widget horizontally by amount
+
+    -ipady => amount
+        Increases the size of the widget vertically by amount
+
+    -padx => amount
+        Places padding on the left and right of the widget
+
+    -pady => amount
+        Places padding on the top and bottom of the widget

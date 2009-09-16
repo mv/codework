@@ -1,0 +1,43 @@
+
+# Usando macros
+DEPENDS = cco-estoque.o mod_alteracao.o mod_atu_qtd.o mod_consolidacao.o mod_consulta.o mod_exclusao.o mod_insercao.o mod_relatorio.o
+DBGOBJS = cco-estoque.do mod_alteracao.do mod_atu_qtd.do mod_consolidacao.do mod_consulta.do mod_exclusao.do mod_insercao.do mod_relatorio.do
+
+OUTPUT = cco-estoque
+DBGPUT = dbg-estoque
+
+CFLAGS = -Wall -O
+DEBUG = -DDEBUG -g
+
+# Usando sufixos: limpa a lista e define na 2a. chamada
+.SUFFIXES:
+.SUFFIXES: .c .o .do
+
+# Regra 1:
+.c.o:; gcc $(CFLAGS) -c -o $@ $<
+
+# Regra 2:
+.c.do:; gcc $(DEBUG) $(CFLAGS) -c -o $@ $<
+
+cco-estoque: $(DEPENDS)
+	gcc $(CFLAGS) -o $(OUTPUT) $(DEPENDS)
+	ln -s $(OUTPUT).exe $(OUTPUT)
+	ident $(OUTPUT)
+
+
+# $* - target without extension
+# $@ - target name
+# $< - source file ( *.c )
+# gcc -c -O mod_alteracao.c
+# gcc -c -O $*.c
+
+debug: $(DBGOBJS)
+	gcc $(DEBUG) -o $(DBGPUT) $(DBGOBJS)
+	#
+	# DEBUG enabled
+	#
+	ln -s $(DBGPUT).exe $(DBGPUT)
+	ident $(DBGPUT)
+
+clean:
+	rm $(OUTPUT).exe $(OUTPUT) $(DBGPUT) $(DBGPUT).exe *.o *.do

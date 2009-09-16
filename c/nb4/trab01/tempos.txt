@@ -1,0 +1,39 @@
+Tempos de Processamento
+-----------------------
+
+Celeron 1.2Ghz
+    RAM 256M
+Windows XP
+ Cygwin 2.340
+    GCC 3.2.3
+   time 1.7
+
+$ time ./b2
+
+BubbleSort
+
+real    0m58.949s           real    1m5.035s        real    1m4.757s
+user    0m45.104s           user    0m44.614s       user    0m45.645s
+sys     0m0.050s            sys     0m0.100s        sys     0m0.060s
+
+$ time ./sl
+
+Selection
+real    0m36.521s           real    0m35.679s       real    0m36.111s
+user    0m19.127s           user    0m18.786s       user    0m18.897s
+sys     0m0.050s            sys     0m0.050s        sys     0m0.050s
+
+$ time ./ins
+
+Insertion
+real    0m31.767s           real    0m31.836s       real    0m30.651s
+user    0m14.130s           user    0m14.060s       user    0m14.170s
+sys     0m0.040s            sys     0m0.070s        sys     0m0.050s
+
+$ time ./sh
+
+Shaker
+real    0m34.911s           real    0m35.188s       real    0m34.001s
+user    0m15.281s           user    0m15.422s       user    0m15.352s
+sys     0m0.050s            sys     0m0.050s        sys     0m0.050s
+

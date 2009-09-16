@@ -1,0 +1,67 @@
+#!/bin/sh
+
+# $Id$
+# http://www.sns.ias.edu/~jns/wp/2006/03/24/iptables-on-a-linksys-cisco-wrt54gl-broadband-router-howto/
+
+IPTABLES="/usr/sbin/iptables"
+INTERFACES="br0 lo"
+LAN="192.168.1.0./24"
+WANIP="your.wan.ip"
+
+# Wait a while due to timing problem
+sleep 30
+
+# Set default policies to ACCEPT"
+$IPTABLES -P OUTPUT ACCEPT
+$IPTABLES -P INPUT ACCEPT
+$IPTABLES -P FORWARD ACCEPT
+
+# Flush all tables and chains
+#
+cat /proc/net/ip_tables_names | while read table; do
+$IPTABLES -t $table -L -n | while read c chain rest; do
+if test "X$c" = "XChain" ; then
+$IPTABLES -t $table -F $chain
+fi
+done
+$IPTABLES -t $table -X
+done
+
+# Allow all loopback traffic
+$IPTABLES -A INPUT -i lo -m state --state NEW -j ACCEPT
+$IPTABLES -A OUTPUT -o lo -m state --state NEW -j ACCEPT
+
+# Allow all ESTABLISHED and RELATED traffic"
+$IPTABLES -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+$IPTABLES -A FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Allow all LAN traffic to router"
+$IPTABLES -A INPUT -i br0 -s $LAN -m state --state NEW -j ACCEPT
+
+# Allow all traffic from router to ANY"
+$IPTABLES -A OUTPUT -m state --state NEW -j ACCEPT
+
+# Allow all traffic from LAN to ANY"
+$IPTABLES -A FORWARD -s $LAN -m state --state NEW -j ACCEPT
+
+# Allow dhcp
+$IPTABLES -A INPUT -i br0 -p udp -s 0.0.0.0 -d 255.255.255.255
+ -p udp -m multiport --dports 68,67 -m state --state NEW -j ACCEPT
+
+# Enable Network Address Translation
+$IPTABLES -t nat -A POSTROUTING -o vlan1 -s $LAN -j MASQUERADE
+
+# Fix MTU size
+$IPTABLES -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN
+ -m tcpmss --mss 1421:65535 -j TCPMSS --clamp-mss-to-pmtu
+
+$IPTABLES -P OUTPUT ACCEPT
+$IPTABLES -P INPUT DROP
+$IPTABLES -P FORWARD DROP
+
+# enable IP forwarding
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+exit 0
+

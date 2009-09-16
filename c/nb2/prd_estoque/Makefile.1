@@ -1,0 +1,15 @@
+
+
+cco-estoque:
+	gcc -o cco-estoque -O cco-estoque.c mod*.c
+	ident cco-estoque.exe
+
+debug:
+	gcc -DDEBUG -o cco-estoque -O cco-estoque.c mod*.c
+	#
+	# DEBUG enabled
+	#
+	ident cco-estoque.exe
+
+clean:
+	rm *.exe *.o ~*

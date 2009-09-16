@@ -1,0 +1,25 @@
+# $Id$
+Job {
+    Dove {
+        Robin
+        Martin
+        Peregrine
+        Jay
+        Coot
+        Finch
+        Condor
+        Budgie
+        Curlew
+        Kiwi
+    }
+    Cinnamon {
+        Parsley
+        Sage
+        Rosemay
+        Thyme
+    }
+    Eyeshadow Kit {
+        Maybelline
+        Jake
+    }
+}

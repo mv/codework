@@ -1,0 +1,42 @@
+
+db_name                 = spcad
+instance_name		= spcad
+service_names		= spcad
+
+compatible = 8.1.7
+
+db_block_size = 4096
+db_block_buffers = 8192                                              # LARGE  
+shared_pool_size = 9437184
+large_pool_size = 0
+java_pool_size = 0
+
+log_buffer =   8192        
+sort_area_size = 262144            #  256k 	# Des2k 6i / Oem 2.2
+sort_area_retained_size = 262144   #  256K	# Oem 2.2
+db_file_multiblock_read_count=16 	# for a 4K Oracle block 
+
+--------------------------------------------------
+
+db_files = 1024
+control_files           = (/u01/oradata/spcad/spcad_control01.ctl, 
+                           /u02/oradata/spcad/spcad_control02.ctl,
+                           /u03/oradata/spcad/spcad_control03.ctl,
+                           /u04/oradata/spcad/spcad_control04.ctl)
+
+audit_file_dest         = /u01/app/oracle/admin/spcad/adump
+background_dump_dest    = /u01/app/oracle/admin/spcad/bdump
+core_dump_dest		= /u01/app/oracle/admin/spcad/cdump
+user_dump_dest		= /u01/app/oracle/admin/spcad/udump
+
+log_archive_start  = true
+log_archive_dest   = /u04/oradata/spcad/arch
+log_archive_format = arc_spcad_%S_%T.arch
+
+timed_statistics = true         # if you want timed statistics
+max_dump_file_size = 10240      # limit trace file size to 5 Meg each
+              
+# ===--- Networking ---=== 
+
+global_names = true
+remote_login_passwordfile=exclusive

@@ -1,0 +1,64 @@
+
+1) Depot
+
+        $ cat /home/marcus/svk/env_svk.sh
+        #
+        # $Id: svk.txt 8453 2007-01-25 18:53:51Z marcus.ferreira $
+        #
+
+        export SVNFSTYPE=bdb
+        export SVNFSTYPE=fsfs
+        export SVKROOT="/u01/svkdata/dp01"
+        export DB_HOME="/u01/svkdata/dp01/local/db" # bdb home..
+
+        # export PATH=/usr/local/BerkeleyDB.4.5/bin:$PATH
+
+        alias db_recover="db_recover -v"
+
+        # svk depotmap --init
+
+
+
+//myproject/        -- imported
+        branch/
+        trunk/
+        tag/
+//mydraft/          -- imported
+        branch/
+        trunk/
+        tag/
+//mirror/
+        salto/      -- mirror
+            branch/
+            trunk/
+            tag/
+        mvdba/      -- mirror
+            trunk/
+
+
+2) To the Depot
+
+    a. Import: add an unversioned tree of file to the depot.
+    ---------
+
+    $ cd ~/work/projects
+    $ svk import -m "Imported." ./calc //calc [--to-checkout]
+
+
+    b. Mirror:
+    ----------
+
+    $ svk mirror http://mdbebsfsw2.mdb.com.br:8080/repos/salto  //mirror/salto
+    $ svk sync //mirror/salto
+
+
+
+
+3) Checkout
+
+    $ cd ~/work/workspace
+
+    $ svk co //calc                 calc
+    $ svk co //mirror/mvdba/trunk   mvdba
+    $ svk co //mirror/salto         salto
+

@@ -1,0 +1,53 @@
+Summary of my perl5 (revision 5 version 8 subversion 7) configuration:
+  Platform:
+    osname=cygwin, osvers=1.5.18(0.13242), archname=cygwin-thread-multi-64int
+    uname='cygwin_nt-5.1 inspiron 1.5.18(0.13242) 2005-07-02 20:30 i686 unknown unknown cygwin '
+    config_args='-de -Dmksymlinks -Duse64bitint -Dusethreads -Uusemymalloc -Doptimize=-O3 -Dman3ext=3pm -Dusesitecustomize'
+    hint=recommended, useposix=true, d_sigaction=define
+    usethreads=define use5005threads=undef useithreads=define usemultiplicity=define
+    useperlio=define d_sfio=undef uselargefiles=define usesocks=undef
+    use64bitint=define use64bitall=undef uselongdouble=undef
+    usemymalloc=n, bincompat5005=undef
+  Compiler:
+    cc='gcc', ccflags ='-DPERL_USE_SAFE_PUTENV -fno-strict-aliasing -pipe -I/usr/local/include',
+    optimize='-O3',
+    cppflags='-DPERL_USE_SAFE_PUTENV -fno-strict-aliasing -pipe -I/usr/local/include'
+    ccversion='', gccversion='3.4.4 (cygming special) (gdc 0.12, using dmd 0.125)', gccosandvers=''
+    intsize=4, longsize=4, ptrsize=4, doublesize=8, byteorder=12345678
+    d_longlong=define, longlongsize=8, d_longdbl=define, longdblsize=12
+    ivtype='long long', ivsize=8, nvtype='double', nvsize=8, Off_t='off_t', lseeksize=8
+    alignbytes=8, prototype=define
+  Linker and Libraries:
+    ld='ld2', ldflags =' -s -L/usr/local/lib'
+    libpth=/usr/local/lib /lib /usr/lib
+    libs=-lgdbm -ldb -lcrypt -lgdbm_compat
+    perllibs=-lcrypt -lgdbm_compat
+    libc=/usr/lib/libc.a, so=dll, useshrplib=true, libperl=libperl.a
+    gnulibc_version=''
+  Dynamic Linking:
+    dlsrc=dl_dlopen.xs, dlext=dll, d_dlsymun=undef, ccdlflags=' -s'
+    cccdlflags=' ', lddlflags=' -s -L/usr/local/lib'
+
+
+Characteristics of this binary (from libperl): 
+  Compile-time options: MULTIPLICITY USE_ITHREADS USE_64_BIT_INT
+                        USE_LARGE_FILES USE_SITECUSTOMIZE
+                        PERL_IMPLICIT_CONTEXT
+  Locally applied patches:
+	SPRINTF0 - fixes for sprintf formatting issues - CVE-2005-3962
+  Built under cygwin
+  Compiled at Dec 30 2005 02:44:25
+  %ENV:
+    CYGWIN=""ntsec server""
+  @INC:
+    /usr/lib/perl5/5.8/cygwin
+    /usr/lib/perl5/5.8
+    /usr/lib/perl5/site_perl/5.8/cygwin
+    /usr/lib/perl5/site_perl/5.8
+    /usr/lib/perl5/site_perl/5.8/cygwin
+    /usr/lib/perl5/site_perl/5.8
+    /usr/lib/perl5/vendor_perl/5.8/cygwin
+    /usr/lib/perl5/vendor_perl/5.8
+    /usr/lib/perl5/vendor_perl/5.8/cygwin
+    /usr/lib/perl5/vendor_perl/5.8
+    .

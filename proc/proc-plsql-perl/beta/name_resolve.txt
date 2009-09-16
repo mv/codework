@@ -1,0 +1,9 @@
+DBMS_UTILITY.NAME_RESOLVE (
+name            IN  VARCHAR2,
+context         IN  NUMBER,
+schema          OUT VARCHAR2,
+part1           OUT VARCHAR2,
+part2           OUT VARCHAR2,
+dblink          OUT VARCHAR2,
+part1_type      OUT NUMBER,
+object_number   OUT NUMBER);

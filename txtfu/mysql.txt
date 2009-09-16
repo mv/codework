@@ -1,0 +1,107 @@
+http://dev.mysql.com/doc/refman/5.0/en/index.html
+http://en.wikipedia.org/wiki/Hash_table
+
+
+5646372
+5749624
+
+SET storage_engine=INNODB;;
+SET table_type=INNODB;;
+
+
+mysql
+    ## initdb
+    $ mysql_install_db --user=mysql --verbose
+
+    ## start
+    $ sudo mysqld_safe --user=mysql
+            --innodb_status_file
+            --ansi
+
+    ## passwd
+    # mysql -u root <<SQL
+        SET PASSWORD FOR 'root'@'localhost' = PASSWORD('admin');
+        SET PASSWORD FOR 'root'@'irulan'    = PASSWORD('admin');
+        SET PASSWORD FOR 'root'@'mdbebsfsw2'    = PASSWORD('admin');
+        SET PASSWORD FOR 'root'@'mdbebsfsw2.mdb.com.br'    = PASSWORD('admin');
+
+        -- UPDATE mysql.user SET Password = PASSWORD('newpwd') WHERE User = '';
+        -- FLUSH PRIVILEGES;
+
+    SQL
+--- ou ---
+    shell> mysqladmin -u root password "sys"
+    shell> mysqladmin -u root -h irulan password "sys"
+
+
+    ## users
+    mysql -u root -psys <<SQL
+        GRANT ALL PRIVILEGES ON adp.* TO 'adp'@'localhost'     IDENTIFIED BY 'adp' WITH GRANT OPTION;
+        GRANT ALL PRIVILEGES ON adp.* TO 'adp'@'%'             IDENTIFIED BY 'adp' WITH GRANT OPTION;
+
+        GRANT ALL PRIVILEGES ON *.* TO 'marcus'@'localhost'     IDENTIFIED BY 'atg' WITH GRANT OPTION;
+        GRANT ALL PRIVILEGES ON *.* TO 'marcus'@'%'             IDENTIFIED BY 'atg' WITH GRANT OPTION;
+
+        GRANT ALL PRIVILEGES ON *.* TO 'fsw00030'@'localhost'   IDENTIFIED BY 'atg' WITH GRANT OPTION;
+        GRANT ALL PRIVILEGES ON *.* TO 'fsw00030'@'%'           IDENTIFIED BY 'atg' WITH GRANT OPTION;
+
+        GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost'           IDENTIFIED BY 'admin' WITH GRANT OPTION;
+        GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'                   IDENTIFIED BY 'admin' WITH GRANT OPTION;
+        GRANT ALL PRIVILEGES ON *.* TO 'root'@'irulan'              IDENTIFIED BY 'admin' WITH GRANT OPTION;
+        GRANT ALL PRIVILEGES ON *.* TO 'root'@'scibm074'            IDENTIFIED BY 'admin' WITH GRANT OPTION;
+        GRANT ALL PRIVILEGES ON *.* TO 'root'@'scibm074.mdb.com.br' IDENTIFIED BY 'admin' WITH GRANT OPTION;
+        GRANT ALL PRIVILEGES ON *.* TO 'root'@'10.%'                IDENTIFIED BY 'admin' WITH GRANT OPTION;
+        GRANT ALL PRIVILEGES ON *.* TO 'root'@'%.mdb.com.br'        IDENTIFIED BY 'admin' WITH GRANT OPTION;
+        GRANT ALL PRIVILEGES ON *.* TO 'root'@'%.mdb.com.br.'       IDENTIFIED BY 'admin' WITH GRANT OPTION;
+
+    SQL
+
+        GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
+           ON db01.* TO 'custom'@'localhost'      IDENTIFIED BY 'obscure';
+        GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
+           ON db02.* TO 'custom'@'whitehouse.gov' IDENTIFIED BY 'obscure';
+        GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
+           ON db02.* TO 'custom'@'server.domain'  IDENTIFIED BY 'obscure'
+           WITH MAX_QUERIES_PER_HOUR 20
+                MAX_UPDATES_PER_HOUR 10
+                MAX_CONNECTIONS_PER_HOUR 5
+                MAX_USER_CONNECTIONS 2;
+           ;
+
+    ## database/schema
+
+        sql> CREATE DATABASE adp;
+        sql> USE adp;
+
+        sql> LOAD DATA LOCAL INFILE '/path/pet.txt' INTO TABLE pet
+             -- LINES TERMINATED BY '\r\n'; -- Win
+             -- LINES TERMINATED BY '\r';   -- Mac
+
+
+
+    ## status
+        $ mysqlshow                                 # database list
+        $ mysqlshow -u root
+        $ mysqlshow -u root mysql                   # database: table list
+
+        sql> SELECT DATABASE();
+        sql> SHOW TABLES;
+
+        # mysqladmin version
+        # mysqladmin variables
+        # mysqld --verbose --help       # defaults
+
+        $ mysql -h host -u user -p
+
+        $ mysql -u root -e "select * from db" mysql # sql 1line
+
+        $ mysql
+            sql> show variables ;
+            sql> show variables like "%version%";
+            sql> status
+            sql> show [global] status
+
+    # mysqladmin [-u root] shutdown
+
+
+

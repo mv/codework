@@ -1,0 +1,25 @@
+# $Id: descendants.txt 3918 2006-11-16 12:00:03Z marcus.ferreira $
+Job {
+    Dove {
+        Robin
+        Martin
+        Peregrine
+        Jay
+        Coot
+        Finch
+        Condor
+        Budgie
+        Curlew
+        Kiwi
+    }
+    Cinnamon {
+        Parsley
+        Sage
+        Rosemay
+        Thyme
+    }
+    Eyeshadow Kit {
+        Maybelline
+        Jake
+    }
+}

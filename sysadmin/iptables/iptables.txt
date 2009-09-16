@@ -1,0 +1,118 @@
+
+iptables structure
+    - actions
+        - ACCEPT
+        - REJECT - discard and inform the source
+        - DROP   - discard silently
+
+    - chains - in kernelspace
+        - PREROUTING
+        - INPUT
+        - OUTPUT
+        - FORWARD
+        - POSTROUTING
+        - user-defined (Example iptables -N FireWall )
+
+        prerouting ---> forward ---> posrouting
+                    |            ^
+                    v            |
+                  input        output
+                    |            ^
+                    v            |
+                 << local process >>
+
+    - tables - in userspace: hooks to chains
+        - filter
+            - Packet Filtering functinality
+            - via:
+                    - ip address
+                    - source mac address
+                    - udp source/dest ports
+                    - tcp source/dest ports
+                    - tcp flags
+                    - tcp options
+                    - tcp owner
+                    - packet fragments
+
+            - filtering uses input/output/forward chains
+
+             --->  ---> forward --->   << remote process >>
+                    |            ^
+                    v            |
+                  input        output
+                    |            ^
+                    v            |
+                 << local process >>
+
+            - Connection Tracking funcionality
+                - hooks into PREROUTING or OUTPUT
+                - defragments all packets
+                - keep state of
+                    - ip protocol
+                    - socket pair (sport+dport)
+                    - connection sate
+                            - NEW
+                            - ESTABLISHED
+                            - RELATED - icmp or ftp data
+                            - INVALID
+                    - timeouts
+                    - sequence numbers
+            prerouting ---> forward ---> posrouting
+            *here*     |            ^
+                        v            |
+                    input        output(*here*)
+                        |            ^
+                        v            |
+                    << local process >>
+
+            - Example
+                iptables -A INPUT  -m state -state ESTABLISHED,RELATED -j ACCEPT
+                iptables -A OUTPUT -m state -state ESTABLISHED,RELATED,NEW -j ACCEPT
+
+        - nat
+            - NAT funcionality
+            - uses SNAT
+                    - Source Network Address Translation
+                    - alter source address of 1st packet
+                    - always done *AFTER* routing/filtering
+                    - encompasses masquerading
+
+            - and uses DNAT
+                    - Destination Network Address Translation
+                    - alter destination address of 1st packet
+                    - always done *BEFORE* routing/filtering
+                    - encompases redirection/port_forwarding
+
+
+            prerouting ---> forward ---> posrouting(*SNAT*)
+            *DNAT*     |            ^
+                        v            |
+                    input        output(*DNAT*)
+                        |            ^
+                        v            |
+                    << local process >>
+
+            - Example SNAT
+                iptables -t nat -A POSTROUTING -j SNAT to 1.2.3.4-1.2.3.6
+                iptables -t nat -A POSTROUTING -j MASQUERADE
+
+            - Example DNAT
+                iptables -t nat -A PREROUTING -j DNAT to 5.6.7.8-5.6.7.10
+                iptables -t nat -A PREROUTING -dport80 -j REDIRECT-to-port 3000
+
+
+        - mangle
+            - Packet marking funcionality
+                - packet marking
+                    iptables -t mangle -A PREROUTING -p tcp -dport 25 -j MARK -set-mark 1
+                - change TOS
+                    iptables -t mangle -A OUTPUT     -p tcp -dport 20 -j TOS  -set-tos Maximize-Throughput
+                - can be used for load-balancing: with DNAT
+
+
+    - chain - others
+        - Rate Limiting
+            - to protect against DOS: SYN flooding
+                iptables -A INPUT -p tcp -syn -m limit -limit 1/s -limit-burst 5 -j ACCEPT
+
+

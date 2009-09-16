@@ -1,0 +1,31 @@
+http://groups.google.com/group/perl.perl6.language/browse_frm/thread/fa453c609022b143/0d0c71b5f94c1920?#0d0c71b5f94c1920
+
+Larry Wall
+
+    if 0 {
+    ...
+    }
+
+    if 1 {
+    (magic now happens)...
+    }
+
+Nicholas Clark
+
+    if 0 { q<
+        ....
+    # > }
+
+    #if 0 { q<
+        ....
+    # > }
+
+Luke Palmer
+
+    <<'#EOC';
+    .. commented out code ..
+    #EOC
+
+    #<<'#EOC';
+    .. commented out code ..
+    #EOC

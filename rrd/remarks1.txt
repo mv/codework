@@ -1,0 +1,53 @@
+ rrdtool create target.rrd          # target.rrd: database "target"
+         --start 1023654125         # startup time (since epoch)
+         --step 300                 # feed rating: 5 min (a PDP every 5 min)
+         DS:mem:GAUGE:600:0:671744  # DataSource: "mem"
+         RRA:AVERAGE:0.5:12:24
+         RRA:AVERAGE:0.5:288:31
+
+
+        "mem"  : type GAUGE
+                 heartbeat = 600s (2 values of step)
+                 min value stored = 0
+                 max value stored = 671744
+                 0 < value < 671744, outside these bounds UNKNOWN will be stored
+
+        "mem" has 2 archives defined
+            1) 24 CDPs, each one is compromised of the AVERAGE of 12 PDPs of 0.5xff
+            2) 31 CDPs, each one is compromised of the AVERAGE of 288 PDPs of 0.5xff.
+
+        A DS defined with a heartbeat of 300s (5 min) has:
+            - a PDP at each 300s
+            - 1 hour size:     12 x 300s (60 min)
+            - 1 day size:     288 x 300s (24 x 12 x 300s)
+            - 1 month size:  8640 x 300s (30 x 288 x 300s)
+            - 1 year size: 103680 x 300s (12 x 8640 x 300s)
+
+        To define the ARCHIVE rotation of such a DS:
+            - 1 day rotation:   24 CDPs of 12   -   12:24
+            - 1 week rotation:   7 CPDS of 288  -   288:7
+            - 1 month rotation: 30 CDPs of 288  -   288:30
+            - 1 year rotation: 365 CDPs of 288  -   288:365
+                           or   12 CDPS of 8640 -   8640:12
+
+
+From rrdcreate manpange:
+    rrdtool create temperature.rrd
+            --step 300
+            DS:temp:GAUGE:600:-273:5000
+            RRA:AVERAGE:0.5:1:1200
+            RRA:MIN:0.5:12:2400
+            RRA:MAX:0.5:12:2400
+            RRA:AVERAGE:0.5:12:2400
+
+
+            "temp" : type GAUGE
+                     heartbeat = 600s (2 values of step)
+                     valid values: -273 < temp < 5000
+
+            ARCHIVES: 300s x 1 x 12 x 100 = (1 hour) x 100 = 100 hours slots
+                                            AVG for 100 hours slots
+                      300s x 12 x 2400    = 2400 hours     = 100 days slots
+                                            MIN for 100 days slots
+                      300s x 12 x 2400    = MAX for 100 days slots
+                      300s x 12 x 2400    = AVG for 100 dats slots

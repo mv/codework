@@ -1,0 +1,59 @@
+Standard Tk widget set.
+
+Toplevel        *
+Frame           *
+    -height => amount
+    -width => amount
+    -background => color
+    -borderwidth => amount
+    -class => classname
+    -colormap => "new" | $window
+    -container => 0 | 1
+    -cursor => cursorname
+    -highlightbackground => color
+    -highlightcolor => color
+    -highlightthickness => amount
+    -relief => 'flat'|'groove'|'raised'|'ridge'|'sunken'|'solid'
+    -takefocus => 0 | 1 | undef
+    -visual => "type #"
+
+    Label           *
+    Button
+    Canvas
+    Checkbutton
+    Entry
+    Labelframe
+    Listbox
+    Menu
+    Menubutton
+    Message
+    Panedwindow
+    Radiobutton
+    Scale
+    Scrollbar
+    Spinbox
+    Text
+
+Perl/Tk new widgets
+
+Adjuster
+Ballon
+BrowseEntry
+ColorEditor
+DirTree
+ErrorDialog
+FileSelect
+HList
+LabEntry
+LabFrame
+NoteBook
+Optionmenu
+Pane
+ProgressBar
+ROText
+Table
+TextUndo
+Tiler
+TList
+Tree
+

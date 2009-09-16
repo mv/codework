@@ -1,0 +1,110 @@
+# http://www.bieberlabs.com/wordpress/archives/2004/11/30/using-svk
+$ svk help intro
+
+Local depot
+    export SVNFSTYPE=bdb
+    export SVNFSTYPE=fsfs
+    export SVKROOT=/u01/svkdata/dp01
+    svk depotmap --init
+    # creates a new svn repos in $SVKROOT/local
+    # the repos is of $SVNFSTYPE inside $SVKROOT/local/db/
+    # this $SVKROOT/local has hooks like any other Subversion repos.
+    # to serve this local repos:
+    # # svnserve -d -r /u01/svkdata/dp01/local/
+    # or, to view:
+    # svk ls //
+    # svk ls //mirror
+    # svk ls //miror/salto/trunk/
+    
+    # Extra depots
+    svk depotmap ref   /u01/svkdata/dp02
+    svk depotmap mdias /u01/svkdata/mdias
+    
+    svk depotmap -l
+
+Mirror (or import)
+    svk mirror http://subversion.bieberlabs.com/svn/bieberlabs/trunk //bieberlabs/trunk
+
+    svk mirror http://mdbebsfsw2.mdb.com.br:8080/repos/salto         /mdias/salto/
+    svk mirror svn://mdbebsfsw2.mdb.com.br/db01/salto                /mdias/salto
+    (( svnserve -d -r /u01/subversion/repos ))
+    
+    svk mirror --list
+
+    svk ls //mirror/salto
+
+    svk mirror http://www.orcaware.com/svn/repos/orca/trunk /ref/orca/
+    svk ls /ref/orca
+    
+Sync
+    svk sync //mirror/salto
+    svk sync //bieberlabs/trunk
+    svk sync //code/orca
+
+Branch
+    - v1
+    svk cp -m "Local Branch for new feature X"  \
+              //bieberlabs/trunk                \
+              //bieberlabs/new-feature-X
+
+    - ou
+    svk mkdir //local
+    svk cp //mirror/salto  //local/salto
+
+Checkout
+    cd ~/svk && svk co //bieberlabs/new-feature-x/website
+
+    - ou
+    cd ~/work 
+    svk co //mirror/salto/trunk
+    svk co //mirror/salto/tag
+    mkdir ~/work/branch/
+    cd    ~/work/branch/
+    svk co //mirror/salto/branch/marcus.ferreira/
+    
+
+
+Merge
+    svk smerge -C //bieberlabs/trunk //bieberlabs/new-feature-x --dry-run
+    svk smerge -C //bieberlabs/trunk //bieberlabs/new-feature-x
+
+Work
+    cd ~/work
+    svk up trunk tag branch/marcus.ferreira
+
+    svk up
+    work,work,work,work
+    svk commit
+
+    svk push
+    svk pull
+
+Merge Back
+    svk smerge -C //bieberlabs/new-feature-x //bieberlabs/trunk
+
+
+Meta
+$ svk depot -l
+
+    Depot                   Path
+    ============================================================
+    //                      /u01/svkdata/dp01/local
+    /opensrc/               /u01/svkdata/dp02
+    /ref/                   /u01/svkdata/dp02
+
+$ svk mirror -l
+
+    Path             Source
+    ==============================================================
+    //mirror/salto   http://mdbebsfsw2.mdb.com.br:8080/repos/salto
+    marcus@irulan:~/work0/trunk
+
+$ svk checkout -l
+
+      Depot Path                            Path
+    ========================================================================
+      //mirror/salto/branch/marcus.ferreira /home/marcus/work/branch/marcus.ferreira
+      //mirror/salto/tag                    /home/marcus/work/tag
+      //mirror/salto/trunk                  /home/marcus/work/trunk
+
+

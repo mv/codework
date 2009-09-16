@@ -1,0 +1,41 @@
+--------------------Configuration: Sample8 - Win32 Release--------------------
+Begining build with project "C:\oracle\ora90\precomp\demo\proc\sample8\sample8.dsp", at root.
+Active configuration is Win32 (x86) Console Application (based on Win32 (x86) Console Application)
+
+Project's tools are:
+			"32-bit C/C++ Compiler for 80x86" with flags "/nologo /MD /W3 /GX /O2 /I "..\..\..\public" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /Fp".\WinRel/sample8.pch" /YX /Fo".\WinRel/" /Fd".\WinRel/" /FD /c "
+			"Win32 Resource Compiler" with flags "/l 0x409 /d "NDEBUG" "
+			"Browser Database Maker" with flags "/nologo /o".\WinRel/sample8.bsc" "
+			"COFF Linker for 80x86" with flags "kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:console /incremental:no /pdb:".\WinRel/sample8.pdb" /machine:I386 /out:".\WinRel/sample8.exe" "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating temp file "C:\DOCUME~1\marcus\LOCALS~1\Temp\RSP11.bat" with contents <@echo off
+call vcvars32.bat
+.\..\..\..\..\bin\proc parse=full  .\SAMPLE8.pc  include=.\..\..\..\public  include="%MSVCDIR%\include"  include="C:\Program Files\DevStudio\SharedIDE\..\vc\include"  include="C:\Program Files\DevStudio\SharedIDE\..\..\vc98\include"
+>
+Creating command line "C:\DOCUME~1\marcus\LOCALS~1\Temp\RSP11.bat" 
+Creating temp file "C:\DOCUME~1\marcus\LOCALS~1\Temp\RSP12.tmp" with contents </nologo /MD /W3 /GX /O2 /I "..\..\..\public" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /Fp".\WinRel/sample8.pch" /YX /Fo".\WinRel/" /Fd".\WinRel/" /FD /c 
+"C:\oracle\ora90\precomp\demo\proc\sample8\sample8.c"
+>
+Creating command line "cl.exe @C:\DOCUME~1\marcus\LOCALS~1\Temp\RSP12.tmp" 
+Performing Custom Build Step
+Setting environment for using Microsoft Visual C++ tools.
+
+Pro*C/C++: Release 9.0.1.1.1 - Production on Sat Jun 15 13:27:37 2002
+
+(c) Copyright 2001 Oracle Corporation.  All rights reserved.
+
+System default option values taken from: C:\oracle\ora90\precomp\admin\pcscfg.cfg
+
+Creating temp file "C:\DOCUME~1\marcus\LOCALS~1\Temp\RSP13.tmp" with contents <kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:console /incremental:no /pdb:".\WinRel/sample8.pdb" /machine:I386 /out:".\WinRel/sample8.exe" 
+.\WinRel\sample8.obj
+..\..\..\LIB\MSVC\oraSQL9.lib>
+Creating command line "link.exe @C:\DOCUME~1\marcus\LOCALS~1\Temp\RSP13.tmp" 
+Compiling...
+sample8.c
+Linking...
+
+
+
+sample8.exe - 0 error(s), 0 warning(s)

@@ -1,0 +1,24 @@
+lp
+lpr
+    print files
+
+    $ lp -d scfsw1 -h mdbebsfsw2:637 -m -n 2
+
+lpstatus
+    daemon/jobs info
+
+    running state of daemon
+    $ lpstat -r
+
+    default current printer
+    $ lpstat -d
+
+    accepting state of queue
+    $ lpstat -a [printer]
+
+    printer state
+    $ lpstat -p [printer]
+
+    printer device
+    $ lpstat -v [printer]
+

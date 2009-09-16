@@ -1,0 +1,72 @@
+
+    int   a;
+        ________________________________________
+
+            a: variable, int value
+        ________________________________________
+
+
+    int * p;
+    p = &a ;
+        ________________________________________
+
+            p: pointer to int, stores an address
+           &a: address of a
+         (*p): value stored at p
+                *(p+1): value at the next address
+                *p +1 : value plus 1
+
+           &p: address of p, p as a variable
+        ________________________________________
+
+
+
+    int *x[10];
+
+        ________________________________________
+
+        int *x[10]: x - matriz de 10 ponteiros para inteiros
+
+        x[1] = &a;
+        x[2] = &b;
+
+        *x[1] : value of a
+        *x[2] : value of b
+        ________________________________________
+
+
+
+
+    int  *p;
+    int **ptr;
+
+      a = 10 ;
+      p = &a ;
+    ptr = &p ;
+        ________________________________________
+
+            p: pointer to int
+          ptr: pointer to store a pointer to int
+
+       (*ptr): addres of p, i.e., &p
+      (**ptr): int value
+
+        ________________________________________
+
+
+
+    int (*p)();
+
+    p = printf;
+    check( "Value %d\n", 10, p );
+
+void check (char *a, int b, int (*func)() )
+{
+    result = (*func)(a,b);
+}
+        ________________________________________
+
+       '(*p)': pointer to a function
+
+        ________________________________________
+

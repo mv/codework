@@ -1,0 +1,76 @@
+Summary of my perl5 (revision 5 version 8 subversion 5) configuration:
+  Platform:
+    osname=linux, osvers=2.4.21-27.0.2.elsmp, archname=i386-linux-thread-multi
+    uname='linux decompose.build.redhat.com 2.4.21-27.0.2.elsmp #1 smp wed jan 12 23:35:44 est 2005 i686 i686 i386 gnulinux '
+    config_args='-des -Doptimize=-O2 -g -pipe -m32 -march=i386 -mtune=pentium4 -Dversion=5.8.5 -Dmyhostname=localhost -Dperladmin=root@localhost -Dcc=gcc -Dcf_by=Red Hat, Inc. -Dinstallprefix=/usr -Dprefix=/usr -Darchname=i386-linux -Dvendorprefix=/usr -Dsiteprefix=/usr -Duseshrplib -Dusethreads -Duseithreads -Duselargefiles -Dd_dosuid -Dd_semctl_semun -Di_db -Ui_ndbm -Di_gdbm -Di_shadow -Di_syslog -Dman3ext=3pm -Duseperlio -Dinstallusrbinperl -Ubincompat5005 -Uversiononly -Dpager=/usr/bin/less -isr -Dinc_version_list=5.8.4 5.8.3 5.8.2 5.8.1 5.8.0'
+    hint=recommended, useposix=true, d_sigaction=define
+    usethreads=define use5005threads=undef useithreads=define usemultiplicity=define
+    useperlio=define d_sfio=undef uselargefiles=define usesocks=undef
+    use64bitint=undef use64bitall=undef uselongdouble=undef
+    usemymalloc=n, bincompat5005=undef
+  Compiler:
+    cc='gcc', ccflags ='-D_REENTRANT -D_GNU_SOURCE -DDEBUGGING -fno-strict-aliasing -pipe -I/usr/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I/usr/include/gdbm',
+    optimize='-O2 -g -pipe -m32 -march=i386 -mtune=pentium4',
+    cppflags='-D_REENTRANT -D_GNU_SOURCE -DDEBUGGING -fno-strict-aliasing -pipe -I/usr/local/include -I/usr/include/gdbm'
+    ccversion='', gccversion='3.4.4 20050721 (Red Hat 3.4.4-2)', gccosandvers=''
+    intsize=4, longsize=4, ptrsize=4, doublesize=8, byteorder=1234
+    d_longlong=define, longlongsize=8, d_longdbl=define, longdblsize=12
+    ivtype='long', ivsize=4, nvtype='double', nvsize=8, Off_t='off_t', lseeksize=8
+    alignbytes=4, prototype=define
+  Linker and Libraries:
+    ld='gcc', ldflags =' -L/usr/local/lib'
+    libpth=/usr/local/lib /lib /usr/lib
+    libs=-lnsl -lgdbm -ldb -ldl -lm -lcrypt -lutil -lpthread -lc
+    perllibs=-lnsl -ldl -lm -lcrypt -lutil -lpthread -lc
+    libc=/lib/libc-2.3.4.so, so=so, useshrplib=true, libperl=libperl.so
+    gnulibc_version='2.3.4'
+  Dynamic Linking:
+    dlsrc=dl_dlopen.xs, dlext=so, d_dlsymun=undef, ccdlflags='-Wl,-E -Wl,-rpath,/usr/lib/perl5/5.8.5/i386-linux-thread-multi/CORE'
+    cccdlflags='-fPIC', lddlflags='-shared -L/usr/local/lib'
+
+
+Characteristics of this binary (from libperl): 
+  Compile-time options: DEBUGGING MULTIPLICITY USE_ITHREADS USE_LARGE_FILES PERL_IMPLICIT_CONTEXT
+  Built under linux
+  Compiled at Aug  2 2005 04:48:47
+  %ENV:
+    PERL5LIB="/usr/local/svn/lib/perl5/site_perl/5.8"
+  @INC:
+    /usr/local/svn/lib/perl5/site_perl/5.8/5.8.5/i386-linux-thread-multi
+    /usr/local/svn/lib/perl5/site_perl/5.8/5.8.5
+    /usr/local/svn/lib/perl5/site_perl/5.8/i386-linux-thread-multi
+    /usr/local/svn/lib/perl5/site_perl/5.8/5.8.4
+    /usr/local/svn/lib/perl5/site_perl/5.8/5.8.3
+    /usr/local/svn/lib/perl5/site_perl/5.8/5.8.2
+    /usr/local/svn/lib/perl5/site_perl/5.8/5.8.1
+    /usr/local/svn/lib/perl5/site_perl/5.8/5.8.0
+    /usr/local/svn/lib/perl5/site_perl/5.8
+    /usr/lib/perl5/5.8.5/i386-linux-thread-multi
+    /usr/lib/perl5/5.8.5
+    /usr/lib/perl5/site_perl/5.8.5/i386-linux-thread-multi
+    /usr/lib/perl5/site_perl/5.8.4/i386-linux-thread-multi
+    /usr/lib/perl5/site_perl/5.8.3/i386-linux-thread-multi
+    /usr/lib/perl5/site_perl/5.8.2/i386-linux-thread-multi
+    /usr/lib/perl5/site_perl/5.8.1/i386-linux-thread-multi
+    /usr/lib/perl5/site_perl/5.8.0/i386-linux-thread-multi
+    /usr/lib/perl5/site_perl/5.8.5
+    /usr/lib/perl5/site_perl/5.8.4
+    /usr/lib/perl5/site_perl/5.8.3
+    /usr/lib/perl5/site_perl/5.8.2
+    /usr/lib/perl5/site_perl/5.8.1
+    /usr/lib/perl5/site_perl/5.8.0
+    /usr/lib/perl5/site_perl
+    /usr/lib/perl5/vendor_perl/5.8.5/i386-linux-thread-multi
+    /usr/lib/perl5/vendor_perl/5.8.4/i386-linux-thread-multi
+    /usr/lib/perl5/vendor_perl/5.8.3/i386-linux-thread-multi
+    /usr/lib/perl5/vendor_perl/5.8.2/i386-linux-thread-multi
+    /usr/lib/perl5/vendor_perl/5.8.1/i386-linux-thread-multi
+    /usr/lib/perl5/vendor_perl/5.8.0/i386-linux-thread-multi
+    /usr/lib/perl5/vendor_perl/5.8.5
+    /usr/lib/perl5/vendor_perl/5.8.4
+    /usr/lib/perl5/vendor_perl/5.8.3
+    /usr/lib/perl5/vendor_perl/5.8.2
+    /usr/lib/perl5/vendor_perl/5.8.1
+    /usr/lib/perl5/vendor_perl/5.8.0
+    /usr/lib/perl5/vendor_perl
+    .

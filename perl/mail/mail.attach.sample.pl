@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# $Id: mail.svn.pl 2436 2006-10-28 18:34:16Z marcus.ferreira $
+# $Id: mail.file.pl 60 2006-09-27 17:11:05Z marcus.ferreira $
 #
 #
 
@@ -10,66 +10,25 @@ my $sender = new Mail::Sender
         , from      => 'marcus.ferreira@mdb.com.br'
         };
 
-while( <> ) {
-    next if /^#/;
-    next if /^\s*$/;
+$sender->MailFile(
+        { to        => 'marcus.ferreira@mdb.com.br'
+        , cc        => 'ferreira.mv@gmail.com'
+        , subject   => 'MDB TE 0.20'
+        , msg       => "Attach via Perl"
+        , file      => '/home/marcus/Desktop/MDB_MD040_padroes_de_construcao.doc'
+        , charset   => 'iso-8859-1'
+        , b_charset => 'iso-8859-1'
+        }
+);
 
-    ($user, $pass)=split;
-    print "user: $user \n";
-    mail( $user, $pass);
 
+if( $sender->{'error'} ) {
+    print "Error: ", $sender->{'error_msg'},"\n\n";
+    exit abs( $sender->{'error'} );
+}
+else {
+    print "\n\nMail sent.\n\n";
 };
 
 exit 0;
 
-sub mail {
-    my $u = shift;
-    my $p = shift;
-
-my $msg=<<MSG;
-
-Caro,
-
-O controle de versão do projeto está no ar. A url de acesso
-é http://mdbebsfsw2.mdb.com.br:8080/
-
-Sua senha de acesso ao repositório do projeto foi criada:
-
-    Username: $u
-    Password: $p
-
-Essa senha foi criada automaticamente. Há na página de entrada
-do projeto um link onde você pode alterá-la.
-
-Para poder usar a ferramenta leia:
-    1. svn.usando_projeto_salto.txt
-    2. svn.arvore_projeto_salto.txt
-
-
-Atenciosamente,
-
-
-Marcus Vinicius Ferreira
-
-MSG
-
-    $sender->MailFile(
-            { to        => $u . '@mdb.com.br'
-            , cc        => 'marcus.ferreira@mdb.com.br'
-            , subject   => 'Sua senha no Subversion.'
-            , msg       => $msg
-            , file      => '../doc/svn.usando_projeto_salto.txt, ../doc/svn.arvore_projeto_salto.txt'
-            , charset   => 'iso-8859-1'
-            , b_charset => 'iso-8859-1'
-            }
-    );
-
-    if( $sender->{'error'} ) {
-        print "Error: ", $sender->{'error_msg'},"\n\n";
-        exit abs( $sender->{'error'} );
-    }
-    else {
-        print "\n\nMail sent.\n\n";
-    };
-
-};

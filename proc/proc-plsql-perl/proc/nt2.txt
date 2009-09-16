@@ -1,0 +1,20 @@
+Administrator@PANDORA /cygdrive/c/tmp/marcus
+$ time ./tab2csv.exe emp1
+
+real    0m0.790s
+user    0m0.015s
+sys     0m0.016s
+
+Administrator@PANDORA /cygdrive/c/tmp/marcus
+$ time ./tab2csv.exe emp2
+
+real    0m46.779s
+user    0m0.031s
+sys     0m0.000s
+
+Administrator@PANDORA /cygdrive/c/tmp/marcus
+$ time ./tab2csv.exe emp3
+
+real    7m52.362s
+user    0m0.031s
+sys     0m0.000s

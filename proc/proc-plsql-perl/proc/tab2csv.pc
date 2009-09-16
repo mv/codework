@@ -1,0 +1,20 @@
+/*
+ *  tab2csv.pc
+ *
+ */
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sqlda.h>
+#include <sqlcpr.h>
+
+/* Define constants for VARCHAR lengths. */
+#define     UNAME_LEN      20
+#define     PWD_LEN        40
+
+/* Declare variables.  No declare section is
+   needed if MODE=ORACLE. */
+VARCHAR     username[UNAME_LEN];  /* VARCHAR is an Oracle-supplied struct */
+varchar     password[PWD_LEN];    /* varchar can be in lower case also. */
+

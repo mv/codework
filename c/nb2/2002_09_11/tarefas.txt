@@ -1,0 +1,11 @@
+Implementar
+
+
+1. retornar soma de 2 números
+
+2. fazer m2()
+
+3. Ler 2 palavras e usar cpalavra
+
+4. Ler 2 palavras e usar somapalavra
+   para concatená-las

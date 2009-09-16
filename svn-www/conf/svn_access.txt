@@ -1,0 +1,14 @@
+# $Id: svn_access.txt 3359 2006-11-09 13:47:54Z marcus.ferreira $
+[groups]
+desenv = marcus.ferreira
+guest = ze.mane
+
+[/]
+@desenv = rw
+
+[/trunk/gaps]
+@guest = r
+
+[/tags]
+* = r
+# *: match anonymous

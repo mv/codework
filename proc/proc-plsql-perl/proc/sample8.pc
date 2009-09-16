@@ -1,0 +1,183 @@
+
+/*
+ *  sample8.pc:  Dynamic SQL Method 3
+ *
+ *  This program uses dynamic SQL Method 3 to retrieve the names of
+ *  all employees in a given department from the EMP table.
+ */
+
+#include <stdio.h>
+#include <string.h>
+
+#include <stdlib.h>
+
+#define USERNAME "SCOTT"
+#define PASSWORD "TIGER"
+
+/* Include the SQL Communications Area, a structure through
+ * which ORACLE makes runtime status information such as error
+ * codes, warning flags, and diagnostic text available to the
+ * program. Also include the ORACA.
+ */
+#include <sqlca.h>
+#include <oraca.h>
+
+/* The ORACA=YES option must be specified to enable use of
+ * the ORACA.
+ */
+EXEC ORACLE OPTION (ORACA=YES);
+
+char    *username = USERNAME;
+char    *password = PASSWORD;
+VARCHAR  dynstmt[80];
+VARCHAR  ename[10];
+int      deptno = 10;
+
+#if defined(__STDC__)
+ void sql_error(char *msg);
+#else
+ void sql_error(/*_ char *msg _*/);
+#endif
+
+void main()
+{
+/* Call sql_error() function on any error in
+ * an embedded SQL statement.
+ */
+    EXEC SQL WHENEVER SQLERROR DO sql_error("Oracle error");
+
+/* Save text of SQL current statement in the ORACA if an
+ * error occurs.
+ */
+    oraca.orastxtf = ORASTFERR;
+
+/* Connect to Oracle. */
+
+    EXEC SQL CONNECT :username IDENTIFIED BY :password;
+    puts("\nConnected to Oracle.\n");
+
+/* Assign a SQL query to the VARCHAR dynstmt.  Both the
+ * array and the length parts must be set properly.  Note
+ * that the query contains one host-variable placeholder,
+ * v1, for which an actual input host variable must be
+ * supplied at OPEN time.
+ */
+    strcpy((char *)dynstmt.arr,
+        "SELECT ename FROM emp WHERE deptno = :v1");
+    dynstmt.len = (unsigned short)strlen((char *)dynstmt.arr);
+
+/* Display the SQL statement and its current input host
+ * variable.
+ */
+    puts((char *) dynstmt.arr);
+    printf("   v1 = %d\n", deptno);
+    printf("\nEmployee\n");
+    printf("--------\n");
+
+/* The PREPARE statement associates a statement name with
+ * a string containing a SELECT statement.  The statement
+ * name is a SQL identifier, not a host variable, and
+ * therefore does not appear in the Declare Section.
+
+ * A single statement name can be PREPAREd more than once,
+ * optionally FROM a different string variable.
+ */
+    EXEC SQL PREPARE S FROM :dynstmt;
+
+/* The DECLARE statement associates a cursor with a
+ * PREPAREd statement.  The cursor name, like the statement
+ * name, does not appear in the Declare Section.
+
+ * A single cursor name can not be DECLAREd more than once.
+ */
+    EXEC SQL DECLARE C CURSOR FOR S;
+
+/* The OPEN statement evaluates the active set of the
+ * PREPAREd query USING the specified input host variables,
+ * which are substituted positionally for placeholders in
+ * the PREPAREd query.  For each occurrence of a
+ * placeholder in the statement there must be a variable
+ * in the USING clause.  That is, if a placeholder occurs
+ * multiple times in the statement, the corresponding
+ * variable must appear multiple times in the USING clause.
+
+ * The USING clause can be omitted only if the statement
+ * contains no placeholders.  OPEN places the cursor at the
+ * first row of the active set in preparation for a FETCH.
+
+ * A single DECLAREd cursor can be OPENed more than once,
+ * optionally USING different input host variables.
+ */
+    EXEC SQL OPEN C USING :deptno;
+
+/* Break the loop when all data have been retrieved. */
+
+    EXEC SQL WHENEVER NOT FOUND DO break;
+
+/* Loop until the NOT FOUND condition is detected. */
+
+    for (;;)
+    {
+/* The FETCH statement places the select list of the
+ * current row into the variables specified by the INTO
+ * clause, then advances the cursor to the next row.  If
+ * there are more select-list fields than output host
+ * variables, the extra fields will not be returned.
+ * Specifying more output host variables than select-list
+ * fields results in an ORACLE error.
+ */
+        EXEC SQL FETCH C INTO :ename;
+
+/* Null-terminate the array before output. */
+
+        ename.arr[ename.len] = '\0';
+        puts((char *) ename.arr);
+        }
+
+/* Print the cumulative number of rows processed by the
+ * current SQL statement.
+ */
+    printf("\nQuery returned %d row%s.\n\n", sqlca.sqlerrd[2],
+        (sqlca.sqlerrd[2] == 1) ? "" : "s");
+
+/* The CLOSE statement releases resources associated with
+ * the cursor.
+ */
+    EXEC SQL CLOSE C;
+
+/* Commit any pending changes and disconnect from Oracle. */
+    EXEC SQL COMMIT RELEASE;
+
+    puts((char *)"Sayonara.\n");
+    exit(0);
+}
+
+#if defined(__STDC__)
+void sql_error(char *msg)
+#else
+void sql_error(msg)
+    char *msg;
+#endif
+{
+    printf("\n%s", msg);
+    sqlca.sqlerrm.sqlerrmc[sqlca.sqlerrm.sqlerrml] = '\0';
+    oraca.orastxt.orastxtc[oraca.orastxt.orastxtl] = '\0';
+    oraca.orasfnm.orasfnmc[oraca.orasfnm.orasfnml] = '\0';
+    printf("\n%s\n", sqlca.sqlerrm.sqlerrmc);
+    printf("in \"%s...\"\n", oraca.orastxt.orastxtc);
+    printf("on line %d of %s.\n\n", oraca.oraslnr,
+       oraca.orasfnm.orasfnmc);
+
+   /* Disable ORACLE error checking to avoid an infinite loop
+    * should another error occur within this routine.
+    */
+    EXEC SQL WHENEVER SQLERROR CONTINUE;
+
+    /* Release resources associated with the cursor. */
+    EXEC SQL CLOSE C;
+
+    /* Roll back any pending changes and disconnect from Oracle. */
+    EXEC SQL ROLLBACK RELEASE;
+    exit(1);
+}
+

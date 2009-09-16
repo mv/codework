@@ -1,0 +1,17 @@
+$ time perl tab2csv.pl emp1
+
+real    0m1.332s
+user    0m0.500s
+sys     0m0.060s
+titan[oracle@spcad]:/tmp/dbi/pl
+$ time perl tab2csv.pl emp2
+
+real    1m10.233s
+user    0m24.850s
+sys     0m1.660s
+titan[oracle@spcad]:/tmp/dbi/pl
+$ time perl tab2csv.pl emp3
+
+real    11m35.835s
+user    3m52.920s
+sys     0m16.870s

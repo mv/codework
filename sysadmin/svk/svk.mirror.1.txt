@@ -1,0 +1,19 @@
+Sat May 19 15:13:28 BRT 2007
+
+$ svk mirror -l
+
+Path           Source
+============================================================
+//salto        http://mdbebsfsw2.mdb.com.br:8080/repos/salto
+/mdias/salto   svn://mdbebsfsw2.mdb.com.br/db01/salto
+
+$ svk mirror --relocate /mdias/salto http://mdbebsfsw2.mdb.com.br:8080/repos/salto
+Mirror relocated.
+
+$ svk mirror -l
+
+Path           Source
+============================================================
+//salto        http://mdbebsfsw2.mdb.com.br:8080/repos/salto
+/mdias/salto   http://mdbebsfsw2.mdb.com.br:8080/repos/salto
+

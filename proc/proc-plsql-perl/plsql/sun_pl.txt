@@ -1,0 +1,33 @@
+$ time sqlplus -s scott/tiger @exec.sql emp1
+
+PL/SQL procedure successfully completed.
+
+
+real    0m2.209s
+user    0m1.780s
+sys     0m0.170s
+
+
+
+titan[oracle@spcad]:/tmp/dbi/plsql
+$ time sqlplus -s scott/tiger @exec.sql emp2
+
+PL/SQL procedure successfully completed.
+
+
+real    2m29.285s
+user    2m19.860s
+sys     0m7.670s
+
+
+
+
+titan[oracle@spcad]:/tmp/dbi/plsql
+$ time sqlplus -s scott/tiger @exec.sql emp3
+
+PL/SQL procedure successfully completed.
+
+
+real    23m6.636s
+user    21m46.130s
+sys     1m10.800s

@@ -1,0 +1,74 @@
+Summary of my perl5 (revision 5 version 8 subversion 4) configuration:
+  Platform:
+    osname=solaris, osvers=2.10, archname=i86pc-solaris-64int
+    uname='sunos localhost 5.10 i86pc i386 i86pc'
+    config_args=''
+    hint=recommended, useposix=true, d_sigaction=define
+    usethreads=undef use5005threads=undef useithreads=undef usemultiplicity=undef
+    useperlio=define d_sfio=undef uselargefiles=define usesocks=undef
+    use64bitint=define use64bitall=undef uselongdouble=undef
+    usemymalloc=n, bincompat5005=undef
+  Compiler:
+    cc='cc', ccflags ='-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_TS_ERRNO',
+    optimize='-xO3 -xspace -xildoff',
+    cppflags=''
+    ccversion='Sun WorkShop', gccversion='', gccosandvers=''
+    intsize=4, longsize=4, ptrsize=4, doublesize=8, byteorder=12345678
+    d_longlong=define, longlongsize=8, d_longdbl=define, longdblsize=12
+    ivtype='long long', ivsize=8, nvtype='double', nvsize=8, Off_t='off_t', lseeksize=8
+    alignbytes=4, prototype=define
+  Linker and Libraries:
+    ld='cc', ldflags =''
+    libpth=/lib /usr/lib /usr/ccs/lib
+    libs=-lsocket -lnsl -ldl -lm -lc
+    perllibs=-lsocket -lnsl -ldl -lm -lc
+    libc=/lib/libc.so, so=so, useshrplib=true, libperl=libperl.so
+    gnulibc_version=''
+  Dynamic Linking:
+    dlsrc=dl_dlopen.xs, dlext=so, d_dlsymun=undef, ccdlflags='-R /usr/perl5/5.8.4/lib/i86pc-solaris-64int/CORE'
+    cccdlflags='-KPIC', lddlflags='-G'
+
+
+Characteristics of this binary (from libperl): 
+  Compile-time options: USE_64_BIT_INT USE_LARGE_FILES
+  Locally applied patches:
+	22667 The optree builder was looping when constructing the ops ...
+	22715 Upgrade to FileCache 1.04
+	22733 Missing copyright in the README.
+	22746 fix a coredump caused by rv2gv not fully converting a PV ...
+	22755 Fix 29149 - another UTF8 cache bug hit by substr.
+	22774 [perl #28938] split could leave an array without ...
+	22775 [perl #29127] scalar delete of empty slice returned garbage
+	22776 [perl #28986] perl -e "open m" crashes Perl
+	22777 add test for change #22776 ("open m" crashes Perl)
+	22778 add test for change #22746 ([perl #29102] Crash on assign ...
+	22781 [perl #29340] Bizarre copy of ARRAY make sure a pad op's ...
+	22796 [perl #29346] Double warning for int(undef) and abs(undef) ...
+	22818 BOM-marked and (BOMless) UTF-16 scripts not working
+	22823 [perl #29581] glob() misses a lot of matches
+	22827 Smoke [5.9.2] 22818 FAIL(F) MSWin32 WinXP/.Net SP1 (x86/1 cpu)
+	22830 [perl #29637] Thread creation time is hypersensitive
+	22831 improve hashing algorithm for ptr tables in perl_clone: ...
+	22839 [perl #29790] Optimization busted: '@a = "b", sort @a' ...
+	22850 [PATCH] 'perl -v' fails if local_patches contains code snippets
+	22852 TEST needs to ignore SCM files
+	22886 Pod::Find should ignore SCM files and dirs
+	22888 Remove redundant %SIG assignments from FileCache
+	23006 [perl #30509] use encoding and "eq" cause memory leak
+	23074 Segfault using HTML::Entities
+	23106 Numeric comparison operators mustn't compare addresses of ...
+	23320 [perl #30066] Memory leak in nested shared data structures ...
+	23321 [perl #31459] Bug in read()
+	SPRINTF0 - fixes for sprintf formatting issues - CVE-2005-3962
+  Built under solaris
+  Compiled at Feb  9 2006 06:26:23
+  @INC:
+    /usr/perl5/5.8.4/lib/i86pc-solaris-64int
+    /usr/perl5/5.8.4/lib
+    /usr/perl5/site_perl/5.8.4/i86pc-solaris-64int
+    /usr/perl5/site_perl/5.8.4
+    /usr/perl5/site_perl
+    /usr/perl5/vendor_perl/5.8.4/i86pc-solaris-64int
+    /usr/perl5/vendor_perl/5.8.4
+    /usr/perl5/vendor_perl
+    .
