@@ -1,0 +1,8 @@
+
+# http://launchd.macosforge.org/
+# http://video.google.com/videoplay?docid=1781045834610400422
+# http://www.secure-computing.net/wiki/index.php/Leopard_Static_Routes
+
+sudo launchctl unload -w /Library/LaunchDaemons/org.macports.dnsmasq.plist
+sudo launchctl load -w /Library/LaunchDaemons/org.macports.dnsmasq.plist
+

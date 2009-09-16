@@ -1,0 +1,18 @@
+
+Enabling Static IP:
+
+cat 192.168.1.10    >  /etc/hostname.hme0
+cat 255.255.255.0   >> /etc/networks
+cat 192.168.1.1     >  /etc/defaultrouter
+
+cat > /etc/resolv.conf <<CAT
+domain mvdba.net
+search mvdba.net, mvdba.com
+nameserver 192.168.1.253
+nameserver 192.168.1.254
+nameserver 4.2.2.1
+CAT
+
+svcadm disable physical:nwam
+svcadm enable physical:default
+

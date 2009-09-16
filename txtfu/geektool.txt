@@ -1,0 +1,23 @@
+System.log:
+    tail -f /var/log/system.log | egrep -v 'lsof'
+    CC9999
+    5:1270, 697:303
+    
+Top:
+    top -l1 -u -ocpu -Otime -X
+    FF6666
+    
+Interfaces:
+    echo " Iface  IP";ifconfig -a | awk '/^[a-z]/ {iface=$1} /inet / {printf "%7s %s\n", iface, $2}'
+    00FFFF
+    0:397 , 25:240
+    
+w:
+    w
+    FFCCFF
+    9:560, 526:169
+    
+ListenTCP:
+    (echo "LISTEN PID USER IP PROTO PROGRAM"; sudo lsof -i 4 -n -P  | awk '/LISTEN/ {print $9,$2,$3,$5,$8,$1}' |sort)| column -t 
+    CCCC00
+    
