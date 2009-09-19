@@ -1,0 +1,50 @@
+Summary of my perl5 (revision 5 version 8 subversion 9) configuration:
+  Platform:
+    osname=darwin, osvers=9.6.0, archname=darwin-2level
+    uname='darwin alia-atreides 9.6.0 darwin kernel version 9.6.0: mon nov 24 17:37:00 pst 2008; root:xnu-1228.9.59~1release_i386 i386 '
+    config_args='-des -D prefix=/opt/local -D scriptdir=/opt/local/bin -D cppflags=-I/opt/local/include -D ldflags=-L/opt/local/lib -D vendorprefix=/opt/local -D man1ext=1pm -D man3ext=3pm -D cc=/usr/bin/gcc-4.0 -D ld=/usr/bin/gcc-4.0 -D man1dir=/opt/local/share/man/man1p -D man3dir=/opt/local/share/man/man3p -D siteman1dir=/opt/local/share/man/man1 -D siteman3dir=/opt/local/share/man/man3 -D vendorman1dir=/opt/local/share/man/man1 -D vendorman3dir=/opt/local/share/man/man3 -D inc_version_list=5.8.8 5.8.8/darwin-2level -U i_bind -U i_gdbm -U i_db'
+    hint=recommended, useposix=true, d_sigaction=define
+    usethreads=undef use5005threads=undef useithreads=undef usemultiplicity=undef
+    useperlio=define d_sfio=undef uselargefiles=define usesocks=undef
+    use64bitint=undef use64bitall=undef uselongdouble=undef
+    usemymalloc=n, bincompat5005=undef
+  Compiler:
+    cc='/usr/bin/gcc-4.0', ccflags ='-fno-common -DPERL_DARWIN -I/opt/local/include -no-cpp-precomp -fno-strict-aliasing -pipe -I/usr/local/include -I/opt/local/include',
+    optimize='-O3',
+    cppflags='-I/opt/local/include -no-cpp-precomp -fno-common -DPERL_DARWIN -I/opt/local/include -no-cpp-precomp -fno-strict-aliasing -pipe -I/usr/local/include -I/opt/local/include'
+    ccversion='', gccversion='4.0.1 (Apple Inc. build 5465)', gccosandvers=''
+    intsize=4, longsize=4, ptrsize=4, doublesize=8, byteorder=1234
+    d_longlong=define, longlongsize=8, d_longdbl=define, longdblsize=16
+    ivtype='long', ivsize=4, nvtype='double', nvsize=8, Off_t='off_t', lseeksize=8
+    alignbytes=8, prototype=define
+  Linker and Libraries:
+    ld='env MACOSX_DEPLOYMENT_TARGET=10.3 /usr/bin/gcc-4.0', ldflags ='-L/opt/local/lib -L/usr/local/lib'
+    libpth=/usr/local/lib /opt/local/lib /usr/lib
+    libs=-ldbm -ldl -lm -lutil -lc
+    perllibs=-ldl -lm -lutil -lc
+    libc=/usr/lib/libc.dylib, so=dylib, useshrplib=false, libperl=libperl.a
+    gnulibc_version=''
+  Dynamic Linking:
+    dlsrc=dl_dlopen.xs, dlext=bundle, d_dlsymun=undef, ccdlflags=' '
+    cccdlflags=' ', lddlflags='-L/opt/local/lib -bundle -undefined dynamic_lookup -L/usr/local/lib'
+
+
+Characteristics of this binary (from libperl): 
+  Compile-time options: PERL_MALLOC_WRAP USE_FAST_STDIO USE_LARGE_FILES
+                        USE_PERLIO
+  Built under darwin
+  Compiled at Sep 16 2009 21:28:19
+  @INC:
+    /opt/local/lib/perl5/site_perl/5.8.9/darwin-2level
+    /opt/local/lib/perl5/site_perl/5.8.9
+    /opt/local/lib/perl5/site_perl/5.8.8
+    /opt/local/lib/perl5/site_perl/5.8.8/darwin-2level
+    /opt/local/lib/perl5/site_perl
+    /opt/local/lib/perl5/vendor_perl/5.8.9/darwin-2level
+    /opt/local/lib/perl5/vendor_perl/5.8.9
+    /opt/local/lib/perl5/vendor_perl/5.8.8
+    /opt/local/lib/perl5/vendor_perl/5.8.8/darwin-2level
+    /opt/local/lib/perl5/vendor_perl
+    /opt/local/lib/perl5/5.8.9/darwin-2level
+    /opt/local/lib/perl5/5.8.9
+    .

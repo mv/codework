@@ -1,0 +1,72 @@
+
+
+    /u01/perl/bin
+             /lib
+             /lib/site_perl
+             /share/man
+             /site_perl/man
+
+
+# Ref: INSTALL#Installation Directories
+# perl distribution
+    /prefix/lib/perl5/$version
+    /prefix/lib/perl5/$version/$archname
+# cpan modules
+    /prefix/lib/perl5/site_perl
+    /prefix/lib/perl5/site_perl/$version
+    /prefix/lib/perl5/site_perl/$version/$archname
+# pre-compiled modules: installed via apt-get/ports/rpm/pkg_add
+    /prefix/lib/perl5/vendor_perl
+    /prefix/lib/perl5/vendor_perl/$version
+    /prefix/lib/perl5/vendor_perl/$version/$archname
+
+# Exemplo: RedHat, 2006, mdias
+    /usr/lib/perl5/5.8/cygwin
+    /usr/lib/perl5/5.8
+    /usr/lib/perl5/site_perl/5.8/cygwin
+    /usr/lib/perl5/site_perl/5.8
+    /usr/lib/perl5/site_perl/5.8/cygwin
+    /usr/lib/perl5/site_perl/5.8
+    /usr/lib/perl5/vendor_perl/5.8/cygwin
+    /usr/lib/perl5/vendor_perl/5.8
+    /usr/lib/perl5/vendor_perl/5.8/cygwin
+    /usr/lib/perl5/vendor_perl/5.8
+
+    /usr/local/svn/lib/perl5/site_perl/5.8/5.8.5/i386-linux-thread-multi
+    /usr/local/svn/lib/perl5/site_perl/5.8/5.8.5
+    /usr/local/svn/lib/perl5/site_perl/5.8/i386-linux-thread-multi
+    /usr/local/svn/lib/perl5/site_perl/5.8/5.8.4
+    /usr/local/svn/lib/perl5/site_perl/5.8/5.8.3
+    /usr/local/svn/lib/perl5/site_perl/5.8/5.8.2
+    /usr/local/svn/lib/perl5/site_perl/5.8/5.8.1
+    /usr/local/svn/lib/perl5/site_perl/5.8/5.8.0
+    /usr/local/svn/lib/perl5/site_perl/5.8
+    /usr/lib/perl5/5.8.5/i386-linux-thread-multi
+    /usr/lib/perl5/5.8.5
+    /usr/lib/perl5/site_perl/5.8.5/i386-linux-thread-multi
+    /usr/lib/perl5/site_perl/5.8.4/i386-linux-thread-multi
+    /usr/lib/perl5/site_perl/5.8.3/i386-linux-thread-multi
+    /usr/lib/perl5/site_perl/5.8.2/i386-linux-thread-multi
+    /usr/lib/perl5/site_perl/5.8.1/i386-linux-thread-multi
+    /usr/lib/perl5/site_perl/5.8.0/i386-linux-thread-multi
+    /usr/lib/perl5/site_perl/5.8.5
+    /usr/lib/perl5/site_perl/5.8.4
+    /usr/lib/perl5/site_perl/5.8.3
+    /usr/lib/perl5/site_perl/5.8.2
+    /usr/lib/perl5/site_perl/5.8.1
+    /usr/lib/perl5/site_perl/5.8.0
+    /usr/lib/perl5/site_perl
+    /usr/lib/perl5/vendor_perl/5.8.5/i386-linux-thread-multi
+    /usr/lib/perl5/vendor_perl/5.8.4/i386-linux-thread-multi
+    /usr/lib/perl5/vendor_perl/5.8.3/i386-linux-thread-multi
+    /usr/lib/perl5/vendor_perl/5.8.2/i386-linux-thread-multi
+    /usr/lib/perl5/vendor_perl/5.8.1/i386-linux-thread-multi
+    /usr/lib/perl5/vendor_perl/5.8.0/i386-linux-thread-multi
+    /usr/lib/perl5/vendor_perl/5.8.5
+    /usr/lib/perl5/vendor_perl/5.8.4
+    /usr/lib/perl5/vendor_perl/5.8.3
+    /usr/lib/perl5/vendor_perl/5.8.2
+    /usr/lib/perl5/vendor_perl/5.8.1
+    /usr/lib/perl5/vendor_perl/5.8.0
+    /usr/lib/perl5/vendor_perl
+

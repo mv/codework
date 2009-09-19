@@ -1,0 +1,54 @@
+Summary of my perl5 (revision 5 version 8 subversion 8) configuration:
+  Platform:
+    osname=darwin, osvers=9.0, archname=darwin-thread-multi-2level
+    uname='darwin b04.apple.com 9.0 darwin kernel version 9.3.0: tue aug 12 17:18:07 pdt 2008; root:xnu-1228.5.90~13release_i386 i386 '
+    config_args='-ds -e -Dprefix=/usr -Dccflags=-g  -pipe  -Dldflags=-Dman3ext=3pm -Duseithreads -Duseshrplib'
+    hint=recommended, useposix=true, d_sigaction=define
+    usethreads=define use5005threads=undef useithreads=define usemultiplicity=define
+    useperlio=define d_sfio=undef uselargefiles=define usesocks=undef
+    use64bitint=define use64bitall=define uselongdouble=undef
+    usemymalloc=n, bincompat5005=undef
+  Compiler:
+    cc='cc', ccflags ='-arch i386 -arch ppc -g -pipe -fno-common -DPERL_DARWIN -no-cpp-precomp -fno-strict-aliasing -Wdeclaration-after-statement -I/usr/local/include',
+    optimize='-O3',
+    cppflags='-no-cpp-precomp -g -pipe -fno-common -DPERL_DARWIN -no-cpp-precomp -fno-strict-aliasing -Wdeclaration-after-statement -I/usr/local/include'
+    ccversion='', gccversion='4.0.1 (Apple Inc. build 5465)', gccosandvers=''
+    intsize=4, longsize=4, ptrsize=4, doublesize=8, byteorder=1234
+    d_longlong=define, longlongsize=8, d_longdbl=define, longdblsize=16
+    ivtype='long', ivsize=4, nvtype='double', nvsize=8, Off_t='off_t', lseeksize=8
+    alignbytes=8, prototype=define
+  Linker and Libraries:
+    ld='cc -mmacosx-version-min=10.5.6', ldflags ='-arch i386 -arch ppc -L/usr/local/lib'
+    libpth=/usr/local/lib /usr/lib
+    libs=-ldbm -ldl -lm -lutil -lc
+    perllibs=-ldl -lm -lutil -lc
+    libc=/usr/lib/libc.dylib, so=dylib, useshrplib=true, libperl=libperl.dylib
+    gnulibc_version=''
+  Dynamic Linking:
+    dlsrc=dl_dlopen.xs, dlext=bundle, d_dlsymun=undef, ccdlflags=' '
+    cccdlflags=' ', lddlflags='-arch i386 -arch ppc -bundle -undefined dynamic_lookup -L/usr/local/lib'
+
+
+Characteristics of this binary (from libperl): 
+  Compile-time options: MULTIPLICITY PERL_IMPLICIT_CONTEXT
+                        PERL_MALLOC_WRAP USE_ITHREADS USE_LARGE_FILES
+                        USE_PERLIO USE_REENTRANT_API
+  Locally applied patches:
+	fix for regcomp CVE-2007-5116 security vulnerability
+	fix for double-free CVE-2008-1927 security vulnerability
+  Built under darwin
+  Compiled at Jan 13 2009 10:02:17
+  @INC:
+    /System/Library/Perl/5.8.8/darwin-thread-multi-2level
+    /System/Library/Perl/5.8.8
+    /Library/Perl/5.8.8/darwin-thread-multi-2level
+    /Library/Perl/5.8.8
+    /Library/Perl
+    /Network/Library/Perl/5.8.8/darwin-thread-multi-2level
+    /Network/Library/Perl/5.8.8
+    /Network/Library/Perl
+    /System/Library/Perl/Extras/5.8.8/darwin-thread-multi-2level
+    /System/Library/Perl/Extras/5.8.8
+    /Library/Perl/5.8.6
+    /Library/Perl/5.8.1
+    .
