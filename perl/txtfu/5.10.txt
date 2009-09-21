@@ -1,0 +1,108 @@
+
+perl
+    http://www.perl.com/pub/a/2008/04/23/a-beginners-introduction-to-perl-510.html
+    http://www.perl.com/pub/a/2008/05/07/beginners-introduction-to-perl-510-part-2.html
+    http://news.oreilly.com/2008/06/a-beginners-introduction-to-pe.html
+    http://broadcast.oreilly.com/2008/09/a-beginners-introduction-to-pe.html
+    http://broadcast.oreilly.com/2008/11/beginners-introduction-to-obje.html
+    perl5.10
+        what's new
+        default on macports
+    vim
+        macvim + perl
+        perl-support
+        snippets
+    File::
+        File::Copy
+        basename
+        dirname
+    @ARGV
+    @INC
+    Best Practices
+        GetOpt::Long
+    Parse
+    lib
+        local lib
+        my libs
+        Log4Perl
+        ...
+    Module
+        Exporter
+        Ref:
+            http://github.com/briandfoy/mac-osversion
+            http://github.com/briandfoy/macosx-alias
+            http://github.com/davorg/transform
+
+    Filehandles
+    Glob
+    use strict refs;
+
+    BenchMark
+    Carp
+    http://freshmeat.net/projects/mod_perlite/
+
+    Digest::SHA
+    Module::CoreList
+    Module::Build
+    Module::Load
+    Hash::Util::FieldHash
+    Params::Check
+    Time::Piece
+    Archive::Extract
+    CPANPLUS
+    Pod::Simple
+
+    ithreads
+    Term::UI
+
+
+perl5.10.0delta
+
+use feature:
+    $a // $b            defined $a ? $a : $b
+    $c //= $d           $c = $d unless defined $c;
+
+    given ($foo) {
+        when (/^abc/) { $abc = 1; }
+        when (/^def/) { $def = 1; }
+        when (/^xyz/) { $xyz = 1; }
+        default { $nothing = 1; }
+    }
+
+    my  $_; # lexical (local)
+    our $_; # global  ($::_ , or simply overriding the lexical declaration with our $_;
+
+    state $a;   # persist $a
+
+    Regexes:
+        \k
+        \v \h \V \H
+        THEN PRUNE COMMIT MARK SKIP FAIL COMMIT
+
+    say()
+
+    -f -w -x $file      i.e, -f $file && -w _ && -x _
+
+    pragma
+        sort
+        bignum
+        bigint
+        bigrat
+
+
+Nicholas Clark
+    http://www.ccl4.org/~nick/P/Fast_Enough/
+Gisle Aas
+Rafael Garcia-Suarez
+Curtis Ovid Poe
+Andy Lester
+    http://www.petdance.com
+
+/u01/app/bin/perl
+        /lib/perl5
+
+
+
+PACKAGE tst IS
+
+

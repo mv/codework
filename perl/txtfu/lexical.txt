@@ -1,0 +1,60 @@
+
+http://perldoc.perl.org/perlsub.html#Private-Variables-via-my()
+
+my $a
+        - confined to the local block
+        - seen by inside blocks
+
+        1. my $x = 10;
+        2. sub bumpx { $x++ }   # same scope
+
+local $x
+        - overrides previous declaration inside a block
+
+        1.  my $x = 10;
+        2.  sub tst {
+                local $x;   # overrides
+                $x++;
+                print $x;   # print 11
+            };
+            print $x;       # print 10
+
+
+state $s
+        - keep variable between block calls
+        - same as 'C static variable'
+
+        use feature 'state';
+        sub gimme_another { state $x; return ++$x };     # $x is not visible outside
+
+
+
+Ref: http://perldoc.perl.org/functions/our.html
+
+? entire lexical scope = file ?
+
+Example 1
+---------
+    package Foo;
+    our $bar;           # declares $Foo::bar for rest of lexical scope
+    $bar = 20;          # $bar is global
+
+    package Bar;
+    print $bar;         # prints 20, as it refers to $Foo::bar
+
+Example 2
+---------
+    use warnings;
+    package Foo;
+    our $bar; # declares $Foo::bar for rest of lexical scope
+    $bar = 20;
+
+    package Bar;
+    our $bar = 30; # declares $Bar::bar for rest of lexical scope
+    print $bar; # prints 30
+
+    our $bar; # emits warning but has no other effect
+    print $bar; # still prints 30
+
+
+# vim: ft=perl :

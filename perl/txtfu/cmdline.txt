@@ -1,0 +1,107 @@
+
+Ref: perlrun
+
+PERL5LIB
+    add lib dirs in @INC to be searched:
+
+        $ export PERL5LIB="/u01/app/lib:/work/lib"
+        $ perl -V
+        output:
+          ...
+          %ENV:
+            PERL5LIB="/u01/app/lib:/work/lib"
+          @INC:
+            /u01/app/lib
+            /work/lib
+            /opt/local/lib/perl5/site_perl/5.8.9/darwin-2level
+            /opt/local/lib/perl5/site_perl/5.8.9
+            /opt/local/lib/perl5/site_perl/5.8.8
+            /opt/local/lib/perl5/site_perl/5.8.8/darwin-2level
+            /opt/local/lib/perl5/site_perl
+            /opt/local/lib/perl5/vendor_perl/5.8.9/darwin-2level
+            /opt/local/lib/perl5/vendor_perl/5.8.9
+            /opt/local/lib/perl5/vendor_perl/5.8.8
+            /opt/local/lib/perl5/vendor_perl/5.8.8/darwin-2level
+            /opt/local/lib/perl5/vendor_perl
+            /opt/local/lib/perl5/5.8.9/darwin-2level
+            /opt/local/lib/perl5/5.8.9
+            .
+
+-l/path/lib
+    Adds /path/lib to @INC
+
+-mmymod
+    executes 'use mymod();' before program, i.e., import none in current namespace.
+
+-Mmymod
+    executes 'use mymod  ;' before program, i.e., import all.
+
+-c
+    check syntax and exit.
+    Executes BEGIN,CHECK,UNITCHECK,use.
+    Skips main program,INIT,END.
+
+-d
+    enable debug.
+    -dt         - debug knows threads are enabled.
+    -d:module   - executes Devel::module as profiler
+    -Dflags
+
+-e  'command'
+    execute 'command' string
+
+-E  'command'
+    execute with all features of perl 5.10
+
+
+-n
+---
+    LINE:
+    while (<>) {
+        ... # your program goes here
+    }
+
+
+-p
+---
+    LINE:
+    while (<>) {
+        ... # your program goes here
+    } continue {
+        print or die "-p destination: $!\n";
+    }
+
+        -a
+            auto split inside loop:
+                @F = split(' ');
+        -F
+            pattern for auto-split.
+
+        -i
+            edit files in place, when using -n | -p.
+            -i.bak      - save files with suffix .bak before processing
+            -iorig_*    - save files with prefix orig_
+
+        -l
+            automatic end of line processing
+
+-n | -p
+-------
+    - simulates awk
+    - -n: no print
+    - -p: print
+
+    ls -l | perl -ane 'print $F[5]," " '
+    ls -l | perl -ape 'print $F[5]," :: " '
+
+    find . -mtime +7 -print | perl -nle unlink
+    find . -mtime +7 -print0 | perl -0nle unlink # ignore newlines in pathname
+
+    find /tmp -print0 | perl -ln0e 'print "found $_" if -x'
+
+    perl -pie 's/foo/bar/' *txt
+    perl -p -i.bak -e 's/foo/bar/' *log
+
+
+
+# vim: ft=perl #

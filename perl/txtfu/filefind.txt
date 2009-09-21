@@ -1,0 +1,22 @@
+
+use File::Find;
+    my @files;
+    find( sub { push @files, $File::Find::name if -f && /\.jpg$/ }, $dir );
+
+
+use File::Find::Wanted;
+    my @files = find_wanted( sub { -f && /\.jpg$/ }, $dir );
+
+use File::Find::Rule;
+    my @subdirs = File::Find::Rule->directory->in( $directory );
+
+    my @files = File::Find::Rule->file()
+                                ->name( '*.pm' )
+                                ->in( @INC );
+
+    # ANY!!! find avis, movs, things over 200M and empty files
+    $rule->any( File::Find::Rule->name( '*.avi', '*.mov' )
+              , File::Find::Rule->size( '>200M' )
+              , File::Find::Rule->file->empty
+              );
+
