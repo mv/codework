@@ -1,0 +1,29 @@
+Date | LastChangedDate
+    $Date: 2002-07-22 21:42:37 -0700 $
+
+Revision | Rev | LastChangedRevision
+
+    $Revision: 144 $
+
+Author | LastChangedBy
+
+    $Author: harry $
+
+HeadURL | URL
+
+    $HeadURL: http://svn.collab.net/repos/trunk/README $
+
+Id | "file $Rev $Date $Author"
+
+    $Id: svn-keywords.txt 4047 2006-11-17 11:44:14Z marcus.ferreira $
+
+$ svn pset svn:keywords Id URL HeadURL Author LastChangedBy Revision Rev LastChanged Revision Date LastChanged Date
+$ svn pset svn:keywords Id URL Author Revision Date
+
+$Rev::                            $:  Revision of last commit
+$Author::                         $:  LastChangedBy
+$Date:: 2002-07-22 21:42:37 -0700 $:  LastModifiedBy
+
+$Header: %f% %v% %d% %u% ship                                                                         $
+         $Header:: <<<__mdb file name object_ >>> 115.rev yyyy/mm/dd hh:mm:ss  <<Username / GECOS 30 bytes >> ship $:
+FDRCSID('$Header: MDBOMSALESGROUPPLACE.fmb 115.5 2006/09/12 14:58:28 appldev ship      $');
