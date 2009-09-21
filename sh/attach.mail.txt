@@ -1,0 +1,11 @@
+
+
+# Linux
+  echo "see attached file" | mail -a filename -s "subject" email@address
+
+# mutt
+  echo "see attached file" | mutt -a filename -s "subject" email@address
+
+# uuencode
+  cat filename | uuencode filename | mail -s "Email subject" user@example.com
+
