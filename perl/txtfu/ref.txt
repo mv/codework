@@ -1,0 +1,67 @@
+
+
+            Assigning a Reference   Assigning a Reference
+Type        to a Variable           to an Anonymous Variable
+----------- ----------------------- -------------------------------------
+scalar      $ref = \$scalar         $ref = \1
+list        $ref = \@array          $ref = [ 1, 2, 3 ]
+hash        $ref = \%hash           $ref = { a=>1, b=>2, c=>3 }
+subroutine  $ref = \&subr           $ref = sub { print "hello, world\n" }
+
+
+# scalar
+    my $scalar = $$ref
+    my $scalar = ${$ref}
+
+# arrays
+    my @a = @$ref
+    my @a = @{$ref}
+       $v = $ref->[8]       # better notation
+       $v = ${$ref}[8]
+
+    my @a = ( [ 1, 2, 3 ]
+            , [ 4, 5, 6 ]
+            , [ 7, 8, 9 ]
+            );
+
+# hashes
+    my %h = %$ref
+    my %h = %{$ref}
+       $v = $ref->{'key'}   # better notation
+       $v = ${$ref}{'key'}
+
+# subs
+    &$ref
+    &{$ref}( @params )
+    &$ref->( $param1, 'param2', @params )
+
+    # Closures
+    #     a function builder must return a ref to a sub
+
+        # sub newprint {
+            my $x = shift;
+            return sub { my $y = shift; print "$x, $y!\n"; };
+        }
+        $h = newprint("Howdy");     # $h: closure 1
+        $g = newprint("Greetings"); # $g: closure 2
+
+        #   Time passes...
+
+        &$h("world");
+        &$g("earthlings");
+
+    # Evaluating expressions inside double quotes:
+        print "My sub returned @{[ mysub(1,2,3) ]} that time.\n";
+        print "That yields @{[ $n + 5 ]} widgets\n";
+
+# Symbolic references
+    - happens when a l-value is not defined yet:
+
+      $name = "foo";
+      $$name = 1;           # $foo = 1;
+      ${$name} = 2;         # $foo = 2;
+
+    - to prevent this:
+
+      use strict 'refs';
+

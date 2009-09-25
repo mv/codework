@@ -1,0 +1,24 @@
+
+autossh
+dog
+gq
+cogito
+colorgcc
+boxes
+flip
+gtypist
+par
+cdargs
+fdupes
+iselect
+iprint
+pal
+mmv
+pcre utilities
+rats
+screen
+since
+vfu
+httping
+wput
+wget

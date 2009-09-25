@@ -10,6 +10,7 @@ cpan -i LWP
 
 cpan -i Term::ReadKey
 cpan -i Term::ReadLine::Perl
+cpan -i Term::ANSIColor
 cpan -i IPC::Run3
 cpan -i Probe::Perl
 
