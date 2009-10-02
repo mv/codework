@@ -1,0 +1,224 @@
+
+Usando Wiki
+-----------
+
+Escrevendo no Wiki
+==================
+"FAQ: Como eu escrevo no Wiki? Preciso aprender HTML?"
+
+No Wiki escreve-se em puro ASCII, da maneira mais simples possível. O texto final é gerado
+automaticamente em HTML.
+
+Há marcadores simples que geram formatações mais elaboradas. A idéia desses marcadores é
+organizar o texto ASCII e deixá-lo legível para ser entendido tanto no original quanto na
+versão final. Por exemplo:
+
+* Tópicos, seções, nível, subníveis:
+    = Nivel1 =
+    == Nivel 2 ==
+    === Nivel 3 ===
+    ==== Nivel 4 ====
+    ===== Nivel 5 =====
+    ====== Nivel 6 =======
+
+* Lista
+    * item 1
+    * item 2
+
+* Lista numberada
+    # item 1
+    ## item 1.1
+    # item 2
+
+* Texto descritivo e texto de código
+
+Texto descritivo é qualquer texto comum. Ele começa na margem esquerda.<CR><CR>
+Para separar um parágrafo do outro basta usar 2 <ENTER>.
+
+Para ter um texto comum identado basta colocar ':' no inicio:
+ : Texto identado 1 vez
+ :: Texto identado 2 vezes
+ ::: Texto identado 3 vezes
+
+Texto de código tem fonte fixa e automaticamente fica dentro de um 'box'. Qualquer
+linha que começa com um espaço ' ' na frente é formatada em código:
+
+;Procedimento:
+ # box 1
+    cd rrdtool-2.xx.yy/
+    ./configure \
+        --prefix=/usr/local/rrdtool \
+        | tee -a configure.my.log
+    make && make test
+    sudo make install
+
+;Código:
+ # box 2
+    #!/bin/bash
+
+    [ -z "$1" ] && {
+        printf "\n    Usage: $0 <filename>\n\n"
+        exit 1
+    }
+
+* Formatações
+    ''italico''                 2 apostrofos
+    '''negrito'''               3 apostrofos
+    '''''italico e negrito''''' 5 apostrofos
+
+    ; Texto     - faz a linha toda em negrito
+    ----        - 4 '-': cria uma barra horizontal
+
+* Links
+
+;Link para outro artigo dentro do mesmo wiki:
+    [[Nome_do_artigo]]
+    [[Nome_do_artigo|Meu titulo Super Jóia]]
+    [[Nome_do_artigo|Veja também esse artigo da hora aqui]]
+
+    [[Nome_do_artigo#secao]]
+    [[Nome_do_artigo#secao|Meu Titulo]]
+    [[Nome_do_artigo#secao|Veja também esse tópico joinha aqui]]
+
+;Link web qualqer:
+    [http://en.wikipedia.org]
+    [http://en.wikipedia.org Meu Titulo Super-Jóia]
+    [http://en.wikipedia.org Site Wikipedia em Ingles]
+
+
+Criando um artigo
+=================
+"FAQ: Como eu crio um artigo novo?"
+
+Para criar um artigo novo basta digitar a url desejada:
+
+    http://www.example.net/wiki/index.php/NOME_DO_ARTIGO_DESEJADO
+
+Aparece uma página em branco indicando que o artigo ainda não existe. Basta clicar em
+"Edit" e começar a editar o novo artigo.
+
+
+Criando tópicos:
+===============
+"FAQ: Como devo começar meu texto? Como eu organizo os tópicos?"
+
+Tópicos se organizam automaticamente em uma árvore, e tem um índice de referência.
+Para criar um texto com a seguinte estrutura:
+
+:   1. Software Usado                           # nivel 1
+::     1.1 Sistema Operacional                  # nivel 2
+:::        1.1.1 Linux                          # nivel 3
+:::        1.1.2 Solaris
+:::        1.1.3 FreeBSD
+:::        1.1.4 Windows
+::     1.2 Banco de dados
+::     1.3 Linguagem
+:::        1.3.1 Ruby
+:::        1.3.2 Javascript
+:   2. Install
+::     2.1 Pre-requisitos
+::     2.2 Repositorios
+::     2.3 Scripts
+
+Basta fazer:
+    =Software Usado=                            # nivel 1, html <H1>
+    Textotexto texto texto textotextotexto.
+
+    ==Sistema Operacional==                     # nivel 2, html <H2>
+    Textotexto texto texto textotextotexto.
+
+    ===Linux===                                 # nivel 3, html <H3>
+    Textotexto texto texto textotextotexto.
+
+    ==Banco de Dados==
+
+    ==Linguagem==
+    ===Ruby===
+    ===Javascript===
+
+    ... etc ...
+
+Os níveis e subníveis vão de 1 a 6, que correspondem a <H1> a <H6>.
+
+
+Categorias
+==========
+"FAQ: Como crio categorias? Por que devo usá-las?"
+
+Ao final de cada artigo do wiki podem ser adicionadas categorias. Categorias são simples
+'labels' e funcionam como 'tags' de assuntos dentro da base do wiki.
+
+Para cada categoria/label/tag que se deseja criar:
+
+ [[Category: tag1]]
+ [[Category: tag2]]
+ [[Category: tag3]]
+
+O wiki cria um índice para cada categoria nova inserida. Organiza todos os textos que
+participam de uma mesma categoria e mantém uma página em ordem alfabética com a lista
+de categorias e seus artigos.
+
+
+Tabelas
+=======
+"FAQ: Como organizo uma tabela? Como crio uma table HTML?"
+"FAQ: Como posso dividir linhas e colunas como uma planilha?"
+
+Tabelas com divisão de linhas e colunas podem ser organizadas com alguns marcadores
+extras. Basicamente uma tabela fica entre '{|' e '|}':
+
+  {|
+      tabela
+   |}
+
+Um exemplo de tabela com título de colunas e linhas:
+
+    {| class="wikitable" border="1" style="font-family:courier"
+     |+ Titulo da Tabela/Planilha
+     ! Coluna 1 !! Coluna 2 !! Coluna 3 || Coluna 4
+     |-
+     ! Linha 1
+     | Texto 2 || Texto 3 || Texto 4
+     |-
+     ! Linha 2
+     | Texto 5 || Texto 6 || Texto 7
+     |-
+     ! Linha A
+     | Texto B
+     | Texto C
+     | Texto D
+     |}
+
+Cria o seguinte exemplo:
+
+                  Tabela
+    -----------------------------------
+    Coluna 1 Coluna 2 Coluna 3 Coluna 4
+    ======== ======== ======== ========
+    Linha 1: Texto 2  Texto 3  Texto 4
+    Linha 2: Texto 5  Texto 6  Texto 7
+    Linha A: Texto B  Texto C  Texto D
+
+Resumindo:
+    {| |}   - tabela
+    |+      - titulo da tabela
+    !,!!    - titulo das colunas
+    |-      - nova linha
+    !       - titulo da linha, se necessário
+    |,||    - texto de cada célula/item/valor
+
+
+Referencia
+==========
+"FAQ: Onde posso saber mais detalhes sobre Wiki?"
+
+Alguns links de interesse:
+    [http://meta.wikimedia.org/wiki/Help:Editing            http://meta.wikimedia.org/wiki/Help:Editing]
+    [http://meta.wikimedia.org/wiki/Help:Table              http://meta.wikimedia.org/wiki/Help:Table]
+    [http://meta.wikimedia.org/wiki/Table_background_colors http://meta.wikimedia.org/wiki/Table_background_colors]
+    [http://www.mediawiki.org/wiki/Categories               http://www.mediawiki.org/wiki/Categories]
+    [http://www.mediawiki.org/wiki/Manual:FAQ               http://www.mediawiki.org/wiki/Manual:FAQ]
+    [http://www.mediawiki.org/wiki/Help:Starting_a_new_page http://www.mediawiki.org/wiki/Help:Starting_a_new_page]
+    [http://meta.wikimedia.org/wiki/Help:Reference_card     http://meta.wikimedia.org/wiki/Help:Reference_card]
+    [http://meta.wikimedia.org/wiki/Help:Advanced_editing   http://meta.wikimedia.org/wiki/Help:Advanced_editing]
+
