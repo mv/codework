@@ -1,0 +1,80 @@
+#
+# perftun_ref.txt
+# 
+
+CPU
+---
+    .) if cpu idle for most of the time then a cpu upgrade is useless
+
+    $ uptime
+    $ w
+        - give cpu load average for 1 min, 5 min, 15 min
+        - load average is number of processes in running state
+
+    $ vmstat 5
+        - cpu usr,sys,idle
+        MacOS - NO!
+        FreeBSD
+        Solaris
+
+
+    $ sar
+        MacOS
+        FreeBSD - NO!
+        Solaris
+
+Processes
+---------
+    $ top
+        FreeBSD: top -S -a -t
+                -a show command arguments
+                -S show system daemons
+                -t do not show 'top' in top list
+                -q renice top to a higher priority
+                keys:
+                    m  toggle cpu/io statistics
+                    S  toggle daemons
+                    t  toggle 'top'
+                    s  refresh interval
+                    o  order by
+        MacOS: top -ocpu -Otime -X
+                -o order by first
+                -O order by second
+                -X legacy display: cmd at rightmost column
+                keys:
+                    f  toggle sharedlib stats
+                    c  modes a,d,e,n
+                    s  refresh interval
+                    o  order by
+
+        Solaris: /opt/local/bin/top
+                -c show command arguments
+                -S show system daemons
+                -q renice top to a higher priority
+                keys:
+                    n  nummber o lines to show
+                    S  toggle daemons
+                    s  refresh interval
+                    o  order by
+
+
+    $ ps
+
+Memory
+------
+    $ vmstat
+    $ vm_stat
+        MacOS
+        FreeBSD - NO!
+        Solaris - NO!
+
+Disk
+----
+    $ iostat
+
+Network
+-------
+    $ netstat
+
+
+

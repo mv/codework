@@ -1,0 +1,7 @@
+
+# Port forward
+# read backwards:
+#     lnx1 - port 8080 is localhost:7777
+
+    ssh lnx1 -L 7777:localhost:8080
+

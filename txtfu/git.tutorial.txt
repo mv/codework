@@ -1,0 +1,161 @@
+
+
+Git
+---
+
+Ref: PeepCode 015
+
+    Clone Git Repo
+        git clone git://git.kernel.org/pub/scm/git/git.git
+
+    Configure
+        git config --global user.name  'Marcus Vinicius Ferreira'
+        git config --global user.email 'mferreira@webcointernet.com'
+
+        git config --list 
+
+        git config --global alias.co checkout
+        git config --global alias.st status
+        git config --global alias.br branch
+
+    Basic Commands
+        git init
+        .gitignore          # goes with the project
+        .git/info/exclude   # my local exclusion list
+        git commit -a       # inside $EDITOR with a status list
+        git commit -v       # inside $EDITOR with a status list and DIFF for each file
+        git log --stat
+        git log -p          # shows a diff of each change
+
+    Branches
+        git branch                  # show current branch
+        git branch -a               # list all branches
+        git branch new-branch       # create new branch
+        git checkout -b new-branch  # create new branch and checkout to it
+            git push origin new-branch  # adds to remote central repos
+            git push server2 new-branch # adds to server2 remote repos
+
+        git diff master new-branch  # all diffs between 2 branches
+
+        git branch -d new-branch        # delete new-branch
+        git branch -D new-branch        # delete a not merged branch (forced)
+            git push origin :new-branch # remove remote branch also
+
+        merge:
+            # merge new-branch into master:
+            git co master
+            git merge new-branch
+
+            # git  merge
+            git reset --hard ORIG_HEAD
+
+    More Branching
+        git stash "description"     # saves current work
+        git stash list              # list files in stash area
+        git stash apply             # apply files from stash to branch
+        git stash clear             # removes stash area
+
+    Repositories
+        "origin"
+            repository server host, remote server
+            
+            remote          local
+            -------------   ------
+            origin/master   master
+            origin/dog      dog
+            origin/fish
+
+        git fetch
+            git fetch origin
+            git log master..origin/master   # shows remote changes without merging
+        git pull                            # fetch+merge: fetches origin/master and merges into master
+
+        git remote add server2 server2:/var/git/app
+            # ~/.gitconfig
+                [remote "origin"]
+                    url = git@git.webcointernet.com:/repos/app.git
+                    fetch = +refs/heads/*:refs/remotes/origin/*
+                ...
+                [remote "server2"]
+                    url = server2:/var/git/app
+                    fetch = +refs/heads/*:refs/remotes/server2/*
+
+            # ex.:
+                git fetch server2
+                git branch -a
+                * master
+                  origin/HEAD
+                  origin/master     # from repos1
+                  server2/dog
+                  server2/master    # from repos2
+                
+                git checkout -b dog     # using repos1
+                git pull server2 dog    # merging from repos2 also
+            (or git merge server2/dog)
+
+        git remote show origin      # describes branches at origin and tracking info
+        git remote show server2     # describes branches at server2
+
+        git push                    # send to origin, all checked branches
+        git push server2            # send to server2, all checked branches
+        git push server2 dog        # send to server2, dog branch
+
+        # created local -> sending to remote repos
+        git remote add origin ssh://git@git.webcointernet.com/repos/myapp
+        git push origin dog
+        git push origin master
+                # if new:
+                server: mkdir new-repos && cd new-repos
+                        git init --bare
+
+        # branch remote -> remote
+        git push origin origin/stable:refs/heads/stable-rc-3
+        
+    Tracking Branches
+        To indicate where each branch must push/merge from, i.e., track:
+
+            .git/config:
+                [remote "origin"]
+                        url = ssh://git@git.webcointernet.com/repos/blogblogs
+                        fetch = +refs/heads/*:refs/remotes/origin/*
+                [branch "master"]
+                        remote = origin
+                        merge = refs/heads/master
+                [branch "deploy2.0"]
+                        remote = origin
+                        merge = refs/heads/deploy2.0
+                [branch "bbs2"]
+                    remote = origin
+                    merge = refs/heads/bbs2
+
+        git branch --track fish origin/fish     # checkout and track a remote branch
+
+    Subversion
+        git-svn clone https://svn.webcointernet.com/repos/sysadmin  # svn checkout
+        git-svn dcommit         # commit, i.e., push
+        git-svn rebase          # update, i.e., pull
+        .
+
+
+Branch
+    - to try a new feature
+
+Commits
+    git reset HEAD~2	# make last 2 commits disappear
+    git diff HEAD       # display changes since last commit
+
+Tags
+    git tag deploy-9-rc2    # create new tag
+    git tag -l              # list current tags
+    git checkout tag1       # goes to tag1
+
+    git fetch --tags        # pull current tags
+
+
+Reset
+    git reset --soft HEAD^
+    git reset --hard
+    
+Patch
+    git format-patch origin
+    

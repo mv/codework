@@ -1,0 +1,77 @@
+
+
+C-a ?   - help/list of keys
+    c   - create
+    d   - detach from
+    x   - lock
+
+    i   - info
+    l   - redisplay
+    m   - last message
+    t   - status: time and load average
+
+    a   - previous using
+    n   - next in list
+    p   - previous in list
+
+    S   - split
+
+    M   - monitor for all activity, i.e., sinalizes when
+          output is new
+    _   - monitor for 30s of silence, i.e., sinalizes when
+          compilation has finished
+
+    0-9 - window by number
+    "   - list of windows
+    w   - small list of windows
+    *   - list of displays
+
+    A   - rename
+    K   - kill
+    C   - clear display
+    F   - fit to current window size
+
+    h   - hardcopy of current window
+    H   - enable log of current window
+
+    [   - copy mode (scroll back enabled_
+          - <space> - mark
+    ]   - paste
+
+    c-v - enter digraph
+
+    :   - enter screen command
+        title "Builder"
+        version
+        silence
+
+screen -r - reattach
+screen -h 200   - 200 lines of historyvim
+screen -t 'name' vim /etc/name  - set title
+screen -U                       - enable UTF
+
+
+
+screen -f live.screen
+####
+    split
+    focus
+    screen -t apache    gtail -f /var/log/httpd/*log
+
+    split
+    focus
+    screen -t logs      gtail -f /webco/logs/bbs/*log
+
+
+
+screen -f oracle.screen
+    split
+    focus
+    screen -t alert     talert
+
+    split
+    focus
+    screen -t oratop    ~/bin/oratop.sh
+
+
+
