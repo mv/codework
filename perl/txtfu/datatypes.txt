@@ -1,0 +1,105 @@
+Scalar
+======
+    my $a = 'no interpolation';
+    my $b = "interpolation: \u${a}";
+
+    \u, \l:     next char upper/lower case
+    \U, \L:     next sequence upper/lower until the end
+    \Q    :     backslash next sequence until the end
+    \E    :     ends \U, \L, \Q
+
+    Quotes
+    ------
+    ''      q//  , q{},  q(),  q[],  q!!
+    ""      qq// , qq{}, qq(), qq[], qq!!
+    ``      qx//
+    ()      qw//
+    //      m//
+    regex   qr//
+
+Boolean
+=======
+    false:  "", 0, "0", '0', undef
+    true:   everything else
+
+Arrays
+======
+
+    my @a = ( 1, 2, 3, 4 );
+    my @b = qw/ abc def ghi/;
+
+    scalar(@days)   - number of elements
+    $#days          - last index
+
+    $days[0]        - array, first element
+    $days->[0]      - ref to array, first element
+
+    @days               - full array
+    @days[ 3, 4, 5 ]    - ( $days[3], $days[4], $days[5] )
+    @days[ 3 .. 5 ]     - ( $days[3], $days[4], $days[5] )
+    @days{'Jan','Feb'}  - hash slice: ( 'Jan' => 31, 'Feb' => 28 )
+
+    # anonymous array
+    my $aref = [ 1, 2, 3, 4, ];
+
+    # array of arrays
+    my @aOfa = ( [ 1, 2, 3 ]
+               , [ 4, 5, 6 ]
+               , [ 7, 8, 9 ]
+               );
+    # array of hashes
+    my @aOfh = ( { 'ls' => '/bin/ls', 'ps' => '/usr/ucb/ps auxwww' }
+               , { 'one' => '1_000', 'two' => '2_000', 'three' => '3_000' }
+               , { 'Adam' => 'Eve', 'Arthur' => 'Guinevere' }
+               );
+Hashes
+======
+    my %h = ( 'one' => 1_000, 'two' => 2_000 );
+
+    # anonymous
+    my $href = { 'Adam' => 'Eve', 'Arthur' => 'Guinevere' };
+
+    # hash of arrays
+    my %hoa = ( 'list1' => [ 'banana', 123, 456, 'books' ]
+              , 'list2' => [ 'abc', 'def' ]
+              , 'list3' => [ 1, 2, 3, 4, 5 ]
+              );
+
+    # hash of hashes
+    my %hoh = ( 'hash1' => { 'ls' => '/bin/ls', 'ps' => '/usr/ucb/ps auxwww' }
+              , 'hash2' => { 'one' => '1_000', 'two' => '2_000' }
+              , 'hash3' => { 'Adam' => 'Eve', 'Arthur' => 'Guinevere' }
+              );
+
+Using
+=====
+
+    print $a[0]                     , "\n";
+    print $h{'one'}                 , "\n";
+
+    print $aOfa[1]->[3]             , "\n"; # 6
+    print $aOfh[0]->{'ls'}          , "\n"; # /bin/ls
+
+    print $hoa{'list2'}->[0]        , "\n"; # abc
+    print $hoh{'list3'}->{'Adam'}   , "\n"; # Eve
+
+    push @a, 5, 6, 7;
+    push @b, ( 'jkl', 'mno' );
+
+    push @aOfa, [ e, f, g, h ];         # one more array 'line'
+    push @{ $aOfa[1] }, ( 10, 11, 12);  # more 'columns': 4,5,6,10,11,12
+
+    push @aOfh        , { 'me' => 1970, 'you' => '2004' }; # one more hash 'line'
+    $aOfh[1]->{'four'} = 4_000 ;        # one more hash value
+
+    $h{'three'} = 3_000;
+    $href->{'four'} = 4_000;
+
+    $hoa{'list4'} = [ 6, 7, 8, 9 ];
+    push @{ $hoa{'list2'} }, ( ghi, jkl );
+
+    $hoh{'hash4'} = { 'db' => 'mysql', 'so' => 'Unix' };
+    $hoh{'hash4'}->{'lang'} = 'perl' ;
+
+# vim: ft=perl:
+

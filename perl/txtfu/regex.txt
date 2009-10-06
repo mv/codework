@@ -1,0 +1,45 @@
+Regexese
+========
+
+Classes
+
+    Name            Definition      Code    Negation
+    --------------- --------------- ------- --------
+    Whitespace:     [ \t\n\f\r]     \s      \S
+    Word character: [a-zA-Z_0-9]    \w      \W
+    Digit:          [0-9]           \d      \D
+
+Quantifier
+
+    /a./    2 chars: a + any char: aa, ab, a!, a_
+    /a*/    0 or more: nothing, a, aa, aaa - {0,}
+    /a+/    at least 1:         a, aa, aaa - {1,}
+    /a?/    0 or 1:    nothing, a          - {0,1}, i.e., optional
+
+    /a.{4,11}/      abra, abrai, abracadabra
+    /a.{min,max}/   .
+
+    /a*?/   non-greedy
+    /a+?/   non-greedy
+
+Anchors
+    /^regex/    beginning
+    /regex$/    end
+    /\bword\b/  \b: word boundary
+
+Capture
+    - open and close HTML tags
+        <B>Bold</B>
+        <TITLE> Main Page </TITLE>
+
+        /<(.*?)>.*?<\/\1>/  :  / + \1
+
+    - Swapping first 2 words
+
+        s/(\S+)\s+(\S+)/$2 $1/
+
+    - time
+        ($hour, $min, $sec, $ampm) = /(\d+):(\d+):(\d+)\s*(\w+)/;
+
+# vim: ft=perl:
+

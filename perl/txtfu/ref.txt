@@ -65,3 +65,5 @@ subroutine  $ref = \&subr           $ref = sub { print "hello, world\n" }
 
       use strict 'refs';
 
+# vim: ft=perl:
+

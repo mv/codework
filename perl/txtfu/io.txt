@@ -1,0 +1,76 @@
+
+System exec
+===========
+
+    my $output = `pwd`;                 # string output
+    my $status = system('vim $file');   # numeric status output
+
+    if( system('ls -ld /bin') != 0 ){   # clear
+        # error: $? > 0
+    }
+
+    if system('ls -ld /bin') {
+        # error: $? > 0
+    }
+
+    # error: $? > 0
+    system("touch /tmp/$$.txt") && die "Could not touch: $!";
+  ! system("touch /tmp/$$.txt") or die "Could not touch: $!";
+    die "Could not touch: $!" if system("touch /tmp/$$.txt") ;
+    die "Could not touch: $!" unless ! system("touch /tmp/$$.txt") ; # clear
+    die "Could not touch: $!" unless not system("touch /tmp/$$.txt") ;
+
+filehandles
+===========
+
+    # Classic
+    open( FILE,  '/path/filename' );
+    open( FILE, '</path/filename' );
+    open( FILE, '| /path/command' );      # output filter
+    open( FILE, '/path/command |' );      # input filter
+
+    while( <FILE> ) { ... }     # read input
+    print FILE "msg\n";         # write output
+
+    print        "msg\n";           # default is STDOUT
+    print STDOUT "msg\n";           # explicitly
+
+    $number = <STDIN>;              # keyborad input
+    chomp $number;
+
+    chomp( $number = <STDIN> );     # keyborad input
+
+    # Best Practice
+    my $file;
+    open( $file, '<', '/path/filename' ); # read input
+    open( $file, '>', '/path/filename' ); # create output
+    open( $file, '>>','/path/filename' ); # append output
+
+    open( $file, '/path/command', '|' );  # input filter
+    open( $file, '|', '/path/command' );  # output filter
+
+    while( <$file> ) { ... }    # read input
+    print {$file} "msg\n";      # write output
+
+    LINE:
+    while( <$file> ) {
+        next LINE if m/^\s*$/ ;     # white lines
+        next LINE if m/^\s*#/ ;     # comments
+        last LINE if m/^\s*quit/i ; # 'quit' command
+
+        chomp;
+        $line = $_;
+        ...
+    }
+
+    LINE: while( $line = <$file> ) {
+        next LINE if $line =~ /^ \s* $/x ;     # white lines
+        next LINE if $line =~ /^ \s* #/x ;     # comments
+        last LINE if $line =~ /^ \s* quit/xi ; # 'quit' command
+
+        chomp( $line );
+        ...
+    }
+
+# vim: ft=perl:
+

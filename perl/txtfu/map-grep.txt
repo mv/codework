@@ -1,0 +1,32 @@
+
+Map
+===
+
+    @lowkeys = map{ lc } keys %hash ;
+
+    i.e
+    foreach (keys %hash) {
+        push @lowkeys, lc $_;
+    }
+
+
+Grep
+====
+
+    @numbersonly = grep{ /\d+/ } @longlist ;
+
+    i.e
+    foreach (@longlist) {
+        push @numbersonly, $_ if /\d+/;
+    }
+
+Schwarzian Transform
+====================
+
+    map
+        sort
+            map
+
+
+# vim: ft=perl:
+

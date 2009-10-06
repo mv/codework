@@ -1,0 +1,35 @@
+Scopes
+======
+    Names are stored in 2 possible ways:
+
+Symbol tables
+-------------
+    - Global hashes that store global variable names
+    - the same as a package
+
+Lexical Scopes
+--------------
+    - Unnamed scratchpads attached to a block of code.
+    - Not attached to any pachage
+    - 'my' declares and attaches a variable to a lexical scope.
+    - 'our' creates an alias to a package variable to be used inside
+      the current lexical scope. ('our' permit access to global varables)
+
+So, a namespace can be global or lexical.
+
+Typeglobs
+=========
+    $foo    - scalar
+    @foo    - array
+    %foo    - hash
+    &foo    - subroutine
+    foo:    - label
+    foo     - filehandle
+    *foo    - all things 'foo' inside this namespace
+
+    - assigning to a typeglob is how Module imports work in Perl.
+
+
+
+# vim: ft=perl:
+

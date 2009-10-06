@@ -1,0 +1,54 @@
+Here Documents
+==============
+
+print <<EOF;
+The price is $Price.
+EOF
+
+print <<"EOF";  # same as above, with explicit quotes
+The price is $Price.
+EOF
+
+print <<'EOF';    # single-quoted quote
+All things (e.g. a camel's journey through
+A needle's eye) are possible, it's true.
+But picture how the camel feels, squeezed out
+In one long bloody thread, from tail to snout.
+                                -- C.S. Lewis
+EOF
+
+print <<`EOC`;    # execute commands
+echo hi there
+echo lo there
+EOC
+
+Here document idented, removing leading spaces to use:
+($quote = <<'QUOTE') =~ s/^\s+//gm;
+    The Road goes ever on and on,
+    down from the door where it began.
+QUOTE
+
+You could even populate an array with the lines of a here document as follows:
+@sauces = <<End_Lines =~ m/(\S.*\S)/g;
+   normal tomato
+   spicy tomato
+   green chile
+   pesto
+   white wine
+End_Lines
+
+funkshun(<<"THIS", 23, <<'THAT');   # doesn't matter if they're in parens
+Here's a line
+or two.
+THIS
+And here's another.
+THAT
+
+print << x 10;    # print next line 10 times
+The camels are coming!  Hurrah!  Hurrah!
+
+print <<"" x 10;  # the preferred way to write that
+The camels are coming!  Hurrah!  Hurrah!
+
+# vim: ft=perl:
+
