@@ -1,0 +1,23 @@
+
+
+
+PC              Mac
+----------      ---------
+Backspace       Delete
+Delete          fn+Delete
+Insert
+Home            command+Left,  alt+Up
+End             command+Right, alt+Down
+PgUP            command+Up
+PgDown          command+Down
+PrintScreen     command+3, command+4
+
+
+Navigation
+----------
+word left       alt+Left
+word right      alt+Right
+Screen Up
+Screen Down
+Document Begin  command+Up
+Document End    command+Down
