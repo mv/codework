@@ -1,4 +1,4 @@
-
+<pre>
 Usando Wiki
 -----------
 
@@ -105,20 +105,20 @@ Criando tópicos:
 Tópicos se organizam automaticamente em uma árvore, e tem um índice de referência.
 Para criar um texto com a seguinte estrutura:
 
-:   1. Software Usado                           # nivel 1
-::     1.1 Sistema Operacional                  # nivel 2
-:::        1.1.1 Linux                          # nivel 3
-:::        1.1.2 Solaris
-:::        1.1.3 FreeBSD
-:::        1.1.4 Windows
-::     1.2 Banco de dados
-::     1.3 Linguagem
-:::        1.3.1 Ruby
-:::        1.3.2 Javascript
-:   2. Install
-::     2.1 Pre-requisitos
-::     2.2 Repositorios
-::     2.3 Scripts
+   1. Software Usado                          # nivel 1
+     1.1 Sistema Operacional                  # nivel 2
+         1.1.1 Linux                          # nivel 3
+         1.1.2 Solaris
+         1.1.3 FreeBSD
+         1.1.4 Windows
+     1.2 Banco de dados
+     1.3 Linguagem
+         1.3.1 Ruby
+         1.3.2 Javascript
+   2. Install
+     2.1 Pre-requisitos
+     2.2 Repositorios
+     2.3 Scripts
 
 Basta fazer:
     =Software Usado=                            # nivel 1, html <H1>
@@ -212,13 +212,13 @@ Referencia
 ==========
 "FAQ: Onde posso saber mais detalhes sobre Wiki?"
 
-Alguns links de interesse:
+Alguns links de interesse: </pre>
+    [http://www.mediawiki.org/wiki/Help:Starting_a_new_page http://www.mediawiki.org/wiki/Help:Starting_a_new_page]
+    [http://www.mediawiki.org/wiki/Manual:FAQ               http://www.mediawiki.org/wiki/Manual:FAQ]
+    [http://www.mediawiki.org/wiki/Categories               http://www.mediawiki.org/wiki/Categories]
+    [http://meta.wikimedia.org/wiki/Help:Advanced_editing   http://meta.wikimedia.org/wiki/Help:Advanced_editing]
+    [http://meta.wikimedia.org/wiki/Help:Reference_card     http://meta.wikimedia.org/wiki/Help:Reference_card]
     [http://meta.wikimedia.org/wiki/Help:Editing            http://meta.wikimedia.org/wiki/Help:Editing]
     [http://meta.wikimedia.org/wiki/Help:Table              http://meta.wikimedia.org/wiki/Help:Table]
     [http://meta.wikimedia.org/wiki/Table_background_colors http://meta.wikimedia.org/wiki/Table_background_colors]
-    [http://www.mediawiki.org/wiki/Categories               http://www.mediawiki.org/wiki/Categories]
-    [http://www.mediawiki.org/wiki/Manual:FAQ               http://www.mediawiki.org/wiki/Manual:FAQ]
-    [http://www.mediawiki.org/wiki/Help:Starting_a_new_page http://www.mediawiki.org/wiki/Help:Starting_a_new_page]
-    [http://meta.wikimedia.org/wiki/Help:Reference_card     http://meta.wikimedia.org/wiki/Help:Reference_card]
-    [http://meta.wikimedia.org/wiki/Help:Advanced_editing   http://meta.wikimedia.org/wiki/Help:Advanced_editing]
 
