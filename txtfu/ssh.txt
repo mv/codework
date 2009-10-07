@@ -1,7 +1,13 @@
 
 # Port forward
-# read backwards:
-#     lnx1 - port 8080 is localhost:7777
 
-    ssh lnx1 -L 7777:localhost:8080
+# exportar portal local 7777
+#          para o endereço que dev01 consegue acessar (10.2.117.196)
+#          na porta remota 5984
+ssh dev01 -L 7777:10.2.117.196:5984
+
+# cria     na máquina remota na porta 7777
+#          um tunel para o servidor mail.abril.com.br
+#          na porta 25
+ssh dev01 -R 7777:mail.abril.com.br:25
 
