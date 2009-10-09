@@ -1,0 +1,35 @@
+## # Lines starting with '#' are considered comments.
+## # Ignore any file named foo.txt.
+## foo.txt
+## # Ignore (generated) html files,
+## *.html
+## # except foo.html which is maintained by hand.
+## !foo.html
+## # Ignore objects and archives.
+## *.[oa]
+
+.svn
+.CVS
+.DS_Store
+.*
+!.gitignore
+
+*.[oa]
+*.log
+*.tmp
+*.pid
+*swp
+*sw?
+
+*.tar
+*.[t]gz
+*.[t]bz
+*.[t]bz2
+*.zip
+*.arj
+*.a[0-9][0-9]
+
+afiedt.buf
+sqlnet.log
+*.lst
+
