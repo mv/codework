@@ -1,0 +1,97 @@
+
+
+Compare:
+    http://en.wikipedia.org/wiki/Comparison_of_open_source_configuration_management_software
+
+            Language    First release       Latest      stable_release  Windows config
+Bcfg2 	    Python      2004-08-11          2008-11-13  0.9.6                   { } + samba like + syslog like
+Cfengine    C 	        1993 	            2009-04-26  3.0.1           cygwin  { }: dns, nagios
+Chef 	    Ruby 	2009-01-15          2009-08-12  0.7.8                   ruby dsl: rake, capistrano, sake
+Puppet 	    Ruby 	2005-08-30 	    2009-09-05  0.25.0                  ruby dsl: rake, capistrano, sake
+
+
+Terms:
+    - configuration manager
+      BUILD
+        "keep config files between tools, apps, hosts and different OSes"
+
+    - distributed instalation manager
+      DEPLOY
+        i.e., "deploy manager"
+
+    - state manager
+      AUDIT
+        "watches/monitors current config files and alert on changes"
+
+    - inventory manager
+      MANAGER
+        "what, where, how many"
+
+
+Chef
+====
+    Artigo:
+        http://www.linux-mag.com/cache/7384/1.html
+    Site:
+        http://www.opscode.com/chef/
+    Cookboooks:
+        http://github.com/opscode/cookbooks
+        http://github.com/jtimberman/cookbooks
+        http://github.com/37signals/37s_cookbooks
+
+"Nao é necessariamente provisionamento, mas controle de configuracao"
+"Controle de distribuicao dos arquivos de conf também?"
+
+    Plus:
+        muitos cookbooks!!!!
+
+CFEngine
+========
+
+    http://www.cfengine.org/
+    Doc:
+        http://www.cfengine.org/manuals/cf3-reference.html
+    Ref:
+        http://www.youtube.com/watch?v=4CCXs4Om5pY
+        http://cfengine.com/pages/media
+        http://www.linux-magazine.com/w3/issue/101/Cfengine.pdf
+    Book:
+        http://www.apress.com/book/view/1430210591
+    Booklet:
+        http://www.sage.org/pubs/16_cfengine/
+
+    Plus:
+        - manager
+        - enforcer
+        - audit
+        - cron replacement: global cron......
+
+Puppet
+======
+
+    Book:
+        http://www.apress.com/book/view/1590599780
+
+Cobbler
+=======
+
+    PDF:
+        http://assets.en.oreilly.com/1/event/27/Automating%20System%20Builds%20and%20Maintenance%20with%20Cobbler%20and%20Puppet%20Presentation.pdf
+
+Bcfg2
+=====
+    http://trac.mcs.anl.gov/projects/bcfg2
+    http://www.madstop.com/puppet-vs-bcfg2.html
+    Doc:
+        http://cd-docdb.fnal.gov/cgi-bin/DisplayMeeting?conferenceid=389
+    Booklet:
+        http://my.safaribooksonline.com/9781931971645
+        http://www.sage.org/pubs/19_bcfg2/
+
+
+LCFG
+====
+
+    Booklet:
+        http://www.sage.org/pubs/17_lcfg/
+

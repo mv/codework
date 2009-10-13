@@ -1,0 +1,44 @@
+
+
+=Novo DNS=
+
+Rule:
+        hostname  IN A     172.16.1.x
+        alias1    IN CNAME www.alias1.hostname.abd.lan
+        alias2    IN CNAME www.alias2.abd.lan
+        alias3    IN CNAME db.alias3.abd.lan
+
+Implementacao:
+    UNIQUE KEY: (host,ip)
+
+Implementacao:
+    * django
+    * ror
+
+Idea:
+    -> cadastrar host/ip
+    -> gerar arquivos de conf
+        1| -> fazer deploy de novos conf num servidor de stage
+           -> start stage dns
+        2| -> usar named -t (test conf's)
+    -> erro?
+
+Idea:
+    extender para controle de inventario
+        1) coletar info via snmp
+        2) cadastrar nas tabelas
+        3) gerar info: lista de ip's
+                                hosts
+                                so
+                                discos
+                                interfaces
+=Options=
+
+===Rails===
+
+===Django===
+
+* Python
+* Admin interface is the application
+
+
