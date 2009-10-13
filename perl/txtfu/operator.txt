@@ -1,0 +1,75 @@
+
+# relational operators
+
+    Numeric  String  Meaning
+    >        gt      Greater than
+    >=       ge      Greater than or equal to
+    <        lt      Less than
+    <=       le      Less than or equal to
+    ==       eq      Equal to
+    !=       ne      Not equal to
+
+    Return 1 for true and "" for false
+
+    <=>      cmp     Comparison
+
+    Return -1 if left value less than
+            0 if equal
+            1 if right value greater than
+
+# logical operators
+
+- and, or
+   LOWEST precedence ever:
+
+   open my $fh, "<", $file or die "Cannot open: $!";
+
+- &&, ||
+    HIGHER precedence
+
+    $xyz = $x || $y || $z;
+
+    $xyz = ($x or $y or $z); # 'or' is lower than assignment.
+
+    $home = $ENV{HOME}
+        || $ENV{LOGDIR}
+        || (getpwuid($<))[7]
+        || die "You're homeless!\n";
+
+# multiplicatives
+
+    print '-' x 80;                             # print row of dashes
+    print "\t" x ($tab/8), ' ' x ($tab%8);      # tab over
+
+# Precedence
+
+   1. left     terms and list operators (leftward)
+   2. left     ->
+   3. nonassoc ++ --
+   4. right    **
+   5. right    ! ~ \ and unary + and -
+   6. left     =~ !~
+   7. left     * / % x
+   8. left     + - .
+   9. left     << >>
+  10. nonassoc named unary operators
+  11. nonassoc < > <= >= lt gt le ge
+  12. nonassoc == != <=> eq ne cmp ~~
+  13. left     &
+  14. left     | ^
+  15. left     &&
+  16. left     || //
+  17. nonassoc .. ...
+  18. right    ?:
+  19. right    = += -= *= etc.  =================
+  20. left     , =>
+  21. nonassoc list operators (rightward)
+  22. right    not
+  23. left     and
+  24. left     or xor
+
+
+
+
+# vim: ft=perl:
+

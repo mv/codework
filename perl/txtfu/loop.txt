@@ -1,0 +1,109 @@
+
+# loop
+######
+
+    LABEL while (EXPR) BLOCK continue BLOCK # execute BLOCK as long as EXPR is TRUE
+    LABEL until (EXPR) BLOCK continue BLOCK # execute BLOCK as long as EXPR is FALSE
+
+    LABEL BLOCK
+    LABEL BLOCK continue BLOCK
+
+    next LABEL; # next loop, execute continue BLOCK
+    last LABEL; # terminate loop           , do NOT execute continue BLOCK
+    redo LABEL; # restart current iteration, do NOT execute continue BLOCK
+
+### for: iterate over a condition
+    LABEL:
+    for (my $i = 1; $i <= 10; $i++) {
+        ...
+    }
+
+    for ($i = 0, $bit = 0; $i < 32; $i++, $bit <<= 1) {
+        print "Bit $i is set\n" if $mask & $bit;
+    } # the values in $i and $bit persist past the loop
+
+    for (my ($i, $bit) = (0, 1); $i < 32; $i++, $bit <<= 1) {
+        print "Bit $i is set\n" if $mask & $bit;
+    } # loop's versions of $i and $bit now out of scope
+
+### foreach: iterate over a list
+
+    for $count (10,9,8,7,6,5,4,3,2,1,'BOOM') {  # do a countdown
+        print "$count\n"; sleep(1);
+    }
+
+    for (reverse 'BOOM', 1 .. 10) {             # same thing
+        print "$_\n"; sleep(1);
+    }
+
+    $sum = 0;
+    foreach $value (@array) { $sum += $value }
+
+    foreach $key (sort keys %hash) {
+        print "$key => $hash{$key}\n";
+    }
+
+    for $field (split /:/ => $data) {             # any LIST expression
+        print "Field contains: `$field'\n";
+    }
+
+    print "field: $_\n" foreach split /:/ => $dataline;
+
+# Range loop
+############
+
+    for (101 .. 200) { print; }           # prints 101102...199200
+    for (101 .. 200) { print "$_ "; }     # prints 101 102 ... 199 200
+
+# Modifier loop
+###############
+
+    # - a modifier loop make '$_' be a localizaed alias to each value
+    #   of a group when this group is assignable lvalue
+
+    for (@christmas, @easter) {              # change menu
+        s/ham/turkey/;
+    }
+    s/ham/turkey/ for @christmas, @easter;   # same thing
+
+    s/java/perl/ for @resumes;
+
+    foreach $pay (@salaries) {               # grant 8% raises
+        $pay *= 1.08;
+    }
+
+    for ($scalar, @array, values %hash) {
+        s/^ \s+ //x;                         # strip leading  whitespace
+        s/\s+ $ //x;                         # strip trailing whitespace
+    }
+
+    WID: foreach $this (@ary1) {
+        JET: foreach $that (@ary2) {
+            next WID if $this > $that;
+            $this += $that;
+        }
+    }
+
+    for ($very_nasty_long_name[$i++][$j++]->method()) {
+        /this pattern/      and do { push @flags, '-e'; last; };
+        /that one/          and do { push @flags, '-h'; last; };
+        /something else/    and do {                    last; };
+        die "unknown value: '$_'";
+    }
+
+    for ($user_color_preference) {
+        $value = /red/      ?   0xFF0000  :
+                 /green/    ?   0x00FF00  :
+                 /blue/     ?   0x0000FF  :
+                                0x000000  ;   # black if all fail
+    } # or use a HASH!!!
+
+    # multiple substitutions on the same string
+    for ($string) {
+        s/^\s+//;       # discard leading whitespace
+        s/\s+$//;       # discard trailing whitespace
+        s/\s+/ /g;      # collapse internal whitespace
+    }
+
+# vim: ft=perl:
+

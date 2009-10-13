@@ -39,6 +39,9 @@ Arrays
     @days[ 3 .. 5 ]     - ( $days[3], $days[4], $days[5] )
     @days{'Jan','Feb'}  - hash slice: ( 'Jan' => 31, 'Feb' => 28 )
 
+    @foo = @foo[0 .. $#foo];               # an expensive no-op
+    @foo = @foo[ -5 .. -1];                # slice last 5 items
+
     # anonymous array
     my $aref = [ 1, 2, 3, 4, ];
 
@@ -55,6 +58,12 @@ Arrays
 Hashes
 ======
     my %h = ( 'one' => 1_000, 'two' => 2_000 );
+
+    @keys = qw(perls before swine);
+    @hash{@keys} = ("") x @keys;
+
+    $string = "password=xyzzy verbose=9 score=0";
+    %hash = $string =~ /(\w+)=(\w+)/g;
 
     # anonymous
     my $href = { 'Adam' => 'Eve', 'Arthur' => 'Guinevere' };

@@ -17,6 +17,16 @@ Lexical Scopes
 
 So, a namespace can be global or lexical.
 
+    my $x    # confines name and value to a scope. New name and new value. Private variable.
+    our $y   # confines name           to a scope. Declares (presents) a global variable in my scope.
+    local $z # confines          value to a scope. Temporary inside my scope. Value is restored after scope.
+
+Dynamical Scopes
+----------------
+    # - blocks nest dynamically by calling other blocks
+    # - first BLOCK variables can be seen by 2nd block, because 2nd block is an 'enclosed' block
+    #   at runtime, i.e., a subroutine can see the caller's lexicals
+
 Typeglobs
 =========
     $foo    - scalar

@@ -1,5 +1,31 @@
 Regexese
 ========
+    - m//       s///
+      m/MATCH/  s/MATCH/REPLACEMENT/
+
+      tr/matchLIST/replacementLIST/
+       y/matchLIST/replacementLIST/
+
+      $value =~ /match/
+      $value =~ m/match/
+      $value !~ m/match/
+      $value =~ s/match/replacement/
+
+      $rotate13 =~ tr/a-zA-Z/n-za-mN-ZA-M/
+
+    - also provide the power of double-quoted interpolation:
+        $foo = "bar";
+        /$foo$/ ; # compile and send...
+        /bar$/  ; # ... this to the regex parser
+
+    - whitespace is possible with chosen open/close pairs
+        s(egg)<larva> ;
+        s{larva}{pupa};
+        s[pupa]/imago/;
+
+        s (egg)   <larva>;
+        s {larva} {pupa} ;
+        s [pupa]  /imago/;
 
 Classes
 
@@ -22,10 +48,123 @@ Quantifier
     /a*?/   non-greedy
     /a+?/   non-greedy
 
-Anchors
+    Maximal	    Minimal	    Allowed Range
+    ----------- ----------- --------------------------------------------------------
+    {MIN,MAX}	{MIN,MAX}?	Must occur at least MIN times but no more than MAX times
+    {MIN,}	    {MIN,}?	    Must occur at least MIN times
+    {COUNT}	    {COUNT}?	Must match exactly COUNT times
+    *	        *?			0 or more times (same as {0,})
+    +	        +?			1 or more times (same as {1,})
+    ?	        ??			0 or 1 time (same as {0,1})
+
+Anchors and Positions
     /^regex/    beginning
     /regex$/    end
     /\bword\b/  \b: word boundary
+
+    $text = "
+    This a bar with a barstool in it. One sand
+    bar. One more bar. A lot of bars. Inside prebarracks.
+    One bot is a program robot made by abbot. This robot
+    rules.
+    One: what it is black? Dark, that is it the one.
+    Two:  One thistle belongs to the artist
+    Three: Brand istanbul so--isn't that butter?
+    Four: Is there confutatis in a metropolis near you ?
+    "
+
+Capturing and Clustering
+
+Alternation
+
+
+Modifiers for m//
+    //i	    Ignore case. Case insensitive.
+    //x	    Expresse modifier. Ignore (most) whitespace and permit comments in pattern.
+    //m	    Multiline.  Let ^ and $ match next to embedded \n.
+    //s	    Singleline. Let . match newline and ignore deprecated $* variable.
+    //o	    Compile pattern once only. Pre-compile a scalar containing a pattern.
+    //g     Global match. Return all matches in LIST context. Resumes previous match in SCALAR context.
+    //gc    Global position. Continues from last match position.
+
+Modifiers for s///
+    //i	    Ignore case. Case insensitive.
+    //x	    Expresse modifier. Ignore (most) whitespace and permit comments in pattern.
+    //m	    Multiline.  Let ^ and $ match next to embedded \n.
+    //s	    Singleline. Let . match newline and ignore deprecated $* variable.
+    //o	    Compile pattern once only. Pre-compile a scalar containing a pattern.
+    //g     Global match. Return all matches in LIST context. Resumes previous match in SCALAR context.
+    //e     Evaluate the right side of an expression as Perl code.
+
+    multiline
+
+Modifiers for tr///
+    //c	    Complement SEARCHLIST.
+    //d	    Delete found but unreplaced characters.
+    //s	    Squash duplicate replaced characters.
+
+    tr/aeiou/!/;                 # change any vowel into !
+    tr{\\ \r\n\b\f./}{_};        # change strange chars into an underscore
+
+    tr/A-Z/a-z/ for @ARGV;       # canonicalize to lowercase ASCII
+
+    $count = ($para =~ tr/\n//); # count the newlines in $para
+    $count = tr/0-9//;           # count the digits in $_
+
+    $word =~ tr/a-zA-Z//s;       # bookkeeper -> bokeper
+
+    tr/@$%*//d;                  # delete any of those
+    tr#A-Za-z0-9+/##cd;          # remove non-base64 chars
+
+    # change en passant
+    ($HOST = $host) =~ tr/a-z/A-Z/;
+
+    $pathname =~ tr/a-zA-Z/_/cs; # change non-(ASCII)alphas to single underbar
+
+    tr [\200-\377]
+       [\000-\177];              # strip 8th bit, bytewise
+
+    # OBSobsOBSobsOBSobsOBSobsOBSobsOBSobsOBSobsOBSobsOBSobsOBSobsOBS
+    # scalars ARE NOT intorpolated in tr///. Must use eval:
+
+    $count = eval "tr/$oldlist/$newlist/";
+    die if $@;  # propagates exception from illegal eval contents
+
+    # OBSobsOBSobsOBSobsOBSobsOBSobsOBSobsOBSobsOBSobsOBSobsOBSobsOBS
+
+Assign and modify
+    # original:
+    $lotr = $hobbit;
+    $lotr =~ s/Bilbo/Frodo/g;
+
+    # en passant: keep old, modify new
+    ($lotr = $hobbit) =~ s/Bilbo/Frodo/g; # first assign. 2nd: replaces. $hobbit is unalterded.
+
+    # WRONG!
+    $lotr = $hobbit =~ s/Bilbo/Frodo/g; # $lotr = 3: number of replacements inside $hobbit
+
+    # keep old, modify new
+    @oldhues = ('bluebird', 'bluegrass',  'bluefish', 'the blues');
+    for (@newhues = @oldhues) { s/blue/red/ }
+    print "@newhues\n";           # prints: redbird redgrass redfish the reds
+
+    # multiple substitutions on the same string
+    for ($string) {
+        s/^\s+//;       # discard leading whitespace
+        s/\s+$//;       # discard trailing whitespace
+        s/\s+/ /g;      # collapse internal whitespace
+    }
+    # shortcut
+    $string = join(" ", split " " => $string);
+
+    # keep old, modify new, multiple times
+    for ($newshow = $oldshow) {
+        s/Fred/Homer/g;
+        s/Wilma/Marge/g;
+        s/Pebbles/Lisa/g;
+        s/Dino/Bart/g;
+    }
+
 
 Capture
     - open and close HTML tags
@@ -40,6 +179,58 @@ Capture
 
     - time
         ($hour, $min, $sec, $ampm) = /(\d+):(\d+):(\d+)\s*(\w+)/;
+
+    # put commas in the right places in an integer
+    1 while s/(\d)(\d\d\d)(?!\d)/$1,$2/;
+
+    # expand tabs to 8-column spacing
+    1 while s/\t+/' ' x (length($&)*8 - length($`)%8)/e;
+
+    # remove (nested (even deeply nested (like this))) remarks
+    1 while s/\([^()]*\)//g;
+
+    # remove duplicate words (and triplicate (and quadruplicate...))
+    1 while s/\b(\w+) \1\b/$1/gi;
+
+    - duplicate words
+    while (<>) {
+        while ( m{ \b (\w\S+) ( \s+ \1) +  \b  }xig) {
+            print "dup word '$1' at paragraph $.\n";
+        }
+    }
+
+    # Find duplicate words in paragraphs, possibly spanning line boundaries.
+    #   Use /x for space and comments, /i to match both `is'
+    #   in "Is is this ok?", and use /g to find all dups.
+    $/ = "";        # "paragrep" mode
+    while (<>) {
+        while ( m{
+                    \b            # start at a word boundary
+                    (\w\S+)       # find a wordish chunk
+                    (
+                        \s+       # separated by some whitespace
+                        \1        # and that chunk again
+                    ) +           # repeat ad lib
+                    \b            # until another word boundary
+                }xig
+            )
+        {
+            print "dup word '$1' at paragraph $.\n";
+        }
+    }
+
+    - "inside out"!!!
+
+    chomp($answer = <STDIN>);
+    if    ("SEND"  =~ /^\Q$answer/i) { print "Action is send\n"  }
+    elsif ("STOP"  =~ /^\Q$answer/i) { print "Action is stop\n"  }
+    elsif ("ABORT" =~ /^\Q$answer/i) { print "Action is abort\n" }
+    elsif ("LIST"  =~ /^\Q$answer/i) { print "Action is list\n"  }
+    elsif ("EDIT"  =~ /^\Q$answer/i) { print "Action is edit\n"  }
+
+    # This lets your user perform the "send" action by typing any
+    # of S, SE, SEN, or SEND (in any mixture of upper- and lowercase).
+    # To "stop", they'd have to type at least ST (or St, or sT, or st).
 
 # vim: ft=perl:
 

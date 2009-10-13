@@ -1,0 +1,143 @@
+
+# Globbing
+    @files = <*.xml>
+    @files = glob("*.xml");
+    @files = glob("$dir/*.[ch]");
+
+    while (glob "*.c") {
+        chmod 0644, $_;
+    }
+
+    chmod 0644, glob("*.c");
+
+# Processing lines
+    while (<CONF>) {
+        next if /^#/;           # most comments. Discard first
+        next if /^ \s* (#|$)/x; # alternation: Blanks and more comments
+        chomp;
+        munchabunch($_);
+    }
+
+# Reading from STDIN
+    while (local $_ = <STDIN>) { print; }       # use local $_
+    while (<STDIN>)            { print; }       # short way
+    while (my $line = <STDIN>) { print $line; } # now private
+
+    # multiple files
+    while (<>) {
+        ...                     # code for each line
+        print "line: $.\n";     # 'global' for all files
+    }
+
+    # idem
+    @ARGV = ('-') unless @ARGV;     # assume STDIN if empty
+    while (@ARGV) {
+        $file = shift @ARGV;        # shorten @ARGV each time
+        if (!open(my $fh, $file)) {
+            warn "Can't open $file $!\n";
+            next;
+        }
+        print "File: $file\n";
+        while (<$fh>) {
+            ...                     # code for each line
+            print "line: $.\n";     # reset for each file
+        }
+    }
+
+    # default to README file if no args given
+    @ARGV = ("README") unless @ARGV;
+
+# Reading continuation lines: terminated with '\'
+
+    # implict
+    while (<>) {
+        chomp;
+        if (s/\\$//) {          # continue to the next line
+            $_ .= <>;           # append next line
+            redo unless eof;    # don't read past each file's eof
+        }
+        # now process $_
+        ...
+    }
+
+    # explict
+    LINE: while (defined($line = <ARGV>)) {
+        chomp($line);
+        if ($line =~ s/\\$//) {
+            $line .= <ARGV>;
+            redo LINE unless eof(ARGV);
+        }
+        # now process $line
+    }
+
+# Range lines
+#############
+
+    line:
+    while(<>) {
+        if (101 .. 200) { print; }  # print 2nd hundred lines
+        # email
+        next line if (1 .. /^$/);   # skip header lines
+        s/^/> / if (/^$/ .. eof()); # quote body
+    }
+
+# File tests
+############
+
+    next unless -f $file && -T $file;
+
+    print "Can do.\n" if -r $a || -w _ || -x _;
+
+    next unless -M $file > .5;      # files are older than 12 hours
+    newfile     if -M $file < 0;    # file is newer than process
+    mailwarning if int(-A) == 90;   # file ($_) was accessed 90 days ago today
+
+    $^T = time;     # reset script startup time
+
+    stat($filename);
+    print  "Readable\n"    if  -r  _;
+    print  "Writable\n"    if  -w  _;
+    print  "Executable\n"  if  -x  _;
+    print  "Setuid\n"      if  -u  _;
+    print  "Setgid\n"      if  -g  _;
+    print  "Sticky\n"      if  -k  _;
+    print  "Text\n"        if  -T  _;
+    print  "Binary\n"      if  -B  _;
+
+
+   1. -r File is readable by effective uid/gid.
+   2. -w File is writable by effective uid/gid.
+   3. -x File is executable by effective uid/gid.
+   4. -o File is owned by effective uid.
+   5.
+   6. -R File is readable by real uid/gid.
+   7. -W File is writable by real uid/gid.
+   8. -X File is executable by real uid/gid.
+   9. -O File is owned by real uid.
+  10.
+  11. -e File exists.
+  12. -z File has zero size (is empty).
+  13. -s File has nonzero size (returns size in bytes).
+  14.
+  15. -f File is a plain file.
+  16. -d File is a directory.
+  17. -l File is a symbolic link.
+  18. -p File is a named pipe (FIFO), or Filehandle is a pipe.
+  19. -S File is a socket.
+  20. -b File is a block special file.
+  21. -c File is a character special file.
+  22. -t Filehandle is opened to a tty.
+  23.
+  24. -u File has setuid bit set.
+  25. -g File has setgid bit set.
+  26. -k File has sticky bit set.
+  27.
+  28. -T File is an ASCII text file (heuristic guess).
+  29. -B File is a "binary" file (opposite of -T).
+  30.
+  31. -M Age of file (at script startup) in days since modification.
+  32. -A Age of file (at script startup) in days since last access.
+  33. -C Age of file (at script startup) in days since inode change.
+
+# vim: ft=perl:
+
