@@ -1,0 +1,14 @@
+
+# Spotlight command line
+mdfind pass.txt
+
+# Finder
+alias here='open .'
+
+# Copy/paste from Clipboard
+cat /etc/hosts | pbcopy
+
+pbpaste > /tmp/1.txt
+
+
+
