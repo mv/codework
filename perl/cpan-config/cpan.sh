@@ -93,4 +93,10 @@ cpan -i Devel::Loaded # pmtools
 # Modules
 # Text::Autoformat
 # Parse::RecDescent
-#
+# autobox
+# modperllite
+# Moose
+# Template Toolkit
+
+# vim:ft=sh:
+
