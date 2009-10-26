@@ -27,7 +27,7 @@ PERL5LIB
             /opt/local/lib/perl5/5.8.9
             .
 
--l/path/lib
+-I/path/lib
     Adds /path/lib to @INC
 
 -mmymod
@@ -84,6 +84,7 @@ PERL5LIB
 
         -l
             automatic end of line processing
+            perl -le 'print @INC'
 
 -n | -p
 -------
