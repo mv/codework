@@ -1,0 +1,56 @@
+#!/usr/local/bin/expect
+# hostdist - distribute hosts and hosts.equiv files
+
+set timeout -1
+# get the root password (once!) 
+stty –echo	# turn off echoing 
+send_user "# "	# prompt for password 
+expect_user -re "(.*)\n"	# get and remember it 
+# assign password to variable
+send_user "\n" 
+set passwd $expect_out(1,string)	 
+stty echo	# turn echo back on
+
+set num [llength $argv]	# number of hosts 
+incr num –1	# account for 0-based counting 
+for {set index 0} {$index <= $num} {incr index} { 
+   set host [lindex $argv $index] 
+   spawn /usr/bin/ssh $host 
+   expect { 
+      -re "(timed out)|(timeout)" {	# ssh failed
+         continue	# just go on to next host
+         }
+
+      -re ".*> *$" {}	# got a prompt
+      }
+   # copy the files 
+   send "/usr/bin/rcp iago:/etc/hosts /tmp\r" 
+   expect -re ".*> *$"		# wait for prompt 
+   send "/usr/bin/rcp iago:/etc/shosts.equiv /tmp\r" 
+   expect -re ".*> *$"		# wait for prompt 
+   send "/bin/su\r" 
+   expect "assword:" 
+   send "$passwd\r"
+   expect { 
+      -re "# $" {	# got a root prompt
+         # install new files
+         send "/usr/bin/cp /tmp/hosts /etc/hosts\r"
+         expect "# $"
+         send "/usr/bin/cp /tmp/shosts.equiv /etc/shosts.equiv\r"
+         expect "# $"
+         send "/usr/bin/chmod 644 /etc/shosts.equiv\r"
+         expect "# $"
+         send "/usr/bin/rm -f /tmp/hosts /tmp/shosts.equiv\r"
+         expect "# $"
+         send "exit\r"	# exit su shell
+         expect ".*> *$"	# wait for prompt
+         } 
+
+      -re ".*> *$" {}	# regular prompt: su failed
+      }
+   send "logout\r"	# all done with this host 
+   expect "?"	# accept anything 
+   close	# terminate spawn command 
+   } # end for loop 
+exit
+

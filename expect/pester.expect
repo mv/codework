@@ -1,0 +1,26 @@
+#!/usr/local/bin/expect
+# pester - keep calling until we get through
+
+set done 0	# did we get through yet? 
+for {set index 1} {$index <= 2000} {incr index} { 
+   system "call-command"	# call ISP 
+   while {$done == 0} { 	# continuously check status
+      spawn /usr/local/admin/isp_stat
+      expect {	# branch depending on results
+         -re "(SENDING)|(RECEIVING)" {
+            set done 1	# success, so set done to 1
+            }
+         -re "NO DEV" {
+            sleep 120	# line in use; wait a bit
+            break
+            }
+         -re "FAILED" {
+            break	# poll failed so try again
+            }
+         } # end expect 
+      } # end while 
+
+   if {$done == 1} {break}  
+   # if we succeeded, end the for loop 
+   } # end for 
+exit

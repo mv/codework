@@ -1,0 +1,24 @@
+#!/usr/local/bin/expect
+# loop - repeat command until a key is pressed
+# args: command [timeout]
+
+set cmd [lindex $argv 0] 
+set timeo [lindex $argv 1] 
+if {"$cmd" == ""} { 
+   send "Usage: loop <command> \[interval]\n" 
+   exit 
+   } 
+if {"$timeo" == ""} {set timeo 3}
+
+set timeout $timeo 
+set done "" 
+while {"$done" == ""} { 
+   system /usr/bin/clear 	# run the UNIX clear commmand 
+   system /usr/bin/$cmd	# run the specified command 
+   stty raw	# put terminal in raw mode 
+   expect "?" { 	# wait for a character 
+      set done 1 
+      } 
+   stty -raw	# restore terminal to normal mode 
+   } 
+exit

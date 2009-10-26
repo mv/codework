@@ -1,0 +1,19 @@
+#!/usr/local/bin/expect
+# timed_prompt - prompt with timeout
+# args: [prompt [default [timeout]]]
+
+# process arguments set prompt [lindex $argv 0] 
+set response [lindex $argv 1] 
+set tout [lindex $argv 2] 
+if {"$prompt" == ""} {set prompt "Enter response"} 
+if {"$tout" == ""} {set tout 5}
+
+set clean_up 1 
+send_tty "$prompt: " 
+set timeout $tout 
+expect "\n" { 
+   set response [string trimright "$expect_out(buffer)" "\n"] 
+   set clean_up 0 
+   } 
+if {$clean_up == 1} {send_tty "\n"} 
+send "$response"

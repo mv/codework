@@ -1,0 +1,13 @@
+#!/usr/local/bin/expect
+# run_test_user - check security of user acct
+
+set user [lindex $argv 0] 	# set user to first argument 
+spawn /bin/sh	# start a conversation 
+expect "#" 
+send "su - $user\r" 
+expect -re "..* $" 
+send "/usr/local/sbin/test_user >> /tmp/results\r" 
+expect -re "..* $" 
+send "exit\r" 
+expect "#" 
+close	# end the conversation
