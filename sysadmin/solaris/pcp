@@ -12,71 +12,75 @@
 #
 if [ $# -lt 1 ]
 then
-echo >&2 "usage: $0 [-p PORT] [-P PID] [-a ALL ] (Wildcards OK)"
-exit 1
+    echo >&2 "usage: $0 [-p PORT] [-P PID] [-a ALL ] (Wildcards OK)"
+    exit 1
 fi
+
 while getopts :p:P:a opt
 do
-case "${opt}" in
-p ) port=${OPTARG};;
-P ) pid=${OPTARG};;
-a ) all=all;;
-[?]) # unknown flag
-echo >&2 "usage: $0 [-p PORT] [-P PID] [-a ALL ] (Wildcards OK) "
-exit 1;;
-esac
+    case "${opt}" in
+          p) port=${OPTARG};;
+          P) pid=${OPTARG};;
+          a) all=all;;
+        [?]) # unknown flag
+        echo >&2 "usage: $0 [-p PORT] [-P PID] [-a ALL ] (Wildcards OK) "
+        exit 1;;
+    esac
 done
+
 shift `expr $OPTIND - 1`
 if [ $port ]
 then
-# Enter the port number, get the PID
-#
-port=${OPTARG}
-echo "PID\tProcess Name and Port"
-echo "_________________________________________________________"
-for proc in `ptree -a | grep -v ptree | awk '{print $1};'`
-do
-result=`pfiles $proc 2> /dev/null| grep "port: $port"`
-if [ ! -z "$result" ]
-then
-program=`ps -fo comm -p $proc | tail -1`
-echo "$proc\t$program\t$port\n$result"
-echo "_________________________________________________________"
-fi
-done
+    # Enter the port number, get the PID
+    #
+    port=${OPTARG}
+    echo "PID\tProcess Name and Port"
+    echo "_________________________________________________________"
+    for proc in `ptree -a | grep -v ptree | awk '{print $1};'`
+    do
+        result=`pfiles $proc 2> /dev/null| grep "port: $port"`
+        if [ ! -z "$result" ]
+        then
+            program=`ps -fo comm -p $proc | tail -1`
+            echo "$proc\t$program\t$port\n$result"
+            echo "_________________________________________________________"
+        fi
+    done
 elif [ $pid ]
 then
-# Enter the PID, get the port
-#
-pid=$OPTARG
-# Print out the information
-echo "PID\tProcess Name and Port"
-echo "_________________________________________________________"
-for proc in `ptree -a | grep -v ptree | grep $pid| awk '{print $1};'`
-do
-result=`pfiles $proc 2> /dev/null| grep port:`
-if [ ! -z "$result" ]
-then
-program=`ps -fo comm -p $pid | tail -1`
-echo "$proc\t$program\n$result"
-echo "_________________________________________________________"
-fi
-done
+    # Enter the PID, get the port
+    #
+    pid=$OPTARG
+    # Print out the information
+    echo "PID\tProcess Name and Port"
+    echo "_________________________________________________________"
+    for proc in `ptree -a | grep -v ptree | grep $pid| awk '{print $1};'`
+    do
+        result=`pfiles $proc 2> /dev/null| grep port:`
+        if [ ! -z "$result" ]
+        then
+            program=`ps -fo comm -p $pid | tail -1`
+            echo "$proc\t$program\n$result"
+            echo "_________________________________________________________"
+        fi
+    done
 elif [ $all ]
 then
-# Show all PIDs, Ports and Peers
-#
-echo "PID\tProcess Name and Port"
-echo "_________________________________________________________"
-for pid in `ptree -a | grep -v ptree |sort -n | awk '{print $1};'`
-do
-out=`pfiles $pid 2>/dev/null| grep "port:"`
-if [ ! -z "$out" ]
-then
-name=`ps -fo comm -p $pid | tail -1`
-echo "$pid\t$name\n$out"
-echo "_________________________________________________________"
+    # Show all PIDs, Ports and Peers
+    #
+    echo "PID\tProcess Name and Port"
+    echo "_________________________________________________________"
+    for pid in `ptree -a | grep -v ptree |sort -n | awk '{print $1};'`
+    do
+        out=`pfiles $pid 2>/dev/null| grep "port:"`
+        if [ ! -z "$out" ]
+        then
+            name=`ps -fo comm -p $pid | tail -1`
+            echo "$pid\t$name\n$out"
+            echo "_________________________________________________________"
+        fi
+    done
 fi
-done
-fi
+
 exit 0
+
