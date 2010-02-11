@@ -12,7 +12,7 @@ Ref: PeepCode 015
         git config --global user.name  'Marcus Vinicius Ferreira'
         git config --global user.email 'mferreira@webcointernet.com'
 
-        git config --list 
+        git config --list
 
         git config --global alias.co checkout
         git config --global alias.st status
@@ -58,7 +58,7 @@ Ref: PeepCode 015
     Repositories
         "origin"
             repository server host, remote server
-            
+
             remote          local
             -------------   ------
             origin/master   master
@@ -88,7 +88,7 @@ Ref: PeepCode 015
                   origin/master     # from repos1
                   server2/dog
                   server2/master    # from repos2
-                
+
                 git checkout -b dog     # using repos1
                 git pull server2 dog    # merging from repos2 also
             (or git merge server2/dog)
@@ -109,8 +109,8 @@ Ref: PeepCode 015
                         git init --bare
 
         # branch remote -> remote
-        git push origin origin/stable:refs/heads/stable-rc-3
-        
+        git push origin BRANCH:refs/heads/BRANCH
+
     Tracking Branches
         To indicate where each branch must push/merge from, i.e., track:
 
@@ -155,7 +155,7 @@ Tags
 Reset
     git reset --soft HEAD^
     git reset --hard
-    
+
 Patch
     git format-patch origin
-    
+
