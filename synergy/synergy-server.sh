@@ -19,7 +19,7 @@ ip0=$( ifconfig en0 | awk '/inet / {print $2}' )
 ip1=$( ifconfig en1 | awk '/inet / {print $2}' )
 
 case $ip0 in
-    '10.73.92.102')
+    '10.73.92.103')
         /usr/local/bin/synergys -c ~/bin/synergy-server.conf -f --restart
         ;;
     *)
