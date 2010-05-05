@@ -1,0 +1,10 @@
+
+
+git clone http://github.com/miyagawa/cpanminus.git
+
+cd cpanminus
+perl Makefile.pl
+make
+sudo make install
+
+

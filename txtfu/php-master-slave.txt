@@ -1,0 +1,22 @@
+class PollMysql{
+    private $bd_masters = array('1.1.1.1', '2.2.2.2');          // IPs Bancos Masters (escrita)
+    private $bd_slaves = array('3.3.3.3', '4.4.4.4', '5.5.5.5');// IPs Bancos Slaves (leitura)
+
+    private $con;
+
+    public function exec_query($query){
+        $command = explode(trim($query), ' ');              // obtem qual o comando SQL (SELECT, INSERT, etc)
+        $command = $command[0];
+
+        if( $command == 'select' ){                         // Se o comando for select (leitura): usa slaves
+            $ip_banco = array_rand($this->$bd_slaves);      // randomiza um dos bancos
+            $this->con = mysql_connect($ip_banco, '', '');  // conecta no banco slave
+            return mysql_query($query, $this->con);         // executa a query
+        }else{                                              // Se o comando é de escrita: usa master
+            $ip_banco = array_rand($this->$bd_masters);     // randomiza um dos bancos
+            $this->con = mysql_connect($ip_banco, '', '');  // conecta no banco master
+            return mysql_query($query, $this->con);         // executa a query
+        }
+    }
+}
+
