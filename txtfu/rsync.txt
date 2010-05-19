@@ -2,6 +2,9 @@
 # via ssh
 rsync 10.11.32.48:/pub/downloads
 
+# prod01:/output para ./output/
+rsync -av --progress --rsh='ssh -p5022' iphone-prod01:/abd/app/libertadores/output/   ./output/
+
 # via rsync daemon
 rsync 10.11.32.48::/pub/downloads
 rsync rsync://10.11.32.48/pub/downloads
@@ -12,13 +15,13 @@ rsync --verbose   --progress --stats --compress \
       --exclude "*~" \
       10.11.32.48:/pub/  /pub/
 
-rsync --progress --recursive --times --links --exclude "*~" 10.11.32.48:/pub/downloads/  /pub/downloads/ 
-rsync -rhtl --progress --exclude "*~" 10.11.32.48:/pub/downloads/  /pub/downloads/ 
+rsync --progress --recursive --times --links --exclude "*~" 10.11.32.48:/pub/downloads/  /pub/downloads/
+rsync -rhtl --progress --exclude "*~" 10.11.32.48:/pub/downloads/  /pub/downloads/
 
 rsync --verbose   --progress --stats --compress
       --recursive --times    --perms --links --delete \
       --exclude "*~" \
       /pub/ 10.11.32.48:/pub/
-      
-      
-      
+
+
+
