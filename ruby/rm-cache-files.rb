@@ -42,7 +42,8 @@ rescue
 end
 
 unless File.directory?(dir_path)
-    puts "\nInvalid dir #{dir_path}\n\n" ; exit 2
+    puts "\nInvalid dir #{dir_path}\n"
+    RDoc::usage( 2, 'usage' )
 end
 
 $VERBOSE = true
@@ -51,11 +52,11 @@ Find.find(dir_path) do |file|
     next if file =~ /^\.\.?$/
     next if File.directory?(file)
 
-    stat = File.lstat(file)
-    if( (now - stat.mtime) >= min_time )
-        printf "File: %s %s\n", stat.mtime.strftime("%Y-%m-%d %H:%M"), file if opt[:v]
+    mtime = File.lstat(file).mtime
+    age = now - mtime
+    if( age >= min_time )
+        printf "Age: %02d min - %s %s\n", age/60, mtime.strftime("%Y-%m-%d %H:%M"), file if opt[:v]
         File.unlink(file) unless opt[:no]
     end
 end
-
 
