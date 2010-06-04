@@ -49,7 +49,6 @@ end
 $VERBOSE = true
 now = Time.now
 Find.find(dir_path) do |file|
-    next if file =~ /^\.\.?$/
     next if File.directory?(file)
 
     mtime = File.lstat(file).mtime
