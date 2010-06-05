@@ -1,9 +1,7 @@
 
 # via ssh
 rsync 10.11.32.48:/pub/downloads
-
-# prod01:/output para ./output/
-rsync -av --progress --rsh='ssh -p5022' iphone-prod01:/abd/app/libertadores/output/   ./output/
+rsync -av --progress --rsh='ssh -p 5022' iphone-prod01:/abd/app/libertadores/output/   ./output/
 
 # via rsync daemon
 rsync 10.11.32.48::/pub/downloads
