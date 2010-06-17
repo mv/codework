@@ -104,4 +104,50 @@ mysql
     # mysqladmin [-u root] shutdown
 
 
+#### Resetando a senha
+
+        == Pré-requisitos ==
+
+        Parar o MySQL e iniciá-lo com a opção --skip-grant-tables
+
+        == Passo 1: Parando o MySQL ==
+
+        <pre>
+        # /etc/init.d/mysql stop
+        </pre>
+
+        == Passo 2: Subindo o MySQL sem senha ==
+
+        <pre>
+        mysqld_safe --skip-grant-tables &
+        </pre>
+
+        == Passo 3: Conectando no MySQL ==
+
+        <pre>
+        # mysql -u root
+        </pre>
+
+        == Passo 4: Setando a nova senha ==
+
+        <pre>
+        mysql> use mysql;
+        mysql> update user set password=PASSWORD("NOVA-SENHA-ROOT") where user='root';
+        mysql> flush privileges;
+        mysql> quit
+        </pre>
+
+        == Passo 5: Parando o MySQL ==
+
+        <pre>
+        # /etc/init.d/mysql stop
+        </pre>
+
+        == Passo 6: Subindo o MySQL e testando a senha ==
+
+        <pre>
+        # /etc/init.d/mysql start
+        # mysql -u root -p
+        </pre>
+
 
