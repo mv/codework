@@ -145,11 +145,13 @@ Commits
     git diff HEAD       # display changes since last commit
 
 Tags
-    git tag deploy-9-rc2    # create new tag
-    git tag -l              # list current tags
     git checkout tag1       # goes to tag1
 
+    git tag deploy-9-rc2    # create new tag
+    git tag -l              # list current tags
+
     git fetch --tags        # pull current tags
+    git push  --tags        # push current tags
 
 
 Reset
@@ -159,3 +161,16 @@ Reset
 Patch
     git format-patch origin
 
+Conflict
+
+    - git mergetool
+      Fix the merge conflict file manually, then do a "git add [file]".
+      -> versao do meu branch           : LOCAL
+      -> versao do branch no "merge in" : REMOTE
+      -> versao base, original          : BASE - common ancestor
+
+      git rebase --continue # to keep going
+      git rebase --skip     # if the edit come to be as a 'no-op'
+      git rebase --abort    # to bail out
+
+<D-1>
