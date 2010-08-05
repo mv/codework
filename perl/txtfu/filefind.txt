@@ -1,12 +1,51 @@
 
+
+# Perl + shell
+# http://www.drdobbs.com/showArticle.jhtml;jsessionid=HZZZJ4JOSWXINQE1GHPCKHWATMY32JVN?articleID=184416030&queryText=ways
+
+    my @files = `find $dir -type f -mtime +10 | egrep -v '\.jpg$'`
+    my @files = `find $dir -type f -mmin  +5  | egrep -v '\.jpg$'`
+    chomp @files;
+
+    # single directory
+    opendir( DIR, $dir ) or die "Cannot open $dir: $!";
+    my @files = grep -f "$dir/$_" && /\.(pl|pm|t)$/, readdir DIR;
+    closedir DIR;
+
+    # single directory
+    my @files = grep -f, <*.{pl,pm,t}>;
+    my @files = grep -f glob("*.{pl,pm,t}");
+
+# Andy Lester code/example
 use File::Find;
     my @files;
     find( sub { push @files, $File::Find::name if -f && /\.jpg$/ }, $dir );
 
+use File::Find;
+    my @files;
+    my $now = timelocal;
+    find( &wanted, $dir );
 
+    # ....
+
+    sub wanted {
+        $file = $File::Find::name ;
+        next if -d $file ;
+        next if $file =~ /\.\.?/ ;
+        next if $file =~ /\.jpg$/ ;
+
+        my $mtime = lstat( $file )[9];
+        if( ($now - $mtime) >= 5*60 ) {
+            push @files, $file
+        }
+    }
+
+
+# Andy Lester Module
 use File::Find::Wanted;
     my @files = find_wanted( sub { -f && /\.jpg$/ }, $dir );
 
+# Richard Clamp Module
 use File::Find::Rule;
     my @subdirs = File::Find::Rule->directory->in( $directory );
 
@@ -19,4 +58,6 @@ use File::Find::Rule;
               , File::Find::Rule->size( '>200M' )
               , File::Find::Rule->file->empty
               );
+
+# vim:ft=perl:
 
