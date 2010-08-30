@@ -1,0 +1,69 @@
+# /etc/logrotate.d/mysql
+#
+# Para usar mysqladmin sem senha, definir /root/.my.cnf
+#
+# [mysqladmin]
+# user= root
+# password = <secret>
+#
+# Marcus Vinicius Ferreira              ferreira.mv[ at ]gmail.com
+# 2010/06
+
+# Globals
+compress
+nodelaycompress
+daily
+rotate 3
+
+notifempty
+missingok
+
+dateext
+#dateformat -%Y-%m-%d
+create 664 mysql mysql
+
+# specifics
+/abd/log*/mysql/*log {
+    postrotate
+        # just if mysqld is really running
+        if test -x /usr/bin/mysqladmin && /usr/bin/mysqladmin ping &>/dev/null
+        then /usr/bin/mysqladmin flush-logs
+        fi
+    endscript
+}
+
+/mysql-logs/*log {
+    postrotate
+        if test -x /usr/bin/mysqladmin && /usr/bin/mysqladmin ping &>/dev/null
+        then /usr/bin/mysqladmin flush-logs
+        fi
+    endscript
+}
+
+# /var/lib/mysql*/*log {
+#     postrotate
+#         # just if mysqld is really running
+#         if test -x /usr/bin/mysqladmin && /usr/bin/mysqladmin ping &>/dev/null
+#         then /usr/bin/mysqladmin flush-logs
+#         fi
+#     endscript
+# }
+
+# /var/log/mysql*/*log {
+#     postrotate
+#         if test -x /usr/bin/mysqladmin && /usr/bin/mysqladmin ping &>/dev/null
+#         then /usr/bin/mysqladmin flush-logs
+#         fi
+#     endscript
+# }
+
+# /var/log/mysql*log {
+#     postrotate
+#         if test -x /usr/bin/mysqladmin && /usr/bin/mysqladmin ping &>/dev/null
+#         then /usr/bin/mysqladmin flush-logs
+#         fi
+#     endscript
+# }
+
+# vim:ft=conf foldlevel=0:
+

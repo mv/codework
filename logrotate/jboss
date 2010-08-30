@@ -1,0 +1,70 @@
+# /etc/logrotate.d/mysql
+#
+# Marcus Vinicius Ferreira              ferreira.mv[ at ]gmail.com
+# 2010/08
+
+# Globals
+compress
+nodelaycompress
+daily
+rotate 3
+
+notifempty
+missingok
+
+dateext
+#dateformat -%Y-%m-%d
+create 664 matriz tomcat
+
+# specifics
+/app/jboss*/server/matriz/log/lcp/lcp*log*1 {
+    postrotate
+        /etc/init.d/jboss_pst restart
+    endscript
+}
+/app/jboss*/server/matriz/log/lcp/lcp*log*2 {
+    postrotate
+        /etc/init.d/jboss_pst restart
+    endscript
+}
+/app/jboss*/server/matriz/log/lcp/lcp*log*3 {
+    postrotate
+        /etc/init.d/jboss_pst restart
+    endscript
+}
+/app/jboss*/server/matriz/log/lcp/lcp*log*4 {
+    postrotate
+        /etc/init.d/jboss_pst restart
+    endscript
+}
+/app/jboss*/server/matriz/log/lcp/lcp*log*5 {
+    postrotate
+        /etc/init.d/jboss_pst restart
+    endscript
+}
+/app/jboss*/server/matriz/log/lcp/lcp*log*6 {
+    postrotate
+        /etc/init.d/jboss_pst restart
+    endscript
+}
+/app/jboss*/server/matriz/log/lcp/lcp*log*7 {
+    postrotate
+        /etc/init.d/jboss_pst restart
+    endscript
+}
+/app/jboss*/server/matriz/log/lcp/lcp*log*8 {
+    postrotate
+        /etc/init.d/jboss_pst restart
+    endscript
+}
+/app/jboss*/server/matriz/log/lcp/lcp*log*9 {
+    postrotate
+        /etc/init.d/jboss_pst restart
+    endscript
+}
+/app/jboss*/server/matriz/log/lcp/lcp*log*0 {
+    postrotate
+        /etc/init.d/jboss_pst restart
+    endscript
+}
+

@@ -1,0 +1,56 @@
+# /etc/logrotated.d/abd-logs
+#     Todos os logs em /abd/logs/*/*log
+#
+# Marcus Vinicius Ferreira              ferreira.mv[ at ]gmail.com
+# 2010/06
+
+# Globals
+compress
+nodelaycompress
+daily
+rotate 3
+
+notifempty
+missingok
+
+dateext
+#dateformat -%Y-%m-%d
+
+# specifics
+/abd/log*/*/*log {
+    create 664 infra infra
+    # Todas as aplicacoes Passenger:
+    postrotate
+        if [ -x /abd/ws/apache/current/bin/apachectl ] ; then
+            /abd/ws/apache/current/bin/apachectl restart
+        fi
+        if [ -x /abd/tools/apache/current/bin/apachectl ] ; then
+            /abd/tools/apache/current/bin/apachectl restart
+        fi
+    endscript
+}
+
+/abd/*/apache/current/log*/*log {
+    create 664 root infra
+    postrotate
+        if [ -x /abd/ws/apache/current/bin/apachectl ] ; then
+            /abd/ws/apache/current/bin/apachectl restart
+        fi
+        if [ -x /abd/tools/apache/current/bin/apachectl ] ; then
+            /abd/tools/apache/current/bin/apachectl restart
+        fi
+    endscript
+}
+
+# Sample: date-based extension {
+## delaycompress
+## postrotate
+##    EXT=`date --date='-1 day' +%Y-%m-%d`
+##    for f in $1; do
+##      mv $f.1 $f-$EXT; /bin/gzip -f $f-$EXT
+##    done
+## endscript
+# }
+
+# vim:ft=conf foldlevel=0:
+
