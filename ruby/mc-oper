@@ -1,0 +1,101 @@
+#!/usr/bin/env ruby
+#
+# memcache-oper
+#     memcache wrapper for operations
+#
+# Depends on:
+#     memcache-top: http://code.google.com/p/memcache-top/
+#
+# == Usage
+#
+# memcache wrapper for operations
+#
+#     mc-oper -l | -h
+#     mc-oper -p poolname -c cmd
+#
+#     -h, --help          Displays help message
+#     -l, --list          List pools of memcache
+#     -p, --pool poolname Memcache pool to use. Default: 'test'
+#     -c, --cmd cmd       Send 'cmd' to each pool member
+#
+#     Available commands:
+#       top         Invokes 'memcache-top'
+#       version     Version of each member
+#       flush_all   Flush each member
+#
+# == Author
+# Marcus Vinicius Ferreira          ferreira.mv[ at ]gmail.combination
+# 2010/09
+#
+
+require 'yaml'
+require 'socket'
+require 'optparse'
+require 'rdoc/usage'
+
+### Command line
+opt = {}
+# opt['pool'] = 'test' # default
+
+opts = OptionParser.new
+opts.on("-h", "--help"      ) { |h| opt['help'] = true }
+opts.on("-l", "--list"      ) { |l| opt['list'] = true }
+opts.on("-p", "--pool pool" ) { |p| opt['pool'] = p }
+opts.on("-c", "--cmd  cmd"  ) { |c| opt['cmd']  = c }
+
+begin
+    $VERBOSE = nil ; opts.parse!
+rescue
+    RDoc::usage( 1, 'usage' )
+end
+$VERBOSE = true
+# opt.each_key { |k| puts "opt: #{k} - #{opt[k]} " }
+
+RDoc::usage( 0, 'usage' ) if opt['help']
+# List or cmd, not both
+RDoc::usage( 1, 'usage' ) if(opt['list'] &&  opt['pool'] )
+RDoc::usage( 1, 'usage' ) if(opt['list'] &&  opt['cmd' ] )
+# pool and cmd, must be both
+RDoc::usage( 1, 'usage' ) if(opt['pool'] &&  opt['cmd' ].nil?)
+RDoc::usage( 1, 'usage' ) if(opt['cmd' ] &&  opt['pool'].nil?)
+
+### yml conf
+conf_file = 'memcache-pool.yml'
+conf = open( conf_file ) { |f| YAML.load(f) }
+
+### List of pools
+if opt['list']
+    print "\n"
+    conf.each_key do |pool|
+        puts "Pool: #{pool}"
+        conf[ pool ].each { |m| puts "      #{m}" }
+        print "\n"
+    end
+    exit 0
+end
+
+### memcache-top
+if( opt['cmd'] == 'top' )
+    list = conf[opt['pool']].join(",")
+    exec "memcache-top","--sleep","2","--instances",list
+    exit 0 # just kidding.....
+end
+
+### Command to each pool member
+if( opt['cmd'] =~ /version|flush_all/ )
+    conf[ opt['pool'] ].each do |item|
+
+        host, port = item.split(':')
+        puts "      Host: #{host} : #{port}"
+
+        socket = TCPSocket.open( host, port )
+        socket.send( "#{opt['cmd']}\r\n", 0 )
+        print "    Result: ", socket.recv(4096)
+        puts ''
+        socket.close
+    end
+
+end
+
+# vim: ft=ruby:
+
