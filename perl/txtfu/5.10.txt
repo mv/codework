@@ -55,6 +55,10 @@ perl
     ithreads
     Term::UI
 
+ cpanm Date::Parse
+ cpanm Time::Duration
+ cpanm File::MimeInfo
+
 
 perl5.10.0delta
 
