@@ -16,22 +16,18 @@
 # Marcus Vinicius Ferreira              ferreira.mv[ at ]gmail.com
 # 2010/06
 #
-require 'rdoc/usage'
 
 require 'find'
 require 'optparse'
+require 'rdoc/usage'
 
 dir_path = ""
 min_time = 5*60
 opt = { :no => false, :v => false }
 
 opts = OptionParser.new
-opts.on("-d", "--dir dirname") do |dir|
-    dir_path = dir
-end
-opts.on("-m", "--min minutes") do |min|
-    min_time = min.to_i*60
-end
+opts.on("-d", "--dir dirname") { |dir| dir_path = dir }
+opts.on("-m", "--min minutes") { |min| min_time = min.to_i*60 }
 opts.on("-n", "--no"         ) { opt[:no] = true }
 opts.on("-v", "--verbose"    ) { opt[:v]  = true }
 
