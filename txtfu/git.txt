@@ -1,0 +1,323 @@
+Config
+------
+    git config --global color.ui always
+    git config --global user.name "Name Surname"
+    git config --global user.email 'email@example.com'
+    git config --global alias.cm   'commit -m'
+    git config --global alias.ba   'branch -a'
+
+    git config --list               # list all values
+    git config user.name            # list value of user.name
+
+Usage
+-----
+    git clone ssh://git@git.site.com:5022/repos/app.git my-git-app
+    git clone ssh://git/repos/app.git                   my-git-app
+    git clone git@codebasehq.com:cia/proj/app.git       my-git-app
+
+    git <cmd> --                    # --: separates revisions from paths
+    git <cmd> -- <file>             # --: separates revisions from paths
+
+    git <cmd> master@{5}            # 5 previous
+    git <cmd> master@{yesterday}    # since yesterday
+    git <cmd> master@{1 month ago}  # since 1 month ago
+    git <cmd> branch@{1 month ago}  # since 1 month ago
+
+    master^2    # Nth parent
+    master~2    # Nth grandparent
+
+    git log
+    git log -p                      # log + patches
+    git log --stat                  # log + status (graph of lines added/removed)
+    git log --summary               # log + summary (list of files created/owner/chmod)
+    git log --graph                 # log + graph
+    git log -1                      # last log only
+    git log -1 HEAD
+    git log --pretty=oneline        # SHA1 + msg
+    git log --until=2.months        # filter --before
+    git log --since=2.weeks         # filter --after
+    git log --grep='deploy' -i      # filter
+    git log -S'foo()'               # filter
+    git log -g                      # log + reflog info
+
+    git log <file>                  # all commits made to <file>
+    git log dir/                    # all commits in any file inside dir/
+
+    git log v2.5..                  # all commits since tag v2.5
+    git log master..experiment      # all commits in experiment, not reachable by master
+    git log experiment..master      # all commits in master, not reachable by experiment
+    git log origin/master..HEAD     # all commits in my current branch, not yet in master
+
+    git log master..mybranch        # list what is on mybranch only
+    git log ^master mybranch        # idem
+    git log mybranch --not master   # idem
+
+    git log mybranch expriment --not master # multiple commits, not yet in master
+
+    git log --left-right master...experiment
+                                    # xor master/experiment
+
+    git diff                        # diff workdir/file|index/file
+                                    #     i.e, differences not yet staged
+    git diff --cached               # diff index/file|last commit
+                                    #     i.e, differences staged and not yet committed
+    git diff --staged               # idem
+
+    git diff HEAD                   # diff workdir/file|last commit
+                                    #     i.e, differences of will be committed via commit -a
+
+    git diff --check                # checks for whitespace
+    git diff --stat                 # display stat of changes instead of patch info
+    git diff mybranch               # differences between current branch and 'mybranch'
+    git diff HEAD                   # differences between current branch and last commit
+    git diff HEAD -- ./lib/         # differences between current branch and last commit
+    git diff master...contrib       # compares master to contrib
+
+    git status                      # status
+    git status -sb                  # short status, a la svn
+
+    git show <sha1>                 # details of object: commit/tree/blob/tag
+
+    git add                         # stage files: add files to the index
+    git add --patch
+    git add -p
+
+    git reset                       # reverse of git add .
+    git reset -- <file>             # reverse of git add <file>
+    git reset --mixed <file>        # idem
+                                    # i.e., reset the index/unstage file
+
+    git reset -p <file>             # reverse of git add -p
+
+    git reset --soft [HEAD|sha1]    # reverse of git commit: adjust HEAD only
+                                    # i.e, keep index and wordir leaving
+                                    # git status as "Changes to be committed"
+
+    git reset --hard [HEAD|sha1]    # reverse of last pull/merge/commit
+                                    # reset index and workdir
+                                    # (it empties the result of diff and diff --cached
+    git reset --merge [HEAD|sha1]   #
+    git reset --keep [HEAD|sha1]    #
+
+    git rm          <file>          # remove from index AND workdir
+    git rm --cached <file>          # remove from index. Keep in workdir
+    git rm log/\*.log               # remove glob of files
+
+    git commit -m 'msg'
+    git commit --amend -m 'msg'     # add file to last commit
+    git commit -a -m 'msg'          # add + commit
+
+    git checkout -b      b1 origin/b1   # checkout remote branch as b1
+    git checkout --track b1 origin/b1   # checkout and track remote branch
+    git checkout -b -t   b1 origin/b1   # checkout and track remote branch
+
+    git checkout HEAD <file>        # restore from HEAD
+    git checkout --   <file>        # restore from index
+
+
+    git revert HEAD                 #
+    git revert HEAD^
+    git revert HEAD^^
+    git revert HEAD^3
+
+    git remote -v                   # show url clone
+    git remote show                 # show origin details
+    git remote show <branch>        # show branch details
+
+    git remote add origin git@git/repos/app.git
+    git remote add webco  ssh://git@git.webco.com/repos/app.git
+
+    git remote rename webco coweb   # rename local (alter .git/config)
+    git remote rm     coweb         # remove from usage (alter .git/config)
+
+    git fetch                       # fetch all references from origin
+    git fetch origin                # idem
+    git fetch webco                 # fetch all references from [webco]
+
+    git push                        # send master to origin
+    git push origin master          # send master to origin
+    git push origin my-branch       # send my-branch to origin
+    git push webco  my-branch       # send my-branch to webco
+
+    git push origin localbranch:remotebranch    # push local to remote
+    git push origin :serverfix      # delete remote branch serverfix
+
+    git pull                        # fetch + merge
+
+    git branch                      # list current branches
+    git branch -v                   # list current branches + last msg/sha1
+    git branch -a                   # list all branches (local and remote)
+    git branch --merged             # branches already merged: safe to delete them
+    git branch --no-merged          # branches not merged yet.
+
+    git rev-parse <branch>          # shows sha1 branch points to
+
+    git branch new-branch           # create local branch
+    #   && git checkout new-branch  -> git checkout -b new-branch
+
+    git branch nmspc/new-branch     # create local branch inside a namespace
+
+    git branch -d new-branch        # remove local branch
+    git branch -D new-branch        # remove local branch, forced
+    git push origin :new-branch     # remove remote branch from origin
+
+    git merge branch-name           # merge 'branch-name' into current branch
+    #   git checkout master &&
+    #      git merge release-branch # merge 'release-branch' into master
+
+    git rebase branch-name          # apply 'branch-name' into current branch
+    git rebase -i                   # interactive: pick/squash/ignore
+
+    git rebase --continue           # conflict: correct+git add+continue
+    git rebase --abort              # conflict: abandon rebase
+
+    git stash                       # save to stash
+    git stash list                  # list stash contents
+    git stash pop                   # apply and remove most recent item
+    git stash pop stash@{0}         # apply and remove most recent item
+
+    git stash apply --index
+    git stash apply                 # apply most recent stash, keep item stashed
+    git stash apply stash@{0}       # apply most recent stash, keep item stashed
+    git stash apply stash@{2}       # apply previous -2 item stashed, keep item stashed
+    git stash apply stash@{5}       # apply previous -5 item stashed, keep item stashed
+    git stash drop                  # remove most recent item
+    git stash drop stash@{0}        # remove most recent item
+
+    git stash show -p               # stash item in patch format
+    #    | git apply -R             # and removing (applying in reverse)
+
+    git stash branch new-branch     # create a branch from stash
+
+    git cherry-pick <sha1>
+
+    git fsck --lost-found
+
+    git format-patch origin/master  # extract all commits from current branch that are not present in origin/master
+    git format-patch stable_1.2     # extract all commits from current branch that are not present in stable_1.2
+    git format-patch sha1-a..sha1-b # extract all commits between R1 and R2
+
+    git apply         /path/0001-a.patch # apply a patch
+    git apply --check /path/0001-a.patch # test a patch
+
+    git am    /path/0001-a.patch    #
+    git am -3 /path/0001-a.patch    # apply a patch using a 3way merge
+
+    cat *patch | git am             # apply patches
+    cat *patch | git am -i          # apply patches interactively
+    cat *patch | git am -3          # apply patches, default 3way merge
+
+    git grep
+    git prune
+
+
+Coming Back
+-----------
+
+    git reset        <sha1>
+    git reset --hard <sha1>
+
+    git reset --hard HEAD           # undo
+    git reset --hard ORIG_HEAD      # undo to previous
+
+    git reflog                       # shows log for my actions
+    git branch recover-branch <sha1> # create branch to my lost sha1
+
+    git fsck --full                  # show dangling objects/commits
+    git fsck --lost-found
+    git show <sha1>
+
+    git branch recover-branch <sha1> # create branch to my lost sha1
+    or
+    git rebase <sha1>
+    or
+    git cherry-pick <sha1>
+    or
+    git merge <sha1>
+
+    ref: http://programblings.com/2008/06/07/the-illustrated-guide-to-recovering-lost-commits-with-git/
+
+
+Plumbing
+--------
+
+    git gc
+
+    git reflog                      # shows log of updates to HEAD
+    git reflog show                 # shows log of updates to HEAD
+    git reflog expire               # remove entries
+
+    git fsck --full
+    git count-objects -v
+    git prune --expire
+
+Conflicts
+---------
+Ref: http://progit.org/book/ch3-2.html
+
+    +------------------------------------------------------------+
+    | <<<<<<< HEAD:index.html                                    |
+    | <div id="footer">contact : email.support@github.com</div>  |
+    | =======                                                    |
+    | <div id="footer">                                          |
+    | please contact us at support@github.com                    |
+    | </div>                                                     |
+    | >>>>>>> iss53:index.html                                   |
+    +------------------------------------------------------------+
+
+    Parte 1:
+        <<<<<<
+        Section 1: conteudo in HEAD
+        ======
+
+    Parte 2:
+        ======
+        Section 2: conteudo in branch iss53
+        >>>>>>
+
+To solve:
+    edit file -> git add <file>
+
+To use mergetool:
+    git mergetool --tool=meld
+      -> versao base, original   : BASE - common ancestor
+      -> versao do meu branch    : LOCAL
+      -> versao do outro branch  : REMOTE
+
+To ignore:
+    git checkout -- <file>
+    or
+    git reset --hard HEAD       # cancel merge
+    git reset --hard ORIG_HEAD  # undo merge
+
+
+Tags
+----
+    git tag                         # list current tags
+    git tag -l                      # list current tags
+    git tag -l release*             # filter list of tags
+
+    git tag    rc-1                 # create simple tag on current HEAD
+    git tag    rc-1 0fb12c          # create simple tag on sha1
+    git tag -a rc-1                 # create annotated tag on current HEAD
+    git tag -a rc-1 cafe010b        # create annotated tag on CAFE010B SHA1
+    git tag -a rc-1 -m 'msg'        # create annotated tag on current HEAD
+
+    git push --tags                 # synchronize
+    git push origin --tags          # synchronize
+    git push coweb  --tags          # synchronize
+    git fetch --tags                # synchronize
+
+    git show rc-1                   # show annotated tag
+
+.gitignore
+----------
+    # a comment - this is ignored
+    *.a       # no .a files
+    !lib.a    # but do track lib.a, even though you're ignoring .a files above
+    /TODO     # only ignore the root TODO file, not subdir/TODO
+    build/    # ignore all files in the build/ directory
+    doc/*.txt # ignore doc/notes.txt, but not doc/server/arch.txt
+
+# vim: ft=sh:
+
