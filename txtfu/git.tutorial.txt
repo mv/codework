@@ -165,9 +165,9 @@ Conflict
 
     - git mergetool
       Fix the merge conflict file manually, then do a "git add [file]".
+      -> versao base, original          : BASE - common ancestor
       -> versao do meu branch           : LOCAL
       -> versao do branch no "merge in" : REMOTE
-      -> versao base, original          : BASE - common ancestor
 
       git rebase --continue # to keep going
       git rebase --skip     # if the edit come to be as a 'no-op'

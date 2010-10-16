@@ -32,7 +32,7 @@ Usage
     git log --summary               # log + summary (list of files created/owner/chmod)
     git log --graph                 # log + graph
     git log -1                      # last log only
-    git log -1 HEAD
+    git log -1 HEAD                 # last log only
     git log --pretty=oneline        # SHA1 + msg
     git log --until=2.months        # filter --before
     git log --since=2.weeks         # filter --after
@@ -57,9 +57,9 @@ Usage
     git log --left-right master...experiment
                                     # xor master/experiment
 
-    git diff                        # diff workdir/file|index/file
+    git diff                        # diff workdir/index
                                     #     i.e, differences not yet staged
-    git diff --cached               # diff index/file|last commit
+    git diff --cached               # diff index/HEAD
                                     #     i.e, differences staged and not yet committed
     git diff --staged               # idem
 
@@ -78,6 +78,8 @@ Usage
 
     git show <sha1>                 # details of object: commit/tree/blob/tag
 
+    git ls-files -s                 # list all objects in local repos
+
     git add                         # stage files: add files to the index
     git add --patch
     git add -p
@@ -93,11 +95,14 @@ Usage
                                     # i.e, keep index and wordir leaving
                                     # git status as "Changes to be committed"
 
-    git reset --hard [HEAD|sha1]    # reverse of last pull/merge/commit
+    git reset --hard [HEAD|sha1]    # reverse of pull/merge/commit
                                     # reset index and workdir
                                     # (it empties the result of diff and diff --cached
-    git reset --merge [HEAD|sha1]   #
-    git reset --keep [HEAD|sha1]    #
+
+    git reset --merge [HEAD|sha1]   # reverse of git merge
+
+    git reset --keep [HEAD|sha1]    # reverse of commits to the index and wordir
+                                    # keeping modified files untouched
 
     git rm          <file>          # remove from index AND workdir
     git rm --cached <file>          # remove from index. Keep in workdir
@@ -113,12 +118,6 @@ Usage
 
     git checkout HEAD <file>        # restore from HEAD
     git checkout --   <file>        # restore from index
-
-
-    git revert HEAD                 #
-    git revert HEAD^
-    git revert HEAD^^
-    git revert HEAD^3
 
     git remote -v                   # show url clone
     git remote show                 # show origin details
@@ -171,6 +170,9 @@ Usage
     git rebase --continue           # conflict: correct+git add+continue
     git rebase --abort              # conflict: abandon rebase
 
+    git revert HEAD                 # revert to previous commit,
+                                    # registering this reverse in history
+
     git stash                       # save to stash
     git stash list                  # list stash contents
     git stash pop                   # apply and remove most recent item
@@ -214,11 +216,9 @@ Usage
 Coming Back
 -----------
 
-    git reset        <sha1>
-    git reset --hard <sha1>
-
-    git reset --hard HEAD           # undo
-    git reset --hard ORIG_HEAD      # undo to previous
+    HEAD           # undo
+    ORIG_HEAD      # undo to previous
+    MERGE_HEAD
 
     git reflog                       # shows log for my actions
     git branch recover-branch <sha1> # create branch to my lost sha1
@@ -275,8 +275,19 @@ Ref: http://progit.org/book/ch3-2.html
         Section 2: conteudo in branch iss53
         >>>>>>
 
+To see:
+    git show :1:file.txt  # BASE:  the file in a common ancestor of both branches
+    git show :2:file.txt  # LOCAL: the version from HEAD.
+    git show :3:file.txt  # REMOTE:the version from MERGE_HEAD.
+
+    or
+
+    git log --merge
+    gitk    --merge
+
 To solve:
-    edit file -> git add <file>
+    edit <file>
+    git add <file>
 
 To use mergetool:
     git mergetool --tool=meld
@@ -284,10 +295,21 @@ To use mergetool:
       -> versao do meu branch    : LOCAL
       -> versao do outro branch  : REMOTE
 
+To see after edit:
+    git diff -1       file.txt      # diff against stage 1
+    git diff --base   file.txt      # i.e, BASE
+
+    git diff -2       file.txt      # diff against stage 2
+    git diff --ours   file.txt      # i.e, LOCAL
+
+    git diff -3       file.txt      # diff against stage 3
+    git diff --theirs file.txt      # i.e, REMOTE
+
 To ignore:
     git checkout -- <file>
     or
     git reset --hard HEAD       # cancel merge
+    or
     git reset --hard ORIG_HEAD  # undo merge
 
 
