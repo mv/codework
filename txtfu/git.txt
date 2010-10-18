@@ -26,6 +26,11 @@ Usage
     master^2    # Nth parent
     master~2    # Nth grandparent
 
+    HEAD            # current commit, last commit done
+    ORIG_HEAD       # previous commit done, HEAD@{1}
+    MERGE_HEAD      # tip of branch being currently merged
+    FETCH_HEAD      # current commit in the REMOTE
+
     git log
     git log -p                      # log + patches
     git log --stat                  # log + status (graph of lines added/removed)
@@ -57,6 +62,9 @@ Usage
     git log --left-right master...experiment
                                     # xor master/experiment
 
+    git log HEAD..FETCH_HEAD        # what was done remotely since I forked
+    git log HEAD...FETCH_HEAD       # what was done locally and remotery since I forked
+
     git diff                        # diff workdir/index
                                     #     i.e, differences not yet staged
     git diff --cached               # diff index/HEAD
@@ -65,6 +73,12 @@ Usage
 
     git diff HEAD                   # diff workdir/file|last commit
                                     #     i.e, differences of will be committed via commit -a
+
+    git diff                        # compares the (i)ndex  and the (w)ork tree;
+    git diff HEAD                   # compares a   (c)ommit and the (w)ork tree;
+    git diff --cached               # compares a   (c)ommit and the (i)ndex;
+    git diff HEAD:file1 file2       # compares an  (o)bject and a   (w)ork tree entity;
+    git diff --no-index a b         # compares two non-git things (1) and (2).
 
     git diff --check                # checks for whitespace
     git diff --stat                 # display stat of changes instead of patch info
@@ -76,13 +90,21 @@ Usage
     git status                      # status
     git status -sb                  # short status, a la svn
 
+    git whatchanged [-n]            # show changed files, -n commits ago
+
     git show <sha1>                 # details of object: commit/tree/blob/tag
 
     git ls-files -s                 # list all objects in local repos
 
-    git add                         # stage files: add files to the index
-    git add --patch
-    git add -p
+    git add                         # add files to the index: stage files
+    git add -u                      # update only already tracked files
+    git add -e                      # edit mode
+    git add -i                      # interactive mode on
+    git add -p                      # patch option of interactive mode
+    git add --patch                 # patch option of interactive mode
+    git add -n                      # dry-run
+    git add -N                      # --intend-to-add
+    git add Documentation/\*.txt    # escaping '*': all txt files include recursively
 
     git reset                       # reverse of git add .
     git reset -- <file>             # reverse of git add <file>
@@ -116,8 +138,11 @@ Usage
     git checkout --track b1 origin/b1   # checkout and track remote branch
     git checkout -b -t   b1 origin/b1   # checkout and track remote branch
 
-    git checkout HEAD <file>        # restore from HEAD
+    git checkout .                  # restore from index
+    git checkout HEAD .             # restore from HEAD
+
     git checkout --   <file>        # restore from index
+    git checkout HEAD <file>        # restore from HEAD
 
     git remote -v                   # show url clone
     git remote show                 # show origin details
@@ -143,9 +168,10 @@ Usage
 
     git pull                        # fetch + merge
 
-    git branch                      # list current branches
-    git branch -v                   # list current branches + last msg/sha1
+    git branch                      # list local branches
+    git branch -r                   # list remote branches
     git branch -a                   # list all branches (local and remote)
+    git branch -v                   # list branches + last msg/sha1
     git branch --merged             # branches already merged: safe to delete them
     git branch --no-merged          # branches not merged yet.
 
@@ -154,7 +180,7 @@ Usage
     git branch new-branch           # create local branch
     #   && git checkout new-branch  -> git checkout -b new-branch
 
-    git branch nmspc/new-branch     # create local branch inside a namespace
+    git branch namespace/new-branch # create local branch inside a namespace
 
     git branch -d new-branch        # remove local branch
     git branch -D new-branch        # remove local branch, forced
@@ -165,16 +191,20 @@ Usage
     #      git merge release-branch # merge 'release-branch' into master
 
     git rebase branch-name          # apply 'branch-name' into current branch
-    git rebase -i                   # interactive: pick/squash/ignore
+    git rebase -i                   # interactive: pick/squash/edit
+    git rebase -i HEAD˜10           # interactive: pick/squash/edit last 10 commits
+    # ref: http://blog.madism.org/index.php/2007/09/09/138-git-awsome-ness-git-rebase-interactive
 
     git rebase --continue           # conflict: correct+git add+continue
     git rebase --abort              # conflict: abandon rebase
 
-    git revert HEAD                 # revert to previous commit,
-                                    # registering this reverse in history
+    git stash                       # save all working itens and index to stash
+    git stash save                  # idem
+    git stash save 'msg'            # idem, adding a commit msg
+    git stash save --patch          # select hunks to be saved
 
-    git stash                       # save to stash
     git stash list                  # list stash contents
+
     git stash pop                   # apply and remove most recent item
     git stash pop stash@{0}         # apply and remove most recent item
 
@@ -183,13 +213,16 @@ Usage
     git stash apply stash@{0}       # apply most recent stash, keep item stashed
     git stash apply stash@{2}       # apply previous -2 item stashed, keep item stashed
     git stash apply stash@{5}       # apply previous -5 item stashed, keep item stashed
+
     git stash drop                  # remove most recent item
     git stash drop stash@{0}        # remove most recent item
 
     git stash show -p               # stash item in patch format
     #    | git apply -R             # and removing (applying in reverse)
 
+    git stash create                # create a new stash area
     git stash branch new-branch     # create a branch from stash
+    git stash clear                 # clear all itens
 
     git cherry-pick <sha1>
 
@@ -209,16 +242,14 @@ Usage
     cat *patch | git am -i          # apply patches interactively
     cat *patch | git am -3          # apply patches, default 3way merge
 
-    git grep
-    git prune
+    git grep                        # grep on local repos
+
+    git revert HEAD                 # revert to previous commit,
+                                    # registering this reverse in history
 
 
 Coming Back
 -----------
-
-    HEAD           # undo
-    ORIG_HEAD      # undo to previous
-    MERGE_HEAD
 
     git reflog                       # shows log for my actions
     git branch recover-branch <sha1> # create branch to my lost sha1
@@ -249,7 +280,9 @@ Plumbing
 
     git fsck --full
     git count-objects -v
-    git prune --expire
+
+    git prune -v                    # remove all unreachable objects
+    git prune --expire              # remove all unreachable objects
 
 Conflicts
 ---------
