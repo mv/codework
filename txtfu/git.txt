@@ -1,3 +1,9 @@
+# Ref:
+#    http://book.git-scm.com/
+#    http://progit.org/book/
+#    http://mislav.uniqpath.com/2010/07/git-tips/
+#
+
 Config
 ------
     git config --global color.ui always
@@ -166,6 +172,8 @@ Usage
     git push origin localbranch:remotebranch    # push local to remote
     git push origin :serverfix      # delete remote branch serverfix
 
+    git push -u origin my-branch    # push branch and create track info
+
     git pull                        # fetch + merge
 
     git branch                      # list local branches
@@ -175,12 +183,15 @@ Usage
     git branch --merged             # branches already merged: safe to delete them
     git branch --no-merged          # branches not merged yet.
 
-    git rev-parse <branch>          # shows sha1 branch points to
+    git branch --contains <sha1>    # show all branches that have <sha1>
 
-    git branch new-branch           # create local branch
-    #   && git checkout new-branch  -> git checkout -b new-branch
+    git branch new-branch           # && git checkout new-branch : create new local branch
+    git checkout -b new-branch      # idem
 
-    git branch namespace/new-branch # create local branch inside a namespace
+    git branch <namespace>/newbranch # create local branch inside a namespace
+
+    git checkout <tag> &&
+    git branch new-branch           # create a branch from tag
 
     git branch -d new-branch        # remove local branch
     git branch -D new-branch        # remove local branch, forced
@@ -246,6 +257,9 @@ Usage
 
     git revert HEAD                 # revert to previous commit,
                                     # registering this reverse in history
+
+    git rev-parse <branch>          # shows sha1 branch points to
+    git rev-parse <tag>             # shows sha1 tag
 
 
 Coming Back
