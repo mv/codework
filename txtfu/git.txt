@@ -253,13 +253,14 @@ Usage
     cat *patch | git am -i          # apply patches interactively
     cat *patch | git am -3          # apply patches, default 3way merge
 
-    git grep                        # grep on local repos
-
     git revert HEAD                 # revert to previous commit,
                                     # registering this reverse in history
 
     git rev-parse <branch>          # shows sha1 branch points to
     git rev-parse <tag>             # shows sha1 tag
+
+    git grep                        # grep on local repos
+    git archive --format=tar HEAD > file.tar
 
 
 Coming Back
