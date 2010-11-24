@@ -1,0 +1,19 @@
+§
+§ =============================================================
+§ ========== USER MACROS ======================================
+§ =============================================================
+§
+|AUTHOR|    = Marcus Vinicius Ferreira
+|AUTHORREF| = Mv
+|EMAIL|     = ferreira.mv[ at ]gmail.com
+|COMPANY|   = 
+|COPYRIGHT| = |YEAR|/|MONTH|
+§
+§ =============================================================
+§ ========== FILE INCLUDES ====================================
+§ =============================================================
+§
+|includefile| = bash.comments.template
+|includefile| = bash.statements.template
+|includefile| = bash.paramsub.template
+§
