@@ -1,0 +1,26 @@
+Sync
+----
+ntpdate -u 172.16.1.5
+while true ; do uptime; sleep 1; done
+
+
+Client
+-----
+chkconfig --add ntpd
+chkconfig --level 2345 ntpd on
+
+/etc/init.d/ntpd start|stop|restart
+
+
+
+# Natal/Rio Branco
+server 172.16.10.84
+server 172.16.10.85
+server 172.16.1.5
+server 172.16.1.6
+
+server 0.centos.pool.ntp.org
+server 1.centos.pool.ntp.org
+server 2.centos.pool.ntp.org
+
+driftfile /var/lib/ntp/drift

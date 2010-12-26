@@ -1,0 +1,50 @@
+
+
+
+snmpwalk -v1 -c public localhost mib-2.system
+
+
+	 snmpwalk -v1 -c public localhost mib-2.interfaces
+	 snmpwalk -v1 -c public -On localhost mib-2.interfaces
+	 snmpwalk -v1 -c public -Of localhost mib-2.interfaces
+	 snmpwalk -v1 -c public -On localhost mib-2.ip
+	 snmpwalk -v1 -c public localhost mib-2.ip
+	 snmpwalk -v1 -c public localhost mib-2.tcp
+	 snmpwalk -v1 -c public localhost mib-2.host
+	 snmpwalk -v1 -c public localhost mib-2.system
+
+     snmpwalk -v1 -c public localhost mib-2
+     snmpwalk -v1 -c public localhost ucdavis
+
+
+manager
+    - ....
+    - snmptrad
+        receives traps
+
+agent
+    - snmpd, on each host
+        provides mib-2
+
+        config ip access: pg. 240
+        #           alias       ip              comunity string
+        com2sec     localnet    10.72.0.0/16    public          # lan joyent
+        com2sec     localhost   127.0.0.1       public
+        com2sec     intra01     10.72.12.16     public
+
+        security model
+        group Local     v1      localhost
+        group Nagios    v1      intra01
+        group Nagios    v2c     intra01
+        group Nagios    usm     intra01
+
+mib-2.system
+     .host
+     .interfaces
+     .ip
+     .icmp
+     .tcp
+     .udp
+
+ucdavis
+ucdavis.ucdExperimental.lmSensors # lmsensors daemon
