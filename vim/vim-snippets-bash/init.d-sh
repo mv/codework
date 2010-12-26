@@ -1,0 +1,62 @@
+#!/bin/bash
+#
+# /webco/scripts/ferret_service.sh
+#
+
+PATH=/opt/csw/bin:opt/csw/sbin
+PATH=$PATH:/opt/local/bin:/opt/local/sbin
+PATH=$PATH:/usr/local/bin:/usr/local/sbin
+PATH=$PATH:/usr/bin:/usr/sbin:/bin:/sbin
+
+export RAILS_ENV=production
+export LD_PRELOAD_32=/usr/lib/extendedFILE.so.1
+
+ulimit -n 5120
+
+start() {
+    echo "Starting Ferret DRb Server:"
+    echo "--- Starting ferret..."
+    cd /webco/app/bbs/current/ && \
+       /webco/app/bbs/current/script/ferret_server -e $RAILS_ENV start
+    echo "Done."
+}
+
+stop() {
+    echo "Stopping Ferret DRb Server:"
+    echo "--- Stopping ferret..."
+    cd /webco/app/bbs/current/ && \
+       /webco/app/bbs/current/script/ferret_server -e $RAILS_ENV stop
+    echo "Done." 
+}
+
+status() {
+    ps -ef | head -1
+    ps -ef | grep -v grep | grep 'ferret_server'
+}
+
+case "$1" in
+    'start')
+            start
+            echo
+            ;;
+    'stop')
+            stop
+            echo
+            ;;
+    'restart')
+            stop
+            echo "Sleeping..."
+            sleep 3
+            start
+            ;;
+    'status')
+            status
+            ;;
+    *)
+            echo "Usage: $0 { start | stop | restart | startus}"
+            exit 1
+            ;;
+esac
+
+exit 0
+

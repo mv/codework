@@ -1,0 +1,26 @@
+
+Surround
+--------
+Character     Replacement
+-             <% ^ %>
+=             <%= ^ %>
+#             <%# ^ %>
+
+Mapping       Changed to (cursor = ^)
+-------------------------------------
+<C-X>=        foo<%= ^ %>
+<C-X>+        <%= foo^ %>
+<C-X>-        foo<% ^ %>
+<C-X>_        <% foo^ %>
+<C-X>'        foo<%# ^ %> (mnemonic: ' is a comment in ASP VBS)
+<C-X>"        <%# foo^ %>
+<C-X><Space>  <foo>^</foo>
+<C-X><CR>     <foo>\n^\n</foo>
+<C-X>/        Last HTML tag closed
+
+<C-X>!        <!DOCTYPE...>/<?xml ...?> (menu)
+<C-X>@        <link rel="stylesheet" ...> (mnemonic: @ is used for importing in a CSS file)
+<C-X>#        <meta http-equiv="Content-Type" ... />
+<C-X>$        <script src="/javascripts/^.js"></script> (mnemonic: $ is valid in javascript identifiers)
+
+

@@ -1,0 +1,31 @@
+
+The default mappings for VoraX are shown below.
+
+Global mappings (normal mode):
+<Leader>vc 	: Request a connection to the database.
+<Leader>vo 	: Toggles the connection profiles window.
+<Leader>vr 	: Toggles the results window.
+<Leader>vv 	: Opens the database explorer tree.
+<Leader>vh 	: Search/help for the provided pattern into
+                  the configured oracle docs.
+
+Sql/PLSQL local buffer mappings (normal mode):
+<Leader>ve 	: Executes statements (the current one or the selected ones).
+<Leader>vp 	: Explain plan for statement (the current one or the
+                  selected one).
+<Leader>vpo	: Explain only plan for statement (the current one or the
+                  selected one).
+<Leader>vb 	: Executes all statements from the current buffer.
+<Leader>vd 	: Describe the database object under cursor.
+<Leader>vdd	: Describe the database object under cursor using the detailed
+		  mode.
+<Leader>vg 	: Go to definition of the database object under cursor.
+<Leader>v1  : Executes a query and shows the results using the vertical
+              columns layout. Pay attention that only queries should be
+              executed this way.
+K           : Oracledoc help for the word under cursor.
+
+Sql/PLSQL local buffer mappings (insert mode):
+<Leader>vl 	: While in insert mode start a vorax fuzzy search.
+
+==

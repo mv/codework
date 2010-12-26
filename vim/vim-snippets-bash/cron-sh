@@ -1,0 +1,30 @@
+#!/bin/bash
+#
+# Cron Wrapper
+#
+
+PATH=/opt/csw/bin:opt/csw/sbin
+PATH=$PATH:/opt/local/bin:/opt/local/sbin
+PATH=$PATH:/usr/local/bin:/usr/local/sbin
+PATH=$PATH:/usr/bin:/usr/sbin:/bin:/sbin
+
+LOGDIR=/webco/logs/bbs
+  FILE=${0##/*/}
+   OUT=${LOGDIR}/${FILE}.log
+   ERR=${LOGDIR}/${FILE}.err
+
+[ -z "$1" ] && {
+    echo
+    echo "Usage: $FILE -f"
+    echo
+    exit 1
+}
+
+# Mark
+date "+%Y-%m-%d %H:%M:%S " | tee -a $ERR >> $OUT
+
+# Output/Error
+/path/cmd 1>> $OUT 2>> $ERR
+
+# :vim set ft=sh:
+

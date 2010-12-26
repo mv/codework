@@ -1,0 +1,20 @@
+change surround         cs'"
+delete surround         ds[
+visual surround         vs[
+insert surround         ysw[    word
+                        ysW[    WORD
+                        yss[    sentence
+                        ysp[    paragraph
+                        ystmvf  tag mvf
+surround
+        b   ()
+        B   {}
+        r   []
+        a   <>
+
+        let g:surround_45 = "<% \r %>"
+        let g:surround_61 = "<%= \r %>"
+
+?
+    vss
+    vSS

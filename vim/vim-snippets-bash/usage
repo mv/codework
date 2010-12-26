@@ -1,0 +1,47 @@
+
+
+usage () {
+cat <<-USAGE
+
+    Usage :  ${0##/*/} [options] [--] 
+
+    Options: 
+        -h|help       Display this message
+        -v|version    Display script version
+
+    USAGE
+    exit 2
+}
+
+while getopts ":hvc:s:" opt
+do
+    case $opt in
+
+        h|help)  
+            usage ;;
+
+        c|config)
+            CONFIG="$OPTARG" ;;
+
+        s|server)
+            SERVER="$OPTARG" ;;
+
+        v|version)  
+            echo "$0 -- Version $ScriptVersion"; exit 0   ;;
+
+        v|version)  
+            echo "$0 -- Version $ScriptVersion"; exit 0   ;;
+
+        \?)  
+            echo -e "\n  Option does not exist : [$OPTARG]\n"
+            usage ;;
+
+        *)  
+            echo -e "\n  Invalid : [ $opt] [$OPTARG]\n"
+            usage ;;
+    esac
+done
+shift $(($OPTIND - 1))
+
+# vim: set ft=sh:
+

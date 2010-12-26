@@ -1,0 +1,55 @@
+
+Private: git@github.com:mv/vim.git
+
+    git remote add origin git@github.com:mv/vim.git
+    git push origin new-branch
+    git push
+
+
+Public: git://github.com/mv/vim.git
+
+    git clone git://github.com/mv/vim.git
+
+
+Show:
+    git remote show origin
+
+
+alias:
+    alias github='git push git@github.com:mv/vim.git'
+
+--------------------------------------------------------------------------------
+
+Public Clone URL:           git://github.com/mv/vim.git
+                  git clone git://github.com/mv/vim.git
+
+Your Clone URL:             git@github.com:mv/vim.git
+                  git clone git@github.com:mv/vim.git
+
+Global setup:
+
+  Download and install Git
+    git config --global user.name "Marcus Vinicius Ferreira"
+    git config --global user.email ferreira.mv@gmail.com
+              
+
+  Next steps:
+
+    mkdir vim
+    cd vim
+    git init
+    touch README
+    git add README
+    git commit -m 'first commit'
+    git remote add origin git@github.com:mv/vim.git
+    git push origin master
+                                    
+
+  Existing Git Repo?
+
+    cd existing_git_repo
+    git remote add origin git@github.com:mv/vim.git
+    git push origin master
+                                                
+# vim: ft=text :
+

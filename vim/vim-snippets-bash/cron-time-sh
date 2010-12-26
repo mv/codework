@@ -1,0 +1,27 @@
+#!/bin/bash
+# $Id: /sysadmin/trunk/scripts/bbs/judge.sh 80 2008-10-21T19:34:54.416840Z mferreira  $
+# 
+# Shell to capture cron job output
+
+APPDIR=/webco/app/bbs/current
+LOGDIR=/webco/logs/bbs
+BINDIR=/opt/local/bin
+
+DT=`/bin/date '+%Y-%m-%d_%H%M%S'`
+
+new_entry() {
+    echo     >> $1
+    echo $DT >> $1
+    echo     >> $1
+}
+
+new_entry ${LOGDIR}/judge_output.txt
+new_entry ${LOGDIR}/judge_error.txt
+
+cd $APPDIR
+( /bin/time \
+  ${BINDIR}/ruby ${APPDIR}/script/runner -e production "Judge.update_ranking" \
+) 1>> ${LOGDIR}/judge_output.txt \
+  2>> ${LOGDIR}/judge_error.txt
+
+

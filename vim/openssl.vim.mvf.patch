@@ -1,0 +1,30 @@
+--- openssl.vim	2008-12-30 18:36:29.000000000 -0200
++++ /Users/mferreira/.vim/plugin/openssl.vim	2008-12-31 07:22:55.000000000 -0200
+@@ -1,3 +1,4 @@
++
+ " openssl.vim version 3.2 2008 Noah Spurrier <noah@noah.org>
+ "
+ " == Edit OpenSSL encrypted files and turn Vim into a Password Safe! ==
+@@ -22,6 +23,9 @@
+ " extensions above. When you write the file you will be asked to give it a new
+ " password.
+ "
++" To create your initial file:
++"   openssl bf -a -salt -in password.txt -out .auth.bfa
++"
+ " == Simple Vim Password Safe ==
+ "
+ " If you edit any file named '.auth.bfa' (that's the full name, not just the
+@@ -189,12 +193,13 @@
+ autocmd BufReadPost,FileReadPost   .auth.bfa set foldexpr=HeadlineDelimiterExpression(v:lnum)
+ autocmd BufReadPost,FileReadPost   .auth.bfa set foldlevel=0
+ autocmd BufReadPost,FileReadPost   .auth.bfa set foldcolumn=0
++autocmd BufReadPost,FileReadPost   .auth.bfa set foldclose=all
+ autocmd BufReadPost,FileReadPost   .auth.bfa set foldmethod=expr
+ autocmd BufReadPost,FileReadPost   .auth.bfa set foldtext=getline(v:foldstart)
+ autocmd BufReadPost,FileReadPost   .auth.bfa nnoremap <silent><space> :exe 'silent! normal! za'.(foldlevel('.')?'':'l')<CR>
+ autocmd BufReadPost,FileReadPost   .auth.bfa nnoremap <silent>q :q<CR>
+ autocmd BufReadPost,FileReadPost   .auth.bfa highlight Folded ctermbg=red ctermfg=black
+ autocmd CursorHold                 .auth.bfa quit
+ 
+ augroup END

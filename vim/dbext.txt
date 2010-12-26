@@ -1,0 +1,33 @@
+
+-- mysql
+-- dbext:type=DBI:driver=mysql:user=root:passwd=@askb:conn_parms=database=mktplace_core;host=localhost;port=3306'
+-- dbext:type=MYSQL:user=root:passwd=@askb:dbname=mktplace_core:host=localhost:port=3306:extra=-t'
+
+-- oracle
+-- dbext:type=ORA:srvname=orcl:user=SCOTT:passwd=@askb'
+-- dbext:type=ORA:srvname=ABDPS1:user=mvdba[SCOTT]:passwd=@askb'
+-- dbext:type=ORA:srvname=//10.10.10.1\:1521/orcl:user=scott:passwd=@askb'
+-- dbext:type=DBI:driver=Oracle:user=scott:passwd=@askb:conn_parms=ORCL
+
+sbp     sql buffer parameters
+sel     sql execute line
+se      sql execute visual
+st      select from table
+sT      select TOP n from table
+stw     select from table WHERE
+sta     select from table ASK
+
+sdt     sql describe table
+slc     sql list column (into paste)
+
+dp      describe procedure
+sh      sql history
+
+slt     sql list table
+slv     sql list view
+slp     sql list procedure
+
+:DBCompleteTables
+:DBCompleteViews
+:DBCompleteProcedures   CTRL+X_CTRL+K
+

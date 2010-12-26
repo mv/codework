@@ -1,0 +1,124 @@
+
+
+
+let mapleader = ","
+
+, be	BufExplorer
+, bv	BufExplorer, Vertical
+, bs	BufExplorer, Split
+
+, d	NERDTree
+, t	Tags , n	Nohlsearch 
+
+, tm	FuzzyFinderTextMate
+, ffb	FuzzyFinderBuffer
+, fff	FuzzyFinderFile
+, ffmf	FuzzyFinderMruFile
+, ffc	FuzzyFinderCmd
+, ffmc	FuzzyFinderMruCmd
+, ffd	FuzzyFinderDir
+, ffbm	FuzzyFinderBookmark
+, fft	FuzzyFinderTag
+, fftf	FuzzyFinderTaggedFile
+
+, t	tags
+        p               show tag
+        o               show tag in new window
+        t               show tag in a new tab
+        <ctrl>+t        show tag, force open in a new tab
+        [[/]]           jump to each file in Tag window
+        tab/bakcpsace   jump to each file in Tag window
+	d		remove file from list
+	u		update list
+	<space>		show funct signature on status line
+	:TlistAddFilesRecursive /my/project/dir *.c
+	:TlistSessionSave ~/sessions/tsession.vim
+	:TlistSessionLoad ~/sessions/tsession.vim
+, ts	TListSave
+, tl	TListLoad
+
+, q	:q
+, w	:w
+, ls	:ls
+
+, cal	:Calendar
+, caL	:CalendarH
+
+<ctrl><ctrl>
+    n	toggle number
+    v	toggle list
+    l	toggle cursorcolumn
+    s	remove trailing spaces
+    d	dos2unix
+
+<ctrl>
+    w
+	w	toggle between split windows
+	hl	nav left/right
+	jk	nav up/down
+	tb	nav top/bottom
+
+	rRx	rotate/exchange
+	HL	move left/right
+	JK	move up/down
+	T	move to a new tab page
+
+	-+=<>	resize
+	|_	set size/maximize size
+
+	split horizontal
+	v	split vertial
+	n	new buffer horizontal
+
+	o	keep this window, close the rest
+	q	close buffer
+	c	close window
+
+
+Tag Windown
+    -/+		Collapse/Expand item
+    =/*		Collapses/Expands all
+    <ctrl>]/g]	goto tag definition
+    <ctrl>tback from tag definition
+
+	:cmap		Command-line
+	:nmap		Normal
+	:imap		Insert
+	:vmap		Visual
+	:omap		Operator-pending
+	:map		Normal, Visual and Operator-pending
+	:map!		Insert and Command-line
+	[un][{cnivo}]map[!]
+
+Plugin
+	:VE	VimExplorer
+
+	<n><CTRL+V>j
+		:Inc <step>
+			  9
+			 10
+			101
+		:IncR <step>
+			9
+			10
+			101
+		:IncN <step>
+
+	mm	mark
+	mv	move to mark
+	mb	move back to mark
+	m.	displace mark
+	F4	remove all marks
+
+	,cc	comment
+	,cu	uncomment
+	,c<sp>	comment toggle
+	,cy	comment and yank
+	,cA	comment at the end of line
+	,cm	comment mininal
+	,cn	comment nested
+	,cs	comment sexy
+
+
+# vim: set sts=0 noet list:
+
