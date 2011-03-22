@@ -140,9 +140,9 @@ Usage
     git commit --amend -m 'msg'     # add file to last commit
     git commit -a -m 'msg'          # add + commit
 
-    git checkout -b      b1 origin/b1   # checkout remote branch as b1
-    git checkout --track b1 origin/b1   # checkout and track remote branch
-    git checkout -b -t   b1 origin/b1   # checkout and track remote branch
+    git checkout -b         b1 origin/b1   # checkout remote branch as b1 (local only)
+    git checkout -b --track b1 origin/b1   # checkout and track remote branch
+    git checkout -t            origin/b1   # checkout and track remote branch
 
     git checkout .                  # restore from index
     git checkout HEAD .             # restore from HEAD
