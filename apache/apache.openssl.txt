@@ -1,0 +1,25 @@
+
+Generates an RSA private key.
+
+    openssl genrsa          \
+        -des3               \
+        -out server.key 1024
+
+Generate a Certificate Signing Request (CSR).
+
+    openssl req             \
+        -new                \
+        -key server.key     \
+        -out www.example.com.csr
+
+Using a combination of the private key and the CSR file,
+generate a certificate.
+
+    openssl x509                    \
+        -req                        \
+        -days 730                   \
+        -in www.example.com.csr     \
+        -signkey server.key         \
+        -out server.crt
+
+Include and edit conf/extra/httpd-ssl.conf.

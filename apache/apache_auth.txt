@@ -1,0 +1,158 @@
+
+http://www.linuxplanet.com/linuxplanet/tutorials/1527/4/
+
+Basic authentication
+    - same authentication database for multiple realms
+
+
+Digest authentication
+    - encoding of the realm with the credentials
+    - must have separate credentials database for each realm
+
+Directives:
+    Files:  every file named "foo.html" on the tree.
+    Directory: directory named inside DocumentRoot (?)
+    Location: url component inside webspace
+              depending on 'alias' configuration, a Location
+              can be named diferently from its actual directory
+Controls:
+    DAC: Discretionary Access Control
+         "at the discretion of the user", i.e., supplied by the user
+    MAC: Mandatory Access Control
+         Indepent of the user, cannot be changed by the user
+         Ex: dna, subnet,
+    Discretionary: Require
+                    Error -> not authorized
+    Mandatory    : Allow,Deny
+                    Error -> forbidden
+
+    Satisfy:
+        All - must be inside net 10. and have a password
+        Any - free for net 10. Other acesses must have a password
+#
+    <Files foo.html>
+        Order Deny,Allow
+        Deny from All
+        Allow from [10.0.0.0/255.0.0.0]
+
+        AuthName "Insiders Only"
+        AuthType [Basic|Digest]
+        AuthUserFile /usr/local/web/apache/.htpasswd-foo
+        Require valid-user
+
+        Satisfy Any
+    </Files>
+#
+    <Directory /usr/local/web/htdocs/finance>
+        AuthName Finance
+        AuthType Basic
+        AuthUserFile /usr/local/web/apache/auth/.htpasswd-finance
+        Require valid-user
+    </Directory>
+    <Directory /usr/local/web/htdocs/finance/strategy>
+        # Defaults by inheritance (parent: /finance/)
+        Require user susan bob
+    </Directory>
+#
+    <Files ~ "^\.ht">
+        Order allow,deny
+        Deny from all
+    </Files>
+
+IP Adresses
+    via:
+    - domain name:  www.mdb.com.br
+    - ip address:   10.11.32.41
+    - partial addr: 10  10.1  192.168   172.20   10.11
+    - addr/subnet:  10.11.32.0/255.255.255.0
+    - addr/cidr:    10.11.32.0/24
+
+Order:
+    Order Allow,Deny:
+        - Deny from all
+        - Allow from []
+    Order Deny,Allow:
+        - Allow from all
+        - Deny from [].
+    Order mutual-failure
+        - !
+
+
+Allowing Users to Control Access to Their Own Documents
+
+    - per-directory .htaccess files
+    - However, in order for Apache to pay attention to them, the directories in question need to be within the scope of a AllowOverride directive that includes the AuthConfig (for discretionary controls) or Limit (for mandatory controls) keywords.
+
+    For instance, a standard Linux installation of Apache can enable this with the following lines in the httpd.conf file:
+
+    <Directory /home/*/public_html>
+        AllowOverride AuthConfig Limit
+    </Directory>
+
+Preventing use of .htaccess:
+
+    <Directory />
+        AllowOverride None
+    </Directory>
+
+Protecting FileSystem:
+
+    # Deny root first:
+    <Directory />
+        Order Deny,Allow
+        Deny from all
+    </Directory>
+
+    # Open specific directories as needed:
+    <Directory /usr/users/*/public_html>
+        Order Deny,Allow
+        Allow from all
+    </Directory>
+    <Directory /usr/local/httpd>
+        Order Deny,Allow
+        Allow from all
+    </Directory>
+
+    # Prevent mis-access
+    <Files ~ "^\.ht">
+        Order allow,deny
+        Deny from all
+    </Files>
+
+    # File and dir
+    # /var/web/dir1/*/*/private.html
+    #
+    <Directory /var/web/dir1>
+        <Files private.html>
+            Order allow,deny
+            Deny from all
+        </Files>
+    </Directory>
+
+    # Image regex
+    <FilesMatch \.(?i:gif|jpe?g|png)$>
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+
+Caution:
+
+    <Location />
+        Order deny,allow
+        Allow from all
+    </Location>
+
+    # Woops! This <Directory> section will have no effect
+    <Directory />  jj
+        Order allow,deny
+        Allow from all
+        Deny from badguy.example.com
+    </Directory>
+
+cgi-bin:
+    <Directory /home/httpd/cgi-bin>
+        Options FollowSymLinks
+        Order allow,deny
+        Allow from all
+    </Directory>
+

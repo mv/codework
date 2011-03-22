@@ -1,0 +1,27 @@
+
+# Testing against multiple gem versions with bundler
+#     Ref: http://grosser.it/2011/03/01/testing-against-multiple-gem-versions-with-bundler/
+#
+# Example setup to test a gem or plugin against rails 2 and 3:
+
+        # Gemfile
+        ...
+        gem 'rails', '~>3'
+
+        # spec/rails2/Gemfile
+        ...
+        gem 'rails', '~>2'
+
+        # Rakefile
+        task :spec do
+          sh "bundle exec rspec spec"
+        end
+
+        task :rails2 do
+          sh "cd spec/rails2 && bundle exec rspec ../../spec"
+        end
+
+        task :default do
+          sh "rake spec && rake rails2"
+        end
+
