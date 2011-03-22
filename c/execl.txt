@@ -1,0 +1,56 @@
+
+svn faq: http://subversion.tigris.org/faq.html#website-auto-update
+
+I'm managing a website in my repository. How can I make the live site 
+automatically update after every commit?
+
+This is done all the time, and is easily accomplished by adding a 
+post-commit hook script to your repository. Read about hook scripts in 
+Chapter 5 of the book. The basic idea is to make the "live site" just 
+an ordinary working copy, and then have your post-commit hook script 
+run 'svn update' on it.
+
+In practice, there are a couple of things to watch out for. The server 
+program performing the commit (svnserve or apache) is the same program 
+that will be running the post-commit hook script. That means that this 
+program must have proper permissions to update the working copy. In 
+other words, the working copy must be owned by the same user that 
+svnserve or apache runs as -- or at least the working copy must have 
+appropriate permissions set.
+
+If the server needs to update a working copy that it doesn't own (for 
+example, user joe's ~/public_html/ area), one technique is create 
+a +s binary program to run the update, since Unix won't allow scripts 
+to run +s. Compile a tiny C program:
+
+_____________________________________________________________________
+
+#include <stddef.h>
+#include <stdlib.h>
+#include <unistd.h>
+int 
+main(void)
+{
+  execl("/usr/local/bin/svn", "svn", "update", "/home/joe/public_html/",
+        (const char *) NULL);
+  return(EXIT_FAILURE);
+}
+
+_____________________________________________________________________
+
+... and then chmod +s the binary, and make sure it's owned by user 'joe'. 
+Then in the post-commit hook, add a line to run the binary.
+
+If you have problems getting the hook to work, see "Why aren't my 
+repository hooks working?".
+
+Also, you'll probably want to prevent apache from exporting the .svn/ 
+directories in the live working copy. Add this to your httpd.conf:
+
+
+# Disallow browsing of Subversion working copy administrative dirs.
+<DirectoryMatch "^/.*/\.svn/">
+    Order deny,allow
+    Deny from all
+</DirectoryMatch>
+

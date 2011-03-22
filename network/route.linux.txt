@@ -1,0 +1,31 @@
+
+-----------------------------------------------------------
+|         RESERVED PRIVATE NETWORK ALLOCATIONS            |
+-----------------------------------------------------------
+| Network | Netmask       | Network Addresses             |
+| Class   |               |                               |
+-----------------------------------------------------------
+|    A    | 255.0.0.0     | 10.0.0.0    - 10.255.255.255  |
+|    B    | 255.255.0.0   | 172.16.0.0  - 172.31.255.255  |
+|    C    | 255.255.255.0 | 192.168.0.0 - 192.168.255.255 |
+-----------------------------------------------------------
+
+    ifconfig lo 127.0.0.1
+    route add -host 127.0.0.1 lo
+
+    ifconfig eth0  192.168.1.10 netmask 255.255.255.0 up
+    route add -net 192.168.1.0  netmask 255.255.255.0 eth0
+    route add default gw 192.168.1.1 eth0
+
+
+
+    root# route add -net 192.168.1.0 netmask 255.255.255.0 eth0
+    root# route add -net 192.168.2.0 netmask 255.255.255.0 eth1
+    root# route add -net 192.168.3.0 netmask 255.255.255.0 eth2
+    root# route add default ppp0
+
+
+
+sudo route add default gw 200.142.130.226 netmask 255.0.0.0
+sudo route add default ppp0
+ll

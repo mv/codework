@@ -1,0 +1,80 @@
+svn merge -r 343:344
+    http://svn.example.com/repos/calc/trunk  # 343 to my-calc-branch
+    my-calc-branch
+
+
+
+$ svn merge http://svn.example.com/repos/branch1@150 \
+            http://svn.example.com/repos/branch2@212 \
+            my-working-copy
+
+$ svn merge -r 100:200 http://svn.example.com/repos/trunk my-working-copy
+
+$ svn merge -r 100:200 http://svn.example.com/repos/trunk
+
+1. An initial repository tree   (often called the left side of the comparison),
+2. A final repository tree      (often called the right side of the comparison),
+3. A working copy to accept the differences as local changes
+                                (often called the target of the merge).
+
+
+svn revert
+
+svn merge --dry-run -r 11912:12878          \
+    http://mdbebsfsw2.mdb.com.br:8080/repos/salto/branch/marcus.ferreira/adpmake-eex \
+    ~/work/trunk/atg/adpmake
+
+ svn commit -m "Ported: adpmaker-eex"
+
+__END__
+
+Skipped missing target: '/home/marcus/work/trunk/atg/adpmake/pex'
+A    /home/marcus/work/trunk/atg/adpmake/t
+A    /home/marcus/work/trunk/atg/adpmake/t/build
+A    /home/marcus/work/trunk/atg/adpmake/t/build/build_txt.t
+A    /home/marcus/work/trunk/atg/adpmake/t/build/build.txt
+A    /home/marcus/work/trunk/atg/adpmake/t/utils
+A    /home/marcus/work/trunk/atg/adpmake/t/utils/ident.t
+A    /home/marcus/work/trunk/atg/adpmake/t/utils/slurp.t
+A    /home/marcus/work/trunk/atg/adpmake/t/file_member
+A    /home/marcus/work/trunk/atg/adpmake/t/file_member/class.t
+A    /home/marcus/work/trunk/atg/adpmake/t/file_member/text_bin.t
+A    /home/marcus/work/trunk/atg/adpmake/t/svn
+A    /home/marcus/work/trunk/atg/adpmake/t/svn/rcsid.t
+A    /home/marcus/work/trunk/atg/adpmake/t/svn/info.t
+A    /home/marcus/work/trunk/atg/adpmake/t/def
+A    /home/marcus/work/trunk/atg/adpmake/t/def/qlt.t
+A    /home/marcus/work/trunk/atg/adpmake/t/def/inside-out.t
+A    /home/marcus/work/trunk/atg/adpmake/t/def/singleton.t
+A    /home/marcus/work/trunk/atg/adpmake/t/def/class.t
+A    /home/marcus/work/trunk/atg/adpmake/t/def/qtd.t
+Skipped '/home/marcus/work/trunk/atg/adpmake/db/pex'
+A    /home/marcus/work/trunk/atg/adpmake/db/pex/db.pex.ins_pat_obj.sh
+A    /home/marcus/work/trunk/atg/adpmake/db/pex/patches_x_objects.vw.sql
+A    /home/marcus/work/trunk/atg/adpmake/db/pex/patches.vw.sql
+A    /home/marcus/work/trunk/atg/adpmake/db/pex/pmo_mdb_list.vw.sql
+A    /home/marcus/work/trunk/atg/adpmake/db/pex/last_patches.vw.sql
+A    /home/marcus/work/trunk/atg/adpmake/db/pex/pex.pkb.sql
+A    /home/marcus/work/trunk/atg/adpmake/db/pex/pex.pks.sql
+A    /home/marcus/work/trunk/atg/adpmake/db/pex/patch.pkb.sql
+A    /home/marcus/work/trunk/atg/adpmake/db/pex/patch.pks.sql
+A    /home/marcus/work/trunk/atg/adpmake/db/pex/db.pex.sh
+A    /home/marcus/work/trunk/atg/adpmake/db/pex/db.pex.t.sh
+A    /home/marcus/work/trunk/atg/adpmake/db/pex/pex.t.txt
+A    /home/marcus/work/trunk/atg/adpmake/db/pex/db.pex.get_obj_ver.sh
+A    /home/marcus/work/trunk/atg/adpmake/db/pex/pex.prc.sql
+Skipped missing target: '/home/marcus/work/trunk/atg/adpmake/lib/ADPMaker.pm'
+D    /home/marcus/work/trunk/atg/adpmake/lib/Build/b1.pl
+D    /home/marcus/work/trunk/atg/adpmake/lib/Build/build.txt
+A    /home/marcus/work/trunk/atg/adpmake/lib/ADP
+A    /home/marcus/work/trunk/atg/adpmake/lib/ADP/Definitions.pm
+A    /home/marcus/work/trunk/atg/adpmake/lib/ADP/File.pm
+A    /home/marcus/work/trunk/atg/adpmake/lib/ADP/Maker.pm
+A    /home/marcus/work/trunk/atg/adpmake/lib/ADP/Utils.pm
+D    /home/marcus/work/trunk/atg/adpmake/lib/SVN/info.pl
+D    /home/marcus/work/trunk/atg/adpmake/lib/SVN/rcsid.pl
+A    /home/marcus/work/trunk/atg/adpmake/lib/SVN/Utils.pm
+A    /home/marcus/work/trunk/atg/adpmake/lab/Definitions.yml.pm
+A    /home/marcus/work/trunk/atg/adpmake/lab/Definitions.yml
+A    /home/marcus/work/trunk/atg/adpmake/lab/d.pl
+C    /home/marcus/work/trunk/atg/adpmake/adpmaker.pl

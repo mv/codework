@@ -1,0 +1,89 @@
+use DBI;
+
+@driver_names = DBI->available_drivers;
+%drivers      = DBI->installed_drivers;
+@data_sources = DBI->data_sources($driver_name, \%attr);
+
+$dbh = DBI->connect($data_source, $username, $auth, \%attr);
+
+        $rv  = $dbh->do($statement);
+        $rv  = $dbh->do($statement, \%attr);
+        $rv  = $dbh->do($statement, \%attr, @bind_values);
+
+        $ary_ref  = $dbh->selectall_arrayref($statement);
+        $hash_ref = $dbh->selectall_hashref($statement, $key_field);
+
+        $ary_ref  = $dbh->selectcol_arrayref($statement);
+        $ary_ref  = $dbh->selectcol_arrayref($statement, \%attr);
+
+        @row_ary  = $dbh->selectrow_array($statement);
+        $ary_ref  = $dbh->selectrow_arrayref($statement);
+        $hash_ref = $dbh->selectrow_hashref($statement);
+
+$sth = $dbh->prepare($statement);
+$sth = $dbh->prepare_cached($statement);
+
+        $rc = $sth->bind_param($p_num, $bind_value);
+        $rc = $sth->bind_param($p_num, $bind_value, $bind_type);
+        $rc = $sth->bind_param($p_num, $bind_value, \%attr);
+
+        $rv = $sth->execute;
+        $rv = $sth->execute(@bind_values);
+        $rv = $sth->execute_array(\%attr, ...);
+
+        $rc = $sth->bind_col($col_num, \$col_variable);
+        $rc = $sth->bind_columns(@list_of_refs_to_vars_to_bind);
+
+        @row_ary  = $sth->fetchrow_array;
+        $ary_ref  = $sth->fetchrow_arrayref;
+        $hash_ref = $sth->fetchrow_hashref;
+
+        $ary_ref  = $sth->fetchall_arrayref;
+        $ary_ref  = $sth->fetchall_arrayref( $slice, $max_rows );
+        $hash_ref = $sth->fetchall_hashref( $key_field );
+
+        $rv  = $sth->rows;
+
+                                        $dbh    Database handle object
+                                        $sth    Statement handle object
+$rc  = $dbh->begin_work;                $drh    Driver handle object (rarely seen or used in applications)
+$rc  = $dbh->commit;                    $h      Any of the handle types above ($dbh, $sth, or $drh)
+$rc  = $dbh->rollback;                  $rc     General Return Code  (boolean: true=ok, false=error)
+                                        $rv     General Return Value (typically an integer)
+$quoted_string = $dbh->quote($string);  @ary    List of values returned from the database, typically a row of data
+                                        $rows   Number of rows processed (if available, else -1)
+$rc  = $h->err;                         $fh     A filehandle
+$str = $h->errstr;                      undef   NULL values are represented by undefined values in Perl
+$rv  = $h->state;                       \%attr  Reference to a hash of attribute values passed to methods
+
+$rc  = $dbh->disconnect;
+
+
+
+
+Processing n rows
+-----------------
+
+    1)
+        $sth->prepare($sql);
+        $sth->execute( @params );
+        $sth->bind_col(1, $v1);
+        $sth->bind_col(2, $v2);
+        while(1) {
+            $sth->fetch;
+        }
+
+    2)
+        $sth->prepare($sql);
+        $sth->execute( @params );
+        $ref = $sth->fetchall_arrayref();
+        while(1) {
+            ($v1, v2) = @{ $ref };
+        }
+
+
+
+
+
+
+

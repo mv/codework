@@ -1,0 +1,13 @@
+
+OpenBSD
+    cd0a
+    wd0
+        wd0a    /
+        wd0e    /var
+
+NetBSD
+    cd0a
+    wd0
+        wd0a    /
+        wd0e    /var
+
