@@ -1,0 +1,35 @@
+Ref:
+        http://www.comptechdoc.org/os/linux/howlinuxworks/linux_hlsysconfig.html
+        http://www.centos.org/docs/2/rhl-rg-en-7.2/s1-boot-init-shutdown-sysconfig.html
+
+ ls -l /lib/kbd/keymaps/i386/qwerty/{br,us}*
+
+-rw-r--r-- 1 root root 1.1K 2009-01-21 02:32 br-abnt2.map.gz
+-rw-r--r-- 1 root root 2.0K 2009-01-21 02:32 br-abnt.map.gz
+-rw-r--r-- 1 root root 1.1K 2009-01-21 02:32 br-latin1-abnt2.map.gz
+-rw-r--r-- 1 root root  989 2009-01-21 02:32 br-latin1-us.map.gz
+-rw-r--r-- 1 root root 2.5K 2009-01-21 02:32 us-acentos.map.gz
+-rw-r--r-- 1 root root  664 2009-01-21 02:32 us.map.gz
+
+loadkeys us
+loadkeys us-acentos
+
+/etc/sysconfig/keyboard
+
+KEYBOARDTYPE="pc"
+KEYTABLE="br-abnt2"
+
+KEYBOARDTYPE="pc"
+KEYTABLE="us"
+
+
+2.1 Default Language
+    system-config-language
+    system-config-language --text
+
+
+2.2 Keyboard Layout
+    system-config-keyboard
+    system-config-keyboard --text
+
+
