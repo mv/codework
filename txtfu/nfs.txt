@@ -1,0 +1,14 @@
+
+
+
+
+BootLevel
+---------
+
+    chkconfig  --level  345  nfs        on
+    chkconfig  --level  345  nfslock    on
+    chkconfig  --level  345  portmap    on
+    chkconfig  --level  345  rpcgssd    on
+    chkconfig  --level  345  rpcidmapd  on
+
+
