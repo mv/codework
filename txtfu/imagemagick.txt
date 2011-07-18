@@ -1,0 +1,41 @@
+ImageMagickError (unable to read font `(null)' @ error/annotate.c/RenderFreetype/1115: `(null)'):
+
+
+ImageMagickError unable to read font error/annotate.c/RenderFreetype/1115 null
+
+
+
+Para instalar no CentOS
+
+    http://www.imagemagick.org/script/install-source.php
+    http://www.imagemagick.org/script/binary-releases.php
+
+Pre-req
+   sudo yum install ghostscript.x86_64 ghostscript-devel.x86_64 ghostscript-gtk.x86_64 ghostscript-fonts.noarch
+
+
+Opcao 1
+   wget http://www.imagemagick.org/download/linux/CentOS/x86_64/ImageMagick-6.7.0-10.x86_64.rpm
+   sudo rpm -ivh ImageMagick-6.7.0-10.x86_64.rpm
+
+
+Opcao 2
+
+# v 7.0
+wget ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick.tar.gz
+
+
+# v 6.6.x
+
+wget http://sourceforge.net/projects/imagemagick/files/old-sources/6.x/6.6/ImageMagick-6.6.9-10.tar.gz/download
+
+./configure \
+   --with-gs-font-dir=/usr/share/fonts/default/Type1
+
+
+sudo yum install ghostscript.x86_64 ghostscript-devel.x86_64 ghostscript-gtk.x86_64 ghostscript-fonts.noarch
+
+
+./configure \
+    --with-gs-font-dir=/usr/share/fonts/default/Type1
+
