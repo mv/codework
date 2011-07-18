@@ -1,0 +1,6 @@
+[localrepo]
+name=Fedora Core $releasever - My Local Repo
+baseurl=file:///mnt/fc_local_repo/
+enabled=1
+gpgcheck=0
+#gpgkey=file:///path/to/you/RPM-GPG-KEY

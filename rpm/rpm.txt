@@ -1,0 +1,120 @@
+
+RPM Poor's man cheat sheet
+
+Ref:
+    http://fedoranews.org/alex/tutorial/rpm/index.shtml
+    http://rpm.org/max-rpm/index.html
+
+###
+### Install
+###
+rpm -ivh htop-0.8.3-1.el5.x86_64.rpm
+
+  # test install
+rpm -ivh --test htop-0.8.3-1.el5.x86_64.rpm
+
+  # from internet, via proxy
+rpm -ivh ftp://user:pass@ftpserver/directory/package.rpm
+rpm -ivh --ftpproxy  proxyserver --ftpport  port  ftp://ftpserver/dir/remote-package.rpm
+rpm -ivh --httpproxy proxyserver --httpport port http://webserver/dir/remote-package.rpm
+
+###
+### Upgrade
+###
+rpm -Uvh htop-0.8.3-1.el5.x86_64.rpm
+rpm -Uvh htop-0.8.3-1.el5.x86_64.rpm --force
+
+  # Freshen: update only if old version is installed
+rpm -Fvh htop-0.8.3-1.el5.x86_64.rpm
+
+  # Downgrade
+rpm -Uvh --oldpackage Samba-old-version.rpm
+
+  # Upgrade and back to the old version
+rpm -Uvh --repackage  new-pkg.rpm   # The Old RPM will be generated on /var/spool/repackage
+rpm -ivh --oldpackage /var/spool/repackage/old-pkg.rpm
+
+
+###
+### Remove
+###
+rpm -ev htop-0.8.3-1.el5.x86_64.rpm
+
+  # backing-up and removing
+rpm -e --repackage new-package.rpm
+
+
+  # if removing unsuccessful, what depends on it
+rpm -q --whatrequires cups
+
+
+###
+### Package info
+###
+rpm -qa --info rpm -Uvh htop-0.8.3-1.el5.x86_64.rpm
+
+###
+### Installed packages
+###
+rpm -qa | grep -i htop
+
+  # rpm file installed ?
+rpm -qip htop-0.8.3-1.el5.x86_64.rpm
+
+  # install by date
+rpm -qa --last | more
+rpm -qa --qf '%{installtime} %{installtime:date} %{name}-%{version}\n' | sort -n | sed 's/^[0-9]*//'
+
+  # Installed packages by size
+rpm -qa --qf "%10{size} %{name}.%{arch}\n" | sort -n
+rpm -qa --qf '%10{size} %{name}-%{version}\n' | sort -n
+rpm -qa --qf "%10{size} %{name}-%{version}.%{arch}\n" | sort -n
+
+
+###
+### Dependencies
+###
+
+  # package dependencies/requirements
+rpm -qR  htop                         # installed package
+rpm -qRp htop-0.8.3-1.el5.x86_64.rpm  # rpm file
+
+  # file belongs to a package?
+rpm -qf /usr/bin/perl
+
+  # list content of installed package
+rpm -ql  htop                           # installed package
+rpm -qlp htop-0.8.3-1.el5.x86_64.rpm    # rpm file
+
+  # Unresolved depencies
+rpm -Va --nofiles --nomd5
+
+
+###
+### RPM environment resources/values
+###
+rpm --showrc                        # all resources
+rpm --eval "%{_arch} %{_bindir}"    # resource values
+rpm --showrc | grep repackage       # repackage dir
+rpm -q --qf "Kernel arch type is: %{ARCH}\nKernel name is: %{VERSION}\n" kernel # arch et al
+
+
+###
+### Digests/Signature et al
+###
+
+  # import a key
+rpm --import /usr/share/rhn/GPG-KEY
+
+  # list imported keys
+rpm -qi gpg-pubkey | more
+
+  # verify rpm file
+rpm -K package.rpm
+
+
+###
+### RPM rebuild database
+###
+rm -f /var/lib/rpm/__* ; rpm -vv --rebuilddb
+

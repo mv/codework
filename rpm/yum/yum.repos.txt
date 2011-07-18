@@ -1,0 +1,57 @@
+
+Ref:
+    http://www.g-loaded.eu/2005/12/11/local-yum-repository/
+    http://www.g-loaded.eu/2009/04/07/sticking-with-centos-rpmforge-and-yum-priorities-for-now/
+    http://www.g-loaded.eu/2009/04/09/yum-priorities-configuration-for-a-centos-desktop/
+
+
+rpmforge
+    http://repoforge.org/
+    http://wiki.centos.org/AdditionalResources/Repositories/RPMForge
+    http://repoforge.org/package/
+    https://github.com/repoforge/rpms
+
+    - RHEL 5 or compatible like CentOS:
+        sudo rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.2-2.el5.rf.x86_64.rpm
+
+        ou
+
+        Install DAG's GPG key
+        rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt
+
+        Verify the package you have downloaded
+        rpm -K rpmforge-release-0.5.2-2.el5.rf.*.rpm
+
+        Install the package
+        rpm -i rpmforge-release-0.5.2-2.el5.rf.*.rpm
+
+        Then try to install something like this
+        yum install htop
+
+
+    - RHEL 6 or compatible like CentOS:
+        sudo rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.2-2.el6.rf.x86_64.rpm
+
+
+EPEL
+    http://fedoraproject.org/wiki/EPEL
+
+    - RHEL 5 or compatible like CentOS:
+        sudo rpm -Uvh http://download.fedoraproject.org/pub/epel/5/i386/epel-release-5-4.noarch.rpm
+
+    - RHEL 6 or compatible like CentOS:
+        sudo rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-5.noarch.rpm
+
+
+RPM Fusion
+    http://rpmfusion.org/
+
+    - pre-req: enable EPEL
+    - RHEL 5 or compatible like CentOS:
+        sudo rpm -Uvh http://download1.rpmfusion.org/free/el/updates/testing/5/i386/rpmfusion-free-release-5-0.1.noarch.rpm         \
+                      http://download1.rpmfusion.org/nonfree/el/updates/testing/5/i386/rpmfusion-nonfree-release-5-0.1.noarch.rpm
+
+    - RHEL 6 or compatible like CentOS:
+        sudo rpm -Uvh http://download1.rpmfusion.org/free/el/updates/testing/6/i386/rpmfusion-free-release-6-0.1.noarch.rpm         \
+                      http://download1.rpmfusion.org/nonfree/el/updates/testing/6/i386/rpmfusion-nonfree-release-6-0.1.noarch.rpm
+
