@@ -1,0 +1,107 @@
+
+- Sempre presente
+
+    mysqldump -u root -proot \
+        --flush-logs        \
+        --hex-blob          \
+        --quick             \
+        --quote-names       \
+        --disable-keys      \
+        --extended-insert   \
+    db_name | gzip -c > db_name_`/bin/date "+%Y-%m-%d-%H%M"`.dump.sql.gz
+
+- One database
+
+    mysqldump -u root -proot \
+        --flush-logs        \
+        --hex-blob          \
+        --quick             \
+        --quote-names       \
+        --disable-keys      \
+        --extended-insert   \
+    db_name | gzip -c > db_name_`/bin/date "+%Y-%m-%d-%H%M"`.dump.sql.gz
+
+- One database, import using other name
+
+    mysqldump -u root -proot \
+        --flush-logs        \
+        --hex-blob          \
+        --quick             \
+        --quote-names       \
+        --no-create-db      \
+        --no-create-info    \
+        --disable-keys      \
+        --extended-insert   \
+    db_name | gzip -c > db_name_`/bin/date "+%Y-%m-%d-%H%M"`.dump.sql.gz
+
+- One database, ddl only
+
+    mysqldump -u root -proot \
+        --no-data
+        --disable-keys      \ ???
+    db_name | gzip -c > db_name_`/bin/date "+%Y-%m-%d-%H%M"`.dump.sql.gz
+
+- One database, data only, compact
+
+    mysqldump -u root -proot \
+        --flush-logs        \
+        --hex-blob          \
+        --quick             \
+        --quote-names       \
+        --no-create-db      \
+        --no-create-info    \
+        --disable-keys      \   ???
+        --extended-insert   \
+    db_name | gzip -c > db_name_`/bin/date "+%Y-%m-%d-%H%M"`.dump.sql.gz
+
+- One database, data only, import into different db
+
+    mysqldump -u root -proot \
+        --flush-logs        \
+        --hex-blob          \
+        --quick             \
+        --quote-names       \
+        --no-create-db      \
+        --no-create-info    \
+    db_name | gzip -c > db_name_`/bin/date "+%Y-%m-%d-%H%M"`.dump.sql.gz
+
+- One table
+
+    mysqldump -u root -proot \
+        --flush-logs        \
+        --hex-blob          \
+        --quick             \
+        --quote-names       \
+        --disable-keys      \
+        --extended-insert   \
+    db_name table_name | gzip -c > table_name_`/bin/date "+%Y-%m-%d-%H%M"`.dump.sql.gz
+
+- One table, data only
+
+    mysqldump -u root -proot \
+        --flush-logs        \
+        --hex-blob          \
+        --quick             \
+        --quote-names       \
+        --no-create-db      \
+        --no-create-info    \
+        --disable-keys      \
+        --extended-insert   \
+    db_name tb_name | gzip -c > tb_name_`/bin/date "+%Y-%m-%d-%H%M"`.dump.sql.gz
+
+
+- One table, data only, 'x' rows only
+
+    mysqldump -u root -proot \
+        --flush-logs        \
+        --hex-blob          \
+        --quick             \
+        --quote-names       \
+        --no-create-db      \
+        --no-create-info    \
+        --disable-keys      \
+        --extended-insert   \
+        --where="true LIMIT 1000"    \
+    db_name tb_name | gzip -c > tb_name_`/bin/date "+%Y-%m-%d-%H%M"`.dump.sql.gz
+
+
