@@ -118,3 +118,42 @@ rpm -K package.rpm
 ###
 rm -f /var/lib/rpm/__* ; rpm -vv --rebuilddb
 
+
+###
+### Equivalence
+###     http://www.linode.com/wiki/index.php/Linux_Packaging
+###
+
+
+Debian	                    Red Hat	                    Description
+--------------------------- --------------------------- -----------
+dpkg -Gi packages.deb	    rpm -Uvh packages.rpm	    Install/Upgrade package file(s)
+dpkg -r package	            rpm -e package	            Remove Package
+dpkg -l '*spell*'	        rpm -qa '*spell*'	        show all packages whose names contain the word spell
+dpkg -l package	            rpm -q package	            show version of package installed
+dpkg -s package	            rpm -q -i package	        show all package metadata
+dpkg -S /path/file	        rpm -q -f /path/file	    what package does file belong to
+dpkg -L package	            rpm -q -l package	        list files owned by package
+dpkg -c package.deb	        rpm -q -l -p package.rpm	List contents of package
+apt-cache depends package	rpm -q --requires package	List package dependencies
+apt-cache rdepends	        rpm -q --whatrequires p	    List reverse dependencies
+
+
+
+Debian 	                        Red Hat	                    Description
+------------------------------- --------------------------- -----------
+apt-get dist-upgrade	        yum update [package list]	upgrade specified packages (or all installed packages if none specified)
+apt-get install <package list>	yum install <package list>	install latest version of package(s)
+apt-get remove <package list>	yum remove <package list>	remove specified packages from system
+apt-cache list [package list]	yum list [package list]	    list available packages from repositories
+
+RPM Downloads
+-------------
+    http://rpmfind.net/
+    http://rpm.pbone.net/
+    http://packages.ubuntu.com/
+    http://freshrpms.net/
+    http://rpm.livna.org/
+    http://dag.wieers.com/home-made/apt/mega-merge.php
+    http://download.fedora.redhat.com/pub/fedora/linux/extras/
+
