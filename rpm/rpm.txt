@@ -53,6 +53,13 @@ rpm -q --whatrequires cups
 ###
 rpm -qa --info rpm -Uvh htop-0.8.3-1.el5.x86_64.rpm
 
+  # list content of installed package
+rpm -ql  htop                           # installed package
+rpm -qlp htop-0.8.3-1.el5.x86_64.rpm    # rpm file
+
+  # file belongs to a package?
+rpm -qf /usr/bin/perl
+
 ###
 ### Installed packages
 ###
@@ -78,13 +85,6 @@ rpm -qa --qf "%10{size} %{name}-%{version}.%{arch}\n" | sort -n
   # package dependencies/requirements
 rpm -qR  htop                         # installed package
 rpm -qRp htop-0.8.3-1.el5.x86_64.rpm  # rpm file
-
-  # file belongs to a package?
-rpm -qf /usr/bin/perl
-
-  # list content of installed package
-rpm -ql  htop                           # installed package
-rpm -qlp htop-0.8.3-1.el5.x86_64.rpm    # rpm file
 
   # Unresolved depencies
 rpm -Va --nofiles --nomd5
