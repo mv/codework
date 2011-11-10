@@ -11,7 +11,7 @@ IPT="/sbin/iptables"
 # WAN is the one connected to the internet
 # LAN the one connected to your local network
 WAN="eth0"  # external,inet
-LAN="ethO"  # internal
+LAN="eth1"  # internal
 
 # First we need to clear up any existing firewall rules
 # and chain which might have been created
