@@ -1,0 +1,146 @@
+# RedHat/CentOS network configuration
+
+
+###
+### Files
+###
+______________________________________________________________________________
+
+    /etc/hosts
+    /etc/resolv.conf
+    /etc/nsswitch.conf
+    /etc/sysconfig/network
+    /etc/sysconfig/network-scripts/ifcfg-eth0
+    /etc/sysconfig/network-scripts/ifcfg-eth0:0
+    /etc/sysconfig/network-scripts/ifcfg-eth0:1
+    /etc/sysconfig/network-scripts/ifcfg-eth1
+    /etc/sysconfig/network-scripts/ifcfg-eth2
+    /etc/sysconfig/network-scripts/ifcfg-eth3
+______________________________________________________________________________
+
+
+###
+### Hostname and default gateway
+###
+
+# vi /etc/sysconfig/network
+______________________________________________________________________________
+
+    NETWORKING=yes
+    NETWORKING_IPV6=no
+    HOSTNAME=www1.example.com
+    GATEWAY=10.10.29.65
+______________________________________________________________________________
+
+###
+### Interfaces
+###
+______________________________________________________________________________
+
+    /etc/sysconfig/network-scripts/ifcfg-eth0
+    /etc/sysconfig/network-scripts/ifcfg-eth1
+    /etc/sysconfig/network-scripts/ifcfg-eth2
+    /etc/sysconfig/network-scripts/ifcfg-eth3
+______________________________________________________________________________
+
+# static address
+______________________________________________________________________________
+
+    # Intel Corporation 82573E Gigabit Ethernet Controller (Copper)
+    DEVICE=eth0
+    BOOTPROTO=static
+    DHCPCLASS=
+    HWADDR=00:30:48:56:A6:2E
+    IPADDR=10.10.29.66
+    NETMASK=255.255.255.192
+    ONBOOT=yes
+  # FORWARD_IPV4=true         - True for NAT firewall gateways and linux routers.
+
+______________________________________________________________________________
+
+ # dhcp address
+______________________________________________________________________________
+
+    # Intel Corporation 82573E Gigabit Ethernet Controller (Copper)
+    DEVICE=eth1
+    BOOTPROTO=dhcp
+    DHCPCLASS=
+    DHCP_HOSTNAME=w1.example.com
+    ONBOOT=yes
+______________________________________________________________________________
+
+
+###
+### Reconfigure
+###
+
+______________________________________________________________________________
+
+    $ sudo /etc/init.d/network restart
+______________________________________________________________________________
+
+
+
+###
+### DNS
+###
+______________________________________________________________________________
+
+    search domain example.com example.co.uk
+    nameserver 10.0.80.11
+    nameserver 10.0.80.12
+    nameserver 202.67.222.222
+______________________________________________________________________________
+
+
+###
+### nsswitch
+###
+______________________________________________________________________________
+
+    hosts:   files dns nisplus nis
+______________________________________________________________________________
+
+
+###
+### commands
+###
+______________________________________________________________________________
+
+    $ /sbin/ifconfig eth0 up
+    $ /sbin/ifconfig eth0 down
+
+    $ /sbin/ifup   eth0
+    $ /sbin/ifdown eth0
+
+    $ /sbin/ifconfig eth0   192.168.10.12 netmask 255.255.255.0 broadcast 192.168.10.255
+    $ /sbin/ifconfig eth0:0 192.168.10.13 netmask 255.255.255.0 broadcast 192.168.10.255
+    $ /sbin/ifconfig eth0:1 192.168.10.14 netmask 255.255.255.0 broadcast 192.168.10.255
+
+    $ dhcpclient eth1
+
+    # default gateway
+    $ route add default gw 201.51.31.1 eth0
+
+    # one host via eth1
+    $ route add -host 123.213.221.231 eth1
+    $ route add -host 192.168.10.12 dev eth0
+    $ route add -host 192.168.10.14 dev eth0
+
+    # one network via eth0
+    $ route add -net 10.13.21.0  netmask 255.255.255.0 gw 192.168.10.254 eth0
+    $ route add -net 10.0.0.0    netmask 255.0.0.0     gw 192.168.10.254 eth0
+    $ route add -net 172.16.0.0  netmask 255.255.0.0   gw 192.168.10.253 eth1
+    $ route add -net 192.168.0.0 netmask 255.255.0.0   gw 192.168.10.252 eth2
+
+    $ route del default
+    $ route del -host 192.168.10.12
+    $ route del -net  10.0.0.0    netmask 255.0.0.0
+    $ route del -net  172.16.0.0  netmask 255.255.0.0
+    $ route del -net  192.168.0.0 netmask 255.255.0.0
+
+    $ echo 1 > /proc/sys/net/ipv4/ip_forward
+
+______________________________________________________________________________
+
+
