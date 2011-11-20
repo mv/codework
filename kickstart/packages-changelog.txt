@@ -1,0 +1,35 @@
+From CentOS 5.6 to CentOS 5.7
+-----------------------------
+
+    base
+    ====
+        # default
+        man-pages-overrides
+        virt-what
+
+        # optional
+        openscap
+
+        # mandatory
+        tcsh617
+
+    core
+    ====
+        # optional
+        python-dmidecode
+        python-suds
+
+    openfabrics-enterprise-distribution
+    ===================================
+        # default
+        libcxgb4
+
+    development-tools
+    =================
+        # optional
+        cmake
+
+
+From CentOS 5.7 to SL 6.1
+-------------------------
+

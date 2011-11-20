@@ -37,7 +37,7 @@ VBoxManage modifyvm          \
     --ioapic     on          \
     --pae        off         \
     --nestedpaging on        \
-    --largepages   on        \
+    --largepages   off       \
     --vtxvpid      on        \
     --cpus         2         \
     --rtcuseutc    on        \
@@ -50,15 +50,14 @@ VBoxManage modifyvm          \
     --boot1    disk              \
     --boot3    none              \
     --boot4    none              \
-    --nic1            nat        \
-    --nictype1        82545EM    \
-    --nic2            hostonly   \
-    --cableconnected1 on         \
-    --nicpromisc1     allow-vms  \
-    --nictype2        82545EM    \
+    --nic1             nat       \
+    --natnet1          default   \
+    --nictype1         82540EM   \
+    --cableconnected1  on        \
+    --nic2             hostonly  \
     --hostonlyadapter2 vboxnet0  \
-    --cableconnected2 on         \
-    --nicpromisc2     allow-vms  \
+    --nictype2         82540EM   \
+    --cableconnected2  on        \
     --mouse    ps2        \
     --keyboard ps2        \
     --uart1    off        \
