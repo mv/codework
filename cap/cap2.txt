@@ -1,0 +1,453 @@
+Capistrano 2.0
+
+
+Instalando
+----------
+    gem install capistrano
+    gem install capistrano-ext  # multistage
+
+Iniciando
+---------
+
+    Para colocar um aplicativo dentro do capistrano:
+    
+    $ cd <app_path>
+    $ capify .
+    
+    Isso cria os arquivos iniciais Capfile e config/deploy.rb
+    
+    No Capistrano 2 há um conjunto de tarefas "default" que implementa boa
+    parte dos passos que fazem um deploy:
+    
+    $ cap -T
+    cap deploy               # Deploys your project.
+    cap deploy:check         # Test deployment dependencies.
+    cap deploy:cleanup       # Clean up old releases.
+    cap deploy:cold          # Deploys and starts a `cold' application.
+    cap deploy:migrate       # Run the migrate rake task.
+    cap deploy:migrations    # Deploy and run pending migrations.
+    cap deploy:pending       # Displays the commits since your last deploy.
+    cap deploy:pending:diff  # Displays the `diff' since your last deploy.
+    cap deploy:restart       # Restarts your application.
+    cap deploy:rollback      # Rolls back to a previous version and restarts.
+    cap deploy:rollback:code # Rolls back to the previously deployed version.
+    cap deploy:setup         # Prepares one or more servers for deployment.
+    cap deploy:start         # Start the application servers.
+    cap deploy:stop          # Stop the application servers.
+    cap deploy:symlink       # Updates the symlink to the most recently deployed ...
+    cap deploy:update        # Copies your project and updates the symlink.
+    cap deploy:update_code   # Copies your project to the remote servers.
+    cap deploy:upload        # Copy files to the currently deployed version.
+    cap deploy:web:disable   # Present a maintenance page to visitors.
+    cap deploy:web:enable    # Makes the application web-accessible again.
+    cap invoke               # Invoke a single command on the remote servers.
+    cap shell                # Begin an interactive Capistrano session.
+
+    Essas tarefas default estão definidas em
+    /Library/Ruby/Gems/1.8/gems/capistrano-2.a.b/lib/capistrano/recipes/deploy.rb
+
+    Além dessas tarefas default há outras que são internas, isto é, são sub-tarefas
+    executadas como parte de uma tarefa maior. Para listá-las:
+    
+    $ cap -vT
+    cap deploy                   # Deploys your project.
+    cap deploy:check             # Test deployment dependencies.
+    cap deploy:cleanup           # Clean up old releases.
+    cap deploy:cold              # Deploys and starts a `cold' application.
+    cap deploy:finalize_update   # [internal] Touches up the released code.
+    cap deploy:migrate           # Run the migrate rake task.
+    cap deploy:migrations        # Deploy and run pending migrations.
+    cap deploy:pending           # Displays the commits since your last deploy.
+    cap deploy:pending:diff      # Displays the `diff' since your last deploy.
+    cap deploy:restart           # Restarts your application.
+    cap deploy:rollback          # Rolls back to a previous version and restarts.
++   cap deploy:rollback:cleanup  # [internal] Removes the most recently deployed ...
+    cap deploy:rollback:code     # Rolls back to the previously deployed version.
++   cap deploy:rollback:revision # [internal] Points the current symlink at the p...
+    cap deploy:setup             # Prepares one or more servers for deployment.
+    cap deploy:start             # Start the application servers.
+    cap deploy:stop              # Stop the application servers.
+    cap deploy:symlink           # Updates the symlink to the most recently deplo...
+    cap deploy:update            # Copies your project and updates the symlink.
+    cap deploy:update_code       # Copies your project to the remote servers.
+    cap deploy:upload            # Copy files to the currently deployed version.
+    cap deploy:web:disable       # Present a maintenance page to visitors.
+    cap deploy:web:enable        # Makes the application web-accessible again.
+    cap invoke                   # Invoke a single command on the remote servers.
+    cap shell                    # Begin an interactive Capistrano session.
+
+
+Tarefas padrão
+-------------
+
+    Primeiro Deploy
+    ===============
+        cap dev deploy:setup    ### Cria novos diretorios
+        cap dev deploy:check    ### Verifica dependencias
+        cap dev deploy:cold     ### Checkout, db migrate, start servers
+        
+    Demais deploys
+    ==============
+        cap dev deploy          ### update scm, db migrate, restart servers
+
+    Manutenção - Servers
+    ====================
+        cap dev deploy:start         # Start the application servers.
+        cap dev deploy:stop          # Stop the application servers.
+        cap dev deploy:restart       # Restarts your application.
+        cap dev deploy:web:disable   # Present a maintenance page to visitors.
+        cap dev deploy:web:enable    # Makes the application web-accessible again.
+
+    Manutenção - DB
+    ===============
+        cap dev deploy:migrate       # Run the migrate rake task.
+        cap dev deploy:migrations    # Deploy and run pending migrations.
+
+    Manutenção - Releases Dir
+    =========================
+        cap dev deploy:cleanup       # Clean up old releases.
+        cap dev deploy:rollback      # Rolls back to a previous version and restart all servers.
+        cap dev deploy:rollback:code # Rolls back to the previously deployed version.
+        cap dev deploy:update        # Copies your project and updates the symlink.
+        cap dev deploy:update_code   # Copies your project to the remote servers.
+        cap dev deploy:symlink       # Updates the symlink to the most recently deployed ...
+        cap dev deploy:upload        # Copy files to the currently deployed version.
+
+    Manutenção - SCM
+    ================
+        cap dev deploy:pending       # Displays the commits since your last deploy.
+        cap dev deploy:pending:diff  # Displays the `diff' since your last deploy.
+
+
+Multistages
+-----------
+    
+    "Multistages" é uma extensão do Capistrano 2 que permite definir perfis para
+    cada environment da aplicação. Para cada ambiente de dev, prod, qa e stage
+    têm-se um diretório config/deploy/ com os arquivos "dev.rb", "qa.rb", 
+    "staging.rb" e "prod.rb". Cada arquivo define as roles que caracteriza cada
+    ambiente. Cada arquivo é um "target", ou uma lista de servidores, onde o deploy
+    será aplicado.
+
+    Assim, onde a chamada cap era baseada em namespaces:
+    
+    $ cap dev:deploy
+    
+    é agora baseada num parâmetro separado no comando de linha:
+    
+    $ cap dev deploy
+    
+    OBS: Como 'stage' é um termo reservado dentro da extensão 'multilstage', o que era
+    'cap stage:deploy' é agora 'cap staging deploy'.
+    
+Definindo multistages
+---------------------
+    
+    No topo do arquivo deploy.rb:
+    
+  ___________________________________________________________________________________________________
+    require 'capistrano/ext/multistage'
+    set :stages, %w(dev qa staging prod)
+    set :default_stage, "dev"
+  ___________________________________________________________________________________________________
+
+    "cap deploy" será equivalente a "cap dev deploy",
+    
+    Dentro de config/:
+    $ mkdir deploy && cd deploy
+    $ touch dev.rb prod.rb qa.rb staging.rb
+    
+    dev.rb:
+      ___________________________________________________________________________________________________
+        # Development
+        role :app,     [:db, :web]
+        role :web,     "localhost"
+        role :db,      "localhost", :primary => true
+      ___________________________________________________________________________________________________
+
+    prod.rb:
+      ___________________________________________________________________________________________________
+        # Production Servers
+        role :app,     [:db, :web]
+        role :web,     "wsbb01.webcointernet.com", "wsbb02.webcointernet.com", "wsbb03.webcointernet.com"
+        role :db,      "dbms02.webcointernet.com", :primary => true
+      ___________________________________________________________________________________________________
+
+    
+    Com a extensão configurada aparecem novas tarefas:
+    
+    $ cap -T
+    cap deploy               # Deploys your project.
+    cap deploy:check         # Test deployment dependencies.
+    cap deploy:cleanup       # Clean up old releases.
+    cap deploy:cold          # Deploys and starts a `cold' application.
+    cap deploy:migrate       # Run the migrate rake task.
+    cap deploy:migrations    # Deploy and run pending migrations.
+    cap deploy:pending       # Displays the commits since your last deploy.
+    cap deploy:pending:diff  # Displays the `diff' since your last deploy.
+    cap deploy:restart       # Restarts your application.
+    cap deploy:rollback      # Rolls back to a previous version and restarts.
+    cap deploy:rollback:code # Rolls back to the previously deployed version.
+    cap deploy:setup         # Prepares one or more servers for deployment.
+    cap deploy:start         # Start the application servers.
+    cap deploy:stop          # Stop the application servers.
+    cap deploy:symlink       # Updates the symlink to the most recently deployed ...
+    cap deploy:update        # Copies your project and updates the symlink.
+    cap deploy:update_code   # Copies your project to the remote servers.
+    cap deploy:upload        # Copy files to the currently deployed version.
+    cap deploy:web:disable   # Present a maintenance page to visitors.
+    cap deploy:web:enable    # Makes the application web-accessible again.
+    cap invoke               # Invoke a single command on the remote servers.
+    cap shell                # Begin an interactive Capistrano session.
++   cap multistage:prepare   # Stub out the staging config files.
++   cap dev                  # Set the target stage to `dev'.
++   cap prod                 # Set the target stage to `prod'.
++   cap qa                   # Set the target stage to `qa'.
++   cap staging              # Set the target stage to `staging'.
+
+    Ref: http://weblog.jamisbuck.org/2007/7/23/capistrano-multistage
+    
+
+
+Criando um deploy
+---------------
+    Para uma aplicação "test", num ambiente "dev":
+    
+        $ rails test
+        $ cd test
+        $ capify .
+        $ mkdir config/deploy ; cd config/deploy
+        $ touch dev.rb prod.rb
+
+        Editar dev.rb
+        ___________________________________________________________________________________________________
+            # Development
+            role :app,     "localhost"
+            role :web,     "localhost"
+            role :db,      "localhost", :primary => true
+        ___________________________________________________________________________________________________
+      
+        $ cd ../..
+        Editar deploy.rb:
+        ___________________________________________________________________________________________________
+            # multistage
+            #     roles :app, :db, :web are defined in
+            #     config/deploy/dev.rb
+            #                   prod.rb
+            #                   etc....
+            #
+            require 'capistrano/ext/multistage'
+            set :stages       , %w(dev qa staging prod)
+            set :default_stage, "dev"
+
+            # application destination
+            set :application, "test"
+            set :deploy_to  , "/var/tmp/www/#{application}"
+            set :user       , "bbs"     # unix owner of :deploy_to dir
+            set :password   , "bbs"     # unix user password
+
+            # scm
+            set :repository,  "file:///Users/mferreira/Work/svn/repos/dep"
+            set :scm        , :subversion
+            set :scm_command, "/opt/local/bin/svn"
+        ___________________________________________________________________________________________________
+
+    Colocando a aplicação "test" no svn:
+        $ mkdir -p /var/tmp/svn/repos/test
+        $ svnadmin create /var/tmp/svn/repos/test
+        $ svn import . -m "Imported" file:///var/tmp/svn/repos/test
+        $ svn co file:///var/tmp/svn/repos/test --force
+        $ svn info
+        
+    Executando o deploy a primeira vez:
+        $ cap dev deploy:setup
+        $ cap dev deploy:check
+        $ cap dev deploy:cold
+    
+
+Tipos de deploy
+---------------
+
+Customizando uma tarefa
+-----------------------
+
+
+Criando novas tarefas
+---------------------
+
+
+Controle de versão, SCM
+-----------------------
+
+    Os tipos de controle de versão disponíveis no capistrano podem ser determinados
+    verificando o diretorio gem capistrano-2.x.x/lib/capistrano/recipes/deploy/scm/.
+    Para o capistrano 2.5.1, MacOS:
+    /Library/Ruby/Gems/1.8/gems/capistrano-2.5.1/lib/capistrano/recipes/deploy/scm/
+        - accurev
+        - bzr
+        - cvs
+        - darcs
+        - git
+        - mercurial
+        - none
+        - perforce
+        - subversion
+
+    Por default um deploy padrão usa subversion.
+    
+    - Subversion
+        set :scm         , :subversion
+        set :repository  , "http://myrepos/proj/"
+        set :scm_command , "/usr/local/bin/svn"
+        set :scm_user    , 'someuser'
+        set :scm_password, "my_secret'
+    
+    - Git
+        set :scm         , :git
+        set :repository  , "someuser@somehost:/home/myproject"
+        set :branch      , "master"
+        set :scm_command , "/opt/local/bin/git"
+        set :scm_user    , 'someuser'
+        set :scm_password, "my_secret'
+
+        Também:
+            set :remote      , "#{scm_user}"
+            set :repository  , "#{scm_user}@somehost:~/projects/project.git"
+
+
+Estratégias de Deploy
+---------------------
+    "Estratégia" é o mecanismo usado para se copiar os arquivos da aplicação, a partir do
+    controle de versão, para o diretório de destino.
+    
+    Os tipos de estratégias para deploy suportadas pela versão de capistrano atual estão 
+    listadas no diretorio gem capistrano-2.x.x/lib/capistrano/recipes/deploy/strategy/.
+    Para o capistrano 2.5.1, MacOS:
+    /Library/Ruby/Gems/1.8/gems/capistrano-2.5.1/lib/capistrano/recipes/deploy/strategy/:
+        - checkout
+        - copy
+        - export
+        - remote_cache
+    
+    - set :deploy_via, :checkout
+    
+        Método default. É feito um checkout em cada servidor remoto no novo diretório
+        de "release". Um efeito colateral disso é que cada release tem um diretório '.svn'
+        ou '.git' criado.
+    
+    - set :deploy_via, :export
+    
+        É feito um export completo da árvore de código, em cada servidor remoto, no novo 
+        diretório de "release". Não há diretorio '.svn' criado localmente, porém é o método
+        mais demorado pois cada novo checkout é sempre completo.
+
+    - set :deploy_via, :copy
+
+        É feito um checkout da aplicação num diretório local de trabalho e/ou temporário. 
+        Depois disso os arquivos são copiados remotamente para o novo "release".
+
+        Ref: http://weblog.jamisbuck.org/2007/5/11/capistrano-2-0-preview-2
+
+        Para que um deploy seguinte nao tenha que fazer todo um checkout completo novamente,
+        mas apenas atualizar o checkout local já existente:
+        
+            set :deploy_via, :copy
+            set :copy_cache, true
+
+        O diretorio default para checkout é /tmp. Para se usar um diretorio específico:
+        
+            set :deploy_via, :copy
+            set :copy_cache, "/webco/app/#{application}/checkout/"
+
+        Para excluir um conjunto de arquivos da cópia final:
+        
+            set :deploy_via, :copy
+            set :copy_cache, true
+            set :copy_exclude, [".git", ".svn", "materials"]
+
+        Ref: http://weblog.jamisbuck.org/2008/5/2/capistrano-2-3-0
+        
+        Para se copiar um conjunto de arquivos que não está no controle de versão, use
+        conjuntamente a opção "none" em :scm:
+        
+            set :repository, "."
+            set :scm, :none
+            set :deploy_via, :copy
+
+        Ref: http://weblog.jamisbuck.org/2008/5/2/capistrano-2-3-0
+
+    - set :deploy_via, :remote_cache
+    
+            set :deploy_via      , :remote_cache
+            set :repository_cache, "git_master"
+            set :copy_exclude    , [".git", ".svn"]
+    
+        É feito um checkout em cada servidor no diretorio ":repository_cache". Depois
+        disso copia-se a árvore para o novo diretorio de "release". Se ":repository_cache"
+        não for definido o checkout/clone é feito em ":deploy_to/shared/cached-copy".
+        
+        Um problema eventual com esse método é que ao se trocar o branch usado pelo git, ou 
+        a url svn de checkout, novos updates darão erro. Para solucionar isso deve-se apagar 
+        o checkout anterior antes do novo deploy.
+        
+        Ref: http://blog.innerewut.de/2008/3/12/remote-cache-pitfalls
+        
+
+Features
+--------
+    - É possível definir qualquer variável de "env" dentro do deploy:
+        set :default_environment["PATH"] = "/bin:/usr/bin:/usr/local/bin:/home/jamis/bin"
+        
+        Ref: http://weblog.jamisbuck.org/2007/6/16/capistrano-2-0-preview-3
+        
+    - Por default, o shell usado pelo Capistrano é "/bin/sh". Para se usar outro:
+        set :default_shell, "/bin/bash"
+        
+        Ref: http://weblog.jamisbuck.org/2007/6/16/capistrano-2-0-preview-3
+
+    - É possível testar "remote dependencies" via match:
+        depend :remote, :match, "rake -V", /version 0\.7/
+        
+        Ref: http://weblog.jamisbuck.org/2007/9/2/capistrano-2-1-preview-1
+
+    - É possível testar a presença de um arquivo como "remote dependency":
+        depend :remote, "/etc/syslog.conf"
+        
+        Ref: http://weblog.jamisbuck.org/2008/5/2/capistrano-2-3-0
+        
+    - Para definir servers que participam de mais de uma role ("overlapping roles"):
+        
+        role :app, "server"
+        role :web, "server"
+
+        # the above is the same as this:
+        server "server", :app, :web
+        
+        Ref: http://weblog.jamisbuck.org/2008/2/28/capistrano-2-2-0
+        
+    - Numa lista extensa de servidores capistrano pode ter problemas por causa do
+      número de conexões ssh simultâneas acima do esperado. Para manter um limite
+      máximo de conexões:
+        task :ping, :max_hosts => 100 do
+            # anything here will only run against 100 hosts at a time
+        end
+        
+        Ref: http://weblog.jamisbuck.org/2008/2/28/capistrano-2-2-0
+
+    - Para tranferir arquivos ou uma árvore de diretórios:
+        upload "/local/file", "/remote/file", :via => :scp
+        download "/remote/file", "/local/file", :via => :sftp
+        
+    - Fazendo download de um mesmo arquivo presente em vários servidores:
+        Dir.mkdir("destination")
+        download "/remote/file", "destination/file-$CAPISTRANO:HOST$"
+
+        Ref: http://weblog.jamisbuck.org/2008/5/2/capistrano-2-3-0
+        
+    - Fazendo upload com globs:
+        cap deploy:upload FILES="config/apache/*.conf" 
+
+        Ref: http://weblog.jamisbuck.org/2008/6/13/capistrano-2-4-0
+        
+        
+file:///Users/mferreira/Work/svn/repos/dep

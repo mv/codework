@@ -1,0 +1,108 @@
+
+=Installing Capistrano=
+
+==Pre-Req==
+
+    Ruby >= 1.8.5
+
+    RubyGems >= 1.3.1
+    wget http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz
+    tar xvfz rubygems-1.3.1.tgz
+    cd rubygems-1.3.1
+    sudo ruby setup.rb
+
+    gem install rake
+    gem list
+
+==Install==
+
+    sudo gem install capistrano
+    sudo gem install capistrano_colors
+    printf "\nrequire 'capistrano_colors'\n\n" > ~/.caprc
+
+    gem list
+
+=Capistrano Single=
+
+Para tarefas simples em mais de um servidor um Capfile precisa no mínimo de uma 'role' e uma 'task':
+
+ role :srv, "127.0.0.1", "192.168.1.1", "192.168.1.2", "dev01.mydomain.com", "dev02.mydomain.com"
+ 
+ desc "Host identification"
+ task :hostid do
+     run "hostname"
+     run "uname -a"
+     run "uptime ; w"
+ end
+
+=Capistrano Deploy=
+
+Fazer deploy com capistrano é, na sua maneira mais simples, copiar uma aplicação para uma lista de servidores. Os deploys mais Para tal, alguns pré-requisitos são necessários.
+
+==Pre-req==
+
+    - a aplicação é uma arvore de diretorios
+    - a aplicação está num controle de versão: svn, git, cvs, bzr, hg
+    - todos os servidores têm ssh
+    - todos os servidores têm o cliente do controle de versão instalado
+    - todos os servidores acessam o repositório do controle de versão
+    - o usuário do aplicativo está presente em todos os servidores.
+    - root não é o dono do aplicativo
+
+==Deploy==
+
+===Colocando o aplicativo no capistrano===
+
+   cd work/app
+   capify .
+   cap -T
+
+;Parametrizando
+
+ # edit config/deploy.rb
+ 
+role :app, "dev01.webcointernet.com"
+role :web, "dev01.webcointernet.com"
+role :db,  "dev01.webcointernet.com", :primary => true
+
+
+ set :user            , "app1"
+ 
+ set :repos           , "app-test"           # custom
+ set :scm             , :git
+ set :scm_user        , "scott"
+ set :repository      , "ssh://git@git.mydomain.com/repos/#{repos}"
+ set :branch          , "master"
+ 
+ set :deploy_via      , :remote_cache
+ set :repository_cache, "#{repos}"
+ set :copy_exclude    , [".svn", "*~"]
+ 
+ set :application     , "app"
+ set :deploy_to       , "/webco/#{application}"
+ set :current_path    , "#{deploy_to}/current"
+ set :releases_path   , "#{deploy_to}"
+
+
+=Windows=
+
+==Como cliente==
+
+Usar capistrano em windows é possível usando-se Cygwin. Os pacotes mínimos quem devem ser instalados:
+
+ bash
+ ssh
+ ruby
+
+A partir desses, basta instalar rubygems no comando de linha do bash.
+
+==Como servidor==
+
+Qualquer servidor windows pode ser o destino de um deploy, desde que a aplicação atenda aos pré-requisitos de deploy. Além desses, um máquina windows precisa ter um 
+'SSH Daemon' operando. A partir do próprio Cygwin é possível instalar um serviço de SSH no painel de controle:
+
+ bash:
+ $ sshd-config
+
+
+

@@ -1,0 +1,188 @@
+
+
+faster:
+    make git set timestamps +
+    set :normalize_asset_timestamps, false
+    :remote_cache copy
+    
+
+capistrano_mailer
+
+Capistrano 1
+http://weblog.jamisbuck.org/2006/9/21/capistrano-not-just-for-rails
+http://weblog.jamisbuck.org/2006/9/21/introducing-the-capistrano-shell
+http://weblog.jamisbuck.org/2006/9/26/inside-capistrano-the-gateway-implementation
+http://weblog.jamisbuck.org/2006/9/28/inside-capistrano-the-command-abstraction
+http://weblog.jamisbuck.org/2007/2/3/capistrano-1-4-0
+
+Capistrano 2
+http://weblog.jamisbuck.org/2007/4/25/capistrano-2-0-preview-1
+http://weblog.jamisbuck.org/2007/5/11/capistrano-2-0-preview-2
+http://weblog.jamisbuck.org/2007/6/16/capistrano-2-0-preview-3
+http://weblog.jamisbuck.org/2007/6/29/capistrano-2-0-preview-4
+http://weblog.jamisbuck.org/2007/7/22/capistrano-2-0
+http://weblog.jamisbuck.org/2007/7/23/capistrano-multistage
+http://weblog.jamisbuck.org/2007/9/2/capistrano-2-1-preview-1
+http://weblog.jamisbuck.org/2007/10/14/capistrano-2-1
+http://weblog.jamisbuck.org/2007/11/14/call-for-help-capistrano-documentation
+http://weblog.jamisbuck.org/2007/11/30/documentation-coordinator
+http://weblog.jamisbuck.org/2008/1/11/advanced-rails-recipes-and-capistrano
+http://weblog.jamisbuck.org/2008/2/23/capistrano-2-2-0-preview
+http://weblog.jamisbuck.org/2008/2/28/capistrano-2-2-0
+http://weblog.jamisbuck.org/2008/4/30/maintenance-releases-capistrano-net-ssh
+http://weblog.jamisbuck.org/2008/5/2/capistrano-2-3-0
+http://weblog.jamisbuck.org/2008/6/13/capistrano-2-4-0
+http://weblog.jamisbuck.org/2008/6/28/capistrano-2-4-3
+http://weblog.jamisbuck.org/2008/8/26/cap-1-4-1-go-1-4-2-now
+http://capify.org/2008/7/14/pattern-conditional-configuration
+http://capify.org/2008/8/29/capistrano-2-5-0
+http://weblog.jamisbuck.org/2008/8/29/capistrano-2-5-0-2
+http://capify.org/2008/9/3/fast-remote-cache
+http://capify.org/2008/11/7/capistrano-2-5-1
+http://capify.org/2008/11/13/capistrano-2-5-2
+http://capify.org/2008/12/7/capistrano-2-5-3
+
+http://capify.org/getting-started/from-the-beginning
+http://capify.org/getting-started/basics
+
+Sugestoes
+    http://push.cx/2008/deploying-crontab-with-your-rails-app
+    
+code
+    recipes/
+        deploy.rb
+            :application
+            :repository
+            :scm
+            :deploy_via
+            :revision
+            :strategy
+            
+            :version_dir
+            :shared_dir
+            :shared_children %w(system log pids)
+            :current_dir
+            
+            :releases_path
+            :shared_path
+            :current_path
+            :release_path
+            
+            :keep_releases, 5
+        strategy.rb
+        git.rb
+            scm_username
+            scm_password
+        remote_dependency
+            file
+            dir
+            match
+            ...
+        local_dependency
+            file
+            dir
+            match
+            
+            
+
+
+http://weblog.jamisbuck.org/2007/7/22/capistrano-2-0
+ You can specify the $CAPISTRANO:HOST$ placeholder in the filenames 
+ that you give to “put”, and it will be replaced with the actual
+ host that the file is being uploaded to.
+
+http://weblog.jamisbuck.org/2007/9/2/capistrano-2-1-preview-1
+    Feature: There are now :version_dir, :current_dir, and :shared_dir variables in the deployment system that let you customize exactly what those deployment directories are called.
+    Feature: There is now a Namespace#top method for accessing the top-level namespace. This is useful when you want to execute a task in another namespace but you have an namespace between you and the top level that is interfering:
+    
+    load 'deploy'
+    namespace :custom do
+      namespace :deploy do
+        task :something do
+          # Have to do "top." because otherwise the bare reference to "deploy"
+          # would find the current namespace.
+          top.deploy.restart
+        end
+      end
+    end
+
+ http://weblog.jamisbuck.org/2008/6/13/capistrano-2-4-0
+    - cap -d # debug!!!!
+    - run "if [ -d /some/directory ]; then #{sudo} chmod -R g+w /some/directory; fi"
+    - With this release, 
+    
+        deploy:start, 
+        deploy:stop, and 
+        deploy:restart all continue to use the :runner user when sudoing, 
+        
+        but 
+        deploy:setup and 
+        deploy:cleanup will use the :admin_runner user. 
+        
+        The :admin_runner variable is unset, by default, meaning those tasks will sudo as root, 
+        but if you want them to run as :runner, just do “set :admin_runner, runner”.
+    
+http://capify.org/2008/8/29/capistrano-2-5-0
+    - cap -n # dry-run
+
+http://capify.org/2008/11/7/capistrano-2-5-1
+    - cap -t [db]
+
+
+
+http://www.lengelzigich.com/posts/how-to-php-deployment-with-capistrano
+
+    namespace :deploy do
+
+        task :update do
+            transaction do
+                update_code
+                symlink
+            end
+        end
+
+        task :finalize_update do
+            transaction do
+                run "chmod -R g+w #{releases_path}/#{release_name}" 
+            end
+        end
+
+        task :symlink do
+            transaction do
+                run "ln -nfs #{current_release} #{deploy_to}/#{current_dir}" 
+                run "ln -nfs #{deploy_to}/#{current_dir} #{document_root}" 
+            end
+        end
+
+        task :migrate do
+            # nothing
+        end
+
+        task :restart do
+            # nothing
+        end
+
+    end
+
+
+Override the deployment altogether
+----------------------------------
+http://nubyonrails.com/articles/tips-for-upgrading-to-capistrano-2
+
+For this blog I have a special deployment file that just updates the theme and clears out the cache. I can still deploy with cap deploy, but it skips update_code, symlink, and the other steps.
+
+For that, I just override the deploy:default task.
+        namespace :deploy do
+        
+          desc "Update the theme and delete cached files." 
+          task :default do
+            # Call custom tasks in this namespace
+            update_theme
+            sweep_cache
+          end
+        
+          task :update_theme do
+            # ...
+          end
+        
+        end
