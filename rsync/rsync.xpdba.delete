@@ -1,0 +1,6 @@
+
+rsync -avh -C -P --stats \
+	  --delete           \
+	  --exclude='mv*/'   \
+	  xpdba:/d/work/
+
