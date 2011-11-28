@@ -1,0 +1,37 @@
+
+
+rsync `find . -name "*.pdf" -mtime -60` prasanta@anothermachine:/tmp/
+
+rsync -avR remote:'`find /home -name "*.[ch]"`' /tmp/
+
+rsync -avR calomel@somemachine:'`find /data/video -name "*.[avi]"`' /download/
+
+
+    #!/bin/sh
+    cd ~susan
+    {
+    echo
+    date
+    dest=~/backup/`date +%A`
+    mkdir $dest.new
+    find . -xdev -type f \( -mtime 0 -or -mtime 1 \) -exec cp -aPv "{}"
+    $dest.new \;
+    cnt=`find $dest.new -type f | wc -l`
+    if [ $cnt -gt 0 ]; then
+      rm -rf $dest
+      mv $dest.new $dest
+    fi
+    rm -rf $dest.new
+    rsync -Cavze ssh . samba:backup
+    } >> ~/backup/backup.log 2>&1
+
+
+Incremental backups using rsync
+
+The following example will make an incremental backup of the directory /data/working/ and put a copy of any file that changes into a dated directory in /BACKUP/ . This can be used to keep a daily backup tree of any changed files and not have to overwrite the previous days files. Note that this method does need to copy the entire file if it changes as the new files are made in the directory named under current day.
+
+rsync --backup --backup-dir=`date +%Y.%m.%d` -a /data/working/ /BACKUP/
+If you have a file under /BACKUP/ called file1 and that file has changed on the source machine in /data/working/ then a new directory will be made. The incremental dir would be named `date +%Y.%m.%d` or the numerical values for YEAR.MONTH.DAY and put under /BACKUP/. The changed data "file1" would be put under that directory.
+
+
+

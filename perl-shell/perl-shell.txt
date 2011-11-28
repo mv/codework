@@ -1,0 +1,7 @@
+
+http://search.cpan.org/~bbc/SQL-Shell-1.14/
+http://search.cpan.org/~bbc/Log-Trace-1.070/
+http://search.cpan.org/~bbc/Sub-Slice-1.048/
+
+http://search.cpan.org/~ferreira/Shell-Perl-0.0018/
+http://search.cpan.org/~darren/Shell-Base-0.05/

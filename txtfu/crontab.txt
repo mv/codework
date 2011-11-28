@@ -1,0 +1,11 @@
+
+# minute (0-59)
+# |   hour (0-23)
+# |   |    day of the month (1-31)
+# |   |    |   month of the year (1-12 or Jan-Dec)
+# |   |    |   |   day of the week (0-6 with 0=Sun or Sun-Sat)
+# |   |    |   |   |   commands
+# |   |    |   |   |   |
+#### refresh squid's anti-ad server list
+35   05    *   *   */3 /scripts_dir/ad_servers_newlist.sh >> /dev/null 2>&
+
