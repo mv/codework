@@ -4,10 +4,8 @@
 
 require "find"
 
-
 # no arguments: uses current dir
 ARGV[0] ||= '.'
-
 
 # for each argument
 ARGV.each do |arg|
@@ -18,6 +16,4 @@ ARGV.each do |arg|
   end
 
 end # arg
-
-
 
