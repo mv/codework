@@ -11,10 +11,7 @@ ARGV[0] ||= '.'
 
 # Executables:
 #     bat exe: valid in cygwin env
-suffixlist = {
-  '.bat' => 1, '.exe' => 1, '.sh'  => 1, '.ksh' => 1,
-  '.pl'  => 1, '.py'  => 1, '.rb'  => 1
-}
+suffixlist = Hash[ %w/bat exe sh ksh pl py rb/.map {|x| [x, 1]} ]
 
 # for each argument
 ARGV.each do |arg|
@@ -30,8 +27,8 @@ ARGV.each do |arg|
       File.chmod( 0775, f) if suffixlist[ File.extname(f) ]
     end
 
-  end # find
+
+  end
 
 end # arg
-
 
