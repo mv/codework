@@ -27,8 +27,7 @@ ARGV.each do |arg|
       File.chmod( 0775, f) if suffixlist[ File.extname(f) ]
     end
 
-
-  end
+  end # find
 
 end # arg
 
