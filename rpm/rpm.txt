@@ -86,6 +86,8 @@ rpm -qa --qf "%10{size} %{name}-%{version}.%{arch}\n" | sort -n
 rpm -qR  htop                         # installed package
 rpm -qRp htop-0.8.3-1.el5.x86_64.rpm  # rpm file
 
+yum deplist htop | grep provider | sort | uniq | awk '{print $1}'
+
   # Unresolved depencies
 rpm -Va --nofiles --nomd5
 
