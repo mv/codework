@@ -1,0 +1,19 @@
+
+# sysctl kern.geom.debugflags=16
+# gmirror label -v -b round-robin gm0 /dev/ad2
+# echo geom_mirror_load="YES" >> /boot/loader.conf
+
+# cd /etc
+# cp fstab fstab.0
+# s|/dev/ad0|/dev/mirror/gm0|
+
+reboot
+
+# df -h
+# swapinfo
+# gmirror insert gm0 /dev/ad2
+
+# gmirror list
+# gmirror status
+
+reboot when status COMPLETED

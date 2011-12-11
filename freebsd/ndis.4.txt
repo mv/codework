@@ -1,0 +1,99 @@
+http://lists.freebsd.org/pipermail/freebsd-hardware/2004-January/001005.html
+
+# cp foo.sys foo.inf /sys/modules/if_ndis
+# cd /sys/modules/ndis
+# make; make load
+# cd /sys/modules/if_ndis
+# ndiscvt -i foo.inf -s foo.sys -o ndis_driver_data.h
+# make; make load
+
+
+
+
+http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/config-network-setup.html#CONFIG-NETWORK-NDIS`
+
+    ndis(4)
+    ndisgen(8)
+
+# ndisgen /path/to/W32DRIVER.INF /path/to/W32DRIVER.SYS
+# kldload ./W32DRIVER.ko
+# kldload ndis
+# kldload if_ndis
+
+# dmesg
+
+    You can configure the system to load the NDIS modules at boot time in the same
+    way as with any other module. First, copy the generated module, W32DRIVER.ko,
+    to the /boot/modules directory. Then, add the following line to
+    /boot/loader.conf:
+
+        W32DRIVER_load="YES"
+
+
+
+http://wiki.pfsense.com/wikka.php?wakka=UsingProjectEvilOnpfSense/show&time=2006-04-27+13%3A02%3A44
+
+    In the case of the Linksys WMP54G, no firmware files are necessary. Carrying on
+    with the "Convert driver" option, you're prompted for the locations of the .inf
+    and .sys files, respectively, with full paths. In my case, these were
+    /usr/src/sys/modules/if_ndis/bcmwl5.inf and
+    /usr/src/sys/modules/if_ndis/bcmwl5.sys.
+
+    Once entered, the shell prompts the user for firmware files to be converted
+    (leave this blank if there are none) and then a prompt to build the ndis driver
+    itself. This created, in the case of the Linksys WMP54G, the file bcmwl5_sys.ko.
+
+# kldload ndis
+# kldload bcmwl5_sys
+
+    To insure the modules will be loaded with subsequent system boots, add the following
+    to /boot/loader.conf:
+
+    ndis_load="YES"
+    bcmwl5_sys_load="YES"
+
+http://dannyman.toldme.com/2005/01/05/freebsd-howto-ndisulate-windows-drivers/
+
+    Step 1: Install NDIS code
+
+        cd /sys/modules/ndis && make && make install
+
+    Step 2: Figure out what hardware you have to support
+
+        pciconf -lv
+
+    Step 4: Copy those Drivers to /sys/modules/if_ndis
+
+    # cp bcmwl5.* /sys/modules/if_ndis
+    # cd /sys/modules/if_ndis
+    # ls /sys/modules/if_ndis
+
+    Step 5: Magic
+    # hd bcmwl5.inf | head -3
+00000000  ff fe 3b 00 3b 00 0d 00  0a 00 3b 00 3b 00 20 00  |..;.;.....;.;. .|
+00000010  62 00 63 00 6d 00 77 00  6c 00 35 00 2e 00 69 00  |b.c.m.w.l.5...i.|
+00000020  6e 00 66 00 0d 00 0a 00  3b 00 3b 00 0d 00 0a 00  |n.f.....;.;.....|
+
+
+    # iconv -c -f utf-16 -t ascii bcmwl5.inf > bcmwl5.inf.ascii
+    # head -3 bcmwl5.inf.ascii
+    ;;
+    ;; bcmwl5.inf
+    ;;
+
+    Step 6: Compile, Install
+
+    # ndiscvt -i bcmwl5.inf.ascii  -s bcmwl5.sys -o ndis_driver_data.h
+    # make && make install
+
+    Load the module:
+
+    # kldload ndis
+    # kldload if_ndis
+    # ifconfig ndis0
+
+    Loading NDIS at Boot
+
+    /boot/loader.conf:
+
+    if_ndis_load="YES"

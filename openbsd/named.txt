@@ -1,0 +1,67 @@
+openssl
+    0.9.8i
+    ./config --prefix=/usr/local ; make ; make install
+
+Bind-9.5.0-P2
+    ./configure --prefix=/usr/local --with-openssl=/usr/local ; make ; make install
+    cd /sbin        # OpenBSD 
+    cd /usr/sbin    # FreeBSD
+    for f in named dns*
+    do mv $f ${f}-9.4.2
+    done
+    
+    ln -s /usr/local/sbin/named
+    ln -s /usr/local/sbin/dnssec-keygen 
+    ln -s /usr/local/sbin/dnssec-signzone 
+    
+    ln -s /var/named/etc/named.conf /etc/named.conf
+    ln -s /var/named/etc/named.conf /usr/local/etc/named.conf
+    ln -s /var/named/log/named.pid  /var/run/named.pid
+    
+    ln -s /var/named/etc/rndc.conf  /etc/rndc.conf
+    ln -s /var/named/etc/rndc.key   /etc/rndc.key
+    ln -s /var/named/etc/rndc.conf  /usr/local/etc/rndc.conf
+    ln -s /var/named/etc/rndc.key   /usr/local/etc/rndc.key
+    
+    FreeBSD:
+        pw groupadd -g 70 -n named
+        pw useradd  -g 70 -u 70 -c "Named Daemon User" -d /nonexistent -s /sbin/nologin -n named
+        
+        /etc/rc.conf:
+            named_enable="YES"                                      # Run named, the DNS server (or NO).
+            named_program="/usr/local/sbin/named"                   # path to named, if you want a different one.
+            named_flags="-u named -t /var/named -c /etc/named.conf" # Flags for named
+            named_pidfile="/var/named/log/named.pid"                # Must set this in named.conf as well
+            named_uid="named"                                       # User to run named as
+            named_chrootdir="/var/named"                            # Chroot directory (or "" not to auto-chroot it)
+            named_chroot_autoupdate="NO"                            # Automatically install/update chrooted 
+                                                            # components of named. See /etc/rc.d/named.
+            named_symlink_enable="NO"                               # Symlink the chrooted pid file
+
+
+
+dhcp-4.0.0
+    ./configure --prefix=/usr/local --with-openssl=/usr/local ; make ; make install
+
+    cd /sbin
+    mv dhclient         dhclient-freebsd-7.0
+    mv dhclient-script  dhclient-script-freebsd-7.0
+
+    mv dhclient         dhclient-openbsd-4.3
+    mv dhclient-script  dhclient-script-openbsd-4.3
+
+    ln -s /usr/local/sbin/dhclient
+    ln -s /usr/local/sbin/dhclient-script
+    
+    cd /usr/sbin
+    mv dhcpd            dhcpd-openbsd-4.3
+    mv dhcrelay         dhcrelay-openbsd-4.3
+    ln -s /usr/local/sbin/dhcpd
+    ln -s /usr/local/sbin/dhcrelay
+    
+    mv rndc             rndc-openbsd-4.3
+    ln -s /usr/local/sbin/rndc
+    
+    
+    pkg_add -r dhcpdump dhcperf dhcping
+

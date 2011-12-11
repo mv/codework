@@ -1,0 +1,14 @@
+# $Id$
+# svnserve via xinet
+# Ubuntu/OEL-4: /etc/xinet.d/svnserve
+#
+service svn
+{
+        port        = 3690
+        socket_type = stream
+        protocol    = tcp
+        wait        = no
+        user        = subversion
+        server      = /usr/local/bin/svnserve
+        server_args = -i -r /u01/subversion/repos
+}

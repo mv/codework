@@ -1,0 +1,45 @@
+$Id: cr_repost.txt 3528 2006-11-11 14:48:59Z marcus.ferreira $
+
+    svnadmin create . --fs-type bdb
+    svn import -m "Repository creation" salto/ http://mdbebsgold.mdb.com.br:8080/repos/salto
+    svn import -m "Created."            etc/   http://mdbebsgold.mdb.com.br:8080/svn/switch/etc
+
+Layout
+------
+    /usr/
+        +- local
+        |   +- apache
+        |   |   +- bin
+        |   |   +- build
+        |   |   +- build-1
+        |   |   +- modules
+        |   |   +- manual
+        |   +- bin
+        |   +- lib
+        |   +- BerkeleyDB
+        |   +-
+        |   +-
+        +- src
+        +- www
+            +- htdocs
+            +- logs
+            +- conf
+
+Ordem de criação
+----------------            1.4.6
+ - Executar env.sh
+    - BerkeleyDB            4.2,4.3.27,4.4
+        - perl
+    - expat
+    - neon                  0.{25,26}.x
+    - perl                  > 5.8
+    - python                > 2.0
+    - Apache
+        apr                 > 0.9.7
+        apr-util            > 0.9.7
+        httpd2              > 2.0.49
+    - swig
+    - svn
+        - perl-binding
+        - python-binding
+    - viewvc
