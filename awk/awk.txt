@@ -1,0 +1,46 @@
+# Ref:
+#     http://semicomplete.com/blog/articles/week-of-unix-tools/day-3-awk.html
+#
+
+### Simple Loop
+awk 'END{ for (i=1; i<=10; i++) printf "%02d\n",i }' < /dev/null
+
+
+### For each line do a loop of 10
+cat /etc/hosts | awk '{ for (i=1; i<=10; i++) printf "%02d %s\n",i,$0 }'
+
+
+### Put timestamp in front of each line
+tail -f my.log | gawk '{print strftime("%Y-%m-%d %H:%M:%S :", systime()), $0 }'
+
+
+### Open files by user
+fstat | sed -e 1d \
+  | awk '{a[$1]++} END { for (i in a) { print i, a[i] } }' \
+  | sort -nk2
+
+
+### Open remote tcp connections
+netstat -nl  \
+  | awk '/tcp4/ {a[$5]++} END { for (i in a) { print i, a[i] } }' \
+  | sort -nk2 -r | column -t
+
+
+### Scan all processes, all columns, looking for a variable and count it
+ps aexww \
+  | awk '{ for (i = 0; i < NF; i++) { if ($i ~ /^SSH_AUTH_SOCK=/) { print $i } } }' \
+  | sort | uniq -c
+
+  24 SSH_AUTH_SOCK=/tmp/ssh-sc4iKR7ZIf/agent.721
+
+
+### Show only log entries between May 10th and May 20th (inclusive)
+awk '$1 == "May" && ($2 >= 10 && $2 <= 20)'  syslog.log
+
+
+### Show non-empty files
+ls -l | awk '$5 > 0'
+
+
+# vim:ft=sh:
+
