@@ -1,0 +1,8 @@
+
+net stop 'Symantec Endpoint Protection'
+net stop 'Symantec Event Manager'
+net stop 'Symantec Management Client'
+net stop 'Symantec Network Access Control'
+net stop 'Symantec Settings Manager'
+net stop 'Altiris Agent'
+
