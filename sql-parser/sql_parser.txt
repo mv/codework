@@ -1,0 +1,3 @@
+
+svn co http://pivotalrb.rubyforge.org/svn/sql_parser
+
