@@ -1,0 +1,32 @@
+mongodb.txt
+
+
+
+http://www.snailinaturtleneck.com/blog/2011/12/20/querying-for-timestamps-using-objectids/
+
+http://www.snailinaturtleneck.com/blog/2011/09/28/mms-the-mongo-monitoring-service/
+
+
+AWS
+    - micro
+        . good arbitrors
+        . bad for single node production instance
+
+    - large/xlarge
+        . with high memory option
+        . mongodb do not use extra cpu/gpu
+
+    - io bound
+        . turn off atime in mount
+        . ulimit for open files: soft/hard 65536
+        . best: ext4/xfs
+        . try to avoid ext3
+
+    - RAID
+        . 10
+        . 0: stripe 8-10 volumes
+        . 1: because ebs fails a lot
+
+    - Arbitror
+        . just need a network connection
+

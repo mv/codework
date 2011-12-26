@@ -1,0 +1,18 @@
+#
+# Ref:
+#     http://boredzo.org/blog/archives/2008-01-19/next-week-apple-system-logger
+#     http://crucialsecurityblog.harris.com/tag/macintosh/
+#
+#     http://developer.apple.com/library/mac/#documentation/Darwin/Reference/ManPages/man5/asl.conf.5.html
+#
+
+# /etc/asl.conf
+# = ttl_store 1
+
+launchctl stop com.apple.syslogd
+launchctl stop com.apple.aslmanager
+
+find /var/log/asl/ -type f -mtime +1 | xargs rm
+
+launchctl start com.apple.syslogd
+
