@@ -1,12 +1,14 @@
 mongodb.txt
 
 
+http://www.engineyard.com/blog/2011/mongodb-best-practices/
 
 http://www.snailinaturtleneck.com/blog/2011/12/20/querying-for-timestamps-using-objectids/
 
 http://www.snailinaturtleneck.com/blog/2011/09/28/mms-the-mongo-monitoring-service/
 
-
+http://www.10gen.com/presentations
+http://www.10gen.com/presentations/mongosv-2011/mongodb-and-aws
 AWS
     - micro
         . good arbitrors
@@ -30,3 +32,27 @@ AWS
     - Arbitror
         . just need a network connection
 
+    - Security Groups
+        . internally, for all apps:
+            - MongoD Status Page    28017
+            - MongoD                27017
+            - MongoS                27017
+            - MongoD Shard Server   27018
+            - ConfigDB              27019
+
+        # 2 groups:
+        ec2-create-group mongodb     --description "security group for mongodb nodes"
+        ec2-create-group app-servers --description "security group for app servers"
+
+        ## Allow mongodb nodes to talk to each other
+        ec2-authorize mongodb -o mongodb      -u <<your ec2 account id>>
+
+        ## Allow app servers to talk to mongodb nodes
+        ec2-authorize mongodb -o app-servers -u <<your ec2 account id>>
+
+        ## Allow SSH access to MongoDB nodes
+        ec2-authorize mongodb -p 22
+
+        ## Allow remote MongoDB nodes to talk to cluster
+        ec2-authorize mongodb -s 1.1.1.1 -p 27017
+        ec2-authorize mongodb -s 2.2.2.2 -p 27017
