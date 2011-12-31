@@ -1,9 +1,11 @@
 
 load "server.rb"
 
+default_run_options[:pty] = true
+
 desc "Install Git, Ruby"
 task :prereq do
-  run "sudo yum install -y git ruby rubygems"
+  run "sudo yum install -y git ruby ", :pty => true
 end
 
 desc "Clone facter repos"
@@ -13,25 +15,24 @@ end
 
 desc "Install Facter from source"
 task :install do
-  run "cd facter && sudo ruby install.rb"
+  run "cd facter && sudo ruby install.rb", :pty => true
 end
 
 desc "Run facter"
 task :facter do
-  run "facter | grep oper"
-end
-
-desc "cat system-release"
-task :release do
   run "cat /etc/system-release"
+  run "cd facter && ./bin/facter | grep oper"
 end
 
-desc "All tasks"
-task :all do
-  prereq
-  git_clone
-  install
-  release
-  facter
+desc "All tasks info"
+task :info do
+  puts <<-EOF
+To be run in sequence:
+    cap prereq
+    cap git_clone
+    cap install
+    cap facter 2>output.log
+    grep out output.log | sort > facter.log
+  EOF
 end
 
