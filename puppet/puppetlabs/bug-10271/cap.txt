@@ -1,0 +1,13 @@
+
+git clone https://github.com/mv/facter
+cd facter/
+ruby install.rb
+
+facter | grep oper
+
+yum install -y git ruby rubygems
+
+gem install puppet --no-ri --no-rdoc
+gem install facter --no-rdoc --no-ri
+
+

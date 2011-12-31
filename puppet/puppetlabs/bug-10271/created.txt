@@ -1,0 +1,30 @@
+RESERVATION	r-d5c25bb4	695228663121	server
+INSTANCE	i-428f0620	ami-0af30663	ec2-50-17-132-21.compute-1.amazonaws.com	domU-12-31-39-09-AC-FF.compute-1.internal	running	marcus_anirul	0		t1.micro	2011-12-30T23:32:47+0000	us-east-1a	aki-427d952b			monitoring-disabled	50.17.132.21	10.210.179.13			ebs					paravirtual	xen		sg-1805f270	default
+BLOCKDEVICE	/dev/sda1	vol-79c18614	2011-12-30T23:33:33.000Z	
+TAG	instance	i-428f0620	Name	amzn-ami-0.9.7-beta.x86_64-ebs
+RESERVATION	r-b9c25bd8	695228663121	server
+INSTANCE	i-288f064a	ami-38c33651	ec2-107-21-128-160.compute-1.amazonaws.com	ip-10-243-151-7.ec2.internal	running	marcus_anirul	0		t1.micro	2011-12-30T23:33:01+0000	us-east-1b	aki-427d952b			monitoring-disabled	107.21.128.160	10.243.151.7			ebs					paravirtual	xen		sg-1805f270	default
+BLOCKDEVICE	/dev/sda1	vol-7bc18616	2011-12-30T23:33:22.000Z	
+TAG	instance	i-288f064a	Name	amzn-ami-0.9.8-beta.x86_64-ebs 
+RESERVATION	r-6bc55c0a	695228663121	server
+INSTANCE	i-1c8f067e	ami-2272864b	ec2-107-22-32-229.compute-1.amazonaws.com	ip-10-126-49-117.ec2.internal	running	marcus_anirul	0		t1.micro	2011-12-30T23:33:12+0000	us-east-1c	aki-427d952b			monitoring-disabled	107.22.32.229	10.126.49.117			ebs					paravirtual	xen		sg-1805f270	default
+BLOCKDEVICE	/dev/sda1	vol-2bc18646	2011-12-30T23:34:02.000Z	
+TAG	instance	i-1c8f067e	Name	amzn-ami-0.9.9-beta.x86_64-ebs 
+RESERVATION	r-51c55c30	695228663121	server
+INSTANCE	i-cc8f06ae	ami-74f0061d	ec2-107-21-65-223.compute-1.amazonaws.com	domU-12-31-39-04-45-05.compute-1.internal	running	marcus_anirul	0		t1.micro	2011-12-30T23:33:23+0000	us-east-1a	aki-427d952b			monitoring-disabled	107.21.65.223	10.240.74.243			ebs					paravirtual	xen		sg-1805f270	default
+BLOCKDEVICE	/dev/sda1	vol-51c1863c	2011-12-30T23:33:48.000Z	
+TAG	instance	i-cc8f06ae	Name	amzn-ami-2010.11.1-beta.x86_64-ebs 
+RESERVATION	r-2bc55c4a	695228663121	server
+INSTANCE	i-aa8f06c8	ami-8e1fece7	ec2-50-19-72-54.compute-1.amazonaws.com	domU-12-31-39-0C-DE-CA.compute-1.internal	running	marcus_anirul	0		t1.micro	2011-12-30T23:33:34+0000	us-east-1a	aki-427d952b			monitoring-disabled	50.19.72.54	10.215.221.52			ebs					paravirtual	xen		sg-1805f270	default
+BLOCKDEVICE	/dev/sda1	vol-2dc18640	2011-12-30T23:33:58.000Z	
+TAG	instance	i-aa8f06c8	Name	amzn-ami-2011.02.1.x86_64-ebs 
+RESERVATION	r-09c55c68	695228663121	server
+INSTANCE	i-8e8f06ec	ami-7341831a	ec2-184-72-167-12.compute-1.amazonaws.com	ip-10-203-47-142.ec2.internal	running	marcus_anirul	0		t1.micro	2011-12-30T23:33:45+0000	us-east-1b	aki-825ea7eb			monitoring-disabled	184.72.167.12	10.203.47.142			ebs					paravirtual	xen		sg-1805f270	default
+BLOCKDEVICE	/dev/sda1	vol-23c1864e	2011-12-30T23:34:14.000Z	
+TAG	instance	i-8e8f06ec	Name	amzn-ami-2011.09.1.x86_64-ebs 
+RESERVATION	r-f7c55c96	695228663121	server
+INSTANCE	i-7e8e071c	ami-1b814f72	ec2-50-16-80-206.compute-1.amazonaws.com	domU-12-31-38-04-54-30.compute-1.internal	running	marcus_anirul	0		t1.micro	2011-12-30T23:33:59+0000	us-east-1c	aki-825ea7eb			monitoring-disabled	50.16.80.206	10.220.87.222			ebs					paravirtual	xen		sg-1805f270	default
+BLOCKDEVICE	/dev/sda1	vol-35c18658	2011-12-30T23:34:22.000Z	
+TAG	instance	i-7e8e071c	Name	amzn-ami-2011.09.2.x86_64-ebs 
+RESERVATION	r-57f96036	695228663121	server
+INSTANCE	i-ea850c88	ami-1b814f72			terminated	marcus_anirul	0		t1.micro	2011-12-30T23:38:19+0000	us-east-1c	aki-825ea7eb			monitoring-disabled					ebs					paravirtual	xen		sg-1805f270	default

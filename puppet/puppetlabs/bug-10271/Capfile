@@ -1,0 +1,18 @@
+
+load "server.rb"
+
+desc "Install Ruby"
+task :install do
+  run "sudo yum install -y git ruby"
+end
+
+desc "Clone facter repos"
+task :clone do
+  run "git clone https://github.com/mv/facter"
+end
+
+desc "Install Facter from source"
+task :install_from_source do
+  run "cd facter && sudo ruby install.rb"
+end
+
