@@ -28,7 +28,7 @@ ec2-create $REGION c $GROUP $KEY $TYPE ami-1b814f72  # amzn-ami-2011.09.2.x86_64
 awk '/^INSTANCE/ {print $4}' $CREATED                  > list-instance.txt
 awk '/^INSTANCE/ {print $6}' $CREATED | grep amazonaws > list-ip.txt
 
-awk '{print "server ", $0, " , :ec2"}' list-ip.txt | column -t> server.rb
+awk '{print "server \""$0"\" , :ec2"}' list-ip.txt | column -t> server.rb
 
 # Logging
 cat -n created.txt | column -t >> $LOG

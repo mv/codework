@@ -1,18 +1,37 @@
 
 load "server.rb"
 
-desc "Install Ruby"
-task :install do
-  run "sudo yum install -y git ruby"
+desc "Install Git, Ruby"
+task :prereq do
+  run "sudo yum install -y git ruby rubygems"
 end
 
 desc "Clone facter repos"
-task :clone do
+task :git_clone do
   run "git clone https://github.com/mv/facter"
 end
 
 desc "Install Facter from source"
-task :install_from_source do
+task :install do
   run "cd facter && sudo ruby install.rb"
+end
+
+desc "Run facter"
+task :facter do
+  run "facter | grep oper"
+end
+
+desc "cat system-release"
+task :release do
+  run "cat /etc/system-release"
+end
+
+desc "All tasks"
+task :all do
+  prereq
+  git_clone
+  install
+  release
+  facter
 end
 
