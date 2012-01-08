@@ -3,6 +3,8 @@ Sync
 ntpdate -u 172.16.1.5
 while true ; do uptime; sleep 1; done
 
+date --set="$(ssh user@server date)"
+
 
 Client
 -----

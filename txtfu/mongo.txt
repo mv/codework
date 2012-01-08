@@ -7,6 +7,9 @@ http://www.snailinaturtleneck.com/blog/2011/12/20/querying-for-timestamps-using-
 
 http://www.snailinaturtleneck.com/blog/2011/09/28/mms-the-mongo-monitoring-service/
 
+http://www.snailinaturtleneck.com/blog/2012/01/04/replica-set-internals-bootcamp-part-i-elections/
+
+
 http://www.10gen.com/presentations
 http://www.10gen.com/presentations/mongosv-2011/mongodb-and-aws
 AWS
