@@ -20,7 +20,8 @@ reserve_3year = 473
 
 on_demand_daily = on_demand_hourly * 24
 reserve_daily = reserve_hourly * 24
-x <- c(0, 365)
+# x <- c(0, 365)
+x <- c(0, 1365)
 y <- on_demand_daily * x
 
 # Calculate day of break-even point reserve vs on-demand rates
