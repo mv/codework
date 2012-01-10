@@ -7,10 +7,10 @@
 
 # Values taken from http://aws.amazon.com/ec2/pricing/
 # for an m1.large ("Large") instance
-on_demand_hourly = 0.115
-reserve_hourly = 0.04
-reserve_1year = 307
-reserve_3year = 473
+on_demand_hourly = 0.34
+reserve_hourly = 0.12
+reserve_1year = 910
+reserve_3year = 1400
 
 # quadruple extra large instances
 #on_demand_hourly = 1.60
