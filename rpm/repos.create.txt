@@ -1,0 +1,12 @@
+Creating a new repository
+=========================
+
+Create a new file: /etc/yum.repos.d/foo.repos
+
+    [foo]
+    name=Foo for RHEL/ CentOS $releasever - $basearch
+    baseurl=http://10.0.2.2/centos/$releasever/$basearch/
+    enabled=1
+    gpgcheck=1
+    gpgkey=http://10.0.2.2/RPM-GPG-KEY.txt
+
