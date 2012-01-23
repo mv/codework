@@ -1,0 +1,19 @@
+
+
+http://www.mysqludf.org/lib_mysqludf_json/index.php
+
+
+CREATE FUNCTION json_members RETURNS STRING SONAME 'lib_mysqludf_json.so';
+
+
+SELECT json_object(customer_id, first_name) FROM customer;
+
+## output in json:
+
+ +------------------------------------+
+ | customer                           |
+ +------------------------------------+
+ | {customer_id:1, first_name:"MARY"} |
+ +------------------------------------+
+
+
