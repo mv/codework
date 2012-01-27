@@ -1,0 +1,83 @@
+master:
+    show master status
+    # File: db04-bin.000068 # Position: 98 # Binlog_Do_DB: # Binlog_Ignore_DB:
+
+
+slave:
+    show slave status
+                 Slave_IO_State: Waiting FOR master TO send event
+                    Master_Host: 192.168.10.171
+                    Master_User: replicant
+                    Master_Port: 3306
+                  Connect_Retry: 60
+
+#IO Thread
+                Master_Log_File: db01-bin.003814
+            Read_Master_Log_Pos: 744615652
+
+                 Relay_Log_File: mysqld-relay-bin.000953
+                  Relay_Log_Pos: 744615788
+
+# http://www.mysqlperformanceblog.com/2008/07/07/how-show-slave-status-relates-to-change-master-to/
+#SQL Thread -> change master to
+          Relay_Master_Log_File: db01-bin.003814
+            Exec_Master_Log_Pos: 744615652
+
+http://dev.mysql.com/doc/refman/5.0/en/change-master-to.html
+
+    STOP SLAVE;
+    change master to
+        RELAY_MASTER_LOG_FILE= '',
+        EXEC_MASTER_LOG_POS= 1234
+        ;
+    START SLAVE;
+
+               Slave_IO_Running: Yes
+              Slave_SQL_Running: Yes
+                Replicate_Do_DB:
+            Replicate_Ignore_DB:
+             Replicate_Do_Table:
+         Replicate_Ignore_Table:
+        Replicate_Wild_Do_Table:
+    Replicate_Wild_Ignore_Table:
+                     Last_Errno: 0
+                     Last_Error:
+                   Skip_Counter: 0
+                Relay_Log_Space: 744615788
+                Until_Condition: None
+                 Until_Log_File:
+                  Until_Log_Pos: 0
+             Master_SSL_Allowed: No
+             Master_SSL_CA_File:
+             Master_SSL_CA_Path:
+                Master_SSL_Cert:
+              Master_SSL_Cipher:
+                 Master_SSL_Key:
+          Seconds_Behind_Master: 0
+
+
+Master:
+    Dump da base
+        --master-data .... > dump.sql
+    show master status
+
+Slave:
+    stop server
+        rm * from /var/log/mysql/ ???
+        comment replication params from my.cnf  ???
+    start server
+        drop database
+        create database
+        import dump
+    stop server
+        uncomment replication params
+    start server
+        change master to...... ;
+        start slave;
+
+
+http://serverfault.com/questions/17066/how-can-i-create-a-slave-replica-of-a-mysql-server-without-stopping-the-master
+http://dev.mysql.com/doc/refman/5.0/en/mysqldump.html#option_mysqldump_master-data
+
+
+http://www.techyouruniverse.com/software/mysql-replication-always-have-more-than-one-slave
