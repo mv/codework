@@ -1,0 +1,28 @@
+
+
+###
+### Converting table from latin1 to utf8
+###
+
+mysqldump --default-character-set=latin1 --skip-set-charset  DBNAME > DBNAME.sql
+mysql     --default-character-set=utf8   DBNAME < DBNAME.sql
+
+
+###
+### working inside mysql session
+###
+
+mysql
+sql> set names latin1;
+sql> select txt from tab1 where id=101;
+
+
+###
+## Converting in place
+### Ref:
+###     http://www.bluebox.net/news/2009/07/mysql_encoding
+###
+ALTER TABLE cc MODIFY cc.translated_address VARCHAR(200) CHARACTER SET latin1;
+ALTER TABLE cc MODIFY cc.translated_address BLOB;
+ALTER TABLE cc MODIFY cc.translated_address VARCHAR(200) CHARACTER SET utf8;
+
