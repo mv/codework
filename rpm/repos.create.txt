@@ -1,12 +1,35 @@
-Creating a new repository
-=========================
+Using repos
+===========
+    Ref: http://www.cyberciti.biz/tips/rhel5-fedora-core-add-new-yum-repository.html
 
 Create a new file: /etc/yum.repos.d/foo.repos
+    ________________________________________________________________________________
 
-    [foo]
-    name=Foo for RHEL/ CentOS $releasever - $basearch
-    baseurl=http://10.0.2.2/centos/$releasever/$basearch/
-    enabled=1
-    gpgcheck=1
-    gpgkey=http://10.0.2.2/RPM-GPG-KEY.txt
+        [foo]
+        name=Foo for RHEL/ CentOS $releasever - $basearch
+        baseurl=http://10.0.2.2/centos/$releasever/$basearch/
+        enabled=1
+        gpgcheck=1
+        gpgkey=http://10.0.2.2/RPM-GPG-KEY.txt
+    ________________________________________________________________________________
+
+    Where:
+        releasever:
+            5
+            5.6
+            5.7
+
+        basearch:
+            i386
+            x86_64
+
+Import gpg key:
+    rpm --import http://foo.nixcraft.com/RPM-GPG-KEY.txt
+
+
+Creating a new repository
+=========================
+    Ref: http://www.cyberciti.biz/tips/redhat-centos-fedora-linux-setup-repo.html
+
+Generate GPG key:
 
