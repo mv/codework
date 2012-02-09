@@ -1,0 +1,19 @@
+help: 03.7
+:help Q_cs
+:help quickref
+
+    zt      - center current line to the top
+    CTRL-B  - up one screen
+    CTRL-U  - up half-screen
+    CTRL-E  - up one line
+    zz      - center current line in center
+    CTRL-Y  - down one line
+    CTRL-D  - down half-screen
+    CTRL-F  - down one screen
+    zb      - center current line to the bottom
+
+    CTRL-E/Y - one line
+    CTRL-U/D - half screen
+    CTRL-B/F - one screen
+
+

@@ -1,311 +1,312 @@
 
 Files
 -----
-	:q!
-	:wq!
-	:x
-	ZZ
-	:e
-	:e! - ignore all edits, reverts do last saved state
+        :q!
+        :wq!
+        :x
+        ZZ
+        :e
+        :e! - ignore all edits, reverts do last saved state
 
-	:w %.new	- % = current filename
-	:w #.new	- # = previous filename
+        :w %.new        - % = current filename
+        :w #.new        - # = previous filename
 
 Sessions/Projects
 -----------------
-	:mksession ~/sessions/proj.vim	- creates proj.vim
-	:mksession		- creates Session.vim
-	:mksession!		- overwrittes Session.vim
-	$ vim -S ~/sessions/proj.vim
+        :mksession ~/sessions/proj.vim  - creates proj.vim
+        :mksession              - creates Session.vim
+        :mksession!             - overwrittes Session.vim
+        $ vim -S ~/sessions/proj.vim
 
 Shell
 -----
-	:!ls
-	:!df
-	:!rm /tmp/1.txt
-	:sh
-	ctrl+Z
+        :!ls
+        :!df
+        :!rm /tmp/1.txt
+        :sh
+        ctrl+Z
 
 Moving
 ------
 by word
-	w forward by word, punctuation include
-	W forward by word, no punctuation
-	b backward by word, punctuation include
-	B backward by word, no punctuation
-	e end of next word
-	E end of next word, no punctuation
+        w forward by word, punctuation include
+        W forward by word, no punctuation
+        b backward by word, punctuation include
+        B backward by word, no punctuation
+        e end of next word
+        E end of next word, no punctuation
 
 by line
-	  G - end of file
- 	 1G - line 1
-	40G - line 40
-	  - - begin of previous line
-	  + - begin of next line
+          G - end of file
+         1G - line 1
+        40G - line 40
+          - - begin of previous line
+          + - begin of next line
 
 on the current line
-	0    - begin of line
-	$    - end of line
-	^    - first non blank char
-	<n>| - go to column n
+        0    - begin of line
+        $    - end of line
+        ^    - first non blank char
+        <n>| - go to column n
 
 by block
-	( )   - sentence, phrase
-	{ }   - paragraph
-	[[ ]] - section (begin/end of file?)
+        ( )   - sentence, phrase
+        { }   - paragraph
+        [[ ]] - section (begin/end of file?)
 
 Screen Moves
 ------------
-	^B - pg up
-	^F - pg down
-	^D - 1/2 down
-	^U - 1/2 up
+        ^B - pg up
+        ^U - 1/2 up
+        zz - center current line to the middle of screen
+        ^D - 1/2 down
+        ^F - pg down
 
-	z<enter> - current line to the top
-	z.       - current line to the middle of screen
-	z-	 - current line to the bottom
+        z<enter> - current line to the top
+        z.       - current line to the middle of screen
+        z-       - current line to the bottom
 
-	<n>z<enter> - put line n to the top of screen
-	<n>z.       - put line n to the middle of screen
-	<n>z-       - put line n to the bottom of screen
+        <n>z<enter> - put line n to the top of screen
+        <n>z.       - put line n to the middle of screen
+        <n>z-       - put line n to the bottom of screen
 
-	H - Home of the screen
-	M - Middle of the screen
-	L - Last line of the screen
+        H - Home of the screen
+        M - Middle of the screen
+        L - Last line of the screen
 
-	<n>H - n line below top of the current screen
-	<n>L - n line above last of the current screen
+        <n>H - n line below top of the current screen
+        <n>L - n line above last of the current screen
 
-	:ctrl+f - history window
+        :ctrl+f - history window
 
 Mark Moves
 ------------
-	mx	- mark current line in bookmark x
-	'x	- moves back to bookmark x
-	`x	- moves back to line of bookmark x
-	''	- previous position
-	``	- previous pos
+        mx      - mark current line in bookmark x
+        'x      - moves back to bookmark x
+        `x      - moves back to line of bookmark x
+        ''      - previous position
+        ``      - previous pos
 
 Search Moves
 ------------
-	/search	- search forward
-	?search - search backward
-	n	- next search
-	N	- prev search
+        /search - search forward
+        ?search - search backward
+        n       - next search
+        N       - prev search
 
-	d/search - delete until "search" matches
-	d?search - delete until "search" matches backwards
+        d/search - delete until "search" matches
+        d?search - delete until "search" matches backwards
 
-	2c/search - replace until 2nd "search" match
-	2c?search - replace until 2nd "search" match backwards
+        2c/search - replace until 2nd "search" match
+        2c?search - replace until 2nd "search" match backwards
 
-	f<c> - find forward char on current line
-	F<C> - find backwards <char> on current line
-	t T  - find and move before <char>
-	; ,  - repeat find
+        f<c> - find forward char on current line
+        F<C> - find backwards <char> on current line
+        t T  - find and move before <char>
+        ; ,  - repeat find
 
-	2f<c> - find 2nd match
+        2f<c> - find 2nd match
 
-	df<c> - delete until find
-	d2f<c> - delete until 2nd find
+        df<c> - delete until find
+        d2f<c> - delete until 2nd find
 
 Simple Edits
 ------------
-	c<>
-	cw
-	c2b
-	c$ C
-	c0
-	cc S	- replace entire line
-	c0+C 	- replace entire line
+        c<>
+        cw
+        c2b
+        c$ C
+        c0
+        cc S    - replace entire line
+        c0+C    - replace entire line
 
-	r	- replace 1 char by 1 char
-	R	- replace by overwrite
-	s	- replace 1 char by n typed char
-	S	- replace entire line
+        r       - replace 1 char by 1 char
+        R       - replace by overwrite
+        s       - replace 1 char by n typed char
+        S       - replace entire line
 
-	d<>
-	D d$	- delete to the end of line
-	dd	- delete line
+        d<>
+        D d$    - delete to the end of line
+        dd      - delete line
 
-	x	- delete char
-	X	- backspace delete char
+        x       - delete char
+        X       - backspace delete char
 
-	i
-	a
-	I	- insert at the beginning of line
-	A	- append to the end of line
-	p
-	P
+        i
+        a
+        I       - insert at the beginning of line
+        A       - append to the end of line
+        p
+        P
 
-	y<>	- yank <obj>
-	yy	- yank entire line
+        y<>     - yank <obj>
+        yy      - yank entire line
 
-	u	- undo 1
-	U	- undo all changes to the current line
-	ctrl+R	- redo changes
+        u       - undo 1
+        U       - undo all changes to the current line
+        ctrl+R  - redo changes
 
-	.	- repeat last edit command
+        .       - repeat last edit command
 
-	J	- join lines
+        J       - join lines
 
 More Edits
 ----------
-	Change 	Delete 	Copy 	From cursor to...
-	------	------	----	-----------------
-	cH 	dH 	yH 	Top of screen
-	cL 	dL 	yL 	Bottom of screen
-	c+ 	d+ 	y+ 	Next line
-	c5| 	d5| 	y5| 	Column 5 of current line
-	2c) 	2d) 	2y) 	Second sentence following
-	c{ 	d{ 	y{ 	Previous paragraph
-	c/patt 	d/patt 	y/patt	Pattern
-	cn 	dn 	yn 	Next pattern
-	cG 	dG 	yG 	End of file
-	c13G 	d13G 	y13G 	Line number 13
+        Change  Delete  Copy    From cursor to...
+        ------  ------  ----    -----------------
+        cH      dH      yH      Top of screen
+        cL      dL      yL      Bottom of screen
+        c+      d+      y+      Next line
+        c5|     d5|     y5|     Column 5 of current line
+        2c)     2d)     2y)     Second sentence following
+        c{      d{      y{      Previous paragraph
+        c/patt  d/patt  y/patt  Pattern
+        cn      dn      yn      Next pattern
+        cG      dG      yG      End of file
+        c13G    d13G    y13G    Line number 13
 
 
 Buffers
 -------
-	"9p	- recover last 9 deletion
-	"8p	- recover last 8 deletion
-	"1pu.u. - cycle through all 9 del buffers
+        "9p     - recover last 9 deletion
+        "8p     - recover last 8 deletion
+        "1pu.u. - cycle through all 9 del buffers
 
-	"ayy	- yank 1 line into buffer a
-	"b7yy	- yank 7 lines into buffer b
-	"c5dd	- delete 5 lines and save into buffer c
-	"zd)	- delete to the end of sentence and
-		  save into buffer z
-	"Zyy	- Add to buffer z
+        "ayy    - yank 1 line into buffer a
+        "b7yy   - yank 7 lines into buffer b
+        "c5dd   - delete 5 lines and save into buffer c
+        "zd)    - delete to the end of sentence and
+                  save into buffer z
+        "Zyy    - Add to buffer z
 
-	"by4w	- copy 4 words to buffer b
+        "by4w   - copy 4 words to buffer b
 
 Command Line
 ------------
-	vi +n file	- open at line n
-	vi + file	- open at last line
-	vi +/patt file	- open at first ocurrence of 'patt'
+        vi +n file      - open at line n
+        vi + file       - open at last line
+        vi +/patt file  - open at first ocurrence of 'patt'
 
-	vi file1 file2 file3
-		:ar	- show command argumens
-		:n	- edit next file
-		:rew	- goes to the first
-		:last	- goes to the last
+        vi file1 file2 file3
+                :ar     - show command argumens
+                :n      - edit next file
+                :rew    - goes to the first
+                :last   - goes to the last
 
 ex commands
 -----------
-	:=	- number of lines
-	:=.	- current line number
-	:patt/=	- line of first occurrence of /patt/
+        :=      - number of lines
+        :=.     - current line number
+        :patt/= - line of first occurrence of /patt/
 
-	:3,18d	- delete from line 3 to 18
-	:20,40m5 - move lines 20 to 40 to follow line 5
-	:5,90co2 - copy lines 5 to 90 to follow line 2
+        :3,18d  - delete from line 3 to 18
+        :20,40m5 - move lines 20 to 40 to follow line 5
+        :5,90co2 - copy lines 5 to 90 to follow line 2
 
-	:%co$	- copy all lines to the end of file (dup all file)
-	:%d	- delete all lines
-	:.,$d	- delete from current line to end of file
-	:20,.m$ - move line 20 to current to follow at the end of line
+        :%co$   - copy all lines to the end of file (dup all file)
+        :%d     - delete all lines
+        :.,$d   - delete from current line to end of file
+        :20,.m$ - move line 20 to current to follow at the end of line
 
-	:.,+6co$ - copy from current line to next 6 and put them
-		   to the end of file
+        :.,+6co$ - copy from current line to next 6 and put them
+                   to the end of file
 
-	:-,+co$	- copy 3 lines to the end of line
+        :-,+co$ - copy 3 lines to the end of line
 
-	:/patt/d - delete line with /patt/
-	:/pat1/,/pat2/d - delete from pat1 to pat2
-	:.,/patt/m23	- move from current line to /patt/ and
-			  put after line 23.
+        :/patt/d - delete line with /patt/
+        :/pat1/,/pat2/d - delete from pat1 to pat2
+        :.,/patt/m23    - move from current line to /patt/ and
+                          put after line 23.
 
-	:d/patt	- delete from current position until patt
+        :d/patt - delete from current position until patt
 
-	:6,80g/patt - search for patt between lines 6 and 80
+        :6,80g/patt - search for patt between lines 6 and 80
 
-	:10,20w /tmp/1.txt - save line 10 to 20 into newfile
-	:10,$w newfile	   - save from line 10 to the end into newfile
-	:10,$w >> newfile  - append to newfile
+        :10,20w /tmp/1.txt - save line 10 to 20 into newfile
+        :10,$w newfile     - save from line 10 to the end into newfile
+        :10,$w >> newfile  - append to newfile
 
-	:r /tmp/1.txt	- insert 1.txt into current line
-	:$r 1.txt	- insert 1.txt into the end of file
-	:0r ! ls	- insert output of `ls` at the begin of file
-	:10r ! ls	- insert after line 10 output of `ls`
+        :r /tmp/1.txt   - insert 1.txt into current line
+        :$r 1.txt       - insert 1.txt into the end of file
+        :0r ! ls        - insert output of `ls` at the begin of file
+        :10r ! ls       - insert after line 10 output of `ls`
 
-	:10,20!sort	- run lines 10 to 20 through sort
+        :10,20!sort     - run lines 10 to 20 through sort
 
-	:10,20ya a	- put lines 10 to 20 in buffer a
-	:pu a		- paste from buffer a
+        :10,20ya a      - put lines 10 to 20 in buffer a
+        :pu a           - paste from buffer a
 
 
 Replacement
 -----------
-	:s/old/new/	- replace on the current line
-	:s/old/new/g	- replace all ocurrences on the current line
-	:%s/old/new/gc	- replace in the entire file, with confirmation
-	:g/patt/s/old/new/g - search for patt, executing s/old/new
+        :s/old/new/     - replace on the current line
+        :s/old/new/g    - replace all ocurrences on the current line
+        :%s/old/new/gc  - replace in the entire file, with confirmation
+        :g/patt/s/old/new/g - search for patt, executing s/old/new
 
-	:s &		- repeats last substitution
-	&		- search string, matched text
-	~		- last replacement used
+        :s &            - repeats last substitution
+        &               - search string, matched text
+        ~               - last replacement used
 
 
 Code Programming
 ----------------
-	set shiftwidth=4 -
-	<<		- shift line left
-	>>		- shift line right
-	7>>		- shift block right
-	ctrl+t		- indent right
-	ctrl+d		- indent left
-	^ ctrl+d	- cursor to position 0, resume indent on next line
-	0 ctrl+d	- cursor to position 0, resets indentation
+        set shiftwidth=4 -
+        <<              - shift line left
+        >>              - shift line right
+        7>>             - shift block right
+        ctrl+t          - indent right
+        ctrl+d          - indent left
+        ^ ctrl+d        - cursor to position 0, resume indent on next line
+        0 ctrl+d        - cursor to position 0, resets indentation
 
-	%		- highlight matching () [] {}
-	ctrl]		- search tag for current word
+        %               - highlight matching () [] {}
+        ctrl]           - search tag for current word
 
 
 Windows
 -------
-	ctrl+w+
-		s 	- new split window
-		v	- new split vertical
-		w	- next window
-		hjkl	- move to ...
-		r/R	- exchange by row
-		x/X	- exchange
-		-/+/=/</>/|	- resize
-		q	- quit
-		o	- only: close all others
-	:new
-	:vnew
-	:split file	- file in a new window
-	:vsplit file	-
-	:resize +4	-
-	:resize -10	-
+        ctrl+w+
+                s       - new split window
+                v       - new split vertical
+                w       - next window
+                hjkl    - move to ...
+                r/R     - exchange by row
+                x/X     - exchange
+                -/+/=/</>/|     - resize
+                q       - quit
+                o       - only: close all others
+        :new
+        :vnew
+        :split file     - file in a new window
+        :vsplit file    -
+        :resize +4      -
+        :resize -10     -
 
-	:ls
-	:files
-	:buffers
+        :ls
+        :files
+        :buffers
 
-	:tabnew [file]
-	:tabclose
-	:tabonly
+        :tabnew [file]
+        :tabclose
+        :tabonly
 
-	:hide	- close window and keep file on buffer
+        :hide   - close window and keep file on buffer
 
-	1,4bd	- delete buffers 1 to 4
-	bd 1 4	- delete buffers 1 and 4
-	1,4bun	- unload
-	bun 1 4	- unload
+        1,4bd   - delete buffers 1 to 4
+        bd 1 4  - delete buffers 1 and 4
+        1,4bun  - unload
+        bun 1 4 - unload
 
 Fold
 ----
-	:10,20 fold	- fold between lines 10 and 20
-	zf%		- fold until next }
+        :10,20 fold     - fold between lines 10 and 20
+        zf%             - fold until next }
 
 Marks
 --------
-	:marks
-	:w
+        :marks
+        :w
 
 autocmd BufRead,BufNewFile *.html set shiftwidth=2
 autocmd BufRead,BufNewFile *.c,*.h set shiftwidth=4
