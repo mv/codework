@@ -1,0 +1,75 @@
+
+
+# RAID-0: Stripe
+mdadm --create /dev/md0 -v --level=stripe --raid-devices=3 /dev/sda2 /dev/sdb2 /dev/sdc2
+mdadm --create /dev/md0 -v --level=raid0  --raid-devices=4 /dev/sd[b-e]1
+mdadm --create /dev/md0 -v --level=0      --raid-devices=4 /dev/sdh{1,2,3,4}
+
+# RAID-1: Mirror
+mdadm --create /dev/md0 --level=mirror --raid-devices=2 /dev/sda1 /dev/sdb1
+mdadm --create /dev/md0 --level=raid1  --raid-devices=2 /dev/sda1 /dev/sdb1
+mdadm --create /dev/md0 --level=1      --raid-devices=2 /dev/sda1 /dev/sdb1
+
+# RAID-5
+mdadm --create /dev/md0 --level=raid5  --raid-devices=3 /dev/sda2 /dev/sdb2 /dev/sdc2
+mdadm --create /dev/md0 --level=5      --raid-devices=3 /dev/sda2 /dev/sdb2 /dev/sdc2
+
+
+###
+### Adding a device
+###
+mdadm --add  /dev/md0 /dev/sdd2
+mdadm --grow /dev/md0 --raid-devices=4
+
+###
+### Removing a device
+###
+mdadm /dev/md0 --fail /dev/sda1 --remove /dev/sda1
+
+###
+### Removing an array
+###
+mdadm --stop   /dev/md0  # to halt the array
+mdadm --remove /dev/md0  # to remove the array
+mdadm --zero-superblock /dev/sd[abc]1  # delete the superblock from all drives in the array
+(edit /etc/mdadm/mdamd.conf to delete any rows related to deleted array)
+
+###
+### status
+###
+      cat /proc/mdstat
+watch cat /proc/mdstat
+mdadm --detail /dev/md0
+
+###
+### booting
+###
+mdadm --detail --scan >> /etc/mdadm.conf
+mdadm -Es >> /etc/mdadm.conf
+
+
+###
+### /etc/mdadm.conf
+###
+
+DEVICE /dev/sdh1 /dev/sdh2 /dev/sdh3 /dev/sdh4
+DEVICE partitions
+ARRAY /dev/md0 devices=/dev/sdh1,/dev/sdh2,/dev/sdh3,/dev/sdh4
+
+
+VBoxManage createhd --filename /VMachine/volumes/vol01.vmdk --size 20480 --format VMDK --variant Standard
+VBoxManage createhd --filename /VMachine/volumes/vol02.vmdk --size 20480 --format VMDK --variant Standard
+VBoxManage createhd --filename /VMachine/volumes/vol03.vmdk --size 20480 --format VMDK --variant Standard
+VBoxManage createhd --filename /VMachine/volumes/vol04.vmdk --size 20480 --format VMDK --variant Standard
+
+UUID: 6a347156-8eb1-4142-8356-ae8d138cf5b7
+UUID: 73de6296-3f3c-4abc-a45c-5d32709399c7
+UUID: 4796944d-8e24-4d53-846a-a8eedeb8d44d
+UUID: b5d42d6f-d540-4b11-9c00-b809b1980605
+
+VBoxManage storageattach ec2a --storagectl "SATA Controller" --port 1 --type hdd --medium /VMachine/volumes/vol01.vmdk
+VBoxManage storageattach ec2a --storagectl "SATA Controller" --port 2 --type hdd --medium /VMachine/volumes/vol02.vmdk
+VBoxManage storageattach ec2a --storagectl "SATA Controller" --port 3 --type hdd --medium /VMachine/volumes/vol03.vmdk
+VBoxManage storageattach ec2a --storagectl "SATA Controller" --port 4 --type hdd --medium /VMachine/volumes/vol04.vmdk
+
+
