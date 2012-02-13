@@ -193,6 +193,10 @@ Usage
     git checkout <tag> &&
     git branch new-branch           # create a branch from tag
 
+                                    # clone a remote branch
+    git fetch origin branch_i_want:refs/remotes/branch_i_want
+    git checkout -b branc_hi_want --track origin/branch_i_want
+
     git branch -d new-branch        # remove local branch
     git branch -D new-branch        # remove local branch, forced
     git push origin :new-branch     # remove remote branch from origin
