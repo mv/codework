@@ -10,6 +10,7 @@ git filter-branch --index-filter 'git rm -r --cached --ignore-unmatch demo'
 
 
 # purging from this commit onwards
-git filter-branch --index-filter 'git rm --cached --ignore-unmatch
+git filter-branch --index-filter 'git rm --cached --ignore-unmatch'
+
 
 
