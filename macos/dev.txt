@@ -1,0 +1,16 @@
+
+# Remove XCode:
+sudo /Developer/Library/uninstall-devtools –mode=all
+
+# GCC only:
+https://github.com/downloads/kennethreitz/osx-gcc-installer/GCC-10.6.pkg
+https://github.com/downloads/kennethreitz/osx-gcc-installer/GCC-10.7-v2.pkg
+
+
+# Homebrew
+/usr/bin/ruby -e "$(curl -fsSL https://raw.github.com/gist/323731)"
+
+# RVM
+sudo bash -s stable < <(curl -sk https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
+
+

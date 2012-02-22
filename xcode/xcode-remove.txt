@@ -1,0 +1,8 @@
+
+# Remove XCode:
+sudo /Developer/Library/uninstall-devtools –mode=all
+
+# GCC only:
+https://github.com/downloads/kennethreitz/osx-gcc-installer/GCC-10.6.pkg
+https://github.com/downloads/kennethreitz/osx-gcc-installer/GCC-10.7-v2.pkg
+

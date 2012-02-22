@@ -1,0 +1,24 @@
+
+RVM single-user:
+----------------
+
+         bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
+
+    ## ~/.bashrc
+    [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
+
+
+RVM multi-user: (system wide install)
+-------------------------------------
+
+    sudo bash -s stable < <(curl -s  https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
+    sudo bash -s stable < <(curl -sk https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
+
+    ## /etc/profile.d/rvm.sh
+
+
+Debugging:
+----------
+         bash -s stable -- --trace < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
+    sudo bash -s stable -- --trace < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
+
