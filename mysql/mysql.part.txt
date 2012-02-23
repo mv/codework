@@ -1,0 +1,176 @@
+select table_schema
+     , table_name
+     , engine
+  from tables
+     ;
+
+select table_schema,engine,count(1)
+  from information_schema.tables
+ group by table_schema,engine
+ order by 1,2
+     ;
+
+OLAP
+    http://www.mysqlperformanceblog.com/2010/07/12/intro-to-olap/
+    http://www.mysqlperformanceblog.com/2010/07/15/data-mart-or-data-warehouse/
+    http://www.mysqlperformanceblog.com/2008/12/22/high-performance-click-analysis-with-mysql/
+    http://en.wikipedia.org/wiki/Slowly_changing_dimension
+    http://www.mysqlperformanceblog.com/2008/08/12/beware-of-myisam-key-cache-mutex-contention/
+
+Modeling
+    char/varchar
+    primary key (day,ad)
+
+Memcache
+    memcache-top --instances localhost:11211,localhost:11222 --sleep 1
+    http://dealnews.com/developers/cacti/memcached.html
+    http://www.pablowe.net/2008/07/memcached/
+    http://www.mysqlperformanceblog.com/2009/07/24/maatkit-now-supports-memcached/
+
+
+Mysql x MariaDB
+    - innodb
+    - xtradb
+    - partition
+    - statistics, mseconds, performance, patches
+
+Stress teste
+    - Mysql 5.5 MyIsam
+    - Mysql 5.5 MyIsam + patches
+    - Mysql 5.5 Innodb (Innodb v1.1.1)
+    - MariaDB Aria
+    - MariaDB XtraDB (~ Innodb 1.0.8)
+    - Percona 5.1.47 XtraDB (~ Innodb 1.0.8)
+
+Performance
+    - http://code.google.com/p/mysql-cacti-templates/wiki/MySQLTemplates
+    - http://code.google.com/p/mysql-cacti-templates/wiki/CreatingGraphs
+    - http://www.faemalia.net/mysqlUtils/
+    - http://www.mysqlperformanceblog.com/2009/12/04/effect-of-adaptive_flushing/#more-1798
+    - http://blogs.secondlife.com/community/technology/blog/2010/01/11/diary-of-a-paranoid-mysql-upgrade
+    - http://www.mysqlperformanceblog.com/2010/02/09/introducing-percona-patches-for-5-1/
+    - http://www.percona.com/docs/wiki/benchmark:pbxt:tpcc:start
+    - http://mysqlha.blogspot.com/2009/03/pbxt-is-fast-no-kidding.html
+    - http://mysqlha.blogspot.com/2010/03/fast-reads-or-fast-scans.html
+
+Downloads
+    http://www.percona.com/downloads/
+    http://ourdelta.org/patches
+    http://code.google.com/p/google-mysql-tools/
+
+Benchmark
+    http://www.mysqlperformanceblog.com/2006/08/18/sysbench-benchmark-tool/
+    http://mysqlha.blogspot.com/2009/02/update-for-sysbench.html
+    http://www.mysqlperformanceblog.com/2008/03/05/evaluating-io-subsystem-performance-for-mysql-needs/
+    http://poormansprofiler.org/
+    http://www.maatkit.org/
+
+Patches
+    http://www.mysqlperformanceblog.com/2008/09/12/googles-user_statistics-v2-port-and-changes/
+    http://www.percona.com/docs/wiki/patches:userstatv2
+    http://www.percona.com/docs/wiki/patches:innodb_io_patches
+
+    https://launchpad.net/percona-patches
+
+Percona Repos
+    http://www.percona.com/docs/wiki/release:start
+
+Master-Master
+    http://www.mysqlperformanceblog.com/2007/04/05/mysql-master-master-replication-manager-released/
+    http://scale-out-blog.blogspot.com/2009/02/simple-ha-with-postgresql-point-in-time.html
+
+http://dev.mysql.com/doc/refman/5.5/en/news-5-5-x.html
+http://dev.mysql.com/doc/refman/5.5/en/news-5-5-0.html
+    - tcmalloc - Google Malloc
+
+    [mysqld_safe]
+    # malloc-lib=tcmalloc
+    # malloc-lib=/opt/lib/libtcmalloc_minimal.so
+
+    - replication heartbeat to slave servers
+
+    MASTER_HEARTBEAT_PERIOD = interval
+    Slave_heartbeat_period
+    Slave_received_heartbeats
+
+    - partition by column list
+
+
+http://dev.mysql.com/doc/refman/5.5/en/news-5-5-1.html
+    - partition on timestamp
+
+    CREATE TABLE t (c TIMESTAMP)
+    PARTITION BY RANGE ( UNIX_TIMESTAMP(c) ) (
+        PARTITION p0 VALUES LESS THAN ( UNIX_TIMESTAMP('2010-01-01') ),
+        PARTITION p1 VALUES LESS THAN ( UNIX_TIMESTAMP('2010-02-01') ),
+        PARTITION p2 VALUES LESS THAN (MAXVALUE)
+    );
+
+    sql> select unix_timestamp('2010-01-01');
+    +------------------------------+
+    | unix_timestamp('2010-01-01') |
+    +------------------------------+
+    |                   1262311200 |
+    +------------------------------+
+    1 row in set (0.00 sec)
+
+    sh: mysql -h localhost -p mysql.sock -u root mysql
+    sql> select unix_timestamp('2010-01-01 13:00:00');
+    +---------------------------------------+
+    | unix_timestamp('2010-01-01 13:00:00') |
+    +---------------------------------------+
+    |                            1262358000 |
+    +---------------------------------------+
+    1 row in set (0.00 sec)
+
+
+    sql> select from_unixtime(946681200);
+    +--------------------------+
+    | from_unixtime(946681200) |
+    +--------------------------+
+    | 1999-12-31 21:00:00      |
+    +--------------------------+
+    1 row in set (0.00 sec)
+
+    sh: mysql -h localhost -p mysql.sock -u root mysql
+    sql> select from_unixtime(946681200);
+    +--------------------------+
+    | from_unixtime(946681200) |
+    +--------------------------+
+    | 1999-12-31 21:00:00      |
+    +--------------------------+
+    1 row in set (0.00 sec)
+
+http://dev.mysql.com/doc/refman/5.5/en/news-5-5-2.html
+
+    - bugs
+
+http://dev.mysql.com/doc/refman/5.5/en/news-5-5-3.html
+
+    - performance_schema
+    - tablespace info in information_schema
+
+http://dev.mysql.com/doc/refman/5.5/en/news-5-5-4.html
+
+    - innodb + aio
+    - innodb 1.1 => multiple rollback segments
+
+http://dev.mysql.com/doc/refman/5.5/en/news-5-5-5.html
+
+    - innodb 1.1.1
+    - innodb as default storage engine:
+        # default-storage-engine=InnoDB
+        # default-storage-engine=MyISAM
+
+    - innodb_file_per_table default ON
+
+    detail -> aggregations
+      +-> detail_history (compressed)
+
+    de_   -> ag_
+      +-> dh_
+
+http://www.amazon.com/Web-Operations-Keeping-Data-Time/dp/1449377440?tag=xaprb-20
+http://www.amazon.com/Art-Capacity-Planning-Scaling-Resources/dp/0596518579/ref=pd_bxgy_b_img_b
+http://www.amazon.com/Art-Scalability-Architecture-Organizations-Enterprise/dp/0137030428/ref=pd_bxgy_b_img_c
+http://www.amazon.com/Complete-Web-Monitoring-Performance-Communities/dp/0596155131/ref=pd_sim_b_4
