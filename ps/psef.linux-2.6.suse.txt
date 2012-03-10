@@ -1,0 +1,53 @@
+UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 Feb24 ?        00:00:00 init [3]
+root         2     1  0 Feb24 ?        00:00:00 [ksoftirqd/0]
+root         3     1  0 Feb24 ?        00:00:00 [events/0]
+root         4     1  0 Feb24 ?        00:00:00 [khelper]
+root         5     1  0 Feb24 ?        00:00:00 [kthread]
+root        11     5  0 Feb24 ?        00:00:00 [kacpid]
+root       460     5  0 Feb24 ?        00:00:00 [kblockd/0]
+root       495     5  0 Feb24 ?        00:00:00 [pdflush]
+root       496     5  0 Feb24 ?        00:00:00 [pdflush]
+root       498     5  0 Feb24 ?        00:00:00 [aio/0]
+root       497     1  0 Feb24 ?        00:00:00 [kswapd0]
+root      1088     5  0 Feb24 ?        00:00:00 [kseriod]
+root      1213     1  0 Feb24 ?        00:00:00 [scsi_eh_0]
+root      1478     5  0 Feb24 ?        00:00:00 [reiserfs/0]
+root      2469     1  0 Feb24 ?        00:00:00 [kjournald]
+root      2523     1  0 Feb24 ?        00:00:00 /sbin/udevd --daemon --stop-exec
+root      3197     5  0 Feb24 ?        00:00:00 [khubd]
+100       3305     1  0 Feb24 ?        00:00:00 /usr/bin/dbus-daemon --system
+root      3870     1  0 Feb24 ?        00:00:00 /sbin/resmgrd
+mdnsd     4774     1  0 Feb24 ?        00:00:00 /usr/sbin/mdnsd -f /etc/nss_mdns
+root      4787     1  0 Feb24 ?        00:00:05 /opt/gnome/bin/netdaemon
+root      4794     1  0 Feb24 ?        00:00:00 /sbin/syslog-ng
+root      4797     1  0 Feb24 ?        00:00:00 /sbin/klogd -c 1 -x -x
+nobody    4823     1  0 Feb24 ?        00:00:00 /sbin/portmap
+root      4972     1  0 Feb24 ?        00:00:00 /usr/sbin/acpid
+lp        5094     1  0 Feb24 ?        00:00:00 /usr/sbin/cupsd
+root      5138     1  0 Feb24 ?        00:00:00 /usr/sbin/nscd
+root      5221     1  0 Feb24 ?        00:00:00 /usr/lib/postfix/master
+postfix   5265  5221  0 Feb24 ?        00:00:00 qmgr -l -t fifo -u
+root      5318     1  0 Feb24 ?        00:00:00 /usr/sbin/cron
+root      5398     1  0 Feb24 ?        00:00:01 /usr/sbin/hald --daemon=yes --re
+root      5401     1  0 Feb24 ?        00:00:00 /usr/sbin/sshd -o PidFile=/var/r
+root      5402     1  0 Feb24 ?        00:00:00 /usr/sbin/smbd -D -s /etc/samba/
+root      5409     1  0 Feb24 ?        00:00:00 /usr/sbin/xinetd
+root      5452  5402  0 Feb24 ?        00:00:00 /usr/sbin/smbd -D -s /etc/samba/
+root      5465  5398  0 Feb24 ?        00:00:00 hald-addon-acpi
+root      5502     1  0 Feb24 ?        00:00:00 /usr/sbin/powersaved -d -f /var/
+root      5505     1  0 Feb24 tty1     00:00:00 /sbin/mingetty --noclear tty1
+root      5506     1  0 Feb24 tty2     00:00:00 /sbin/mingetty tty2
+root      5507     1  0 Feb24 tty3     00:00:00 /sbin/mingetty tty3
+root      5508     1  0 Feb24 tty4     00:00:00 /sbin/mingetty tty4
+root      5509     1  0 Feb24 tty5     00:00:00 /sbin/mingetty tty5
+root      5510     1  0 Feb24 tty6     00:00:00 /sbin/mingetty tty6
+root      5593  5398  0 Feb24 ?        00:00:00 hald-addon-storage
+postfix  23424  5221  0 02:17 ?        00:00:00 pickup -l -t fifo -u
+root      7736  5401  0 17:34 ?        00:00:00 sshd: marcus [priv]
+marcus    7742  7736  0 17:34 ?        00:00:00 sshd: marcus@pts/0
+marcus    7744  7742  0 17:34 pts/0    00:00:00 -bash
+root      7782  5401  0 17:37 ?        00:00:00 sshd: marcus [priv]
+marcus    7785  7782  0 17:37 ?        00:00:00 sshd: marcus@pts/1
+marcus    7786  7785  0 17:37 pts/1    00:00:00 -bash
+marcus    7815  7786  0 17:37 pts/1    00:00:00 ps -ef

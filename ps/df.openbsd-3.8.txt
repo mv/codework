@@ -1,0 +1,33 @@
+$ df
+Filesystem  512-blocks      Used     Avail Capacity  Mounted on
+/dev/wd0a      1003164     92520    860488    10%    /
+/dev/wd0e     10319276   2793020   7010296    28%    /export
+/dev/wd0d     20637580   4209444  15396260    21%    /usr
+/dev/wd0f      6514876     67804   6121332     1%    /var
+/dev/wd1i     19228232        40  18251448     0%    /mnt/hdc1
+/dev/wd1j     19228296        40  18251504     0%    /mnt/hdc2
+/dev/wd1k     19243760    310736  17955472     2%    /mnt/hdc3
+
+
+marcus@bashar:~
+$ df -k
+Filesystem  1K-blocks      Used     Avail Capacity  Mounted on
+/dev/wd0a      501582     46260    430244    10%    /
+/dev/wd0e     5159638   1396510   3505148    28%    /export
+/dev/wd0d    10318790   2104722   7698130    21%    /usr
+/dev/wd0f     3257438     33902   3060666     1%    /var
+/dev/wd1i     9614116        20   9125724     0%    /mnt/hdc1
+/dev/wd1j     9614148        20   9125752     0%    /mnt/hdc2
+/dev/wd1k     9621880    155368   8977736     2%    /mnt/hdc3
+
+
+marcus@bashar:~
+$ df -h
+Filesystem     Size    Used   Avail Capacity  Mounted on
+/dev/wd0a      490M   45.2M    420M    10%    /
+/dev/wd0e      4.9G    1.3G    3.3G    28%    /export
+/dev/wd0d      9.8G    2.0G    7.3G    21%    /usr
+/dev/wd0f      3.1G   33.1M    2.9G     1%    /var
+/dev/wd1i      9.2G   20.0K    8.7G     0%    /mnt/hdc1
+/dev/wd1j      9.2G   20.0K    8.7G     0%    /mnt/hdc2
+/dev/wd1k      9.2G    152M    8.6G     2%    /mnt/hdc3

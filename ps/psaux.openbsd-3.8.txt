@@ -1,0 +1,50 @@
+USER       PID %CPU %MEM   VSZ   RSS TT   STAT STARTED       TIME COMMAND
+root     26467  1.6  1.1  3236  2152 ??  Ss     5:34PM    0:00.33 sshd: marcus
+root         1  0.0  0.2   460   332 ??  Is     4Jan06    0:00.66 /sbin/init
+root     26489  0.0  0.3   360   512 ??  Is     4Jan06    0:00.12 syslogd: [pri
+_syslogd 13878  0.0  0.3   388   536 ??  S      4Jan06    0:25.35 syslogd -a /v
+root     15504  0.0  0.2   544   360 ??  Is     4Jan06    0:00.01 pflogd: [priv
+_pflogd  28808  0.0  0.1   612   260 ??  S      4Jan06    3:53.98 pflogd: [runn
+root      4371  0.0  0.3   420   556 ??  Is     4Jan06    0:00.09 inetd
+root      1137  0.0  0.7  1044  1280 ??  Ss     4Jan06    5:37.43 sendmail: acc
+root     14933  0.0  0.6   680  1132 ??  Ss     4Jan06    1:34.26 /usr/sbin/ssh
+root      2218  0.0  0.4   592   692 ??  Is     4Jan06    0:18.97 cron
+root     30157  0.0  0.2   308   400 ??  Is     4Jan06    0:00.03 /usr/sbin/wsm
+_dhcp    31779  0.0  0.2   392   344 ??  Is     4Jan06    0:02.01 dhclient: fxp
+root     18689  0.0  0.7   736  1324 ??  Is     5Jan06    0:04.13 SCREEN (scree
+root     25497  0.0  0.6  1000  1264 ??  Ss     5Jan06    2:09.43 httpd -d /var
+www      30431  0.0  0.7  1204  1356 ??  I      5Jan06    0:17.19 httpd -d /var
+www      25094  0.0  0.7  1208  1368 ??  I      5Jan06    0:16.61 httpd -d /var
+www      25718  0.0  0.7  1208  1360 ??  I      5Jan06    0:27.73 httpd -d /var
+www        675  0.0  0.7  1216  1376 ??  I      5Jan06    0:17.33 httpd -d /var
+www      27343  0.0  0.7  1236  1424 ??  I      5Jan06    0:15.68 httpd -d /var
+root      5830  0.0  0.7  1080  1296 ??  Ss     5Jan06    2:11.71 /usr/sbin/htt
+www      29336  0.0  0.6  1168  1168 ??  I      5Jan06    0:00.03 /usr/sbin/htt
+www      22939  0.0  0.6  1148  1132 ??  I      5Jan06    0:00.05 /usr/sbin/htt
+www      13094  0.0  0.6  1176  1184 ??  I      5Jan06    0:00.05 /usr/sbin/htt
+www      24009  0.0  0.6  1148  1104 ??  I      5Jan06    0:00.04 /usr/sbin/htt
+www      29071  0.0  0.6  1148  1100 ??  I      5Jan06    0:00.03 /usr/sbin/htt
+www      23993  0.0  0.7  1232  1412 ??  I      5Jan06    0:18.33 httpd -d /var
+www       9791  0.0  0.7  1216  1372 ??  I      5Jan06    0:15.79 httpd -d /var
+www       1092  0.0  0.7  1212  1356 ??  I      5Jan06    0:16.67 httpd -d /var
+www      17358  0.0  0.7  1204  1356 ??  I      5Jan06    0:20.66 httpd -d /var
+www      22345  0.0  0.7  1216  1384 ??  I      5Jan06    0:16.89 httpd -d /var
+www      22593  0.0  0.4  1116   688 ??  I     10Jan06    0:00.01 /usr/sbin/htt
+marcus   29712  0.0  0.7  3220  1372 ??  S      5:34PM    0:00.05 sshd: marcus@
+root     18369  0.0  0.0   324    80 ??  S      5:34PM    0:00.00 sleep 2
+marcus   21099  0.0  0.2   568   472 p0  Ss     5:34PM    0:00.02 -ksh (ksh)
+marcus     178  0.0  0.1   284   216 p0  R+     5:34PM    0:00.00 ps -aux
+nobody   22274  0.0  0.3   420   516 p1- I     11:46PM    0:00.04 /usr/local/bi
+root     24505  0.0  0.3   516   488 p2- S      4Jan06  160:44.40 -ksh (ksh)
+root     29166  0.0  0.2   552   476 p5  Is+    5Jan06    0:00.05 /bin/ksh
+root     20579  0.0  0.3   528   496 p6  Is     5Jan06    0:00.06 /bin/ksh
+root     29059  0.0  0.2   336   436 p6  I+     5Jan06    0:00.02 tail -f error
+root     24562  0.0  0.3   504   508 p7  Is     5Jan06    0:00.15 /bin/ksh
+root     25346  0.0  0.2   328   412 p7  I+     5Jan06    0:03.05 tail -f acces
+root     17507  0.0  0.1   336   280 C0- I      4Jan06    0:02.60 dhclient: fxp
+root     21838  0.0  0.2   436   476 C0  Is     5Jan06    0:00.12 -ksh (ksh)
+root     25435  0.0  1.0  1856  2048 C0  S+    22Jan06   15:46.36 pftop
+root       218  0.0  0.3   304   532 C1  Is+    4Jan06    0:00.01 /usr/libexec/
+root     22122  0.0  0.3   384   528 C2  Is+    4Jan06    0:00.01 /usr/libexec/
+root      2917  0.0  0.3   388   532 C3  Is+    4Jan06    0:00.01 /usr/libexec/
+root     32638  0.0  0.3   248   528 C5  Is+    4Jan06    0:00.01 /usr/libexec/

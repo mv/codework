@@ -1,0 +1,48 @@
+#
+# Interface:
+#    ep1 - external to cable modem
+# 
+# NAT policy:
+#    + Use IP Filter FTP proxy
+#    + Use IP Filter IKE proxy
+#    + Use IP Filter RealAudio proxy
+#    + NAT UDP and TCP packets from internal hosts to external IP
+#    + NAT ICMP packets from internal hosts to external IP
+#
+# share and enjoy,
+# hoang@muine.org
+# Oct 25, 2001
+#
+
+# ------------------------------------------------------------
+# Use ipfilter FTP proxy for the firewall doing transfer mode
+# active.
+# ------------------------------------------------------------
+map ep1 0.0.0.0/0 -> 0.0.0.0/32 proxy port ftp ftp/tcp
+
+# ------------------------------------------------------------
+# Use ipfilter FTP proxy for hosts behind NAT doing transfer
+# mode active.
+# ------------------------------------------------------------
+map ep1 192.168.1.0/24 -> 0.0.0.0/32 proxy port ftp ftp/tcp
+
+# -----------------------------------------------------------
+# Use ipfilter IKE proxy for ESP packets for hosts behind NAT 
+# IP Filter 3.4.21 and beyond only.
+# -----------------------------------------------------------
+map ep1 192.168.1.0/24 -> 0.0.0.0/32 proxy port 500 ipsec/udp
+
+# -----------------------------------------------------------
+# Use ipfilter RealAudio proxy for hosts behind NAT
+# -----------------------------------------------------------
+map ep1 192.168.1.0/24 -> 0.0.0.0/32 proxy port 7070 raudio/tcp
+
+# -----------------------------------------------------------
+# Map all internal UDP and TCP traffic to the external IP address
+# -----------------------------------------------------------
+map ep1 192.168.1.0/24 -> 0.0.0.0/32 portmap tcp/udp 40000:60000
+
+# -----------------------------------------------------------
+# Map all other traffic e.g. ICMP to the external IP address
+# -----------------------------------------------------------
+map ep1 192.168.1.0/24 -> 0.0.0.0/32

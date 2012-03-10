@@ -1,0 +1,27 @@
+-- $Id: home.psqlrc 32 2004-10-15 14:49:25Z marcus $
+--
+-- .psqlrc (Postgres psql)
+--       copy or move to ~/.psqlrc to make it work
+--
+-- Created
+--       Marcus Vinicius Ferreira    Out/2004
+--
+
+-- ignorespace ignoredups ignoreboth
+\set HISTCONTROL ignoreboth
+\set HISTSIZE 700
+
+\set ON_ERROR_STOP
+
+-- #\set PROMPT1 '%/%R%# '
+-- #\set PROMPT2 '%/%R%# '
+-- #\set PROMPT1 '%n@%`hostname -s` [%/] :%`pwd`%R%# '
+-- #\set PROMPT2 '%n@%`hostname -s` [%/] :%`pwd`%R%# '
+\set PROMPT1 '%n@[%/]:%`pwd`%R%# '
+\set PROMPT2 '%n@[%/]:%`pwd`%R%# '
+
+\set PROMPT3 '>> '
+
+-- # default verbose terse
+\set VERBOSITY verbose
+

@@ -1,0 +1,53 @@
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.0    688    64 ?        S    Feb24   0:00 init [3]
+root         2  0.0  0.0      0     0 ?        SN   Feb24   0:00 [ksoftirqd/0]
+root         3  0.0  0.0      0     0 ?        S<   Feb24   0:00 [events/0]
+root         4  0.0  0.0      0     0 ?        S<   Feb24   0:00 [khelper]
+root         5  0.0  0.0      0     0 ?        S<   Feb24   0:00 [kthread]
+root        11  0.0  0.0      0     0 ?        S<   Feb24   0:00 [kacpid]
+root       460  0.0  0.0      0     0 ?        S<   Feb24   0:00 [kblockd/0]
+root       495  0.0  0.0      0     0 ?        S    Feb24   0:00 [pdflush]
+root       496  0.0  0.0      0     0 ?        S    Feb24   0:00 [pdflush]
+root       498  0.0  0.0      0     0 ?        S<   Feb24   0:00 [aio/0]
+root       497  0.0  0.0      0     0 ?        S    Feb24   0:00 [kswapd0]
+root      1088  0.0  0.0      0     0 ?        S<   Feb24   0:00 [kseriod]
+root      1213  0.0  0.0      0     0 ?        S    Feb24   0:00 [scsi_eh_0]
+root      1478  0.0  0.0      0     0 ?        S<   Feb24   0:00 [reiserfs/0]
+root      2469  0.0  0.0      0     0 ?        S    Feb24   0:00 [kjournald]
+root      2523  0.0  0.0   1788   556 ?        S<s  Feb24   0:00 /sbin/udevd --d
+root      3197  0.0  0.0      0     0 ?        S<   Feb24   0:00 [khubd]
+100       3305  0.0  0.0   3520   464 ?        Ss   Feb24   0:00 /usr/bin/dbus-d
+root      3870  0.0  0.0   1996   128 ?        Ss   Feb24   0:00 /sbin/resmgrd
+mdnsd     4774  0.0  0.0   1968   244 ?        Ss   Feb24   0:00 /usr/sbin/mdnsd
+root      4787  0.0  0.0   2212   344 ?        Ss   Feb24   0:05 /opt/gnome/bin/
+root      4794  0.0  0.0   1884   292 ?        Ss   Feb24   0:00 /sbin/syslog-ng
+root      4797  0.0  0.0   1632   312 ?        Ss   Feb24   0:00 /sbin/klogd -c
+nobody    4823  0.0  0.0   1536    60 ?        Ss   Feb24   0:00 /sbin/portmap
+root      4972  0.0  0.0   1492    96 ?        Ss   Feb24   0:00 /usr/sbin/acpid
+lp        5094  0.0  0.0   6832    16 ?        Ss   Feb24   0:00 /usr/sbin/cupsd
+root      5138  0.0  0.0   8844   596 ?        Ssl  Feb24   0:00 /usr/sbin/nscd
+root      5221  0.0  0.0   5144    84 ?        Ss   Feb24   0:00 /usr/lib/postfi
+postfix   5265  0.0  0.0   5144   116 ?        S    Feb24   0:00 qmgr -l -t fifo
+root      5318  0.0  0.0   1784   124 ?        Ss   Feb24   0:00 /usr/sbin/cron
+root      5398  0.0  0.0   4980  1420 ?        Ss   Feb24   0:01 /usr/sbin/hald
+root      5401  0.0  0.0   4796   304 ?        Ss   Feb24   0:00 /usr/sbin/sshd
+root      5402  0.0  0.0   9160    12 ?        Ss   Feb24   0:00 /usr/sbin/smbd
+root      5409  0.0  0.0   2572     8 ?        Ss   Feb24   0:00 /usr/sbin/xinet
+root      5452  0.0  0.0   9160     8 ?        S    Feb24   0:00 /usr/sbin/smbd
+root      5465  0.0  0.0   1792     8 ?        S    Feb24   0:00 hald-addon-acpi
+root      5502  0.0  0.0   3136   848 ?        S    Feb24   0:00 /usr/sbin/power
+root      5505  0.0  0.0   1932     8 tty1     Ss+  Feb24   0:00 /sbin/mingetty
+root      5506  0.0  0.0   1932     8 tty2     Ss+  Feb24   0:00 /sbin/mingetty
+root      5507  0.0  0.0   1928     8 tty3     Ss+  Feb24   0:00 /sbin/mingetty
+root      5508  0.0  0.0   1928     4 tty4     Ss+  Feb24   0:00 /sbin/mingetty
+root      5509  0.0  0.0   1928     8 tty5     Ss+  Feb24   0:00 /sbin/mingetty
+root      5510  0.0  0.0   1932     8 tty6     Ss+  Feb24   0:00 /sbin/mingetty
+root      5593  0.0  0.0   1792    52 ?        S    Feb24   0:00 hald-addon-stor
+postfix  23424  0.0  0.0   5108    92 ?        S    02:17   0:00 pickup -l -t fi
+root      7736  0.0  0.0   8248  2328 ?        Ss   17:34   0:00 sshd: marcus [p
+marcus    7742  0.0  0.0   8248  2412 ?        S    17:34   0:00 sshd: marcus@pt
+marcus    7744  0.0  0.0   4360  1856 pts/0    Ss+  17:34   0:00 -bash
+root      7782  0.0  0.0   8248  2332 ?        Ss   17:37   0:00 sshd: marcus [p
+marcus    7785  0.0  0.0   8248  2412 ?        R    17:37   0:00 sshd: marcus@pt
+marcus    7786  0.0  0.0   4224  1820 pts/1    Ss   17:37   0:00 -bash
+marcus    7821  0.0  0.0   2716   820 pts/1    R+   17:38   0:00 ps aux

@@ -1,0 +1,57 @@
+
+arrays
+
+    .) 1 array
+    ---
+    - 1           # Numbers
+    - Snow Crash  # Strings
+    - 2003-07-24  # Dates
+
+    .) 2 arrays in sequence
+    ---
+    - Harry Potter and the Prisoner of Azkaban
+    - Harry Potter and the Goblet of Fire
+    - Harry Potter and the Order of the Phoenix
+    ---
+    - Memoirs Found in a Bathtub
+    - Snow Crash
+    - Ghost World
+
+    .) List of hashes
+    - {name: John Smith, age: 33}
+    - name: Mary Smith
+       age: 27
+
+Hash
+
+    .) hash in sequence
+    ---
+    - Stanislaw Lem: Memoirs Found in a Bathtub
+    - Neal Stephenson: Snowcrash
+    - Daniel Clowes: Ghost World
+
+    .) hash within a hash
+    ---
+    date: 2003-07-25
+    letters to:
+      "Hank Bros.: the Car Wash!": 1
+      Jim O'Connor: 2
+      Myself: 2
+
+    print $h{date};
+        -> 2003-07-25
+
+    print $h{'letters to'}{'Myself'};
+        -> 2
+
+
+    .) Hash of lists
+    ---
+    men: [John Smith, Bill Jones]
+    women:
+      - Mary Smith
+      - Susan Williams
+
+
+
+

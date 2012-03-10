@@ -1,0 +1,9 @@
+     UID     PID    PPID TTY     STIME COMMAND
+  marcus    1632       1 con  16:27:08 /usr/bin/bash
+  marcus    1668       1 con  16:27:46 /usr/bin/bash
+  SYSTEM    1840       1   ?  16:28:36 /usr/bin/cygrunsrv
+  SYSTEM    1872    1840   ?  16:28:40 /usr/sbin/sshd
+  marcus    3704    1668 con  17:37:12 /usr/bin/ssh
+  marcus    2840    1632 con  17:40:09 /usr/bin/ssh
+  marcus    1884       1 con  17:42:23 /usr/bin/bash
+  marcus    4020    1884 con  17:42:27 /usr/bin/ps

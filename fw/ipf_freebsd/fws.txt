@@ -1,0 +1,77 @@
+
+
+2175-7230   Talita
+
+
+An exclusive firewall allows all traffic through except for the traffic matching the ruleset.
+    deixa tudo
+    bloqueia via regra
+
+An inclusive firewall allows traffic matching the rules through and blocks everything else.
+    bloqueia tudo
+    permite via regra
+
+
+    IPFILTER    IPF     altq        stateful + easy NAT
+
+            ipfilter_enable="YES"             # Start ipf firewall
+            ipfilter_rules="/etc/ipf.rules"   # loads rules definition text file
+            ipmon_enable="YES"                # Start IP monitor log
+            ipmon_flags="-Ds"                 # D = start as daemon
+                                              # s = log to syslog
+                                              # v = log tcp window, ack, seq
+                                              # n = map IP & port to names
+
+            gateway_enable="YES"              # Enable as LAN gateway
+            ipnat_enable="YES"                # Start ipnat function
+            ipnat_rules="/etc/ipnat.rules"    # rules definition file for ipnat
+            -----------
+            options IPFILTER
+            options IPFILTER_LOG
+            options IPFILTER_DEFAULT_BLOCK
+            options RANDOM_IP_ID              # RANDOM_IP_ID causes the ID field in IP packets to be randomized
+                                              # instead of incremented by 1 with each packet generated.
+
+    http://www.muine.org/~hoang/freenat.html
+    Hardening features:
+
+    Add to /etc/sysctl.conf:
+
+        net.inet.ip.check_interface=1
+        net.inet.tcp.blackhole=2
+        net.inet.udp.blackhole=1
+
+        net.inet.tcp.recvspace=65535
+        net.inet.tcp.sendspace=65535
+
+
+
+
+    IPFIREWALL  IPFW    dummynet
+    OpenBSD     PF      altq
+
+            pf_enable="YES"                 # Enable PF (load module if required)
+            pf_rules="/etc/pf.conf"         # rules definition file for pf
+            pf_flags=""                     # additional flags for pfctl startup
+            pflog_enable="YES"              # start pflogd(8)
+            pflog_logfile="/var/log/pflog"  # where pflogd should store the logfile
+            pflog_flags=""                  # additional flags for pflogd startup
+
+            gateway_enable="YES"
+            ipnat_enable="YES"
+            ipnat_rules="/etc/ipnat.rules"
+
+
+            -----------
+            device pf
+            device pflog
+            device pfsync
+
+            options         ALTQ
+            options         ALTQ_CBQ        # Class Bases Queuing (CBQ)
+            options         ALTQ_RED        # Random Early Detection (RED)
+            options         ALTQ_RIO        # RED In/Out
+            options         ALTQ_HFSC       # Hierarchical Packet Scheduler (HFSC)
+            options         ALTQ_PRIQ       # Priority Queuing (PRIQ)
+            options         ALTQ_NOPCC      # Required for SMP build
+

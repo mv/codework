@@ -1,0 +1,164 @@
+#################################################################
+# No restrictions on Inside LAN Interface for private network
+# Not needed unless you have LAN
+#################################################################
+
+# LAN=xl0
+# EXT=dc0
+
+pass out quick on xl0 all
+pass in quick on xl0 all
+
+#################################################################
+# No restrictions on Loopback Interface
+#################################################################
+pass in quick on lo0 all
+pass out quick on lo0 all
+
+#################################################################
+# Interface facing Public Internet (Outbound Section)
+# Interrogate session start requests originating from behind the
+# firewall on the private network
+# or from this gateway server destine for the public Internet.
+#################################################################
+
+# Allow out access to my ISP's Domain name server.
+# xxx must be the IP address of your ISP's DNS.
+# Dup these lines if your ISP has more than one DNS server
+# Get the IP addresses from /etc/resolv.conf file
+pass out quick on dc0 proto tcp from any to xxx port = 53 flags S keep state
+pass out quick on dc0 proto udp from any to xxx port = 53 keep state
+
+# Allow out access to my ISP's DHCP server for cable or DSL networks.
+# This rule is not needed for 'user ppp' type connection to the
+# public Internet, so you can delete this whole group.
+# Use the following rule and check log for IP address.
+# Then put IP address in commented out rule & delete first rule
+pass out log quick on dc0 proto udp from any to any port = 67 keep state
+#pass out quick on dc0 proto udp from any to z.z.z.z port = 67 keep state
+
+
+# Allow out non-secure standard www function
+pass out quick on dc0 proto tcp from any to any port = 80 flags S keep state
+
+# Allow out secure www function https over TLS SSL
+pass out quick on dc0 proto tcp from any to any port = 443 flags S keep state
+
+# Allow out send & get email function
+pass out quick on dc0 proto tcp from any to any port = 110 flags S keep state
+pass out quick on dc0 proto tcp from any to any port = 25 flags S keep state
+
+# Allow out Time
+pass out quick on dc0 proto tcp from any to any port = 37 flags S keep state
+
+# Allow out nntp news
+pass out quick on dc0 proto tcp from any to any port = 119 flags S keep state
+
+# Allow out gateway & LAN users non-secure FTP ( both passive & active modes)
+# This function uses the IPNAT built in FTP proxy function coded in
+# the nat rules file to make this single rule function correctly.
+# If you want to use the pkg_add command to install application packages
+# on your gateway system you need this rule.
+pass out quick on dc0 proto tcp from any to any port = 21 flags S keep state
+
+# Allow out secure FTP, Telnet, and SCP
+# This function is using SSH (secure shell)
+pass out quick on dc0 proto tcp from any to any port = 22 flags S keep state
+
+# Allow out non-secure Telnet
+pass out quick on dc0 proto tcp from any to any port = 23 flags S keep state
+
+# Allow out FBSD CVSUP function
+pass out quick on dc0 proto tcp from any to any port = 5999 flags S keep state
+
+# Allow out ping to public Internet
+pass out quick on dc0 proto icmp from any to any icmp-type 8 keep state
+
+# Allow out whois for LAN PC to public Internet
+pass out quick on dc0 proto tcp from any to any port = 43 flags S keep state
+
+# Block and log only the first occurrence of everything
+# else that's trying to get out.
+# This rule enforces the block all by default logic.
+block out log first quick on dc0 all
+
+#################################################################
+# Interface facing Public Internet (Inbound Section)
+# Interrogate packets originating from the public Internet
+# destine for this gateway server or the private network.
+#################################################################
+
+# Block all inbound traffic from non-routable or reserved address spaces
+block in quick on dc0 from 192.168.0.0/16 to any    #RFC 1918 private IP
+block in quick on dc0 from 172.16.0.0/12 to any     #RFC 1918 private IP
+block in quick on dc0 from 10.0.0.0/8 to any        #RFC 1918 private IP
+block in quick on dc0 from 127.0.0.0/8 to any       #loopback
+block in quick on dc0 from 0.0.0.0/8 to any         #loopback
+block in quick on dc0 from 169.254.0.0/16 to any    #DHCP auto-config
+block in quick on dc0 from 192.0.2.0/24 to any      #reserved for docs
+block in quick on dc0 from 204.152.64.0/23 to any   #Sun cluster interconnect
+block in quick on dc0 from 224.0.0.0/3 to any       #Class D & E multicast
+
+##### Block a bunch of different nasty things. ############
+# That I do not want to see in the log
+
+# Block frags
+block in quick on dc0 all with frags
+
+# Block short tcp packets
+block in quick on dc0 proto tcp all with short
+
+# block source routed packets
+block in quick on dc0 all with opt lsrr
+block in quick on dc0 all with opt ssrr
+
+# Block nmap OS fingerprint attempts
+# Log first occurrence of these so I can get their IP address
+block in log first quick on dc0 proto tcp from any to any flags FUP
+
+# Block anything with special options
+block in quick on dc0 all with ipopts
+
+# Block public pings
+block in quick on dc0 proto icmp all icmp-type 8
+
+# Block ident
+block in quick on dc0 proto tcp from any to any port = 113
+
+# Block all Netbios service. 137=name, 138=datagram, 139=session
+# Netbios is MS/Windows sharing services.
+# Block MS/Windows hosts2 name server requests 81
+block in log first quick on dc0 proto tcp/udp from any to any port = 137
+block in log first quick on dc0 proto tcp/udp from any to any port = 138
+block in log first quick on dc0 proto tcp/udp from any to any port = 139
+block in log first quick on dc0 proto tcp/udp from any to any port = 81
+
+# Allow traffic in from ISP's DHCP server. This rule must contain
+# the IP address of your ISP's DHCP server as it's the only
+# authorized source to send this packet type. Only necessary for
+# cable or DSL configurations. This rule is not needed for
+# 'user ppp' type connection to the public Internet.
+# This is the same IP address you captured and
+# used in the outbound section.
+pass in quick on dc0 proto udp from z.z.z.z to any port = 68 keep state
+
+# Allow in standard www function because I have apache server
+pass in quick on dc0 proto tcp from any to any port = 80 flags S keep state
+
+# Allow in non-secure Telnet session from public Internet
+# labeled non-secure because ID/PW passed over public Internet as clear text.
+# Delete this sample group if you do not have telnet server enabled.
+#pass in quick on dc0 proto tcp from any to any port = 23 flags S keep state
+
+# Allow in secure FTP, Telnet, and SCP from public Internet
+# This function is using SSH (secure shell)
+pass in quick on dc0 proto tcp from any to any port = 22 flags S keep state
+
+# Block and log only first occurrence of all remaining traffic
+# coming into the firewall. The logging of only the first
+# occurrence stops a .denial of service. attack targeted
+# at filling up your log file space.
+# This rule enforces the block all by default logic.
+block in log first quick on dc0 all
+################### End of rules file #####################################
+

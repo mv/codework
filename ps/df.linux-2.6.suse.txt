@@ -1,0 +1,50 @@
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hda7              1132504    203792    928712  18% /
+tmpfs                  1428316         0   1428316   0% /dev/shm
+/dev/hdb5             33106776  12380592  19017280  40% /mnt/bkp1
+/dev/hdb1              4939812    975720   3964092  20% /mnt/bkp2
+/dev/sda1             17927956  15624564   2303392  88% /mnt/data1
+/dev/sdc1             17935960  16911744   1024216  95% /mnt/data2
+/dev/sdc2             17935960  12036088   5899872  68% /mnt/data3
+/dev/sdb1             17919896    895104  17024792   5% /mnt/data4
+/dev/hda5             24570572     32840  24537732   1% /export
+/dev/hda6              2176696    773696   1403000  36% /opt
+/dev/hda9               570216    108068    462148  19% /tmp
+/dev/hda8              6433780   2880196   3553584  45% /usr
+/dev/hda10             3140572    178480   2962092   6% /var
+
+
+marcus@mahdi:~
+$ df -k
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hda7              1132504    203792    928712  18% /
+tmpfs                  1428316         0   1428316   0% /dev/shm
+/dev/hdb5             33106776  12380592  19017280  40% /mnt/bkp1
+/dev/hdb1              4939812    975720   3964092  20% /mnt/bkp2
+/dev/sda1             17927956  15624564   2303392  88% /mnt/data1
+/dev/sdc1             17935960  16911744   1024216  95% /mnt/data2
+/dev/sdc2             17935960  12036088   5899872  68% /mnt/data3
+/dev/sdb1             17919896    895104  17024792   5% /mnt/data4
+/dev/hda5             24570572     32840  24537732   1% /export
+/dev/hda6              2176696    773696   1403000  36% /opt
+/dev/hda9               570216    108068    462148  19% /tmp
+/dev/hda8              6433780   2880196   3553584  45% /usr
+/dev/hda10             3140572    178480   2962092   6% /var
+
+
+marcus@mahdi:~
+$ df -k
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hda7              1132504    203792    928712  18% /
+tmpfs                  1428316         0   1428316   0% /dev/shm
+/dev/hdb5             33106776  12380592  19017280  40% /mnt/bkp1
+/dev/hdb1              4939812    975720   3964092  20% /mnt/bkp2
+/dev/sda1             17927956  15624564   2303392  88% /mnt/data1
+/dev/sdc1             17935960  16911744   1024216  95% /mnt/data2
+/dev/sdc2             17935960  12036088   5899872  68% /mnt/data3
+/dev/sdb1             17919896    895104  17024792   5% /mnt/data4
+/dev/hda5             24570572     32840  24537732   1% /export
+/dev/hda6              2176696    773696   1403000  36% /opt
+/dev/hda9               570216    108068    462148  19% /tmp
+/dev/hda8              6433780   2880196   3553584  45% /usr
+/dev/hda10             3140572    178480   2962092   6% /var
