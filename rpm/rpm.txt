@@ -60,6 +60,9 @@ rpm -qlp htop-0.8.3-1.el5.x86_64.rpm    # rpm file
   # file belongs to a package?
 rpm -qf /usr/bin/perl
 
+  # Last installed packages
+rpm -qa --last
+
 ###
 ### Installed packages
 ###
