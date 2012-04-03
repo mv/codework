@@ -14,11 +14,11 @@
 # exec="/path/to/<daemonname>"
 exec="/path/to/<daemonname>"
 
-# config="<path to major config file>"
-config="<path to major config file>"
-
 # prog="<service name>"
 prog="<service name>"
+
+# config="<path to major config file>"
+config="<path to major config file>"
 
 # user to run $prog
 user="user name"
