@@ -1,0 +1,10 @@
+# String
+data:text/plain;base64,UXVlIGxpbmRvIGlzc28sIE1hbnUh
+
+# Checkbox
+data:text/html,<label><input type=checkbox> Teste</label>
+
+
+
+# vim:ft=html:
+
