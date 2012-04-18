@@ -1,0 +1,29 @@
+
+
+
+# Directories/Files
+
+    # Main config
+    /etc/yum.conf
+
+   # Repositories
+    /etc/yum.repos.d/
+    /etc/yum.repos.d/repos1.repo
+    /etc/yum.repos.d/repos2.repo
+
+    # Plugins
+    /etc/yum/pluginconf.d/fastestmirror.conf
+
+    # Downloads
+    /var/cache/yum
+
+
+# Commands
+
+    # Remove metadata
+    yum clean headers
+
+    # Remove downloaded packages
+    yum clean packages
+
+

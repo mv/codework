@@ -1,0 +1,57 @@
+
+wget http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/RPMS/mongo-10gen-2.0.2-mongodb_1.x86_64.rpm
+wget http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/RPMS/mongo-10gen-server-2.0.2-mongodb_1.x86_64.rpm
+
+wget http://downloads-distro.mongodb.org/repo/redhat/os/i686/RPMS/mongo-10gen-2.0.2-mongodb_1.i686.rpm
+wget http://downloads-distro.mongodb.org/repo/redhat/os/i686/RPMS/mongo-10gen-server-2.0.2-mongodb_1.i686.rpm
+
+
+[10gen]
+name=10gen Repository
+baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
+gpgcheck=0
+
+
+[10gen]
+name=10gen Repository
+baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/i686
+gpgcheck=0
+
+
+Shards
+------
+
+Bad:
+    shard id on crescent number:
+        - sequence_id
+        - iso timestamp
+        - epoch
+
+        All inserts go to the same shard all the time, because
+        of a 'split to the right'
+
+    shard on random hash
+        - md5
+        - sha1
+
+        Chunks balance ok, but an additional index must be created
+        on each shard id. This can waste RAM.
+
+Good:
+
+    Double key: (CoarselyAscending, search)
+    Examples:
+        ( 'yyyy-mm'   , username )
+        ( 'yyyy-mm-dd', hash/sha1/md5 )
+        ( 'yyyy-mm-dd', guid/uuid )
+        ( 'yyyy-mm-dd', email )
+
+
+vim: tw=150:
+
+twt-mongod = ec2-50-19-183-166.compute-1.amazonaws.com  ec2-184-72-159-58.compute-1.amazonaws.com ec2-50-16-41-224.compute-1.amazonaws.com ec2-23-20-69-254.compute-1.amazonaws.com
+twt-mongoc = ec2-174-129-146-22.compute-1.amazonaws.com ec2-184-73-108-97.compute-1.amazonaws.com ec2-23-20-57-4.compute-1.amazonaws.com
+twt-mongoe = ec2-107-21-166-240.compute-1.amazonaws.com
+t
+
+:e
