@@ -1,0 +1,36 @@
+
+Linux pagecache memory
+----------------------
+
+###
+### Before
+###
+free -m
+htop
+
+
+### To free pagecache:
+    echo 1 > /proc/sys/vm/drop_caches
+
+### To free dentries and inodes:
+    echo 2 > /proc/sys/vm/drop_caches
+
+### To free pagecache, dentries and inodes:
+    echo 3 > /proc/sys/vm/drop_caches
+
+### Best
+    sync; echo 3 > /proc/sys/vm/drop_caches
+
+
+###
+### After
+###
+free -m
+
+
+###
+### Pinning files in the cache
+###
+/bin/ls -1 /var/www/rpm/RPMS/*rpm | xargs readahead
+
+

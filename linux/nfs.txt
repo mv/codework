@@ -1,0 +1,127 @@
+
+
+
+
+BootLevel
+---------
+
+    chkconfig  --level  345  nfs        on
+    chkconfig  --level  345  nfslock    on
+    chkconfig  --level  345  portmap    on
+    chkconfig  --level  345  rpcgssd    on
+    chkconfig  --level  345  rpcidmapd  on
+
+Exports
+-------
+
+# ExportDir  host(options)
+/shared      192.168.0.0/255.255.0.0(ro)
+/shared      192.168.10.10/255.255.255.0(rw)
+/shared     *(ro)
+
+
+Mount
+-----
+mount -t nfs -o options host:/remote/export /local/directory
+
+
+/etc/fstab
+----------
+server:/usr/local/pub    /pub   nfs    defaults 0 0
+server:/usr/local/pub    /pub   nfs    ro,hard,intr,_netdev,noexec,nosuid,noatime 0 0
+
+
+Package                     Service
+--------------------------  -------
+nfs-utils.x86_64            nfs nfslock rpcgssd rpcidmapd rpcsvcgssd
+    portmap                 portmap
+    nfs-utils-lib.x86_64
+    libevent
+    libgssapi
+
+
+nfs            	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+nfslock        	0:off	1:off	2:off	3:on	4:on	5:on	6:off
+portmap        	0:off	1:off	2:off	3:on	4:on	5:on	6:off
+rpcgssd        	0:off	1:off	2:off	3:on	4:on	5:on	6:off
+rpcidmapd      	0:off	1:off	2:off	3:on	4:on	5:on	6:off
+rpcsvcgssd     	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+
+
+
+
+
+# /etc/init.d/nfs stop
+Shutting down NFS mountd:                                  [FAILED]
+Shutting down NFS daemon:                                  [FAILED]
+
+
+# /etc/init.d/nfs start
+Starting NFS services:                                     [  OK  ]
+Starting NFS daemon:                                       [  OK  ]
+Starting NFS mountd:                                       [  OK  ]
+Starting RPC idmapd: Error: RPC MTAB does not exist.
+
+
+
+client
+    lockd       rpc.lockd
+    statd       rpc.statd
+    portmap
+
+server
+    lockd       rpc.lockd
+    statd       rpc.statd
+    portmap
+
+    mountd
+    nfsd        rpc.nfsd
+    rquotad
+
+
+/etc/idmapd.conf
+/etc/rc.d/init.d/nfs
+                    /sbin/service rpcsvcgssd start  #[ RPCSEC ]
+                    daemon rpc.rquotad   S/K
+                    daemon rpc.nfsd      S/K
+                    daemon rpc.mountd    S/K
+
+/etc/rc.d/init.d/nfslock
+                    daemon rpc.lockd
+                    daemon rpc.statd
+
+
+/etc/rc.d/init.d/rpcidmapd
+                    daemon rpc.idmapd
+
+/etc/rc.d/init.d/rpcgssd    # RPCSEC
+/etc/rc.d/init.d/rpcsvcgssd # RPCSEC
+
+/etc/sysconfig/nfs
+/sbin/mount.nfs
+/sbin/mount.nfs4
+/sbin/rpc.lockd
+/sbin/rpc.statd
+/sbin/umount.nfs
+/sbin/umount.nfs4
+/usr/sbin/exportfs
+/usr/sbin/gss_clnt_send_err
+/usr/sbin/gss_destroy_creds
+/usr/sbin/mountstats
+/usr/sbin/nfsiostat
+/usr/sbin/nfsstat
+/usr/sbin/nhfsgraph
+/usr/sbin/nhfsnums
+/usr/sbin/nhfsrun
+/usr/sbin/nhfsstone
+/usr/sbin/rpc.gssd
+/usr/sbin/rpc.idmapd
+/usr/sbin/rpc.mountd
+/usr/sbin/rpc.nfsd
+/usr/sbin/rpc.svcgssd
+/usr/sbin/rpcdebug
+/usr/sbin/showmount
+
+
+
+
