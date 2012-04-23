@@ -4,28 +4,87 @@ RPM Poor's man cheat sheet
 Ref:
     http://fedoranews.org/alex/tutorial/rpm/index.shtml
     http://rpm.org/max-rpm/index.html
+    http://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/
+
+# Database
+
+    # initialize database
+    rpm --initdb
+
+    # rebuild database (from /var/lib/rpm/Packages)
+    rpm --rebuilddb
 
 ###
 ### Install
 ###
 rpm -ivh htop-0.8.3-1.el5.x86_64.rpm
 
-  # test install
+  # test only
 rpm -ivh --test htop-0.8.3-1.el5.x86_64.rpm
 
   # from internet, via proxy
+rpm -ivh ftp://user@ftpserver/directory/package.rpm
 rpm -ivh ftp://user:pass@ftpserver/directory/package.rpm
 rpm -ivh --ftpproxy  proxyserver --ftpport  port  ftp://ftpserver/dir/remote-package.rpm
 rpm -ivh --httpproxy proxyserver --httpport port http://webserver/dir/remote-package.rpm
 
+  # using a different directory
+rpm -ivh --prefix /tmp/package            package.rpm
+rpm -ivh --relocate /usr/local=/tmp/local package.rpm
+
 ###
-### Upgrade
+### Force install
+###
+  # replace already installed package
+rpm -ivh --replacepkgs  package.rpm
+
+  # force downgrade of a package
+rpm -Uvh --oldpackage  package.rpm
+
+  # overwrite other package files
+rpm -ivh --replacefiles package.rpm
+
+  # force = replacepkgs + oldpackage + replacefiles
+rpm -ivh --force package.rpm
+
+  # replace all files listed in package
+rpm -ivh --allfiles  package.rpm
+
+  # exclude a set of files
+rpm -Uvh --excludepath /usr/lib package.rpm
+
+  # do not install dependencies
+rpm -ivh --nodeps package.rpm
+
+  # do not install docs
+rpm -ivh --excludedocs package.rpm
+
+  # skip checks
+rpm -ivh --ignorearch      package.rpm
+rpm -ivh --ignoreos        package.rpm
+rpm -ivh --ignoresize      package.rpm # skip disk full check
+rpm -ivh --ignodigest      package.rpm # skip md5 rpm   check
+rpm -ivh --ignoresignature package.rpm # skip gpg build check
+
+###
+### Skip scripts
+###
+rpm -ivh --nopre     htop-0.8.3-1.el5.x86_64.rpm
+rpm -ivh --nopost    htop-0.8.3-1.el5.x86_64.rpm
+rpm -ivh --nopreun   htop-0.8.3-1.el5.x86_64.rpm
+rpm -ivh --nopostun  htop-0.8.3-1.el5.x86_64.rpm
+rpm -ivh --noscripts htop-0.8.3-1.el5.x86_64.rpm # skip all
+
+rpm -ivh --notriggerin     htop-0.8.3-1.el5.x86_64.rpm
+rpm -ivh --notriggerun     htop-0.8.3-1.el5.x86_64.rpm
+rpm -ivh --notriggerpostun htop-0.8.3-1.el5.x86_64.rpm
+rpm -ivh --notriggers      htop-0.8.3-1.el5.x86_64.rpm # skip all
+
+###
+### Upgrade: install if not exists
 ###
 rpm -Uvh htop-0.8.3-1.el5.x86_64.rpm
 rpm -Uvh htop-0.8.3-1.el5.x86_64.rpm --force
-
-  # Freshen: update only if old version is installed
-rpm -Fvh htop-0.8.3-1.el5.x86_64.rpm
 
   # Downgrade
 rpm -Uvh --oldpackage Samba-old-version.rpm
@@ -34,11 +93,31 @@ rpm -Uvh --oldpackage Samba-old-version.rpm
 rpm -Uvh --repackage  new-pkg.rpm   # The Old RPM will be generated on /var/spool/repackage
 rpm -ivh --oldpackage /var/spool/repackage/old-pkg.rpm
 
+###
+### Upgrade: skip if not exists
+###
+rpm -Fvh htop-0.8.3-1.el5.x86_64.rpm
 
 ###
 ### Remove
 ###
-rpm -ev htop-0.8.3-1.el5.x86_64.rpm
+rpm -e   htop
+rpm -ev  htop-0.8.3-1
+rpm -evh htop-0.8.3-1.el5.x86_64.rpm
+
+  # remove all matches (by arch)
+rpm -e --allmatches htop
+
+  # skip dependencies
+rpm -e --nodeps htop
+
+  # skip scripts
+rpm -e --nopreun   htop
+rpm -e --nopostun  htop
+rpm -e --noscripts htop
+rpm -e --notriggerun       htop
+rpm -e --notriggerpostun   htop
+rpm -e --notriggertriggers htop
 
   # backing-up and removing
 rpm -e --repackage new-package.rpm
@@ -47,59 +126,173 @@ rpm -e --repackage new-package.rpm
   # if removing unsuccessful, what depends on it
 rpm -q --whatrequires cups
 
+###
+### Extracting from package
+###
+
+  # all files
+rpm2cpio htop-0.8.3-1.el5.x86_64.rpm | cpio -idmv
+
+  # one file
+rpm2cpio htop-0.8.3-1.el5.x86_64.rpm | cpio -idmv usr/bin/htop
 
 ###
 ### Package info
+### Query
 ###
-rpm -qa --info rpm -Uvh htop-0.8.3-1.el5.x86_64.rpm
 
-  # list content of installed package
-rpm -ql  htop                           # installed package
-rpm -qlp htop-0.8.3-1.el5.x86_64.rpm    # rpm file
-
-  # file belongs to a package?
-rpm -qf /usr/bin/perl
+  # list all packages
+rpm -qa
+rpm -qa | grep top  # pkg names with 'top'
+rpm -qa '*top*'     # pkg names with 'top'
+rpm -qa 'send*'     # pkg names beginning with 'send'
+rpm -qa '!send*'    # pkg names NOT beginning with 'send'
 
   # Last installed packages
 rpm -qa --last
+rpm -qa --last | more
+rpm -qa --last | cat -n | more
 
-###
-### Installed packages
-###
-rpm -qa | grep -i htop
+  # Package exists?
+rpm -q rvm   1>/dev/null || echo 'Package does NOT exist.'
+rpm -q httpd 1>/dev/null && service start httpd
+
+  # Package detailed info
+rpm -qi       perl
+rpm -q --info perl-5.8.8-32
 
   # rpm file installed ?
 rpm -qip htop-0.8.3-1.el5.x86_64.rpm
 
+  # list content of installed package
+rpm -ql       file    # file list
+rpm -q --list file    # file list
+rpm -qlv      file    # detailed file list (owner,perms)
+
+  # list content of rpm file
+rpm -qlp  htop-0.8.3-1.el5.x86_64.rpm    # file list
+rpm -qlvp htop-0.8.3-1.el5.x86_64.rpm    # detailed file list
+
+  # file belongs to a package?
+rpm -qf       /usr/bin/perl
+rpm -q --file /usr/bin/perl
+
+  # file missing from a package?
+rpm -V bash
+
+  # list content by package name
+rpm -q --filesbypkg file openssh-clients
+
+  # list config files
+rpm -qc              bash   # file list
+rpm -q --configfiles bash   # file list
+rpm -qcv             bash   # detailed file list
+
+  # list doc files
+rpm -qd              bash   # file list
+rpm -q --docfiles    bash   # file list
+rpm -qdv             bash   # detailed file list
+
+  # list script files
+rpm -q --scripts     bash   # file list
+
+  # list script files
+rpm -q --changelog   bash   # file list
+
+  # list state of files
+rpm -qs          bash   # file list
+rpm -q --state   bash   # file list
+rpm -qsv         bash   # detailed file list
+
+  # combining query options
+rpm -qcs  bash                        # state of config files
+rpm -qcsp bash-3.2-32.el5             # p: rpm package file
+rpm -qcsp bash-3.2-32.el5.x86_64.rpm  # p: rpm package file
+rpm -qcsf /bin/bash                   # f: file belonging to pkg
+rpm -qcsf /bin/ls                     # f: file belonging to pkg
+
+###
+### Custom Queries
+###
+
+  # all query tags
+  #     http://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/ch04s02s10s02.html
+  #     http://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/ch04s02s10s05.html
+  #     http://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/ch04s02s10s06.html
+rpm --querytags
+
+  # Querying array values: example
+rpm -q --qf "[%{REQUIRENAME}\n]" bash
+
   # install by date
-rpm -qa --last | more
+rpm -qa --last | cat -n | more
 rpm -qa --qf '%{installtime} %{installtime:date} %{name}-%{version}\n' | sort -n | sed 's/^[0-9]*//'
+rpm -qa --queryformat '%{installtime} %{name}-%{version}\n' | sort -n
 
   # Installed packages by size
 rpm -qa --qf "%10{size} %{name}.%{arch}\n" | sort -n
 rpm -qa --qf '%10{size} %{name}-%{version}\n' | sort -n
 rpm -qa --qf "%10{size} %{name}-%{version}.%{arch}\n" | sort -n
 
+  # Package dependencies: what bash dependes on
+rpm -q --qf "[%{REQUIRENAME} %{REQUIREFLAGS:depflags} %{REQUIREVERSION}\n]" bash
+
 
 ###
 ### Dependencies
 ###
 
-  # package dependencies/requirements
-rpm -qR  htop                         # installed package
+rpm -qR  gcc | grep '='
+
+  # package dependencies
+rpm -qR           bash      # installed package
 rpm -qRp htop-0.8.3-1.el5.x86_64.rpm  # rpm file
+rpm -q --requires bash      # installed package
+
+  # which other packages depends on package 'x|bash'
+rpm -q --whatrequires bash
+rpm -q --whatrequires file
+rpm -q --whatrequires glibc
+
+  # package provides
+rpm -q --provides glibc
+
+  # which package provides a certain iten
+rpm -q --whatprovides webserver
+rpm -q --whatprovides /bin/ls
+rpm -qf               /bin/ls
+
+  # package conflicts
+rpm -q --conflicts glibc
+rpm -q --conflicts gcc
+
 
 yum deplist htop | grep provider | sort | uniq | awk '{print $1}'
 
-  # Unresolved depencies
+  # Files modified since package install
+rpm -V  bash  # pkg name
+rpm -Va       # all system
+
+  # Differs on:
+  #    S: file size
+  #    5: file md5
+  #    D: file device
+  #    L: file link
+  #    U: file user/owner
+  #    G: file group
+  #    M: file mode
+  #    T: file time
+
+  # Verifying depencies
+  #     http://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/ch04s04s02.html
 rpm -Va --nofiles --nomd5
 
 
 ###
 ### RPM environment resources/values
 ###
-rpm --showrc                        # all resources
 rpm --eval "%{_arch} %{_bindir}"    # resource values
+rpm --showrc                        # all resources
 rpm --showrc | grep repackage       # repackage dir
 rpm -q --qf "Kernel arch type is: %{ARCH}\nKernel name is: %{VERSION}\n" kernel # arch et al
 
@@ -108,20 +301,30 @@ rpm -q --qf "Kernel arch type is: %{ARCH}\nKernel name is: %{VERSION}\n" kernel 
 ### Digests/Signature et al
 ###
 
+  # verify rpm file
+rpm -K package.rpm
+
   # import a key
 rpm --import /usr/share/rhn/GPG-KEY
 
   # list imported keys
 rpm -qi gpg-pubkey | more
 
-  # verify rpm file
-rpm -K package.rpm
-
 
 ###
 ### RPM rebuild database
 ###
 rm -f /var/lib/rpm/__* ; rpm -vv --rebuilddb
+
+###
+### RPMrc
+###
+  # Default rc search path
+  /usr/lib/rpm/rpmrc:/usr/lib/rpm/redhat/rpmrc:/etc/rpmrc:~/.rpmrc
+  rpm --showrc
+
+  rpm --rcfile path/to/file
+  rpm --rcfile file1:file2:file3
 
 
 ###
