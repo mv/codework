@@ -1,0 +1,56 @@
+
+
+    DS:ds-name:DST:heartbeat:min:max
+               DST:COUNTER
+                   GAUGE
+                   DERIVE
+                   ABSOLUTE
+                   COMPUTE
+    RRA:CF:xff:steps:rows
+        CF:AVERAGE
+           MIN
+           MAX
+           LAST
+
+rrdtool create my.rrd --step=60 \  # resolution 60s
+    DS:in:COUNTER:600:0:1000    \  # COUNTER, updates at least 600s
+                                   # values/rates between 0 and 1000
+    RRA:AVERAGE:0.5:1:100       \  # 3 archives with 100 entries
+    RRA:AVERAGE:0.5:10:100      \  # 0.5: store unknown unless half are known
+    RRA:MAX:0.5:10:100
+
+
+
+rrdtool update my.rrd [--template in] N:value1:value2:.....
+rrdtool update my.rrd [--template in] 1329393810:value1:value2:.....
+rrdtool update my.rrd [--template in] 1329393995:value1:value2:.....
+
+
+# Example - oscon2005-slides.pdf
+rrdtool graph my.png                \
+    DEF:in=data.rrd:input:AVERAGE   \
+    DEF:out=data.rrd:output:AVERAGE \
+    AREA:in#ff0000:incoming         \
+    LINE2:out#00ff00:outgoing
+
+# Graph with marked maximum
+rrdtool graph graph.png \
+    DEF:a=data.rrd:a:AVERAGE    \
+    VDEF:max=a,MAXIMUM          \
+    LINE2:a#00ff00:outgoing     \
+    LINE1:max#ff0000:maximum\\g \
+    VRULE:max#ff0000            \
+    GPRINT:max:"at %.2lf"
+
+# Graph with 95 percentile
+rrdtool graph.png \
+    DEF:in=data.rrd:input       \
+    DEF:out=data.rrd:output     \
+    CDEF:base=in,out,MAX        \
+    VDEF:n95=base,95,PERCENT    \
+    AREA:in#0000b0:incoming     \
+    AREA:out#00ff0080:outgoing  \
+    LINE1:base#000000:maximum   \
+    LINE1:n95#ff0000:"95%-tile "\
+    GRPINT:n95:"at %.2lf %s"
+
