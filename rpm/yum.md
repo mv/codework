@@ -21,12 +21,14 @@
     MySQL-client-5.5.21
     MySQL-client-5.5.21-1
     MySQL-client-5.5.21-1.x86_64
-    MySQL-client-5.5.21-1.rhel5
-    MySQL-client-5.5.21-1.rhel5.x86_64
+    MySQL-client-5.5.21-1.el5
+    MySQL-client-5.5.21-1.el5.x86_64
     mysql-client-5.5.21-1.amzn
     mysql-client-5.5.21-1.amzn.x86_64
     mysql-client-5.5.21-1.abril
     mysql-client-5.5.21-1.abril.x86_64
+    MySQL-client-5.5.21-1.el5.abril
+    MySQL-client-5.5.21-1.el5.abril.x86_64
 
 # Directories/Files
 
