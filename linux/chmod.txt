@@ -1,0 +1,60 @@
+
+
+$ man chmod
+  1000    (the sticky bit) See chmod(2) and sticky(8).
+
+  2000    (the set-group-ID-on-execution bit) Executable files with this bit set
+           will run with effective gid set to the gid of the file owner.
+
+  4000    (the set-user-ID-on-execution bit) Executable files with this bit set
+           will run with effective uid set to the uid of the file owner.  Directo-
+           ries with the set-user-id bit set will force all files and sub-directo-
+           ries created in them to be owned by the directory owner and not by the
+           uid of the creating process, if the underlying file system supports
+           this feature: see chmod(2) and the suiddir option to mount(8).
+
+  0400    Allow read by owner.
+  0200    Allow write by owner.
+  0100    For files, allow execution by owner.  For directories, allow the owner
+           to search in the directory.
+
+  0040    Allow read by group members.
+  0020    Allow write by group members.
+  0010    For files, allow execution by group members.  For directories, allow
+           group members to search in the directory.
+
+  0004    Allow read by others.
+  0002    Allow write by others.
+  0001    For files, allow execution by others.  For directories allow others to
+           search in the directory.
+
+
+
+# Executables
+
+  touch e1 e2 e3
+  chmod 0755 e?
+  chmod 1755 e1
+  chmod 2755 e2
+  chmod 4755 e3
+  ls -l
+
+    -rwxr-xr-t 1 root    root       0 May  3 11:35 e1
+    -rwxr-sr-x 1 root    root       0 May  3 11:35 e2
+    -rwsr-xr-x 1 root    root       0 May  3 11:35 e3
+
+
+# Files
+
+  touch f1 f2 f3
+  chmod 0644 f?
+  chmod 1644 f1
+  chmod 2644 f2
+  chmod 4644 f3
+  ls -l
+
+    -rw-r--r-T 1 root    root       0 May  3 11:36 f1
+    -rw-r-Sr-- 1 root    root       0 May  3 11:36 f2
+    -rwSr--r-- 1 root    root       0 May  3 11:36 f3
+
+
