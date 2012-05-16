@@ -11,4 +11,8 @@ cat /etc/hosts | pbcopy
 pbpaste > /tmp/1.txt
 
 
+# wifi on/off
+networksetup -setairportpower en1 on
+networksetup -setairportpower en1 off
+
 
