@@ -1,0 +1,13 @@
+
+## Dinamico
+cat /proc/sys/net/ipv4/tcp_keepalive_time
+echo 300 > /proc/sys/net/ipv4/tcp_keepalive_time
+
+
+/etc/sysctl.conf:
+    net.ipv4.tcp_keepalive_time = 300
+
+## Ajustar e reboot:
+/etc/security/limits.conf
+        * hard nofile 65536
+        * soft nofile 65536

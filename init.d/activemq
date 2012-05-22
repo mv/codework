@@ -1,0 +1,135 @@
+#!/bin/bash
+#
+# /etc/init.d/activemq
+#
+# Comments to support chkconfig on RedHat Linux
+# chkconfig: 2345 65 35
+# description: Apache ActiveMQ
+# usage: chkconfig --add activemq
+#
+# Marcus Vinicius Ferreira                       ferreira.mv[ at ]gmail.com
+# 2010/Mar
+#
+
+PATH=/abd/app/activemq/current/bin
+PATH=$PATH:/opt/local/bin:/opt/local/sbin
+PATH=$PATH:/usr/local/bin:/usr/local/sbin
+PATH=$PATH:/usr/bin:/usr/sbin:/bin:/sbin
+
+
+    BASE=/abd/app/activemq
+ CURRENT=${BASE}/current
+
+     LOG=${BASE}/log/activemq-init.log
+   ERROR=${BASE}/log/activemq-error.log
+     PID=${BASE}/log/activemq.pid
+
+APP_USER=activemq
+APP_USER=infra
+ COMMAND="$CURRENT/bin/activemq"
+     CMD="apache.activemq"
+    PORT=61616
+
+status() {
+    echo
+    echo "==== Status"
+    # /webco/scripts/pcp -p $PORT   # opensolaris
+    netstat -anlp | head -2
+    netstat -anlp | grep $PORT
+
+    echo
+    ps -ef | grep -v grep | grep $CMD | grep $APP_USER
+
+    if [ -f $PID ]
+    then
+        echo
+        echo "Pid file: $( cat $PID ) [$PID]"
+    else
+        echo
+        echo "No Pid file"
+    fi
+    echo
+}
+
+start() {
+    if [ -f $PID ]
+    then
+        echo
+        echo "Already started. PID: [$( cat $PID )]"
+    else
+        echo "==== Start"
+        cd $CURRENT
+        if su $APP_USER -c $COMMAND 1>>/dev/null 2>>$ERROR &
+        then
+             echo "INFO | $(date '+%Y-%m-%d %X'): START" >>$LOG
+             sleep 5
+
+             newpid=$( netstat -anlp | grep $PORT | awk {'print $7'} | awk -F/ '{print $1}' )
+             echo $newpid > $PID
+             echo "New pid: $newpid"
+             echo "$(date '+%Y-%m-%d %X'): Pid $newpid" >>$LOG
+             echo "Done."
+        else
+             echo "Error... "
+        fi
+    fi
+    echo
+}
+
+kill_cmd() {
+    SIGNAL=""; MSG="Killing "
+    while true
+    do
+        LIST=`ps -ef | grep -v grep | grep $CMD | grep -w $APP_USER | awk '{print $2}'`
+        if [ "$LIST" ]
+        then
+            echo; echo "$MSG $LIST" ; echo
+            echo $LIST | xargs kill $SIGNAL
+            sleep 2
+            SIGNAL="-9" ; MSG="Killing $SIGNAL"
+        else
+           echo; echo "All killed..." ; echo
+           break
+        fi
+    done
+}
+
+stop() {
+    echo "==== Stop"
+
+    if [ -f $PID ]
+    then
+        if kill $( cat $PID )
+        then
+             echo "$(date '+%Y-%m-%d %X'): STOP" >>$LOG
+        fi
+        sleep 5
+        echo "Done."
+        /bin/rm -f $PID
+        kill_cmd
+    else
+        echo "No pid file. Already stopped?"
+    fi
+    echo
+}
+
+case "$1" in
+    'start'|'stop'|'status')
+            $1
+            ;;
+    'restart')
+            stop ; echo "Sleeping..."; echo ; sleep 1 ;
+            start
+            ;;
+    *)
+            echo
+            echo "Usage: $0 { start | stop | restart | status }"
+            echo
+            exit 1
+            ;;
+esac
+
+exit 0
+
+# vim:ft=sh:
+
