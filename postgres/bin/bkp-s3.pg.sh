@@ -18,9 +18,9 @@
 }
 
 ### Custom
-mailto="mv@baby.com.br"
+mailto="mv@example.com"
 bucket="s3://us.backup.db/postgres"
-    db="dinda_production"
+    db="db_production"
    dir="/var/lib/postgresql/dump"
 
 ### Setup
