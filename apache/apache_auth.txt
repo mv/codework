@@ -156,3 +156,22 @@ cgi-bin:
         Allow from all
     </Directory>
 
+
+
+
+
+
+    <Location />
+
+        AuthType Basic
+        AuthName "Service"
+        AuthUserFile /etc/httpd/conf/cms-service.auth
+        Require valid-user
+
+        Order allow,deny
+        Allow from all
+
+    </Location>
+
+
+
