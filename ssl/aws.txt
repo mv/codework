@@ -1,0 +1,35 @@
+
+X.509 self-signed key
+-----------------------
+
+## 1. Generate Private key
+
+    # create private key
+    openssl genrsa -des3 -out server.key 1024
+
+    # Remove passphrase
+    cp server.key server.key.org
+    openssl rsa -in server.key.org -out server.key
+
+    # Name private key using AWS name
+    cp server.key.org pk-user-aws.pem
+
+
+## 2. Generate a Certificate Signing Request (CSR)
+
+    # from the private key, generate a CSR
+    openssl req -new -key server.key -out server.csr
+
+    # using the CSR, create a self-signed key
+    openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+    cp server.crt cert-user-aws.pem
+
+## 3. Use the keys
+
+    # copy keys to $HOME/.ec2/
+    cp *pem /Users/marcus/.ec2/
+
+    # Upload certifate (i.e., public part of your key) to AWS console
+    # cert-*.pem
+
+
