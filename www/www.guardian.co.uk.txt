@@ -1,0 +1,62 @@
+##ACAP version=1.0
+
+# Conventional policies...
+User-agent: *
+Disallow: /sendarticle/
+Disallow: /Users/
+Disallow: /users/
+Disallow: /*/print$
+Disallow: /email/
+Disallow: /contactus/
+Disallow: /share/
+Disallow: /websearch
+Disallow: /*?commentpage=
+Disallow: /whsmiths/
+Disallow: /external/overture/
+Disallow: /discussion/report-abuse/*
+Disallow: /discussion/comment-permalink/*
+Disallow: /discussion/user-report-abuse/*
+Disallow: /search
+Disallow: /advertising/wpp-newsletter-competition
+Disallow: /advertising/wpp-newsletter-pricing-packages
+Disallow: /advertising/wpp-newsletter-guardian-stats
+Disallow: /advertising/wpp-newsletter-industry-news
+Disallow: /advertising/wpp-newsletter-kirsty-cummings
+Disallow: /music/artist/*
+Disallow: /music/album/*
+Disallow: /books/data/*
+
+User-agent: Googlebot-Mobile
+Disallow: /
+Disallow: /search
+
+User-agent: Meltwater
+Disallow: / 
+Disallow: /search
+
+# ACAP policies...
+ACAP-crawler: *
+ACAP-disallow-crawl: /sendarticle/
+ACAP-disallow-crawl: /Users/
+ACAP-disallow-crawl: /*/print$
+ACAP-disallow-crawl: /email/
+ACAP-disallow-crawl: /contactus/
+ACAP-disallow-crawl: /share/
+ACAP-disallow-crawl: /websearch
+ACAP-disallow-crawl: /*?commentpage=
+ACAP-disallow-crawl: /whsmiths/
+ACAP-disallow-crawl: /external/overture/
+ACAP-disallow-crawl: /*?showallcomments=true
+ACAP-disallow-crawl: /discussion/report-abuse/*
+ACAP-disallow-crawl: /discussion/comment-permalink/*
+ACAP-disallow-crawl: /discussion/user-report-abuse/*
+ACAP-disallow-crawl: /search
+ACAP-disallow-crawl: /advertising/wpp-newsletter-competition
+ACAP-disallow-crawl: /advertising/wpp-newsletter-pricing-packages
+ACAP-disallow-crawl: /advertising/wpp-newsletter-guardian-stats
+ACAP-disallow-crawl: /advertising/wpp-newsletter-industry-news
+ACAP-disallow-crawl: /advertising/wpp-newsletter-kirsty-cummings
+ACAP-Disallow-crawl: /music/artist/*
+ACAP-Disallow-crawl: /music/album/*
+ACAP-Disallow-crawl: /books/data/*
+
