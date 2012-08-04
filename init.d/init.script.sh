@@ -83,7 +83,7 @@ force_reload() {
 
 rh_status() {
     # run checks to determine if the service is running or use generic status
-    status $prog
+    status -p $pidfile $prog
 }
 
 rh_status_q() {
