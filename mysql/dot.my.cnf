@@ -1,0 +1,35 @@
+#
+# ~/.my.cnf
+#
+
+[client]
+
+host=dinda-01.cuobafpcovi6.sa-east-1.rds.amazonaws.com
+port=3306
+database=dinda_stg
+
+user=dinda
+password=dinda2012
+
+default-character-set=utf8
+
+[mysql]
+
+prompt='[ host:\h user:\u db:\d ]\\nsql> '
+prompt='sh: mysql -h \h -p \p -u \u \d \nsql> '
+compress
+show-warnings
+disable-auto-rehash
+protocol=tcp
+
+[mysqldump]
+
+flush-logs
+flush-privileges
+hex-blob
+verbose
+# fields-terminated-by=','
+# fields-enclosed-by='"'
+
+# vim: ft=conf:
+

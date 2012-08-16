@@ -16,6 +16,9 @@ mysql
 sql> set names latin1;
 sql> select txt from tab1 where id=101;
 
+sql> set names utf8;
+sql> select txt from tab1 where id=101;
+
 
 ###
 ## Converting in place

@@ -1,19 +1,26 @@
+#
+# /etc/my.cnf
+#
+
 [mysql]
+
 default-character-set=utf8
 
 [mysqld_safe]
-pid-file=/mysql-logs/localhost.pid
-log-error=/mysql-logs/localhost-error.log
+
+pid-file=/mysql/log/mysqld.pid
+log-error=/mysql/log/mysql-error.log
 
 [mysqld]
+
 user=mysql
 
 ##################################################
 ### install dirs
 ##################################################
 # basedir=/
-datadir=/mysql-data
-pid-file=/mysql-logs/localhost.pid
+datadir=/mysql/data
+pid-file=/mysql/log/mysqld.pid
 
 ##################################################
 ### Force server time_zone
@@ -23,10 +30,14 @@ pid-file=/mysql-logs/localhost.pid
 ##################################################
 ### Encodinhg
 ##################################################
-# default-time-zone='America/Sao_Paulo'
-character_set_server = utf8
-collation_server = utf8_general_ci
-#
+
+default-character-set = utf8
+collation-server = utf8_bin
+character-set-server = utf8
+character-set-filesystem = utf8
+
+# collation-server = utf8_general_ci
+# skip-character-set-client-handshake
 
 ##################################################
 ### Storage
@@ -57,7 +68,7 @@ innodb_force_recovery=0
 # bind=172.16.0.146
 # bind=172.16.202.70
 port=3306
-socket=/var/lib/mysql/mysql.sock
+socket=/mysql/mysql.sock
 
 # IP only
 skip-name-resolve
@@ -66,7 +77,8 @@ skip-name-resolve
 # server_id=29
 
 # session network transfer size
-max-allowed-packet=20M
+#ax-allowed-packet=20M
+max-allowed-packet=50M
 
 ##################################################
 ### Process
@@ -116,7 +128,7 @@ join_buffer_size = 8M
 ###
 ### Error
 ###
-log-error=/mysql-logs/localhost-error.log
+log-error=/mysql/log/mysql-error.log
 
 ###
 ### General
@@ -124,14 +136,14 @@ log-error=/mysql-logs/localhost-error.log
 ###     Tip: save into myisam table, for later use. Default=csv table.
 ###
 general-log
-general-log-file=/mysql-logs/localhost.log
+general-log-file=/mysql/log/mysql.log
 
 ###
 ### Slow
 ###     set @@global.slow_query_log_file='/home/aluno/mysql-logs/slow2.log';
 ###
 slow-query-log
-slow-query-log-file=/mysql-logs/localhost-slow.log
+slow-query-log-file=/mysql/log/mysql-slow.log
 
 log-queries-not-using-index
 
@@ -141,7 +153,7 @@ long_query_time=2
 ###
 ### Binary log: Replication/Redo, i.e., archive log
 ###
-# log-bin=/mysql-data/localhost-bin
+# log-bin=/mysql/arch/mysql-bin
 
 # size:
 # max_binlog_size=100M
@@ -163,7 +175,9 @@ long_query_time=2
 ### Others
 ##################################################
 
-init-connect="SET AUTOCOMMIT=OFF"
+#nit-connect="SET AUTOCOMMIT=OFF"
+init-connect='SET names utf8 COLLATE utf8_bin'
+
 # init-file=/home/aluno/work/mysql-init-file.sql
 
 transaction-isolation='READ-COMMITTED'
