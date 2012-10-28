@@ -1,0 +1,40 @@
+
+SMSGlobal
+http://www.smsglobal.com/global/en/
+
+
+Cost
+    Brazil
+    Cost per SMS	$ 0.043 (USD)
+
+    PrePaid
+        100 msgs     4.30
+       1000 msgs    43.00
+
+
+
+PagerDuty
+http://www.pagerduty.com/pricing#starter
+
+
+Startup
+    $9/month - 3 users
+    10 sms/month: free
+    extra sms   : $ 0.35 (USD)
+
+Standard
+    $18/month/user
+    20 sms/month/user: free (i.e, 5 users => 100 sms/month)
+    extra sms   : $ 0.35 (USD)
+
+
+
+
+
+
+
+mvdba
+5511994941586@email.smsglobal.com
+
+alert1@groups.smsglobal.com
+alert2@groups.smsglobal.com

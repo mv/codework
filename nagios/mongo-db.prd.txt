@@ -1,0 +1,45 @@
+
+csshX --login ec2-user  \
+        ec2-177-71-239-178.sa-east-1.compute.amazonaws.com  \
+        ec2-177-71-140-132.sa-east-1.compute.amazonaws.com
+
+
+csshX --login ec2-user  \
+        prd1-mongo-db-01a.edenbr.net    \
+        prd1-mongo-db-01b.edenbr.net
+
+
+prd1-mongo-db
+prd1-mongo-db-01a
+prd1-mongo-db-01b
+
+mongo-db-01a-v01    /dev/sdf    /dev/xvdf   /dev/xvdj
+mongo-db-01a-v02    /dev/sdg    /dev/xvdg   /dev/xvdk
+mongo-db-01a-v03    /dev/sdh    /dev/xvdh   /dev/xvdl
+mongo-db-01a-v04    /dev/sdi    /dev/xvdi   /dev/xvdm
+
+mongo-db-01b-v01
+mongo-db-01b-v02
+mongo-db-01b-v03
+mongo-db-01b-v04
+
+
+## Create RAID10 and persist configuration
+mdadm --verbose         \
+    --create /dev/md0   \
+    --level=10          \
+    --chunk=256         \
+    --raid-devices=4 /dev/xvd[j-m]  \
+    > /tmp/mdadm.log
+
+
+echo '`mdadm --detail --scan`' | tee -a /etc/mdadm.conf
+
+
+
+## Set read-ahead on each device
+for f in /dev/md0 /dev/xvd[j-m]
+do
+    blockdev --setra 128 $f
+done
+
