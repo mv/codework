@@ -36,6 +36,40 @@ cd /mnt/rakuten && \
 
 
 
+FTP: 200.98.213.113
+Usuário: babyftpimg
+Senha: passwd
+
+lftp -c 'open -e "mirror -n -v ./" ftp://babyftpimg:"passwd"@200.98.213.113/babyftpimg/produtos'
+lftp -c 'open -e "mirror -n -v ./" ftp://babyftpimg:passwd@200.98.213.113/babyftpimg/produtos'
+lftp -c 'open -e "mirror -n -v ./" ftp://babyftpimg:@200.98.213.113/babyftpimg/produtos'
+
+
+     lftp -u babyftpimg,"passwd" -e "mirror --only-newer ./  ~/produtos/" 200.98.213.113
+time lftp -u babyftpimg,"passwd" -e "mirror --only-newer ./  ~/produtos/" 200.98.213.113
+
+
+
+open 200.98.213.113
+user babyftpimg "passwd"
+
+    mirror --only-newer ~/produtos/ ./
+    mirror              ~/produtos/ ./
+    mirror --continue   source      destination
+    mirror -p
+    mirror --parallel=10
+
+    mirror --verbose --only-newer path/to/source_directory path/to/target_directory
+
+
+time lftp -u babyftpimg,"passwd" -e "mirror               ~/produtos ./" 200.98.213.113
+time lftp -u babyftpimg,"passwd" -e "mirror --parallel=10 ~/produtos ./" 200.98.213.113
+
+
+
+lftp at 00:00 remote_site -e "mirror --verbose --only-newer path/to/source_directory path/to/target_directory" &
+
+
 
 mirror [OPTS] [source [target]]
 
