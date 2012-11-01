@@ -2,11 +2,13 @@
 
     by Tim Kay
     http://timkay.com/aws/
+    http://timkay.com/aws/howto.html
+    https://github.com/timkay/aws
 
 
 ## Install
 
-*__'aws'__* is a perl standalone script. To use it:
+*__'aws'__* is a perl standalone script. To install it:
 
 
     wget https://raw.github.com/timkay/aws/master/aws
@@ -27,7 +29,7 @@ Amazon credentials can be defined in various ways:
 
     # or create ~/.awssecret:
     B5JYHPQCXW13EXAMPLE
-    2GAHKWG3+1wxcqyhpj5b1Ggqc0TIxj2EXAMPLE
+    GAHKWG3+1wxcqyhpj5b1Ggqc0TIxj2EXAMPLE
 
 
 
