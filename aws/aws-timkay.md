@@ -24,12 +24,12 @@
 Amazon credentials can be defined in various ways:
 
     # Set env variables:
-    export AWS_ACCESS_KEY_ID=B5JYHPQCXW13EXAMPLE
-    export AWS_SECRET_ACCESS_KEY=2GAHKWG3+1wxcqyhpj5b1Ggqc0TIxj2EXAMPLE
+    export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+    export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 
     # or create ~/.awssecret:
-    B5JYHPQCXW13EXAMPLE
-    GAHKWG3+1wxcqyhpj5b1Ggqc0TIxj2EXAMPLE
+    AKIAIOSFODNN7EXAMPLE
+    wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 
 
 
