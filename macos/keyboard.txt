@@ -21,3 +21,53 @@ Screen Up
 Screen Down
 Document Begin  command+Up
 Document End    command+Down
+
+
+
+Fix Home and End Keys on Mac OS X
+----------------------------------
+
+    Ref: http://phatness.com/2007/08/fix-home-and-end-keys-on-mac-os-x/
+
+# User preferences
+
+In ~/Library/KeyBindings/DefaultKeyBinding.dict
+
+    {
+        "\UF729"  = "moveToBeginningOfLine:";
+        "$\UF729" = "moveToBeginningOfLineAndModifySelection:";
+        "\UF72B"  = "moveToEndOfLine:";
+        "$\UF72B" = "moveToEndOfLineAndModifySelection:";
+        "\UF72C"  = "pageUp:";
+        "\UF72D"  = "pageDown:";
+    }
+
+# Terminal.app
+
+In the 'Keyboard Tab':
+
+        Key         Escape Sequence
+        Home        \033[1~
+        End         \033[4~
+        Page Up     \033[5~
+        Page Down   \033[6~
+
+# Shell
+
+In '~/.inputrc'
+
+
+        "\e[1~": beginning-of-line
+        "\e[4~": end-of-line
+        "\e[5~": history-search-backward
+        "\e[6~": history-search-forward
+        "\e[3~": delete-char
+        "\e[2~": quoted-insert
+        "\e[5C": forward-word
+        "\e[5D": backward-word
+        "\e\e[C": forward-word
+        "\e\e[D": backward-word
+        set completion-ignore-case On
+
+
+
