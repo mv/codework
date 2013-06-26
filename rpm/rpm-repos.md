@@ -53,6 +53,10 @@
     http://elrepo.org/linux/extras/el6/x86_64/RPMS/
     http://elrepo.org/linux/extras/el6/SRPMS/
 
+### Atomic
+    http://www6.atomicorp.com/channels/atomic/centos/6/x86_64/RPMS/
+
+    wget -q -O - http://www.atomicorp.com/installers/atomic | sh
 
 ### MongoDB
     http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/
