@@ -7,6 +7,7 @@
 
 ### Centos6 updates
     http://mirror.centos.org/centos/6/updates/x86_64/Packages/
+    http://mirror.centos.org/centos/6/updates/x86_64/Packages/?C=M;O=D
 
 ### Centos6 Source
     http://vault.centos.org/6.2/os/Source/SPackages/
