@@ -1,0 +1,5 @@
+
+gem "nokogiri"       , "~> 1.5.10"
+gem "nori"           , "~> 2.2.0"
+#em "humanize-bytes" , "~> 1.0.0"
+
