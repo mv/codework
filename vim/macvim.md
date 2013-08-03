@@ -1,12 +1,13 @@
 # MacVim drawer
 
     git clone git://github.com/alloy/macvim.git
-    cd macvim/src
+    cd macvim
+    cd src
     ./configure --with-features=huge  \
                 --enable-rubyinterp   \
                 --enable-pythoninterp \
-                --enable-perlinterp   \
                 --enable-cscope
+               #--enable-perlinterp   \
 
 
     open MacVim/build/Release/MacVim.app
