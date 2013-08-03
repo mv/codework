@@ -1,9 +1,10 @@
 ### Packages Search
-
     http://pkgs.org/
+    http://pkgs.repoforge.org/
 
     http://rpm.pbone.net/
     http://rpmfind.net/linux/RPM/index.html
+
 
 ### Centos6 updates
     http://mirror.centos.org/centos/6/updates/x86_64/Packages/
@@ -12,8 +13,35 @@
 ### Centos6 Source
     http://vault.centos.org/6.2/os/Source/SPackages/
     http://vault.centos.org/6.3/os/Source/SPackages/
+    http://vault.centos.org/6.4/os/Source/SPackages/
 
+### RedHat Source
+    http://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/os/SRPMS/
 
+### RedHat Source: spacewalk, cobbler
+    http://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/RHNTOOLS/SRPMS/
+
+### RedHat Source: ruby, v8, nagios-plugins, facter
+    http://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/RHOS/SRPMS/
+
+### RedHat Source: ruby, nodejs, uuid, mocollective
+    http://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/RHOSE/SRPMS/
+
+### RedHat Source: storage: glusterfs, libvirt, augeas
+    http://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/RHS/SRPMS/
+
+### RedHat Source: Satellite: oracle-client, spacewalk
+    http://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/RHNSAT/SRPMS/
+    http://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/RHNPROXY/SRPMS/
+
+### RedHat Source: DirectoryServices: 389-ds
+    http://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/RHDirServ/SRPMS/
+
+### RedHat Source: Cloud-Init
+    http://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/RH-COMMON/SRPMS/
+
+### RedHat Source: jboss
+    http://ftp.redhat.com/pub/redhat/linux/enterprise/6Server/en/JBEAP/SRPMS/
 ### EPEL
     http://dl.fedoraproject.org/pub/epel/6/x86_64/
     http://dl.fedoraproject.org/pub/epel/6/SRMPS
@@ -24,7 +52,6 @@
     http://pkgs.repoforge.org/mytop/
 
 ### RPMForge
-
     http://apt.sw.be/source/
     http://apt.sw.be/redhat/el6/en/x86_64/rpmforge/RPMS/        # rpmforge
     http://apt.sw.be/redhat/el6/en/x86_64/extras/RPMS/          # extras
@@ -35,9 +62,15 @@
     http://apt.sw.be/redhat/el6/en/$basearch/testing
 
 
+### Dan Walsh SELinux policies
+    http://people.redhat.com/dwalsh/SELinux/RHEL6/
+    http://people.redhat.com/dwalsh/SELinux/RHEL6/noarch/
+
+
 ### CentALT
     http://centos.alt.ru/repository/centos/6/x86_64/
     http://centos.alt.ru/repository/centos/6/SRPMS/
+
 
 ### Remi
     http://rpms.famillecollet.com/fedora/
