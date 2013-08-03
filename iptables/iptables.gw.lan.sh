@@ -2,14 +2,28 @@
 #
 # iptables for a NAT gateway server.
 #
+#   i--i--i--i-i-i
+#   |            |
+#   i  internet  i      L--L--L
+#   |            |      |
+#   i--i--i--i-i-i      L--L--L
+#               \       |
+#                g------L  local internal netowrk
+#                       |
+#                       L--L
+#
+# g: gateway/firewall server: (this server)
+# i: internet servers
+# L: local lan servers
+#
 # server scenario:
 # ----------------
 #   - a server in your home and/or office
 #   - I have a public IP, on interface 'eth0'
 #   - I have an internal IP, on interface 'eth1'
 #   - public IP   : 200.200.200.1 (example)
-#   - internal IP : 192.168.10.254 (example)
-#   - internal lan: 192.168.10.0./24 (example)
+#   - internal IP : 192.168.10.254
+#   - internal lan: 192.168.10.0./24
 #
 #
 # Marcus Vinicius Fereira            ferreira.mv[ at ].gmail.com
@@ -18,6 +32,7 @@
 
 ###
 ### Setup
+###   (I am server 'g')
 ###
   external_iface='eth0'
   internal_iface='eth1'
@@ -109,61 +124,49 @@
 ##
 ## Ping, please.
 ##
-  iptables -A INPUT  -p icmp --icmp-type 8 -j ACCEPT -m comment --comment 'allow: icmp ping: echo-request'
-  iptables -A INPUT  -p icmp --icmp-type 0 -j ACCEPT -m comment --comment 'allow: icmp ping: echo-reply'
+  # from outside
+  iptables -A INPUT -i $external_iface -p icmp --icmp-type 8 -j ACCEPT -m comment --comment 'allow: icmp ping: echo-request'
+  iptables -A INPUT -i $external_iface -p icmp --icmp-type 0 -j ACCEPT -m comment --comment 'allow: icmp ping: echo-reply'
+
+  # from inside
+  iptables -A INPUT -i $internal_iface -p icmp               -j ACCEPT -m comment --comment 'allow: icmp from lan'
 
 
 ##
 ## All my servers have ssh
 ##
 
-# iptables -A INPUT -p tcp --dport    22 -m state --state NEW                         -j ACCEPT -m comment --comment 'allow: ssh new from anywhere'
-# iptables -A INPUT -p tcp --dport    22 -m limit --limit 25/minute --limit-burst 100 -j ACCEPT -m comment --comment 'ddos on ssh?'
+  # from outside
+  iptables -A INPUT -i $external_iface -p tcp --dport    22 -m state --state NEW    \
+                                       -m limit --limit 25/minute --limit-burst 100 \
+                                       -j ACCEPT -m comment --comment 'ssh: prevent ddos from internet'
 
-  iptables -A INPUT -p tcp --dport    22 -m state --state NEW                         \
-                                         -m limit --limit 25/minute --limit-burst 100 \
-                                         -j ACCEPT -m comment --comment 'ssh: prevent ddos'
-
-##
-## I am a server: webserver
-##
-  iptables -A INPUT -p tcp --dport    80 -m state --state NEW                         \
-                                         -m limit --limit 25/minute --limit-burst 100 \
-                                         -j ACCEPT -m comment --comment 'http: prevent ddos'
-
-  iptables -A INPUT -p tcp --dport   443 -m state --state NEW                         \
-                                         -m limit --limit 25/minute --limit-burst 100 \
-                                         -j ACCEPT -m comment --comment 'https: prevent ddos'
-
-# iptables -A INPUT -p tcp --dport    80 -m state --state NEW -j ACCEPT -m comment --comment 'allow: http new'
-# iptables -A INPUT -p tcp --dport   443 -m state --state NEW -j ACCEPT -m comment --comment 'allow: https new'
-# iptables -A INPUT -p tcp --dport    80 -m limit --limit 25/minute --limit-burst 100 -j ACCEPT -m comment --comment 'ddos on http?'
-# iptables -A INPUT -p tcp --dport   443 -m limit --limit 25/minute --limit-burst 100 -j ACCEPT -m comment --comment 'ddos on https?'
+  # from outside
+  iptables -A INPUT -i $internal_iface -p tcp --dport    22 -m state --state NEW -j ACCEPT -m comment --comment 'allow: ssh from lan'
 
 ##
-## I am a server: pick all that apply
+## I am a server: my current admin control panel
+##
+
+  # from outside
+  iptables -A INPUT -i $external_iface -p tcp --dport    80 -m state --state NEW    \
+                                         -m limit --limit 25/minute --limit-burst 100 \
+                                         -j ACCEPT -m comment --comment 'http: prevent ddos from internet'
+
+  iptables -A INPUT -i $external_iface -p tcp --dport   443 -m state --state NEW    \
+                                         -m limit --limit 25/minute --limit-burst 100 \
+                                         -j ACCEPT -m comment --comment 'https: prevent ddos from internet'
+
+  # from inside
+  iptables -A INPUT -i $internal_iface -p tcp --dport    80 -m state --state NEW -j ACCEPT -m comment --comment 'allow: http from lan'
+  iptables -A INPUT -i $internal_iface -p tcp --dport   443 -m state --state NEW -j ACCEPT -m comment --comment 'allow: https from lan'
+
+##
+## I am a server: pick all that apply (resumed)
 ##
 # iptables -A INPUT -p udp --dport   123 -m state --state NEW -j ACCEPT -m comment --comment 'allow: ntp'
 # iptables -A INPUT -p tcp --dport    53 -m state --state NEW -j ACCEPT -m comment --comment 'allow: dns'
 # iptables -A INPUT -p udp --dport    53 -m state --state NEW -j ACCEPT -m comment --comment 'allow: dns'
-# iptables -A INPUT -p tcp --dport    25 -m state --state NEW -j ACCEPT -m comment --comment 'allow: smtp'
-# iptables -A INPUT -p tcp --dport   465 -m state --state NEW -j ACCEPT -m comment --comment 'allow: smtp SSL'
-# iptables -A INPUT -p tcp --dport   587 -m state --state NEW -j ACCEPT -m comment --comment 'allow: smtp TLS'
-# iptables -A INPUT -p tcp --dport   110 -m state --state NEW -j ACCEPT -m comment --comment 'allow: pop3'
-# iptables -A INPUT -p tcp --dport   995 -m state --state NEW -j ACCEPT -m comment --comment 'allow: pop3 ssl'
-# iptables -A INPUT -p tcp --dport   143 -m state --state NEW -j ACCEPT -m comment --comment 'allow: imap'
-# iptables -A INPUT -p tcp --dport   993 -m state --state NEW -j ACCEPT -m comment --comment 'allow: imap ssl'
-# iptables -A INPUT -p tcp --dport   873 -m state --state NEW -j ACCEPT -m comment --comment 'allow: rsync'
-# iptables -A INPUT -p tcp --dport  1521 -m state --state NEW -j ACCEPT -m comment --comment 'allow: Oracle Listener'
-# iptables -A INPUT -p tcp --dport  1526 -m state --state NEW -j ACCEPT -m comment --comment 'allow: Oracle Listener'
-# iptables -A INPUT -p tcp --dport  3128 -m state --state NEW -j ACCEPT -m comment --comment 'allow: proxy'
-# iptables -A INPUT -p tcp --dport  3306 -m state --state NEW -j ACCEPT -m comment --comment 'allow: mysql'
-# iptables -A INPUT -p tcp --dport  6380 -m state --state NEW -j ACCEPT -m comment --comment 'allow: redis'
-# iptables -A INPUT -p tcp --dport 11211 -m state --state NEW -j ACCEPT -m comment --comment 'allow: memcache'
-# iptables -A INPUT -p tcp --dport   137 -m state --state NEW -j ACCEPT -m comment --comment 'allow: samba'
-# iptables -A INPUT -p tcp --dport   138 -m state --state NEW -j ACCEPT -m comment --comment 'allow: samba'
-# iptables -A INPUT -p tcp --dport   139 -m state --state NEW -j ACCEPT -m comment --comment 'allow: samba'
-# iptables -A INPUT -p tcp --dport   445 -m state --state NEW -j ACCEPT -m comment --comment 'allow: samba'
 
 
 ##
@@ -195,8 +198,29 @@
 ##   DROP  : refuse silently     : for external accesses. An attacker will have no extra clues.
 ##
 
-# iptables -A INPUT -j REJECT -m comment --comment 'CHAIN INPUT - FINAL RULE: reject with error [This must close INPUT CHAIN.]'
-  iptables -A INPUT -j DROP   -m comment --comment 'CHAIN INPUT - FINAL RULE: drop! [This must close INPUT CHAIN.]'
+  iptables -A INPUT -i $internal_iface -j REJECT -m comment --comment 'LAN clients: reject with error [Extra ports must open explicitly.]'
+  iptables -A INPUT -i $external_iface -j DROP   -m comment --comment 'CHAIN INPUT - FINAL RULE: drop! [This must close INPUT CHAIN.]'
+
+
+###
+### NAT
+###
+###   To enable NAT do not forget to enable 'net.ipv4.ip_forward = 1'
+###   on /etc/sysctl.conf and on the command line:
+###
+###     $ sysctl -e net.ipv4.ip_forward=1
+###
+
+  iptables -t nat    -A POSTROUTING -o $external_iface -j MASQUERADE -m comment --comment 'enabling NAT'
+  iptables -t filter -A FORWARD -i eth1 -o eth0        -j ACCEPT     -m comment --comment 'pass LAN traffic'
+# iptables -t filter -A FORWARD -i eth1                -j ACCEPT     -m comment --comment 'pass LAN traffic'
+# iptables -t filter -A FORWARD -i eth0 -o eth1 -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+
+### Obs:
+###   MASQUERADE: I pass on a interface. I uses the address bound to that interfaces
+###         SNAT: I must use a source IP address.
+
 
 
 ###
