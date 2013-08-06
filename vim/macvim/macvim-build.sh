@@ -46,20 +46,8 @@ PATH=/usr/bin:/bin ./configure \
 
     cd MacVim && xcodebuild 2>&1 | tee xcodebuild.my.log
 
-    # destination
-    mkdir   -p  ${DEST}/bin
+    open build/Release/
 
-    # .app
-    /bin/rm -rf ${DEST}/MacVim.app && /bin/cp -rp build/Release/MacVim.app ${DEST}/
-    sudo ln -nsf ${DEST}/MacVim.app /Applications/
-
-    # command line
-    pwd
-    /bin/cp -f mvim ${DEST}/bin/
-    for f in gview gvim gvimdiff gvimex mview mvim mvimdiff mvimex vi view vim vimdiff vimex
-    do
-       ln -nsf ${DEST}/bin/mvim /usr/local/bin/${f}
-    done
 
 # vim:ft=sh:
 
