@@ -24,16 +24,24 @@ make clean
 #
 PATH=/usr/bin:/bin ./configure \
     --with-features=huge    \
-    --enable-gui=macvim     \
+    --with-compiledby=Mv    \
+    --with-macarchs=x86_64  \
+    --enable-multibyte      \
     --enable-perlinterp     \
     --enable-rubyinterp     \
     --enable-pythoninterp   \
     --enable-luainterp      \
     --enable-cscope         \
+    --enable-gui=macvim     \
     --disable-workshop      \
     --disable-netbeans      \
     --disable-netbeans_intg \
          2>&1 | tee configure.my.log
+
+#     --enable-tclinterp
+#     --with-ruby-command=#{RUBY_PATH}
+#     --with-tlib=ncurses     \
+
     make 2>&1 | tee make.my.log
 
     cd MacVim && xcodebuild 2>&1 | tee xcodebuild.my.log
@@ -47,7 +55,7 @@ PATH=/usr/bin:/bin ./configure \
 
     # command line
     pwd
-    /bin/cp -f MacVim/mvim ${DEST}/bin/
+    /bin/cp -f mvim ${DEST}/bin/
     for f in gview gvim gvimdiff gvimex mview mvim mvimdiff mvimex vi view vim vimdiff vimex
     do
        ln -nsf ${DEST}/bin/mvim /usr/local/bin/${f}
