@@ -6,6 +6,11 @@ defaults write com.apple.Finder AppleShowAllFiles -bool false
 # Screen capture format: pdf, png, jpg, gif
 defaults write com.apple.screencapture type png
 
+# Dock bounce icon
+defaults write com.apple.dock no-bouncing -bool TRUE
+killall Dock
+
+
 # Software update
 
 ## User
