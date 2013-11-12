@@ -15,5 +15,8 @@
 
 FSTAB
 
+# Align
+column -t /etc/fstab > /root/fstab1 && /bin/cp /root/fstab1 /etc/fstab
+
 # vim:ft=sh:
 
