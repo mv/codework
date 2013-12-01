@@ -1,16 +1,10 @@
 #!/bin/bash
 
-usage() {
-  echo
-  echo "$0 /path/to/file.ext"
-  echo
-  exit 1
-}
-
-[ -z "$1" ] && usage
-
 set -x
-pathname="/mnt/public/upload/dump_2013-11-01.tar.gz"
+
+# default
+pathname="$1"
+pathname=${pathname:='/mnt/public/upload/dump_2013-11-01.tar.gz'}
 
 ###
 ### delete on left: ltrim
