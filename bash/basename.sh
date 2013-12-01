@@ -12,16 +12,16 @@ pathname=${pathname:='/mnt/public/upload/dump_2013-11-01.tar.gz'}
 
 
 # shortest
-  pattern='/'
+  pattern='/*/'
   one_level_relative_path=${pathname#${pattern}}
 
   pattern='*.'
   all_ext=${pathname#${pattern}}
 
-# longest
-  pattern='*/'
-  basename=${pathname##${pattern}}
 
+# longest
+  pattern='/*/'
+  basename=${pathname##${pattern}}
 
   pattern='*.'
   one_ext=${pathname##${pattern}}
@@ -32,7 +32,7 @@ pathname=${pathname:='/mnt/public/upload/dump_2013-11-01.tar.gz'}
 ###
 
 # shortest
-  pattern='/*'
+  pattern='/*/'
   dirname=${pathname%${pattern}}
 
 # longest
@@ -50,14 +50,14 @@ cat<<EOF
   pathname: [$pathname]
 
   # ltrim: shortest,longest (#,##)
-  onelevel_relpath=\${pathname#*/}       ${pathname#*/}
-          basename=\${pathname##*/}      ${pathname##*/}
+  onelevel_relpath=\${pathname#/*/}      ${pathname#*/}
+          basename=\${pathname##/*/}     ${pathname##*/}
 
            all_ext=\${pathname#*.}       ${pathname#*.}
            one_ext=\${pathname##*.}      ${pathname##*.}
 
   # rtrim: shortest,longest (%,%%)
-           dirname=\${pathname%/*}       ${pathname%/*}
+           dirname=\${pathname%/*/}      ${pathname%/*}
             nogzip=\${pathname%.*}       ${pathname%.*}
              noext=\${pathname%%.*}      ${pathname%%.*}
 
@@ -65,6 +65,17 @@ cat<<EOF
 
             nogzip=\${basename%.*}       ${basename%.*}
              noext=\${basename%%.*}      ${basename%%.*}
+
+
+  OReilly: Learning the Bash Shell
+  ---------------------------------
+
+     Expression                             Result
+        \${path##/*/}                          long.file.name
+        \${path#/*/}                  cam/book/long.file.name
+        \$path                  /home/cam/book/long.file.name
+        \${path%.*}             /home/cam/book/long.file
+        \${path%%.*}            /home/cam/book/long
 
 EOF
 
