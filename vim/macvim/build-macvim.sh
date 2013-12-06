@@ -55,6 +55,7 @@ PATH=/usr/bin:/bin ./configure \
 
     # command line
     pwd
+#   /bin/cp -f MacVim/mvim ${DEST}/bin/
     /bin/cp -f mvim ${DEST}/bin/
     for f in gview gvim gvimdiff gvimex mview mvim mvimdiff mvimex vi view vim vimdiff vimex
     do
