@@ -1,0 +1,43 @@
+Hi,
+
+Attached is a patch to address a build problem of Mac OS X 10.9 Mavericks (released version).
+
+On that system, the build fails due to a type conflict as shown below:
+
+clang -c -I. -Iproto -DHAVE_CONFIG_H -DFEAT_GUI_GTK  -D_REENTRANT -I/opt/local/include/gtk-2.0 -I/opt/local/lib/gtk-2.0/include -I/opt/local/include/pango-1.0 -I/opt/local/include/gio-unix-2.0/ -I/opt/local/include -I/opt/local/include/cairo -I/opt/local/include/atk-1.0 -I/opt/local/include/cairo -I/opt/local/include/pixman-1 -I/opt/local/include/libpng15 -I/opt/local/include -I/opt/local/include/gdk-pixbuf-2.0 -I/opt/local/include/libpng15 -I/opt/local/include/pango-1.0 -I/opt/local/include/harfbuzz -I/opt/local/include/pango-1.0 -I/opt/local/include/glib-2.0 -I/opt/local/lib/glib-2.0/include -I/opt/local/include -I/opt/local/include/freetype2 -I/opt/local/include -I/opt/local/include/freetype2 -I/opt/local/include    -g -O2 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1   -I/opt/local/include     -o objects/os_unix.o os_unix.c
+os_unix.c:830:46: warning: declaration of 'struct sigaltstack' will not be
+      visible outside of this function [-Wvisibility]
+              extern int sigaltstack __ARGS((const struct sigaltstack *ss, str...
+                                                          ^
+./os_unix.h:88:21: note: expanded from macro '__ARGS'
+#  define __ARGS(x) x
+                    ^
+os_unix.c:830:13: error: conflicting types for 'sigaltstack'
+        extern int sigaltstack __ARGS((const struct sigaltstack *ss, str...
+                   ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/include/signal.h:85:5: note:
+        previous declaration is here
+int     sigaltstack(const stack_t * __restrict, stack_t * __restrict)  _...
+        ^
+1 warning and 1 error generated.
+make[1]: *** [objects/os_unix.o] Error 1
+make: *** [first] Error 2
+
+The type conflict above is not the cause of the failure, but the result of the failure of importing the constant macro MAC_OS_X_VERSION_MAX_ALLOWED that is used at lines 826--827 of src/os_unix.c to determine whether or not an alternative signature of sigaltstack() is used.
+
+For some reason (unknown to me), ‘Mavericks' fails to have the preprocessor import the macro, which is defined in AvailabilityMacros.h, whose role is very similar to glibc’s features.h.
+
+Hence, the macro can't be seen from the source code and remains undefined even after it is preprocessed.  The missing macro results in a wrong function signature selection, thus causing the compile error.
+
+Including the header explicitly is a solution, but if it is done unconditionally, it is almost certain to do something wrong with systems other than Mavericks.
+
+But macros looking suitable for conditional compilation are all defined in the header. :-/
+
+To get around this chicken-or-egg problem, the patch uses the compiler’s predefined macro __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__, whose default value is the version number of OS X the compiler accompanies, so that the direct reference to the macros of AvailabilityMacros.h is not used to check the build environment.
+
+Depending on its value, inclusion of the header is automatically determined.  In particular, if the compiler does not have such a predefined macro, nothing happens.  So the patch is harmless to any systems other than Mac.
+
+Of course, the patch doesn't address the case where compilers other than the ones Apple provides, say genuine gcc, are used.  But I think almost users satisfy with the solution the patch offers.
+
+Regards,
+KK
