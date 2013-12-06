@@ -2,6 +2,7 @@
 
     git clone git://github.com/alloy/macvim.git
     cd macvim
+    git checkout split-browser
     cd src
     ./configure --with-features=huge  \
                 --enable-cscope       \
@@ -12,11 +13,12 @@
 
     make
 
-    # To test:
+    # To execute:
     open MacVim/build/Release/MacVim.app
 
-    # To install: drag 'MacVim.app' to your location
+    # To install: drag 'MacVim.app' to your Appllications folder or elsewhere
     open MacVim/build/Release
+
 
 ##
 ## if ruby.h compilation problems
@@ -32,12 +34,13 @@
               --enable-perlinterp   \
               --enable-cscope
 
+
 ##
-## if make error: src/os_unix.c (for build on Mac OS X 10.9 Mavericks)
-##     Ref: https://groups.google.com/forum/#!topic/vim_dev/wGSyk59cDjw
+## if make error: src/os_unix.c (on Mac OS X 10.9 Mavericks)
 ##
 
-    wget https://groups.google.com/group/vim_dev/attach/35ec989be91d045/os_unix.c.patch
-    cd ../src/
-    patch -p1 < os_unix.c.patch
+      # Ref: https://groups.google.com/forum/#!topic/vim_dev/wGSyk59cDjw
+      wget https://groups.google.com/group/vim_dev/attach/35ec989be91d045/os_unix.c.patch
+      cd ../src/
+      patch -p1 < os_unix.c.patch
 
