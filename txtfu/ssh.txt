@@ -11,3 +11,8 @@ ssh dev01 -L 7777:10.2.117.196:5984
 #          na porta 25
 ssh dev01 -R 7777:mail.abril.com.br:25
 
+
+##   ssh -l 'sshuser'  server.address.com   1521:rds_endpoint:1521
+## $ ssh -l ec2-user ccl-01.example-wws.com -L 1521:ora-01.dukdukduk.sa-east-1.rds.amazonaws.com:1521
+
+
