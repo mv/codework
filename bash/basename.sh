@@ -70,12 +70,15 @@ cat<<EOF
   OReilly: Learning the Bash Shell
   ---------------------------------
 
-     Expression                             Result
-        \${path##/*/}                          long.file.name
-        \${path#/*/}                  cam/book/long.file.name
-        \$path                  /home/cam/book/long.file.name
-        \${path%.*}             /home/cam/book/long.file
-        \${path%%.*}            /home/cam/book/long
+     Expression                               Result
+        \${path##/*/}                            long.file.name
+        \${path#/*/}                    cam/book/long.file.name
+        \$path                    /home/cam/book/long.file.name
+        \${path%.*}               /home/cam/book/long.file
+        \${path%%.*}              /home/cam/book/long
+
+        echo -e \${$PATH://:/\n}  $( echo -e ${$PATH://:/\n} )
+
 
 EOF
 
