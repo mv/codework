@@ -1,0 +1,13 @@
+
+
+
+    /bin/ls -l | awk '{print $11}' | egrep --color Cellar | \
+                awk -F/ '{print $3}' | sort | uniq |       \
+    while read x
+    do
+        brew install $x
+        brew unlink  $x
+        brew link --overwrite $x
+    done
+
+
