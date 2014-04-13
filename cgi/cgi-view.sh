@@ -4,6 +4,7 @@
 PATH=/bin:/usr/bin:/sbin:/usr/sbin
 
 p() {
+    #echo "${@}"
     echo "${@} </br>"
 }
 
@@ -17,24 +18,23 @@ p "-----------"
 env | sort | while read x
 do p $x
 done
+echo
 
 
+p "Method: ${REQUEST_METHOD}"
+p ""
 
 if [ "$REQUEST_METHOD" == "POST" ] || \
    [ "$REQUEST_METHOD" == "PUT"  ]
 then
-    p "${REQUEST_METHOD}</br>"
-    p "</br>"
-
     p "Standard Input"
     p "--------------"
     read -n $CONTENT_LENGTH QUERY_STRING_POST
-    echo "[ $QUERY_STRING_POST ]"
     echo "$QUERY_STRING_POST"
     echo
 fi
 
-printf "</code></html>\n";
+printf "</code></html>\n\n";
 
 # vim:ft=sh:
 
