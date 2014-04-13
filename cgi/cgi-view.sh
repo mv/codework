@@ -1,40 +1,43 @@
 #!/bin/bash
 #
 
+##
+## Remember:
+##   - CGI is any program/script executed by the webserver
+##   - webserver will pass information in 2 ways:
+##       - using ENVIRONMENT variables
+##       - using STDIN for POST/PUT methods, encoded
+##   - in shell, 'GET' parameters must be handed by yourself
+##   - in shell, 'POST' parameters must be handed by yourself
+##   - in shell, 'POST' parameters are encoded.
+##
+
 PATH=/bin:/usr/bin:/sbin:/usr/sbin
 
-p() {
-    #echo "${@}"
-    echo "${@} </br>"
-}
-
 printf "Content-type: text/html\n\n"
-printf "<html><code>\n"
 
-p "Environment"
-p "-----------"
+printf "<html><pre>\n\n"
 
-# env | sort | column -t
-env | sort | while read x
-do p $x
-done
+echo "Environment"
+echo "-----------"
+
+env | sort | sed -e 's/=/ = /'
+
 echo
-
-
-p "Method: ${REQUEST_METHOD}"
-p ""
+echo "Method: ${REQUEST_METHOD}"
+echo
 
 if [ "$REQUEST_METHOD" == "POST" ] || \
    [ "$REQUEST_METHOD" == "PUT"  ]
 then
-    p "Standard Input"
-    p "--------------"
+    echo "Standard Input"
+    echo "--------------"
     read -n $CONTENT_LENGTH QUERY_STRING_POST
     echo "$QUERY_STRING_POST"
     echo
 fi
 
-printf "</code></html>\n\n";
+echo "</pre></html>"
 
 # vim:ft=sh:
 
