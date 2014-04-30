@@ -11,6 +11,18 @@ usage() {
 
 pathname="$1"
 
+###
+### Book://Learning_the_Bash_Shell_3rd_ed.Oreilly.pdf
+###
+###   Expression         Result
+###   --------------     -----------------------------
+###     ${path##/*/}                    long.file.name
+###     ${path#/*/}            cam/book/long.file.name
+###     $path            /home/cam/book/long.file.name
+###     ${path%.*}       /home/cam/book/long.file
+###     ${path%%.*}      /home/cam/book/long
+###
+
   relative_path=${pathname#*/}
   ltrim=${pathname#*marcus/}
       base_name=${pathname##*/}
