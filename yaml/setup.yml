@@ -1,0 +1,32 @@
+###
+### logstash
+###
+
+production:
+  agent:
+    output: |
+        redis {
+          'codec'     => 'json'
+          'host'      => 'redis.example.com'
+          'data_type' => 'list'
+          'key'       => 'logstash'
+        }
+    opts: [ '--verbose', '--debug' ] # in-flow
+  server:
+    input: |
+        redis {
+          'codec'     => 'json'
+          'host'      => 'redis.example.com'
+          'data_type' => 'list'
+          'key'       => 'logstash'
+        }
+    output: |
+        elasticsearch_http {
+          'host' => 'es.example.com'
+          'port' => '9200'
+        }
+    opts: { w: 2, pluginpath: /opt/logstash } # in-flow
+
+
+# vim:ft=yaml:
+
