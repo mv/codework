@@ -1,0 +1,41 @@
+
+        "ElasticLoadBalancer" : {
+            "Type" : "AWS::ElasticLoadBalancing::LoadBalancer",
+            "Properties" : {
+                "LoadBalancerName" : {   "Ref": "AWS::StackName" },
+                "SecurityGroups"   : [ { "Ref": "DefaultSecurityGroupId" } ],
+                "Subnets"          : [ { "Ref": "SubnetEnvProd01a" }, { "Ref": "SubnetEnvProd01b" } ],
+                "Scheme"           : "internal",
+                "Listeners" : [
+                    { "Protocol" : "HTTP" , "LoadBalancerPort" :   "80", "InstancePort" :   "80" },
+                    { "Protocol" : "HTTP" , "LoadBalancerPort" : "5000", "InstancePort" : "5000" }
+                ],
+                "HealthCheck" : {
+                    "Target" : "HTTP:5000/",
+                    "HealthyThreshold"   : "3",
+                    "UnhealthyThreshold" : "5",
+                    "Interval" : "30",
+                    "Timeout" : "5"
+                }
+            }
+        },
+
+        "AutoScalingDNS" : {
+            "Type" : "AWS::Route53::RecordSetGroup",
+            "Properties" : {
+                "HostedZoneName" : { "Ref" : "DefaultHostedZone" },
+                "Comment" : { "Fn::Join": [ "", [ { "Ref": "AWS::StackName" }, ": LoadBalancer" ] ] } ,
+                "RecordSets" : [
+                    {
+                        "Name" : { "Fn::Join": [ ".", [ "docker", { "Ref": "DefaultHostedZone" } ] ] } ,
+                        "Type" : "A",
+                        "AliasTarget" : {
+                            "HostedZoneId" : { "Fn::GetAtt" : ["ElasticLoadBalancer", "CanonicalHostedZoneNameID"] },
+                            "DNSName"      : { "Fn::GetAtt" : ["ElasticLoadBalancer", "DNSName"  ] }
+                        }
+                    }
+                ]
+            }
+        }
+
+
