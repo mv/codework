@@ -1,0 +1,61 @@
+##
+## to test:
+##     logrotate -d /etc/logrotate.con
+##
+## to enforce:
+##     logrotate -v -f /etc/logrotate.con
+##
+
+###
+### Simple/global/other logs
+###
+/var/log/kafka/*.log
+{
+    daily
+
+    # only keep last 2 compressed
+    rotate 2
+
+    # managing timestamps
+    dateext
+    dateformat _%Y-%m-%d-%s
+
+    compress
+    nodelaycompress
+
+    nocopy
+    nocopytruncate
+    nocreate
+
+    missingok
+    notifempty
+}
+
+###
+### Logs generates hourly by log4j/logback
+### (logrotation here is to enforce compressing of the remaining files)
+###
+/var/log/kafka/*.log*[0-9][0-9]
+{
+    daily
+
+    # remove after compressed
+    rotate 0
+
+    # overwriting, if set elsewhere: these logs are already timestamp named
+    nodateext
+
+    compress
+    nodelaycompress
+
+    # Yes, I am just renaming by using '/bin/mv'
+    nocopy
+    nocopytruncate
+    nocreate
+
+    missingok
+    notifempty
+}
+
+# vim:ft=conf:
+
