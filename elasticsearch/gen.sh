@@ -8,6 +8,10 @@ show_delete() {
   echo curl -XDELETE http://10.0.2.250:9200/${1}
 }
 
+es_dump() {
+  echo es_dump_restore dump $es $1 ${dir}/${1}.zip
+}
+
 # 02
 for d in 09 11 14 {17..28}
 do
