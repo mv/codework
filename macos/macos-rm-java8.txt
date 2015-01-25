@@ -1,0 +1,3 @@
+sudo rm -rf /Library/Java/JavaVirtualMachines/jdk<version>.jdk
+sudo rm -rf /Library/PreferencePanes/JavaControlPanel.prefPane
+sudo rm -rf /Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin
