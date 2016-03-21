@@ -1,0 +1,14 @@
+
+<project name="project" default="list" basedir=".">
+
+  <target name="list">
+      <java classname="org.apache.tools.ant.Main">
+          <arg value="-projecthelp" />
+          <arg value="-verbose" />
+          <arg value="-buildfile" />
+          <arg value="${ant.file}" />
+      </java>
+  </target>
+
+</project>
+
