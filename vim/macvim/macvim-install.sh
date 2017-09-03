@@ -7,7 +7,7 @@
 #
 
 
-DEST=/usr/local/macvim
+DEST=/usr/local/macvim-alloy
 
 
   # destination

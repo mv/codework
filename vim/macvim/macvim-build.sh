@@ -7,7 +7,7 @@
 #
 
 
-DEST=/usr/local/macvim
+DEST=/usr/local/macvim-alloy
 
 # Ref:
 #     http://code.google.com/p/macvim/wiki/Building?tm=4
@@ -22,7 +22,7 @@ set -e
 
 make clean
 #
-PATH=/usr/bin:/bin ./configure \
+./configure \
     --with-features=huge    \
     --with-compiledby=Mv    \
     --with-macarchs=x86_64  \
@@ -31,11 +31,11 @@ PATH=/usr/bin:/bin ./configure \
     --enable-rubyinterp     \
     --enable-pythoninterp   \
     --enable-luainterp      \
+    --with-lua-prefix=/usr/local    \
     --enable-cscope         \
     --enable-gui=macvim     \
     --disable-workshop      \
     --disable-netbeans      \
-    --disable-netbeans_intg \
          2>&1 | tee configure.my.log
 
 #     --enable-tclinterp
