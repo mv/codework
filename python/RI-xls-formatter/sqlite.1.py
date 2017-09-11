@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# sqlite
 
 import sys
 import re
@@ -76,6 +77,8 @@ df = df.sort_values(['region', 'os_type', 'current_on_demand_price'], ascending=
 df['billed_hours'] = df['current_on_demand_price']  / df['on_demand_rate']
 df['saving_perc']  = df['effective_monthly_saving'] / df['current_on_demand_price']
 df['ri_fee']       = df['ri_upfront_price']         / df['ri_recommend']
+
+df['effective_hours'] = df['on_demand_monthly_price'] / df['on_demand_rate']
 
 
 # sqlite3 ftw!

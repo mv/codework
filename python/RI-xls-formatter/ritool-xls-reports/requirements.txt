@@ -1,0 +1,17 @@
+
+###
+### Ref:
+###   https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format
+###
+
+
+### csv and number crunch
+pandas
+
+### xlsx files
+openpyxl
+
+### local sqlite workings
+sqlite3
+sqlalchemy
+
