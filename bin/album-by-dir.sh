@@ -57,7 +57,6 @@ fi
 #
 [ "${_srcdir}"  == "" ] && usage
 [ "${_dstdir}"  == "" ] && usage
-[ "${_newname}" == "" ] && usage
 
 # coreutils: MacOS vs Linux
 which gstat  2>/dev/null && alias stat="gstat"
