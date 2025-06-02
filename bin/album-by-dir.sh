@@ -60,9 +60,9 @@ fi
 [ "${_newname}" == "" ] && usage
 
 # coreutils: MacOS vs Linux
-which gstat  2>&1>/dev/null && alias stat="gstat"
-which gcp    2>&1>/dev/null && alias cp="gcp"
-which gtouch 2>&1>/dev/null && alias touch="gtouch"
+which gstat  2>/dev/null && alias stat="gstat"
+which gcp    2>/dev/null && alias cp="gcp"
+which gtouch 2>/dev/null && alias touch="gtouch"
 
 ## Black        0;30     Dark Gray     1;30
 ## Red          0;31     Light Red     1;31
