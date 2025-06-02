@@ -59,6 +59,7 @@ fi
 [ "${_dstdir}"  == "" ] && usage
 
 # coreutils: MacOS vs Linux
+shopt -s expand_aliases
 which gstat  2>/dev/null && alias stat="gstat"
 which gcp    2>/dev/null && alias cp="gcp"
 which gtouch 2>/dev/null && alias touch="gtouch"
