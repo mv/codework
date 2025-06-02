@@ -6,10 +6,11 @@
 
 usage() {
     echo
-    echo "Usage: $0 -s src_dir -d dst_dir [-t] [-f] [-v]"
+    echo "Usage: $0 -s src_dir -d dst_dir [-n new_name] [-t] [-f] [-v]"
     echo
     echo "  -s: source dir"
     echo "  -d: destination root dir"
+    echo "  -n: set new name. (Assumes -t)"
     echo "  -t: set timestamp in filename"
     echo "  -f: force"
     echo "  -v: verbose"
@@ -19,12 +20,14 @@ usage() {
 
 [ "${1}" == "" ] && usage
 
-while getopts "s:d:tfv" opt
+while getopts "s:d:n:tfv" opt
 do
   case $opt in
     s) _srcdir=$( echo "${OPTARG}" | sed -e 's|/$||' )  # dir: remove trailing '/'
       ;;
     d) _dstdir=$( echo "${OPTARG}" | sed -e 's|/$||' )  # dir: remove trailing '/'
+      ;;
+    n) _newname="${OPTARG}"
       ;;
     t) _timestamp="true"
       ;;
@@ -54,6 +57,7 @@ fi
 #
 [ "${_srcdir}"  == "" ] && usage
 [ "${_dstdir}"  == "" ] && usage
+[ "${_newname}" == "" ] && usage
 
 # coreutils: MacOS vs Linux
 which gstat  2>&1>/dev/null && alias stat="gstat"
@@ -88,20 +92,29 @@ _qtd=$(/bin/ls -l "${_srcdir}"/* | wc -l | tr -d ' ')
 for f in "${_srcdir}"/*
 do
   # album is a dir named by date
-  _dtdir=$(  stat -x -t '%F'          "${f}" | grep Modify | awk -F': ' '{print $2}' )
+# _dtdir=$(  stat -x -t '%F'          "${f}" | grep Modify | awk -F': ' '{print $2}' )
+# _dtdir=$(  stat --format '%y' "${f}" | awk '{print $1}' )
+
+# _dtfile=$( stat -x -t '%F_%H-%M-%S' "${f}" | grep Modify | awk -F': ' '{print $2}' )
+  _dtfile=$( stat --format '%y' "${f}" | awk -F'.' '{print $1}' | tr ' ' "_" | tr ':' "-")
+  _dtdir=$(  echo "${_dtfile}" | awk -F'_' '{print $1}' )
 
   _bname="${f##*/}"     # basename
   _fname="${_bname%.*}" # file name, no extension
   _fext="${_bname##*.}" # file extension
   _lext=".${_fext,,}"   # lower
 
-  _dst="${_dstdir}/${_dtdir}"
-  _new="${_dst}/${_bname}"
+  _dst="${_dstdir}/${_dtdir}"   # destination
+  _new="${_dst}/${_bname}"      # new name
 
   if [ "${_timestamp}" == "true" ]
   then
-    _dtfile=$( stat -x -t '%F_%H-%M-%S' "${f}" | grep Modify | awk -F': ' '{print $2}' )
-    _new="${_dst}/${_fname}.${_dtfile}${_lext}"
+    _new="${_dst}/${_fname}.${_dtfile}${_lext}"   # new name + timestamp
+  fi
+
+  if [ "${_newname}" != "" ]
+  then
+    _new="${_dst}/${_newname}.${_dtfile}${_lext}" # new name using '-n'
   fi
 
   echo -n "File: [${_kount}/${_qtd}]: [${f}]."
