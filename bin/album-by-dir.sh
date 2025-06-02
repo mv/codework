@@ -97,7 +97,7 @@ do
 
 # _dtfile=$( stat -x -t '%F_%H-%M-%S' "${f}" | grep Modify | awk -F': ' '{print $2}' )
   _dtfile=$( stat --format '%y' "${f}" | awk -F'.' '{print $1}' | tr ' ' "_" | tr ':' "-")
-  _dtdir=$(  echo "${_dtfile}" | awk -F'_' '{print $1}' )
+  _dtdir="${_dtfile:0:10}"  # substr
 
   _bname="${f##*/}"     # basename
   _fname="${_bname%.*}" # file name, no extension
