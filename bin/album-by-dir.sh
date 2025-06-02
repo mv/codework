@@ -117,12 +117,12 @@ do
     _new="${_dst}/${_newname}.${_dtfile}${_lext}" # new name using '-n'
   fi
 
-  echo -n "File: [${_kount}/${_qtd}]: [${f}]."
+  echo -n "File: [${_kount}/${_qtd}]: [${f}]"
 
   if [ "${_verbose}" == "true" ]
   then
     echo
-    echo -e -n "File: [${_kount}/${_qtd}]: [${cyn}${_new}${rst}]."
+    echo -e -n "File: [${_kount}/${_qtd}]: [${cyn}${_new}${rst}]"
   fi
 
   if [ "${_force}" == "true" ]
