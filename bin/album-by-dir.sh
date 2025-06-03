@@ -6,15 +6,15 @@
 
 usage() {
     echo
-    echo "Usage: $0 -s src_dir -d dst_dir [-n new_name] [-t] [-f] [-v]"
+    echo "Usage: $0 -s src_dir -d dst_dir [-n new_name | -p prefix] [-t] [-f] [-v]"
     echo
-    echo "  -s: source dir"
-    echo "  -d: destination root dir"
+    echo "  -s: source dir."
+    echo "  -d: destination root dir."
     echo "  -n: set new name."
-    echo "  -p: set prefix to name."
-    echo "  -t: set timestamp in filename"
-    echo "  -f: force"
-    echo "  -v: verbose"
+    echo "  -p: set prefix to name. (Overwrites -n)"
+    echo "  -t: set timestamp in filename."
+    echo "  -f: force."
+    echo "  -v: verbose."
     echo
     exit 1
 }
