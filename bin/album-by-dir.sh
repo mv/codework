@@ -10,7 +10,8 @@ usage() {
     echo
     echo "  -s: source dir"
     echo "  -d: destination root dir"
-    echo "  -n: set new name. (Assumes -t)"
+    echo "  -n: set new name."
+    echo "  -p: set prefix to name."
     echo "  -t: set timestamp in filename"
     echo "  -f: force"
     echo "  -v: verbose"
@@ -20,7 +21,7 @@ usage() {
 
 [ "${1}" == "" ] && usage
 
-while getopts "s:d:n:tfv" opt
+while getopts "s:d:n:p:tfv" opt
 do
   case $opt in
     s) _srcdir=$( echo "${OPTARG}" | sed -e 's|/$||' )  # dir: remove trailing '/'
@@ -28,6 +29,8 @@ do
     d) _dstdir=$( echo "${OPTARG}" | sed -e 's|/$||' )  # dir: remove trailing '/'
       ;;
     n) _newname="${OPTARG}"
+      ;;
+    p) _prefix="${OPTARG}"
       ;;
     t) _timestamp="true"
       ;;
@@ -114,7 +117,22 @@ do
 
   if [ "${_newname}" != "" ]
   then
+    _new="${_dst}/${_newname}${_lext}" # new name using '-n'
+  fi
+
+  if [ "${_newname}" != "" ] && [ "${_timestamp}" == "true" ]
+  then
     _new="${_dst}/${_newname}.${_dtfile}${_lext}" # new name using '-n'
+  fi
+
+  if [ "${_prefix}" != "" ]
+  then
+    _new="${_dst}/${_prefix}.${_fname}${_lext}"   #
+  fi
+
+  if [ "${_prefix}" != "" ] && [ "${_timestamp}" == "true" ]
+  then
+    _new="${_dst}/${_prefix}.${_fname}.${_dtfile}${_lext}"   #
   fi
 
   echo -n "File: [${_kount}/${_qtd}]: [${f}]"
