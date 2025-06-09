@@ -1,0 +1,7 @@
+[project]
+name = "example"
+version = "0.1"
+dependencies = []
+
+[project.scripts]
+example = "example.main:run"
